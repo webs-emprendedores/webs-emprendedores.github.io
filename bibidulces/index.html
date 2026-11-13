@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bibi Dulces y Más · Tortas personalizadas en Rosario</title>
+<meta name="description" content="Tortas personalizadas, bento, minitortas, bombones y talleres de decoración en Rosario. Armá tu torta y pedila online.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Bibi Dulces y Más">
+<meta property="og:description" content="Armá tu torta eligiendo tamaño, relleno y cobertura.">
+<meta property="og:image" content="img/lila.jpg">
+<link rel="icon" href="img/icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<meta name="theme-color" content="#7b5fc0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
+<style>
+:root{--p:#7b5fc0;--pd:#5d44a0;--ps:#ece5fa;--ink:#3a2418;--mut:#6a5a52;--bg:#faf7ff;--line:#ddd2f1;--rosa:#f3b5c3;--ok:#2f6b3a;--oks:#e2f1e3;--no:#b3261e;--nos:#fbe3e1}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Nunito Sans",system-ui,sans-serif;font-size:17.5px;line-height:1.5}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+.in{max-width:580px;margin:0 auto;padding-left:18px;padding-right:18px}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;line-height:1.02}
+h1{font-size:clamp(44px,12.5vw,64px)} h2{font-size:38px} h3{font-size:27px;line-height:1.08}
+.mut{color:var(--mut);font-size:16px}
+.top{display:flex;align-items:center;justify-content:space-between;padding-top:10px;padding-bottom:10px}
+.brand{display:flex;align-items:center;gap:10px;font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;font-size:24px;line-height:1}
+.brand img{width:52px;height:52px;border-radius:50%}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;padding:9px 20px;border:2px solid var(--p);border-radius:28px;background:var(--p);color:#fff;font-weight:700;font-size:18.5px;text-decoration:none;cursor:pointer;text-align:center}
+.btn.o{background:transparent;color:var(--pd)}
+.btn.sm{width:auto;min-height:46px;padding:7px 18px;font-size:16.5px}
+.btn.no{border-color:var(--no);color:var(--no);background:transparent}
+.btn:disabled{opacity:.55}
+.hero img{width:100%;height:330px;object-fit:cover;object-position:center 40%}
+.hero .in{padding-top:22px;padding-bottom:30px}
+.hero p{margin:12px 0 20px;font-size:19px}
+.blk{padding-top:34px;padding-bottom:12px}
+.lila{background:var(--ps)}
+label,.lab{display:block;font-weight:700;font-size:17px;margin:20px 0 8px}
+input,select,textarea{width:100%;min-height:52px;padding:10px 14px;border:1.5px solid #b9a9dc;border-radius:12px;background:#fff;font-size:18px}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--p);outline-offset:2px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{min-height:50px;padding:8px 18px;border:1.5px solid #b9a9dc;border-radius:25px;background:#fff;font-weight:600;cursor:pointer}
+.opts.col{flex-direction:column} .opts.col button{text-align:left;border-radius:14px}
+.opts button.on{background:var(--p);border-color:var(--p);color:#fff}
+.chk{display:flex;align-items:center;gap:12px;font-weight:600;margin-top:14px} .chk input{width:28px;min-height:28px;flex:none}
+/* la torta que se arma */
+.cakebox{position:sticky;top:0;z-index:5;background:var(--ps);padding:14px 0 10px;text-align:center}
+.cake{margin:0 auto;width:210px;transition:width .35s}
+.cake .cap{height:30px;border-radius:16px 16px 0 0;position:relative;transition:background .35s}
+.cake .cap:after{content:"";position:absolute;left:0;right:0;top:100%;height:12px;background:radial-gradient(circle at 10px 0,var(--c) 9px,transparent 10px) 0 0/20px 12px repeat-x}
+.cake .body{border-left:9px solid var(--c);border-right:9px solid var(--c);transition:border-color .35s}
+.cake .l{height:21px;transition:background .35s} .cake .l.r{height:11px}
+.cake .plate{height:9px;margin:0 -22px;border-radius:5px;background:#fff;box-shadow:0 2px 0 #cdbfe8}
+.cakecap{font-size:16px;margin-top:10px;min-height:24px}
+.sum{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px}
+.sum div{display:flex;justify-content:space-between;gap:12px;padding:3px 0} .sum b{font-weight:700}
+.err{color:var(--no);font-weight:700;margin-top:12px;display:none}
+.also{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.also figure img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:16px}
+.also figcaption{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;font-size:24px;line-height:1.1;margin-top:6px}
+.tal{background:#fff;border-radius:16px;padding:16px;margin-top:12px}
+.tal .f{font-weight:700;color:var(--pd)}
+.foot{background:var(--ink);color:#fff;margin-top:34px;padding:30px 0 34px}
+.foot a.t{display:block;color:#fff;font-weight:700;font-size:19.5px;padding:8px 0;text-underline-offset:4px}
+#toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:88%;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%)}
+[hidden]{display:none !important}
+/* panel */
+#panel{display:none;min-height:100vh;padding-bottom:50px}
+body.admin #site{display:none} body.admin #panel{display:block}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 4px}
+.tabs button{min-height:50px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-weight:600;font-size:16px;cursor:pointer;padding:4px 2px}
+.tabs button.on{background:var(--p);border-color:var(--p);color:#fff}
+.pv{display:none;padding-top:10px} .pv.on{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin-top:12px}
+.help{background:var(--ps);border-radius:12px;padding:10px 14px;font-size:16px;margin:6px 0 4px}
+.pill{font-size:15px;font-weight:700;border-radius:999px;padding:6px 14px;border:0;cursor:pointer;white-space:nowrap}
+.pill.ok{background:var(--oks);color:var(--ok)} .pill.no{background:var(--nos);color:var(--no)} .pill.ne{background:var(--ps);color:var(--pd)}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.dt{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700;font-size:25px;color:var(--pd);line-height:1}
+.res{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line)} .res b{font-size:20px;color:var(--pd)}
+.it{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)} .it:first-of-type{border-top:0}
+.it img{width:60px;height:60px;border-radius:12px;object-fit:cover;flex:none} .it .tx{flex:1;min-width:0} .it .n{font-weight:700;line-height:1.2}
+</style>
+</head>
+<body>
+<div id="site">
+<header class="in top"><div class="brand"><img src="img/icon-192.png" alt="">Bibi Dulces y Más</div><a class="btn sm" href="#torta">Pedir</a></header>
+
+<section class="hero">
+  <img src="img/lila.jpg" alt="Torta lila con drip de chocolate hecha por Bibi">
+  <div class="in">
+    <h1>Diseñamos tu torta juntas</h1>
+    <p>Tortas, bento y minitortas por encargo en Rosario. Elegís tamaño, relleno y fecha, y tu pedido me llega armado.</p>
+    <a class="btn" href="#torta">Armar mi torta</a>
+    <a class="btn o" href="#talleres" style="margin-top:10px">Talleres de decoración</a>
+  </div>
+</section>
+
+<section id="torta" class="lila">
+  <div class="in blk" style="padding-bottom:0"><h2>Armá tu pedido</h2><div class="lab" style="margin-top:14px">Qué querés pedir</div><div class="opts" id="oProd"></div></div>
+  <div id="build">
+    <div class="cakebox"><div class="cake" id="cake"><div class="cap"></div><div class="body"><div class="l b"></div><div class="l r"></div><div class="l b"></div><div class="l r"></div><div class="l b"></div></div><div class="plate"></div></div><p class="cakecap in" id="cakeCap"></p></div>
+    <div class="in">
+      <div id="persBox"><label for="fPers">Para cuántas personas</label><input id="fPers" type="number" inputmode="numeric" min="1" placeholder="Por ejemplo: 15"></div>
+      <div class="lab">Bizcochuelo</div><div class="opts" id="oBiz"></div>
+      <div class="lab">Relleno</div><div class="opts col" id="oRel"></div>
+      <div class="lab">Cobertura</div><div class="opts col" id="oCob"></div>
+      <label for="fIdea">Temática o idea</label><input id="fIdea" placeholder="Por ejemplo: cumpleaños de 15, en lila">
+      <label class="chk"><input type="checkbox" id="fFoto"> Tengo una foto de referencia</label>
+    </div>
+  </div>
+  <div class="in" id="simple" hidden><label for="fDet">Cuántos y de qué</label><input id="fDet" placeholder="Por ejemplo: una caja de 12"></div>
+  <div class="in" style="padding-bottom:34px">
+    <label for="fDate">Para qué día</label><input id="fDate" type="date"><p class="mut" id="dateInfo" style="margin-top:6px"></p>
+    <label for="fName">Tu nombre</label><input id="fName" autocomplete="name">
+    <label for="fPhone">Tu WhatsApp</label><input id="fPhone" type="tel" inputmode="tel" autocomplete="tel">
+    <div id="entBox"><div class="lab">Entrega</div><div class="opts" id="oEnt"><button type="button" data-v="Retiro" class="on">La retiro</button><button type="button" data-v="Envío">Necesito envío</button></div><p class="mut" id="entInfo" style="margin-top:8px"></p></div>
+    <label for="fNotes">Algo más que quieras contarme</label><textarea id="fNotes"></textarea>
+    <div class="sum" id="sum"></div>
+    <p class="err" id="fErr"></p>
+    <button class="btn" id="send" style="margin-top:16px">Enviar pedido por WhatsApp</button>
+  </div>
+</section>
+
+<section id="done" hidden><div class="in blk">
+  <h2>Pedido anotado</h2>
+  <p style="margin:10px 0 16px">Mandame el mensaje por WhatsApp y te confirmo el precio y la fecha.</p>
+  <a class="btn" id="doneWa" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
+  <p id="payInfo" style="margin-top:14px"></p>
+</div></section>
+
+<section><div class="in blk"><h2>También hago</h2><div class="also" id="also"></div></div></section>
+
+<section id="talleres"><div class="in blk">
+  <h2>Talleres de decoración</h2>
+  <div id="talList"></div>
+</div></section>
+
+<footer class="foot"><div class="in">
+  <a class="t" id="waLink" href="#" target="_blank" rel="noopener">Escribime por WhatsApp</a>
+  <a class="t" href="https://www.instagram.com/tortasbibiymas/" target="_blank" rel="noopener">Seguime en Instagram</a>
+  <p style="padding:8px 0 18px">Bibi Dulces y Más. Rosario, Santa Fe.</p>
+  <p><a href="#panel" style="color:#fff;opacity:.8;font-size:15px;padding:10px 10px 10px 0">Acceso Bibi</a></p>
+</div></footer>
+</div>
+
+<div id="panel">
+  <header class="in top"><div class="brand"><img src="img/icon-192.png" alt="">Mi panel</div><a href="#" style="color:var(--pd);font-weight:600">Ver la página</a></header>
+  <div class="in">
+    <div id="loginBox" class="card" style="margin-top:20px"><h3>Entrar</h3><label for="pin">Clave</label><input id="pin" type="password" inputmode="numeric" autocomplete="off"><button class="btn" id="pinBtn" style="margin-top:14px">Entrar</button></div>
+    <div id="app" hidden>
+      <div class="tabs"><button data-t="ped" class="on">Pedidos</button><button data-t="tal">Talleres</button><button data-t="car">Carta</button><button data-t="mas">Más</button></div>
+      <div class="pv on" id="pv-ped"></div><div class="pv" id="pv-tal"></div><div class="pv" id="pv-car"></div><div class="pv" id="pv-mas"></div>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+const SLUG = 'bibidulces';
+const WA = '5493415704109';       // WhatsApp donde llegan los pedidos (el de su página de Facebook)
+const KEY = 'bibidulces_v1';
+const HIT = 'https://abacus.jasoncameron.dev/hit/websemprendedores/bibidulces';
+const API = 'https://script.google.com/macros/s/AKfycbxcv-Wg40xQbjDn92_8W6i2VpEqXS3vZTsNDH_NzN2BYKyMLi3Kw2AdU8P28SN9gRof/exec';
+const DIA = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'], DIAL = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const CAKES = 'Tortas', TAL = 'Taller: ';
+const today = new Date(); today.setHours(0,0,0,0);
+const iso = d => new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+const pd = s => { const a = String(s).split('-').map(Number); return new Date(a[0], a[1]-1, a[2]); };
+const plus = n => { const d = new Date(today); d.setDate(d.getDate()+n); return iso(d); };
+const dshort = s => { const d = pd(s); return DIA[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1); };
+const dlong = s => { const d = pd(s); return DIAL[d.getDay()]+' '+d.getDate()+' de '+MES[d.getMonth()]; };
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const money = n => '$' + Number(n||0).toLocaleString('es-AR');
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tH; function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(tH); tH=setTimeout(()=>t.classList.remove('show'),3000); }
+function hit(s){ try{ fetch(HIT+(s||'')).catch(()=>{}); }catch(e){} }
+
+// ===== Datos =====
+const DEFAULT = {
+  products: [
+    {id:'p1',cat:CAKES,name:'Torta',desc:'Personalizada, con el relleno que elijas',price:null,visible:true,img:'img/rosa.jpg'},
+    {id:'p2',cat:CAKES,name:'Minitorta',desc:'Para un festejo chico',price:null,visible:true,img:''},
+    {id:'p3',cat:CAKES,name:'Bento',desc:'Para regalar',price:null,visible:true,img:''},
+    {id:'p4',cat:'Bombones',name:'Bombones',desc:'',price:null,visible:true,img:'img/bombones.jpg'},
+    {id:'p5',cat:'Budines',name:'Budín',desc:'',price:null,visible:true,img:'img/budin.jpg'}],
+  settings: {maxPerDay:9999, blocked:[], alias:'', aliasName:'', senaPct:50, extra:{kind:'tortas', biz:['Vainilla','Chocolate'], rel:['Dulce de leche y crema','Chantilly con frutillas','Dulce de leche con chocolate'], cob:['Buttercream','Mousse de frutilla','Chantilly'], lead:2, talleres:[], pickup:'Cochabamba 1224, Rosario', envio:true, wa:WA}}
+};
+let S = JSON.parse(JSON.stringify(DEFAULT)); S.orders = []; S.costs = []; S.taken = {};
+try{ const c = JSON.parse(localStorage.getItem(KEY+'_pub')); if(c && c.products && c.settings && c.settings.extra && c.settings.extra.biz){ S.products = c.products; S.settings = c.settings; S.taken = c.taken||{}; } }catch(e){}
+const X = () => S.settings.extra;
+const waNum = () => String(X().wa || WA).replace(/\D/g,'');
+let pinOk = ''; try{ pinOk = localStorage.getItem(KEY+'_pin') || ''; }catch(e){}
+async function api(body){ body.c = SLUG; const r = await fetch(API, {method:'POST', body:JSON.stringify(body)}); return r.json(); }
+function fix(r){ r.settings.extra = Object.assign({}, DEFAULT.settings.extra, r.settings.extra||{}); return r; }
+async function pullPub(){ try{ const r = await api({a:'pub'}); if(r.ok){ fix(r); S.products = r.products; S.settings = r.settings; S.taken = r.taken||{}; try{ localStorage.setItem(KEY+'_pub', JSON.stringify({products:r.products, settings:r.settings, taken:S.taken})); }catch(e){} renderSite(); } }catch(e){} }
+async function pullAll(){ const r = await api({a:'all', pin:pinOk}); if(r.ok){ fix(r); S.products = r.products; S.orders = r.orders; S.settings = r.settings; S.costs = (r.calc && r.calc.rows) || []; } return r; }
+function send(body, okMsg){ body.pin = pinOk; return api(body).then(r => { if(!r.ok) toast(r.msg||'No se pudo guardar'); else if(okMsg) toast(okMsg); return r; }).catch(() => { toast('Sin conexión: no se guardó. Probá de nuevo.'); return {ok:false}; }); }
+const saveProducts = m => send({a:'saveProducts', products:S.products}, m);
+const saveSettings = m => send({a:'saveSettings', settings:S.settings}, m);
+
+// ===== Página =====
+const tone = s => { s = String(s||'').toLowerCase(); if(/choco/.test(s) && !/blanco/.test(s)) return '#5b3622'; if(/frutilla|frambuesa|rosa/.test(s)) return '#f2a7b9'; if(/dulce de leche|ddl|caramel/.test(s)) return '#b8752e'; if(/lim[oó]n|maracuy|naranja/.test(s)) return '#f4d35e'; if(/vainilla/.test(s)) return '#f1d9a3'; if(/butter/.test(s)) return '#b9a2ea'; if(/chantilly|crema|merengue|blanco/.test(s)) return '#fff6ea'; return '#d9ccf5'; };
+let sel = {pid:'', biz:'', rel:'', cob:'', ent:'Retiro'};
+const prod = () => S.products.find(p => p.id===sel.pid);
+const isCake = p => p && p.cat===CAKES;
+const optBtns = (list, cur) => list.map(v => `<button type="button" data-v="${esc(v)}" class="${v===cur?'on':''}">${esc(v)}</button>`).join('');
+const talKey = t => TAL+t.name+'|'+t.date;
+const talLeft = t => Math.max(0, (Number(t.cupos)||0) - (S.taken[talKey(t)]||0));
+
+function renderSite(){ const x = X(), vis = S.products.filter(p => p.visible);
+  if(!vis.some(p => p.id===sel.pid)) sel.pid = (vis[0]||{}).id || '';
+  if(!x.biz.includes(sel.biz)) sel.biz = x.biz[0]||''; if(!x.rel.includes(sel.rel)) sel.rel = x.rel[0]||''; if(!x.cob.includes(sel.cob)) sel.cob = x.cob[0]||'';
+  $('#oProd').innerHTML = vis.map(p => `<button type="button" data-v="${esc(p.id)}" class="${p.id===sel.pid?'on':''}">${esc(p.name)}</button>`).join('');
+  $('#oBiz').innerHTML = optBtns(x.biz, sel.biz); $('#oRel').innerHTML = optBtns(x.rel, sel.rel); $('#oCob').innerHTML = optBtns(x.cob, sel.cob);
+  const d = $('#fDate'); d.min = plus(Number(x.lead)||0); if(d.value && d.value < d.min) d.value = '';
+  $('#dateInfo').textContent = Number(x.lead) > 0 ? 'Tomo pedidos con '+x.lead+(Number(x.lead)===1?' día':' días')+' de anticipación como mínimo.' : '';
+  $('#entBox').hidden = !x.envio && !x.pickup; $('#oEnt').hidden = !x.envio; if(!x.envio) sel.ent = 'Retiro';
+  $('#entInfo').textContent = sel.ent==='Envío' ? 'El envío lo coordinamos por WhatsApp.' : (x.pickup ? 'Se retira por '+x.pickup+'.' : 'El lugar de retiro te lo paso por WhatsApp.');
+  $('#also').innerHTML = vis.filter(p => !isCake(p) && p.img).map(p => `<figure><img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy"><figcaption>${esc(p.name)}</figcaption><p class="mut">${esc(p.desc)}${p.desc&&p.price?'. ':''}${p.price?money(p.price):''}</p><button class="btn sm o" data-pick="${esc(p.id)}" style="margin-top:8px">Pedir</button></figure>`).join('') || '<p>Escribime por WhatsApp y te cuento.</p>';
+  const ts = (x.talleres||[]).filter(t => t.date >= iso(today));
+  $('#talList').innerHTML = ts.length ? ts.map(t => { const left = talLeft(t); return `<div class="tal"><p class="f">El ${dlong(t.date)}${t.time?' a las '+esc(t.time):''}</p><h3 style="margin:4px 0 6px">${esc(t.name)}</h3><p>${esc(t.desc||'')}</p><p style="margin:6px 0 12px">${t.price?money(t.price)+'. ':''}${left ? (left===1?'Queda 1 lugar.':'Quedan '+left+' lugares.') : 'Cupo completo.'}</p>${left ? `<input placeholder="Tu nombre" data-tn="${esc(t.id)}"><input placeholder="Tu WhatsApp" type="tel" data-tp="${esc(t.id)}" style="margin-top:8px"><button class="btn" data-tal="${esc(t.id)}" style="margin-top:10px">Anotarme</button>` : ''}</div>`; }).join('')
+    : `<p style="margin-top:10px">Todavía no publiqué la fecha del próximo taller. Escribime y te aviso cuando salga.</p><a class="btn o" style="margin-top:14px" target="_blank" rel="noopener" href="https://wa.me/${waNum()}?text=${encodeURIComponent('Hola Bibi! Quiero que me avises cuando salga el próximo taller de decoración.')}">Avisame del próximo taller</a>`;
+  $('#waLink').href = 'https://wa.me/'+waNum()+'?text='+encodeURIComponent('Hola Bibi! Te escribo desde tu página.');
+  drawSel(); }
+function drawSel(){ const p = prod(), cake = isCake(p);
+  $('#build').hidden = !cake; $('#simple').hidden = cake; $('#persBox').hidden = !(p && /^torta/i.test(p.name));
+  if(cake){ const c = $('#cake'), cb = tone(sel.cob); c.style.width = /bento/i.test(p.name) ? '130px' : /mini/i.test(p.name) ? '168px' : '210px';
+    c.querySelector('.cap').style.background = cb; c.querySelector('.cap').style.setProperty('--c', cb); c.querySelector('.body').style.borderColor = cb;
+    c.querySelectorAll('.l.b').forEach(e => e.style.background = tone(sel.biz)); c.querySelectorAll('.l.r').forEach(e => e.style.background = tone(sel.rel));
+    $('#cakeCap').textContent = p.name+' de '+sel.biz.toLowerCase()+', con '+sel.rel.toLowerCase()+' y cobertura de '+sel.cob.toLowerCase()+'.'; }
+  const dv = $('#fDate').value;
+  $('#sum').innerHTML = p ? `<div><span>${esc(p.name)}</span><b>${p.price ? money(p.price) : 'Precio a confirmar'}</b></div>${dv ? `<div><span>Para el ${dlong(dv)}</span></div>` : ''}` : ''; }
+const pickOpt = (id, key) => $(id).addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return; sel[key] = b.dataset.v; $$(id+' button').forEach(x => x.classList.toggle('on', x===b)); if(key==='ent') renderSite(); else drawSel(); });
+pickOpt('#oProd','pid'); pickOpt('#oBiz','biz'); pickOpt('#oRel','rel'); pickOpt('#oCob','cob'); pickOpt('#oEnt','ent');
+$('#fDate').addEventListener('change', drawSel);
+$('#also').addEventListener('click', e => { const b = e.target.closest('[data-pick]'); if(!b) return; sel.pid = b.dataset.pick; renderSite(); $('#torta').scrollIntoView({behavior:'smooth'}); });
+function finish(msg){ const url = 'https://wa.me/'+waNum()+'?text='+encodeURIComponent(msg), s = S.settings;
+  $('#doneWa').href = url; $('#payInfo').textContent = s.alias ? 'Para reservar la fecha se pide una seña'+(Number(s.senaPct)?' del '+s.senaPct+'%':'')+'. Alias: '+s.alias+(s.aliasName?' ('+s.aliasName+')':'')+'.' : '';
+  $('#done').hidden = false; $('#done').scrollIntoView({block:'center'}); setTimeout(() => { location.href = url; }, 500); }
+$('#send').addEventListener('click', async () => { const p = prod(), cake = isCake(p), x = X(), er = $('#fErr');
+  const date = $('#fDate').value, name = $('#fName').value.trim(), phone = $('#fPhone').value.trim(), det = $('#fDet').value.trim(), idea = $('#fIdea').value.trim(), notes = $('#fNotes').value.trim(), pers = $('#fPers').value.trim(), foto = $('#fFoto').checked;
+  const bad = !p ? 'Elegí qué querés pedir.' : (!cake && !det) ? 'Contame cuántos y de qué.' : !date ? 'Elegí para qué día lo necesitás.' : date < plus(Number(x.lead)||0) ? 'Esa fecha es muy pronto. Elegí otra o escribime por WhatsApp.' : (S.settings.blocked||[]).includes(date) ? 'Ese día no tomo pedidos. Probá con otra fecha.' : !name ? 'Escribí tu nombre.' : phone.replace(/\D/g,'').length < 8 ? 'Escribí tu WhatsApp con característica.' : '';
+  er.textContent = bad; er.style.display = bad ? 'block' : 'none'; if(bad) return;
+  const fill = cake ? 'Bizcochuelo de '+sel.biz.toLowerCase()+'. Relleno: '+sel.rel+'. Cobertura: '+sel.cob+'.' : det, extraN = [idea && 'Idea: '+idea, foto && 'Manda foto de referencia', notes].filter(Boolean).join(' / ');
+  const btn = $('#send'); btn.disabled = true; btn.textContent = 'Enviando…';
+  try{ const r = await api({a:'order', order:{date, product:p.name, people:pers, fill, delivery:sel.ent, name, phone, notes:extraN}}); if(!r.ok){ er.textContent = r.msg || 'No se pudo enviar. Probá de nuevo.'; er.style.display = 'block'; btn.disabled = false; btn.textContent = 'Enviar pedido por WhatsApp'; return; } hit('-pedidos'); }catch(e){}
+  btn.disabled = false; btn.textContent = 'Enviar pedido por WhatsApp';
+  finish('Hola Bibi! Quiero pedir:\n• '+p.name+(pers ? ' para '+pers+' personas' : '')+'\n• '+fill+(idea ? '\n• Idea: '+idea : '')+(foto ? '\n• Tengo una foto de referencia, te la mando por acá.' : '')+'\n• Para el '+dlong(date)+'\n• Entrega: '+(sel.ent==='Envío' ? 'necesito envío' : 'la retiro')+(notes ? '\n• '+notes : '')+'\n\nNombre: '+name); });
+$('#talList').addEventListener('click', async e => { const b = e.target.closest('[data-tal]'); if(!b) return; const t = X().talleres.find(t => t.id===b.dataset.tal), name = $(`[data-tn="${t.id}"]`).value.trim(), phone = $(`[data-tp="${t.id}"]`).value.trim();
+  if(!name || phone.replace(/\D/g,'').length < 8){ toast('Escribí tu nombre y tu WhatsApp.'); return; } b.disabled = true;
+  try{ const r = await api({a:'order', order:{date:t.date, product:TAL+t.name, people:1, fill:'', delivery:'', name, phone, notes:''}}); if(!r.ok){ toast(r.msg||'No se pudo anotar.'); b.disabled = false; pullPub(); return; } hit('-pedidos'); }catch(err){}
+  finish('Hola Bibi! Me anoté al taller "'+t.name+'" del '+dlong(t.date)+'.\n\nNombre: '+name); });
+
+// ===== Panel =====
+let tab = 'ped', edit = null, old = false, armed = null;
+const isTal = o => String(o.product).indexOf(TAL)===0;
+function sure(b, key){ if(armed===key){ armed = null; return true; } armed = key; const t = b.textContent; b.textContent = 'Segura? Tocá de nuevo'; setTimeout(() => { if(armed===key){ armed = null; b.textContent = t; } }, 3500); return false; }
+const payOf = o => o.total > 0 && o.paid >= o.total ? 'total' : o.paid > 0 ? 'sena' : 'sin';
+const payPill = o => ({total:'<span class="pill ok">Pagado</span>', sena:'<span class="pill ne">Seña '+money(o.paid)+'</span>', sin:'<span class="pill no">Sin seña</span>'})[payOf(o)];
+const waLink = ph => { const t = String(ph).replace(/\D/g,''); return t.length>=10 ? 'https://wa.me/'+(t.startsWith('54') ? t : '549'+t.replace(/^0/,'')) : ''; };
+function saveO(o, msg){ o.pay = payOf(o); return send({a:'saveOrder', order:o}, msg); }
+function renderPanel(){ $$('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.t===tab)); $$('.pv').forEach(v => v.classList.toggle('on', v.id==='pv-'+tab)); ({ped:renderPed, tal:renderTal, car:renderCar, mas:renderMas})[tab](); }
+$('.tabs').addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return; tab = b.dataset.t; edit = null; renderPanel(); window.scrollTo(0,0); });
+
+function renderPed(){ if(edit && edit.k==='o'){ const o = edit.o;
+    $('#pv-ped').innerHTML = `<h3>${edit.isNew?'Cargar un pedido':'Cambiar pedido'}</h3><label>Qué pidió</label><input id="oProdI" value="${esc(o.product)}" list="pl"><datalist id="pl">${S.products.map(p => `<option value="${esc(p.name)}">`).join('')}</datalist>
+    <div class="two"><div><label>Para qué día</label><input id="oDate" type="date" value="${esc(o.date)}"></div><div><label>Personas</label><input id="oPers" type="number" value="${esc(o.people)}"></div></div>
+    <label>Sabor, relleno y detalle</label><textarea id="oFill">${esc(o.fill)}</textarea><label>Cliente</label><input id="oName" value="${esc(o.name)}"><label>WhatsApp</label><input id="oPhone" type="tel" value="${esc(o.phone)}">
+    <label>Entrega</label><select id="oDel"><option${o.delivery==='Retiro'?' selected':''}>Retiro</option><option${o.delivery==='Envío'?' selected':''}>Envío</option></select><label>Notas</label><input id="oNotes" value="${esc(o.notes)}">
+    <div class="two"><div><label>Precio total</label><input id="oTot" type="number" inputmode="numeric" value="${o.total||''}"></div><div><label>Ya pagó</label><input id="oPaid" type="number" inputmode="numeric" value="${o.paid||''}"></div></div>
+    <button class="btn" data-a="osave" style="margin-top:16px">Guardar</button><button class="btn o" data-a="cancel" style="margin-top:10px">Cancelar</button>`; return; }
+  const list = S.orders.filter(o => !isTal(o)).filter(o => old ? (o.done || o.date < iso(today)) : (!o.done && o.date >= iso(today))).sort((a,b) => a.date < b.date ? -1 : 1); if(old) list.reverse();
+  $('#pv-ped').innerHTML = `<button class="btn" data-a="onew">+ Cargar un pedido</button><p class="help" style="margin-top:10px">Los pedidos de la página aparecen solos. Tocá "Cambiar" para ponerle el precio y anotar la seña.</p>
+  <div class="opts" style="margin-top:8px"><button data-a="old" data-v="0" class="${old?'':'on'}">Próximas entregas</button><button data-a="old" data-v="1" class="${old?'on':''}">Anteriores</button></div>` +
+  (list.length ? list.map(o => `<div class="card"><div class="row"><span class="dt">${dshort(o.date)}</span>${payPill(o)}</div><h3 style="margin:8px 0 4px">${esc(o.product)}${o.people?' para '+esc(o.people):''}</h3><p>${esc(o.fill)}</p>${o.notes?`<p class="mut">${esc(o.notes)}</p>`:''}
+    <p style="margin-top:8px"><b>${esc(o.name)}</b> · ${esc(o.phone)} · ${esc(o.delivery)}</p><p>${o.total ? 'Total '+money(o.total)+(o.total>o.paid ? ', falta cobrar '+money(o.total-o.paid) : '') : 'Sin precio cargado'}</p>
+    <div class="acts">${waLink(o.phone)?`<a class="btn sm o" target="_blank" rel="noopener" href="${waLink(o.phone)}">WhatsApp</a>`:''}<button class="btn sm" data-a="oedit" data-id="${esc(o.id)}">Cambiar</button><button class="btn sm o" data-a="odone" data-id="${esc(o.id)}">${o.done?'Volver a pendiente':'Entregado'}</button><button class="btn sm no" data-a="odel" data-id="${esc(o.id)}">Borrar</button></div></div>`).join('') : '<div class="card">No hay pedidos acá.</div>'); }
+
+function renderTal(){ const x = X();
+  if(edit && edit.k==='t'){ const t = edit.t; $('#pv-tal').innerHTML = `<h3>${edit.isNew?'Agregar taller':'Cambiar taller'}</h3><label>Nombre del taller</label><input id="tName" value="${esc(t.name)}" placeholder="Por ejemplo: Decoración con manga"><div class="two"><div><label>Fecha</label><input id="tDate" type="date" value="${esc(t.date)}"></div><div><label>Hora</label><input id="tTime" value="${esc(t.time)}" placeholder="16 h"></div></div>
+    <div class="two"><div><label>Cupos</label><input id="tCup" type="number" inputmode="numeric" value="${esc(t.cupos)}"></div><div><label>Precio</label><input id="tPrice" type="number" inputmode="numeric" value="${esc(t.price)}"></div></div><label>Qué incluye</label><textarea id="tDesc">${esc(t.desc)}</textarea>
+    <button class="btn" data-a="tsave" style="margin-top:16px">Guardar</button>${edit.isNew?'':'<button class="btn no" data-a="tdel" style="margin-top:10px">Quitar taller</button>'}<button class="btn o" data-a="cancel" style="margin-top:10px">Cancelar</button>`; return; }
+  $('#pv-tal').innerHTML = `<button class="btn" data-a="tnew">+ Agregar taller</button><p class="help" style="margin-top:10px">Cargá la fecha y los cupos. La gente se anota desde la página y acá ves quién se anotó.</p>` +
+  ((x.talleres||[]).length ? x.talleres.slice().sort((a,b) => a.date < b.date ? -1 : 1).map(t => { const ins = S.orders.filter(o => o.product===TAL+t.name && o.date===t.date), n = ins.reduce((s,o) => s + (Number(o.people)||1), 0);
+    return `<div class="card"><div class="row"><span class="dt">${dshort(t.date)}${t.time?' · '+esc(t.time):''}</span><span class="pill ne">${n} de ${esc(t.cupos)}</span></div><h3 style="margin:8px 0 4px">${esc(t.name)}</h3><p class="mut">${t.price?money(t.price):'Sin precio'}</p>` +
+      ins.map(o => `<div class="it"><div class="tx"><div class="n">${esc(o.name)}</div><div class="mut">${esc(o.phone)}</div></div><button class="pill ${o.paid>0?'ok':'no'}" data-a="tpay" data-id="${esc(o.id)}">${o.paid>0?'Pagó':'Debe'}</button><button class="pill ne" data-a="odel" data-id="${esc(o.id)}">Quitar</button></div>`).join('') + `<div class="acts"><button class="btn sm" data-a="tedit" data-id="${esc(t.id)}">Cambiar</button></div></div>`; }).join('') : '<div class="card">Todavía no cargaste ningún taller.</div>'); }
+
+function renderCar(){ const x = X();
+  if(edit && edit.k==='p'){ const p = edit.p; $('#pv-car').innerHTML = `<h3>${edit.isNew?'Agregar producto':'Cambiar producto'}</h3><label>Nombre</label><input id="pName" value="${esc(p.name)}"><label>Tipo</label><select id="pCat"><option value="${CAKES}"${p.cat===CAKES?' selected':''}>Torta para armar (elige relleno y cobertura)</option><option value="Otros"${p.cat!==CAKES?' selected':''}>Otro producto</option></select>
+    <label>Descripción corta</label><input id="pDesc" value="${esc(p.desc)}"><label>Precio (vacío = a confirmar)</label><input id="pPrice" type="number" inputmode="numeric" value="${p.price||''}">
+    <label class="chk"><input type="checkbox" id="pVis"${p.visible?' checked':''}> Se muestra en la página</label>
+    <label>Foto</label><div style="display:flex;gap:12px;align-items:center">${p.img?`<img src="${esc(p.img)}" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:cover">`:''}<label class="btn sm o" style="margin:0;cursor:pointer">${p.img?'Cambiar foto':'Subir foto'}<input type="file" id="pFile" accept="image/*" hidden></label></div>
+    <button class="btn" data-a="psave" style="margin-top:16px">Guardar</button>${edit.isNew?'':'<button class="btn no" data-a="pdel" style="margin-top:10px">Borrar producto</button>'}<button class="btn o" data-a="cancel" style="margin-top:10px">Cancelar</button>`; return; }
+  $('#pv-car').innerHTML = `<p class="help">Lo que cambies acá se ve al instante en tu página.</p><div class="card"><h3>Productos</h3>` + S.products.map(p => `<div class="it">${p.img?`<img src="${esc(p.img)}" alt="">`:''}<div class="tx"><div class="n">${esc(p.name)}${p.visible?'':' (oculto)'}</div><div class="mut">${p.price?money(p.price):'Precio a confirmar'}</div></div><button class="btn sm o" data-a="pedit" data-id="${esc(p.id)}">Cambiar</button></div>`).join('') + `<button class="btn o" data-a="pnew" style="margin-top:12px">+ Agregar producto</button></div>
+  <div class="card"><h3>Sabores para armar la torta</h3><p class="mut">Uno por renglón.</p><label>Bizcochuelos</label><textarea id="xBiz">${esc(x.biz.join('\n'))}</textarea><label>Rellenos</label><textarea id="xRel" style="min-height:120px">${esc(x.rel.join('\n'))}</textarea><label>Coberturas</label><textarea id="xCob" style="min-height:120px">${esc(x.cob.join('\n'))}</textarea><button class="btn" data-a="xsave" style="margin-top:14px">Guardar sabores</button></div>`; }
+
+const CK = ['name','ing','pack','hours','rate','gas','margin']; let C = {name:'',ing:'',pack:'',hours:'',rate:'',gas:'',margin:'30'};
+function calcRes(){ const v = k => Number(C[k])||0, cost = v('ing') + v('pack') + v('gas') + v('hours')*v('rate'); return cost ? {cost, price:Math.ceil(cost*(1+v('margin')/100)/100)*100} : null; }
+function calcOut(){ const r = calcRes(); $('#cOut').innerHTML = r ? `<div class="res"><span>Tu costo</span><b>${money(r.cost)}</b></div><div class="res"><span>Precio sugerido</span><b>${money(r.price)}</b></div><div class="res" style="border:0"><span>Tu ganancia</span><b>${money(r.price-r.cost)}</b></div>` : '<p class="mut">Completá los datos y el precio sugerido aparece solo.</p>'; }
+function renderMas(){ const s = S.settings, x = X(), f = (k,l,ph,t) => `<label>${l}</label><input data-c="${k}" ${t?'':'type="number" inputmode="decimal"'} value="${esc(C[k])}" placeholder="${ph||''}">`;
+  $('#pv-mas').innerHTML = `<div class="card" style="margin-top:0"><h3>Cuánto cobrar</h3>${f('name','Producto','Por ejemplo: Torta de 1 kg',1)}${f('ing','Ingredientes ($)')}${f('pack','Caja, base y decoración ($)')}<div class="two"><div>${f('hours','Horas de trabajo')}</div><div>${f('rate','Valor de tu hora ($)')}</div></div>${f('gas','Gas, luz y envío ($)')}${f('margin','Ganancia que querés (%)')}
+    <div id="cOut" style="margin-top:14px"></div><button class="btn" data-a="csave" style="margin-top:12px">Guardar este cálculo</button>${S.costs.filter(r => r[0]).map((r,i) => `<div class="it"><div class="tx"><div class="n">${esc(r[0])}</div><div class="mut">Sugerido ${money(r[7])}</div></div><button class="pill ne" data-a="cload" data-i="${i}">Ver</button><button class="pill no" data-a="cdel" data-i="${i}">Borrar</button></div>`).join('')}</div>
+  <div class="card"><h3>Pedidos y entrega</h3><label>Tu WhatsApp para recibir pedidos</label><input id="sWa" type="tel" value="${esc(x.wa||'')}" placeholder="Con característica, sin 0 ni 15"><label>Días de anticipación mínima</label><input id="sLead" type="number" inputmode="numeric" value="${esc(x.lead)}"><label>Dónde se retira</label><input id="sPick" value="${esc(x.pickup)}" placeholder="Zona o dirección"><label>Hacés envíos</label><select id="sEnv"><option value="1"${x.envio?' selected':''}>Sí, se coordinan por WhatsApp</option><option value="0"${x.envio?'':' selected'}>No, solo retiro</option></select>
+    <label>Días que no tomás pedidos</label><div class="two"><input id="sBlk" type="date"><button class="btn sm o" data-a="badd" style="min-height:52px;width:100%">Agregar</button></div><div class="acts">${(s.blocked||[]).filter(d => d >= iso(today)).sort().map(d => `<button class="pill ne" data-a="bdel" data-d="${d}">${dshort(d)} ✕</button>`).join('')}</div>
+    <h3 style="margin-top:20px">Seña</h3><div class="two"><div><label>Seña (%)</label><input id="sSena" type="number" inputmode="numeric" value="${esc(s.senaPct)}"></div><div><label>Alias</label><input id="sAlias" value="${esc(s.alias)}"></div></div><label>A nombre de</label><input id="sAliasN" value="${esc(s.aliasName)}"><button class="btn" data-a="ssave" style="margin-top:14px">Guardar</button></div>
+  <div class="card"><h3>Clave de acceso</h3><p class="mut">De 4 a 8 números.</p><label>Clave nueva</label><input id="npin" type="password" inputmode="numeric"><label>Repetir la clave nueva</label><input id="npin2" type="password" inputmode="numeric"><button class="btn" data-a="pinsave" style="margin-top:14px">Cambiar la clave</button></div>
+  <div class="card"><h3>Visitas</h3><p><b id="vN">…</b> visitas a tu página y <b id="vP">…</b> pedidos hechos desde ahí.</p></div>
+  <div class="card"><h3>Tenerla como app</h3><p style="margin-top:6px">En iPhone: abrila en Safari, tocá Compartir y después "Agregar a inicio". En Android: abrí el menú de Chrome y tocá "Agregar a la pantalla principal".</p></div>
+  <button class="btn o" data-a="out" style="margin-top:16px">Salir del panel</button>`;
+  calcOut(); const g = HIT.replace('/hit/','/get/'), put = (id,v) => { const e = $(id); if(e) e.textContent = v; }; fetch(g).then(r => r.json()).then(j => put('#vN', j.value||0)).catch(() => put('#vN', 0)); fetch(g+'-pedidos').then(r => r.json()).then(j => put('#vP', j.value||0)).catch(() => put('#vP', 0)); }
+
+function shrink(file){ return new Promise((res,rej) => { const fr = new FileReader(); fr.onerror = rej; fr.onload = () => { const im = new Image(); im.onerror = rej; im.onload = () => { const k = Math.min(1, 900/Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width*k); c.height = Math.round(im.height*k); c.getContext('2d').drawImage(im,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',.82)); }; im.src = fr.result; }; fr.readAsDataURL(file); }); }
+const lines = id => $(id).value.split('\n').map(s => s.trim()).filter(Boolean);
+$('#app').addEventListener('input', e => { const k = e.target.dataset.c; if(k){ C[k] = e.target.value; calcOut(); } });
+$('#app').addEventListener('change', async e => { const t = e.target; if(t.id==='pFile' && t.files[0]){ const p = edit.p; p.name = $('#pName').value; p.desc = $('#pDesc').value; p.price = Number($('#pPrice').value)||null; p.cat = $('#pCat').value; p.visible = $('#pVis').checked;
+  try{ toast('Subiendo foto…'); const r = await send({a:'photo', data:await shrink(t.files[0]), name:(p.name||'producto')+'.jpg'}); if(r.ok){ p.img = r.url; toast('Foto lista ✔'); renderCar(); } }catch(err){ toast('No se pudo subir la foto.'); } } });
+$('#app').addEventListener('click', async e => { const b = e.target.closest('[data-a]'); if(!b) return; const a = b.dataset.a, x = X(), byId = () => S.orders.find(o => o.id===b.dataset.id);
+  if(a==='cancel'){ edit = null; renderPanel(); }
+  if(a==='old'){ old = b.dataset.v==='1'; renderPed(); }
+  if(a==='onew'){ edit = {k:'o', isNew:true, o:{id:'o'+Date.now(), created:iso(today), date:'', product:'', people:'', fill:'', delivery:'Retiro', name:'', phone:'', notes:'', pay:'sin', total:0, paid:0, done:false}}; renderPed(); window.scrollTo(0,0); }
+  if(a==='oedit'){ edit = {k:'o', isNew:false, o:Object.assign({}, byId())}; renderPed(); window.scrollTo(0,0); }
+  if(a==='osave'){ const o = edit.o; Object.assign(o, {product:$('#oProdI').value.trim(), date:$('#oDate').value, people:$('#oPers').value, fill:$('#oFill').value.trim(), name:$('#oName').value.trim(), phone:$('#oPhone').value.trim(), delivery:$('#oDel').value, notes:$('#oNotes').value.trim(), total:Number($('#oTot').value)||0, paid:Number($('#oPaid').value)||0});
+    if(!o.product || !o.date || !o.name){ toast('Falta el producto, la fecha o el nombre.'); return; } if(edit.isNew) S.orders.push(o); else Object.assign(byIdOf(o.id), o); edit = null; saveO(o, 'Pedido guardado ✔'); renderPed(); }
+  if(a==='odone'){ const o = byId(); o.done = !o.done; saveO(o); renderPed(); }
+  if(a==='odel'){ if(!sure(b, 'd'+b.dataset.id)) return; S.orders = S.orders.filter(o => o.id!==b.dataset.id); send({a:'delOrder', id:b.dataset.id}, 'Borrado'); renderPanel(); }
+  if(a==='tpay'){ const o = byId(); o.paid = o.paid > 0 ? 0 : (o.total || 1); saveO(o); renderTal(); }
+  if(a==='tnew'){ edit = {k:'t', isNew:true, t:{id:'t'+Date.now(), name:'', date:'', time:'', cupos:'', price:'', desc:''}}; renderTal(); window.scrollTo(0,0); }
+  if(a==='tedit'){ edit = {k:'t', isNew:false, t:Object.assign({}, x.talleres.find(t => t.id===b.dataset.id))}; renderTal(); window.scrollTo(0,0); }
+  if(a==='tsave'){ const t = edit.t, was = edit.isNew ? null : x.talleres.find(q => q.id===t.id), oldName = was && was.name, oldDate = was && was.date; Object.assign(t, {name:$('#tName').value.trim(), date:$('#tDate').value, time:$('#tTime').value.trim(), cupos:Number($('#tCup').value)||0, price:Number($('#tPrice').value)||0, desc:$('#tDesc').value.trim()});
+    if(!t.name || !t.date || !t.cupos){ toast('Falta el nombre, la fecha o los cupos.'); return; }
+    if(was){ const mv = S.orders.filter(o => o.product===TAL+oldName && o.date===oldDate); mv.forEach(o => { o.product = TAL+t.name; o.date = t.date; }); if(mv.length && (oldName!==t.name || oldDate!==t.date)) send({a:'saveOrders', orders:mv}); Object.assign(was, t); } else (x.talleres = x.talleres||[]).push(t);
+    edit = null; saveSettings('Taller guardado ✔'); renderTal(); renderSite(); }
+  if(a==='tdel'){ if(!sure(b,'tdel')) return; x.talleres = x.talleres.filter(t => t.id!==edit.t.id); edit = null; saveSettings('Taller quitado'); renderTal(); renderSite(); }
+  if(a==='pnew'){ edit = {k:'p', isNew:true, p:{id:'p'+Date.now(), cat:'Otros', name:'', desc:'', price:null, visible:true, img:''}}; renderCar(); window.scrollTo(0,0); }
+  if(a==='pedit'){ edit = {k:'p', isNew:false, p:Object.assign({}, S.products.find(p => p.id===b.dataset.id))}; renderCar(); window.scrollTo(0,0); }
+  if(a==='psave'){ const p = edit.p; Object.assign(p, {name:$('#pName').value.trim(), cat:$('#pCat').value, desc:$('#pDesc').value.trim(), price:Number($('#pPrice').value)||null, visible:$('#pVis').checked}); if(!p.name){ toast('Falta el nombre.'); return; }
+    if(edit.isNew) S.products.push(p); else Object.assign(S.products.find(q => q.id===p.id), p); edit = null; saveProducts('Guardado ✔'); renderCar(); renderSite(); }
+  if(a==='pdel'){ if(!sure(b,'pdel')) return; S.products = S.products.filter(q => q.id!==edit.p.id); edit = null; saveProducts('Producto borrado'); renderCar(); renderSite(); }
+  if(a==='xsave'){ const bz = lines('#xBiz'), rl = lines('#xRel'), cb = lines('#xCob'); if(!bz.length || !rl.length || !cb.length){ toast('Dejá al menos una opción en cada lista.'); return; } x.biz = bz; x.rel = rl; x.cob = cb; saveSettings('Sabores guardados ✔'); renderSite(); }
+  if(a==='csave'){ const r = calcRes(); if(!C.name.trim() || !r){ toast('Falta el nombre o algún dato.'); return; } const row = CK.map(k => String(C[k])).concat([String(r.price)]), i = S.costs.findIndex(c => c[0].trim().toLowerCase()===C.name.trim().toLowerCase()); if(i>=0) S.costs[i] = row; else S.costs.push(row); S.costs = S.costs.filter(c => c[0]); send({a:'saveCalc', calc:{rows:S.costs}}, 'Cálculo guardado ✔'); renderMas(); }
+  if(a==='cload'){ const r = S.costs.filter(c => c[0])[b.dataset.i]; CK.forEach((k,i) => C[k] = r[i]); renderMas(); window.scrollTo(0,0); }
+  if(a==='cdel'){ if(!sure(b,'c'+b.dataset.i)) return; S.costs = S.costs.filter(c => c[0]); S.costs.splice(b.dataset.i,1); send({a:'saveCalc', calc:{rows:S.costs}}); renderMas(); }
+  if(a==='badd'){ const d = $('#sBlk').value; if(!d) return; S.settings.blocked = [...new Set([...(S.settings.blocked||[]), d])]; saveSettings('Día agregado ✔'); renderMas(); }
+  if(a==='bdel'){ S.settings.blocked = (S.settings.blocked||[]).filter(d => d!==b.dataset.d); saveSettings(); renderMas(); }
+  if(a==='ssave'){ x.wa = $('#sWa').value.replace(/\D/g,''); if(x.wa && !x.wa.startsWith('54')) x.wa = '549'+x.wa.replace(/^0/,''); x.lead = Number($('#sLead').value)||0; x.pickup = $('#sPick').value.trim(); x.envio = $('#sEnv').value==='1'; S.settings.senaPct = Number($('#sSena').value)||0; S.settings.alias = $('#sAlias').value.trim(); S.settings.aliasName = $('#sAliasN').value.trim(); saveSettings('Guardado ✔'); renderSite(); renderMas(); }
+  if(a==='pinsave'){ const n = $('#npin').value.trim(), n2 = $('#npin2').value.trim(); if(!/^\d{4,8}$/.test(n)){ toast('La clave tiene que tener entre 4 y 8 números.'); return; } if(n!==n2){ toast('Las dos claves no coinciden.'); return; } const r = await send({a:'setPin', newPin:n}); if(r.ok){ pinOk = n; try{ localStorage.setItem(KEY+'_pin', n); }catch(e){} toast('Clave cambiada ✔'); renderMas(); } }
+  if(a==='out'){ pinOk = ''; logged = false; try{ localStorage.removeItem(KEY+'_pin'); }catch(e){} route(); }
+});
+const byIdOf = id => S.orders.find(o => o.id===id);
+
+// ===== Login y rutas =====
+let logged = false;
+async function enter(v, quiet){ pinOk = v; let r; try{ r = await pullAll(); }catch(e){ if(!quiet) toast('Sin conexión. Probá de nuevo.'); return false; }
+  if(!r.ok){ pinOk = ''; try{ localStorage.removeItem(KEY+'_pin'); }catch(e){} if(!quiet) toast(r.msg || 'Clave incorrecta'); return false; }
+  logged = true; try{ localStorage.setItem(KEY+'_pin', v); }catch(e){} renderSite(); return true; }
+async function route(){ const admin = location.hash==='#panel'; document.body.classList.toggle('admin', admin); if(!admin) return;
+  if(!logged && pinOk) await enter(pinOk, true); $('#loginBox').hidden = logged; $('#app').hidden = !logged; if(logged) renderPanel(); window.scrollTo(0,0); }
+$('#pinBtn').addEventListener('click', async () => { const b = $('#pinBtn'); b.disabled = true; const ok = await enter($('#pin').value.trim()); b.disabled = false; if(ok){ $('#pin').value = ''; hit('-panel'); route(); } });
+$('#pin').addEventListener('keydown', e => { if(e.key==='Enter') $('#pinBtn').click(); });
+window.addEventListener('hashchange', route);
+renderSite(); route(); pullPub();
+try{ if(location.hash!=='#panel' && !sessionStorage.getItem(KEY+'_v')){ sessionStorage.setItem(KEY+'_v','1'); hit(''); } }catch(e){}
+</script>
+</body>
+</html>
