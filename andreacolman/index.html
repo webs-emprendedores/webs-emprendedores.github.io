@@ -300,7 +300,7 @@ function viewDay(){ const sl = slots(A.date);
 function viewTurno(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); } const fn = esc(tu.name.split(' ')[0]);
   return back(A.from==='day'?'day':'home') + `<div class="ptop" style="padding-top:12px"><h1>${esc(tu.name)}</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(cap(longDate(A.tdate)))}, ${tu.time}</p><p class="mut">${tagOf(tu)}</p></div><div class="acts" style="background:none;box-shadow:none">`
     + (tu.status==='consulta' ? `<a class="btn" href="tel:+${waNum(tu.phone)}">Llamar a ${fn}</a><button class="btn o" data-a="conf" data-id="${tu.id}">Lo tomo: confirmarle por WhatsApp</button><button class="btn del" data-a="rej" data-id="${tu.id}">No puedo tomarlo: avisarle</button>`
-      : `${tu.status==='pedido'?`<button class="btn" data-a="conf" data-id="${tu.id}">Confirmarle por WhatsApp</button>`:''}<button class="btn o" data-a="rem" data-id="${tu.id}">Recordarle por WhatsApp</button>${tu.weekly?`<button class="btn del" data-a="cask" data-v="skip">Cancelar solo este día</button><button class="btn del" data-a="del" data-id="${tu.id}">Terminar el turno fijo</button>`:`<button class="btn del" data-a="cask" data-v="del">Cancelar el turno</button>`}`) + `</div></section>`; }
+      : `${tu.status==='pedido'?`<button class="btn" data-a="conf" data-id="${tu.id}">Confirmarle por WhatsApp</button>`:''}<button class="btn o" data-a="rem" data-id="${tu.id}">Recordarle por WhatsApp</button>${calBtn(tu, A.tdate)}${tu.weekly?`<button class="btn del" data-a="cask" data-v="skip">Cancelar solo este día</button><button class="btn del" data-a="del" data-id="${tu.id}">Terminar el turno fijo</button>`:`<button class="btn del" data-a="cask" data-v="del">Cancelar el turno</button>`}`) + `</div></section>`; }
 function viewCancel(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); }
   return back('turno') + `<div class="ptop" style="padding-top:12px"><h1>Cancelar el turno</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(tu.name)}</p><p class="big" style="margin-top:6px">${esc(cap(longDate(A.tdate)))}, ${tu.time}</p></div></section>
     <h2 class="sec">Quién lo cancela</h2>
@@ -352,7 +352,13 @@ function viewCobros(){ const c = S.cfg;
 function readCobros(){ const c = S.cfg, num = v => Number(String(v||'').replace(/\D/g,''))||0; c.fees.part = num($('#cP').value); c.fees.show = $('#cS').checked; c.osAll = $('#cA').checked;
   document.querySelectorAll('.oOn').forEach(i => { const o = c.os[i.dataset.i]; o.on = i.checked; o.plus = num(document.querySelector('.oPl[data-i="'+i.dataset.i+'"]').value); }); }
 function calLink(t, date){ const s = day(date), m = mins(t.time), f = (mm) => date.replace(/-/g,'')+'T'+pad(Math.floor(mm/60))+pad(mm%60)+'00';
-  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Turno '+t.name)+'&dates='+f(m)+'/'+f(m+S.cfg.dur)+'&details='+encodeURIComponent(t.mode+'. WhatsApp: '+t.phone); }
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Turno '+t.name)+'&dates='+f(m)+'/'+f(m+S.cfg.dur)+'&details='+encodeURIComponent('WhatsApp: '+t.phone)+(t.weekly?'&recur='+encodeURIComponent('RRULE:FREQ=WEEKLY'):''); }
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1), isAndroid = /Android/i.test(navigator.userAgent);
+function icsText(t, date){ const m = mins(t.time), f = mm => date.replace(/-/g,'')+'T'+pad(Math.floor(mm/60))+pad(mm%60)+'00', n = new Date(), st = n.getUTCFullYear()+pad(n.getUTCMonth()+1)+pad(n.getUTCDate())+'T'+pad(n.getUTCHours())+pad(n.getUTCMinutes())+pad(n.getUTCSeconds())+'Z';
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Turnos//ES','BEGIN:VEVENT','UID:'+t.id+'-'+date+'@turnos','DTSTAMP:'+st,'DTSTART:'+f(m),'DTEND:'+f(m+S.cfg.dur),'SUMMARY:Turno '+t.name].concat(t.weekly?['RRULE:FREQ=WEEKLY']:[], t.phone?['DESCRIPTION:WhatsApp '+t.phone]:[], ['END:VEVENT','END:VCALENDAR']).join('\r\n'); }
+function calBtn(tu, date){ if(isIOS) return `<a class="btn o" href="data:text/calendar;charset=utf-8,${encodeURIComponent(icsText(tu, date))}">Guardarlo en mi calendario</a>`;
+  if(isAndroid) return `<button class="btn o" data-a="ics" data-id="${tu.id}">Guardarlo en mi calendario</button>`;
+  return `<a class="btn o" target="_blank" rel="noopener" href="${esc(calLink(tu, date))}">Guardarlo en Google Calendar</a>`; }
 function showMsg(t, title, text){ A.msg = {title, text, href:waLink(t.phone, text), demo:!!t.demo}; }
 function when(date){ const td = today(); return date===td ? 'de hoy' : date===iso(addDays(new Date(),1)) ? 'de mañana' : 'del '+shortDate(date); }
 
@@ -409,6 +415,7 @@ document.addEventListener('click', e => {
     if(a==='rem') showMsg(t, 'Recordatorio', `Hola ${fn}! Te recuerdo tu turno ${when(d)} a las ${t.time}${modeTxt(t)}. Te espero.`);
     if(a==='rej'){ showMsg(t, 'Aviso para ' + fn, `Hola ${fn}! Gracias por escribirme. En este momento no puedo tomar tu consulta. Espero que encuentres pronto un espacio.`); S.turnos = S.turnos.filter(x => x.id!==t.id); save(); renderSite(); }
     A.scr = 'msg'; renderPanel(); scrollTo(0,0); }
+  if(a==='ics'){ const t = S.turnos.find(x => x.id===b.dataset.id); if(t){ const u = URL.createObjectURL(new Blob([icsText(t, A.tdate)], {type:'text/calendar'})), l = document.createElement('a'); l.href = u; l.download = 'turno.ics'; document.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); } }
   if(a==='cask'){ A.cmode = v; A.scr = 'cancel'; renderPanel(); scrollTo(0,0); }
   if(a==='cdo'){ const t = S.turnos.find(x => x.id===A.tid); if(!t) return; const d = A.tdate, fn = t.name.split(' ')[0];
     if(v==='yo') showMsg(t, 'Aviso para '+fn, `Hola ${fn}! Tengo que cancelar el turno ${when(d)} a las ${t.time}. Disculpá las molestias. Te escribo para pasarte otro horario.`);
