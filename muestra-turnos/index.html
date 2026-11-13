@@ -180,9 +180,7 @@ const nextDays = n => Array.from({length:n}, (_,i) => iso(addDays(new Date(), i)
 let P = {kind:'nuevo', mode:null, date:null, time:null, step:'pick', last:null, motivo:'', f:{}};
 const covList = () => ['Particular'].concat(S.cfg.os.filter(o => o.on).map(o => o.n)).concat(['Otra obra social']);
 function feeLine(cov){ const c = S.cfg, o = c.os.find(x => x.n===cov); if(!cov) return ''; if(cov==='Otra obra social') return `${c.short} te confirma si trabaja con esa obra social.`; if(!c.fees.show) return '';
-  if(cov==='Particular') return c.fees.part ? `Sesión particular: ${money(c.fees.part)}.` : ''; return o ? (o.plus>0 ? `Con ${o.n} hay un adicional de ${money(o.plus)} por sesión.` : `Con ${o.n} no hay adicional.`) : ''; }
-function honor(){ const c = S.cfg; if(!c.fees.show) return 'Te los paso al confirmar el turno.'; const os = c.os.filter(o => o.on).map(o => o.n + (o.plus>0 ? ' (adicional '+money(o.plus)+')' : ''));
-  return ((c.fees.part ? 'Particular: '+money(c.fees.part)+' la sesión. ' : '') + (os.length ? 'Obras sociales: '+os.join(', ')+'.' : '')) || 'Te los paso al confirmar el turno.'; }
+  if(cov==='Particular') return c.fees.part ? `Sesión particular: ${money(c.fees.part)}.` : ''; return o ? (o.plus>0 ? `Con ${o.n} se paga un adicional de ${money(o.plus)} por sesión.` : `Con ${o.n} no pagás nada aparte.`) : ''; }
 function renderSite(){
   const c = S.cfg, f = P.f, nuevo = P.kind==='nuevo'; if(!P.mode || !c.modes.includes(P.mode)) P.mode = c.modes[0];
   const ds = nextDays(14); if(!P.date || !freeSlots(P.date).length) P.date = ds.find(d => freeSlots(d).length) || null;
@@ -217,7 +215,7 @@ function renderSite(){
   }
   h += `<section class="info"><h2>Antes de venir</h2><dl>
     <dt>Dónde</dt><dd>${c.modes.includes('Presencial') ? esc(c.place) : 'Por videollamada.'}${c.modes.includes('Presencial') && c.modes.includes('Online') ? ' Online, por videollamada.' : ''}</dd>
-    <dt>Cuánto dura</dt><dd>${c.dur} minutos.</dd><dt>Honorarios</dt><dd>${esc(honor())}</dd><dt>Si tenés que cancelar</dt><dd>${esc(c.cancel)}</dd></dl></section>
+    <dt>Cuánto dura</dt><dd>${c.dur} minutos.</dd>${nuevo ? `<dt>Honorarios</dt><dd>${esc(!c.fees.show && f.cov!=='Otra obra social' ? 'Te los paso al confirmar el turno.' : (feeLine(f.cov) || 'Cuando elijas obra social o particular, acá ves cuánto es.'))}</dd>` : ''}<dt>Si tenés que cancelar</dt><dd>${esc(c.cancel)}</dd></dl></section>
     <footer><span>${esc(c.name)}, ${esc(c.role.toLowerCase())}</span><a href="#panel">Acceso ${esc(c.short)}</a></footer>`;
   $('#site').innerHTML = h;
 }
