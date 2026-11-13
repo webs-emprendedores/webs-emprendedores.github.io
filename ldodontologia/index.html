@@ -193,7 +193,7 @@ const DEFAULT = {
   tags:[]          // especialidades o servicios, se listan bajo la presentación
 };
 Object.assign(DEFAULT, {"role": "Odontóloga", "modes": ["Presencial"], "place": "Fontana 1006, 1er piso, local 11 y 12. Formosa.", "cancel": "", "dur": 30, "step": 30, "fees": {"part": 0, "show": true}, "os": [], "osAll": true, "osNote": "Te confirmo si trabajo con tu obra social.", "selfPick": false, "wa": "5493704001380", "ask": {"age": true, "motivo": true, "pain": true}, "lead": "", "tags": [], "photo": ""});
-const PROS = [{"c": "ld-lucrecia", "name": "Lucrecia Badur", "short": "Lucrecia", "mono": "L", "photo": "lucrecia.jpg", "tags": ["Ortodoncia y ortopedia", "Endodoncia", "Estética orofacial", "Disfunción de ATM"]}, {"c": "ld-daniela", "name": "Daniela Weiss", "short": "Daniela", "mono": "D", "photo": "", "tags": ["Odontopediatría", "Ortodoncia y ortopedia", "Ortodoncia con alineadores"]}];
+const PROS = [{"c": "ld-lucrecia", "slug": "lucrecia", "name": "Lucrecia Badur", "short": "Lucrecia", "mono": "L", "photo": "lucrecia.jpg", "tags": ["Ortodoncia y ortopedia", "Endodoncia", "Estética orofacial", "Disfunción de ATM"]}, {"c": "ld-daniela", "slug": "daniela", "name": "Daniela Weiss", "short": "Daniela", "mono": "D", "photo": "", "tags": ["Odontopediatría", "Ortodoncia y ortopedia", "Ortodoncia con alineadores"]}];
 const WD = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const WD3 = ['dom','lun','mar','mié','jue','vie','sáb'];
 const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -493,9 +493,9 @@ document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id===
 
 // ===== LD Odontología: dos profesionales, datos en la planilla =====
 const API = 'https://script.google.com/macros/s/AKfycbxcv-Wg40xQbjDn92_8W6i2VpEqXS3vZTsNDH_NzN2BYKyMLi3Kw2AdU8P28SN9gRof/exec';
-let CUR = null, SNAP = null, LAST = 0, QUEUE = Promise.resolve();
+let CUR = null, OWN = -1, SNAP = null, LAST = 0, QUEUE = Promise.resolve();
 async function api(body){ body.c = PROS[CUR].c; const r = await fetch(API, {method:'POST', body:JSON.stringify(body)}); return r.json(); }
-const proCfg = (i, extra) => { const c = Object.assign(JSON.parse(JSON.stringify(DEFAULT)), PROS[i], (extra && extra.cfg) || {}); c.photo = PROS[i].photo; delete c.c; c.blocked = c.blocked||[]; c.blockedSlots = c.blockedSlots||[]; return c; };
+const proCfg = (i, extra) => { const c = Object.assign(JSON.parse(JSON.stringify(DEFAULT)), PROS[i], (extra && extra.cfg) || {}); c.photo = PROS[i].photo; delete c.c; delete c.slug; c.blocked = c.blocked||[]; c.blockedSlots = c.blockedSlots||[]; return c; };
 const LBL = {confirmado:'Turno confirmado', pedido:'Turno por confirmar', consulta:'Primera consulta'};
 const line = (k,v) => v ? k+': '+v : '';
 const pick = (notes,k) => { const m = String(notes||'').split('\n').find(l => l.indexOf(k+': ')===0); return m ? m.slice(k.length+2) : ''; };
@@ -549,11 +549,11 @@ function renderSite(){ const el = $('#site');
 async function choose(i){ CUR = i; S = null; P = {kind:'nuevo', mode:null, date:null, time:null, step:'pick', last:null, motivo:'', f:{}}; renderSite(); scrollTo(0,0);
   try{ const d = await api({a:'pub'}); if(CUR!==i) return; S = {cfg:proCfg(i, d.settings && d.settings.extra), turnos:[], reqs:[]}; }catch(e){ if(CUR!==i) return; S = {cfg:proCfg(i), turnos:[], reqs:[]}; }
   renderSite(); }
-function renderPanel(){ const el = $('#panel');
+function renderPanel(){ const el = $('#panel'); if(OWN>=0 && CUR===null){ CUR = OWN; S = null; A.ok = false; }
   if(CUR===null || !S){ if(CUR!==null && !S) S = {cfg:proCfg(CUR), turnos:[], reqs:[]};
     if(CUR===null){ el.innerHTML = brand(true) + `<div class="ptop"><h1>Quién sos</h1></div><p class="mut" style="margin-bottom:14px">Cada una entra a su agenda con su clave.</p>${PROS.map((p,i) => `<button class="btn o w who" data-ld="who" data-v="${i}">${face(p,'s')}<span>${p.name}</span></button>`).join('')}`; return; } }
   renderPanel0();
-  if(!A.ok) el.insertAdjacentHTML('afterbegin', `<button class="back" data-ld="unwho">Volver</button>`);
+  if(!A.ok) el.insertAdjacentHTML('afterbegin', brand(true) + (OWN>=0 ? '' : `<button class="back" data-ld="unwho">Volver</button>`));
   else if(A.scr==='home' && Date.now()-LAST>45000){ LAST = Date.now(); refresh(); }
 }
 document.addEventListener('click', async e => { const b = e.target.closest('[data-ld]'); if(!b) return; const a = b.dataset.ld, v = Number(b.dataset.v);
@@ -565,10 +565,10 @@ document.addEventListener('click', async e => { const b = e.target.closest('[dat
     try{ const r = await api({a:'setPin', pin:A.pin, newPin:n}); if(r.ok){ A.pin = n; $('#nPin').value = ''; toast('Clave cambiada.'); } else toast(r.msg||'No se pudo cambiar.'); }catch(x){ toast('No hay conexión. Probá de nuevo.'); } b.disabled = false; }
 });
 document.addEventListener('visibilitychange', () => { if(!document.hidden && A.ok && A.scr==='home') refresh(); });
-fetch('https://abacus.jasoncameron.dev/hit/websemprendedores/ldodontologia' + (location.hash==='#panel'?'-panel':'')).catch(()=>{});
+fetch('https://abacus.jasoncameron.dev/hit/websemprendedores/ldodontologia' + (location.hash.length>1?'-panel':'')).catch(()=>{});
 
 // ===== Arranque =====
-function route(){ const p = location.hash==='#panel'; $('#site').hidden = p; $('#panel').hidden = !p; if(p) renderPanel(); else renderSite(); scrollTo(0,0); }
+function route(){ const h = location.hash.slice(1); OWN = PROS.findIndex(x => x.slug===h); const p = h==='panel' || OWN>=0; if(OWN>=0 && CUR!==OWN){ CUR = null; S = null; A.ok = false; A.pin = ''; } $('#site').hidden = p; $('#panel').hidden = !p; if(p) renderPanel(); else renderSite(); scrollTo(0,0); }
 addEventListener('hashchange', route); route();
 </script>
 </body>
