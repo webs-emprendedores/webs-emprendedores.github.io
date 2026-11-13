@@ -174,13 +174,13 @@ const modeTxt = t => S.cfg.modes.length>1 && t.mode ? ` (${t.mode.toLowerCase()}
 // ===== Estado (en la muestra vive solo en este celular) =====
 function seed(){
   const base = new Date(), mon = addDays(base, -((base.getDay()+6)%7));
-  const w = (off,time,name,phone,mode,cov) => ({id:uid(), date:iso(addDays(mon,off)), time, name, phone, mode, cov, kind:'paciente', status:'confirmado', weekly:true, skip:[]});
+  const w = (off,time,name,phone,mode,cov) => ({id:uid(), date:iso(addDays(mon,off)), time, name, phone, mode, cov, kind:'paciente', status:'confirmado', weekly:true, skip:[], demo:true});
   const turnos = [ w(0,'15:00','Marcela R.','341 555 0101','Presencial','IAPOS'), w(0,'18:00','Tomás G.','341 555 0102','Online','Particular'), w(1,'16:00','Lucía F.','341 555 0103','Presencial','OSDE'),
     w(2,'10:00','Hernán P.','341 555 0104','Presencial','Particular'), w(3,'17:00','Carla M.','341 555 0105','Online','Sancor Salud'), w(4,'11:00','Diego A.','341 555 0106','Presencial','Particular') ];
   const s = {cfg:JSON.parse(JSON.stringify(DEFAULT)), turnos, reqs:[]}; let n = 0;
-  if(!DEFAULT.selfPick) s.reqs.push({id:uid(), name:'Martín L.', phone:'341 555 0107', age:29, cov:'Particular', avail:'por la tarde. Lunes o miércoles'});
-  for(let i=1;i<10 && n<2 && DEFAULT.selfPick;i++){ const d = iso(addDays(base,i)); const f = freeSlots(d, s); if(f.length>1){ s.turnos.push(n ? {id:uid(), date:d, time:f[1], name:'Sofía B.', phone:'341 555 0108', mode:'Online', cov:'Particular', kind:'paciente', status:'pedido', weekly:false, skip:[]}
-      : {id:uid(), date:d, time:f[1], name:'Martín L.', phone:'341 555 0107', mode:'Presencial', cov:'IAPOS', age:29, kind:'consulta', status:'consulta', weekly:false, skip:[]}); n++; } }
+  if(!DEFAULT.selfPick) s.reqs.push({id:uid(), name:'Martín L.', phone:'341 555 0107', age:29, cov:'Particular', avail:'por la tarde. Lunes o miércoles', demo:true});
+  for(let i=1;i<10 && n<2 && DEFAULT.selfPick;i++){ const d = iso(addDays(base,i)); const f = freeSlots(d, s); if(f.length>1){ s.turnos.push(n ? {id:uid(), date:d, time:f[1], name:'Sofía B.', phone:'341 555 0108', mode:'Online', cov:'Particular', kind:'paciente', status:'pedido', weekly:false, skip:[], demo:true}
+      : {id:uid(), date:d, time:f[1], name:'Martín L.', phone:'341 555 0107', mode:'Presencial', cov:'IAPOS', age:29, kind:'consulta', status:'consulta', weekly:false, skip:[], demo:true}); n++; } }
   return s;
 }
 let S;
@@ -270,13 +270,13 @@ let A = {ok:false, scr:'home', date:null, tid:null, tdate:null, from:'home', w:n
 const back = (to, label) => `<button class="btn o sm back" data-a="go" data-v="${to}">← ${label||'Volver'}</button>`;
 function listPend(){ const td = today(); return S.turnos.filter(t => t.status!=='confirmado' && t.date>=td).sort((a,b) => (a.date+a.time).localeCompare(b.date+b.time)); }
 function freeOrAll(date){ const td = today(), n = new Date(), now = n.getHours()*60+n.getMinutes(); return slots(date).filter(t => !turnoAt(date,t) && !isBlocked(date,t) && (date>td || (date===td && mins(t)>now))); }
-const tagOf = tu => [tu.status==='consulta'?'<b>Consulta nueva</b>':tu.status==='pedido'?'<b>Sin confirmar</b>':'', tu.age?tu.age+' años':'', esc(tu.cov||''), S.cfg.modes.length>1?esc(tu.mode):'', tu.weekly?'turno fijo':''].filter(Boolean).join('. ');
+const tagOf = tu => [tu.status==='consulta'?'<b>Consulta nueva</b>':tu.status==='pedido'?'<b>Sin confirmar</b>':'', tu.age?tu.age+' años':'', esc(tu.cov||''), S.cfg.modes.length>1?esc(tu.mode):'', tu.weekly?'Turno fijo':''].filter(Boolean).join('. ');
 const rowT = (tu, date, withDay) => `<div class="row"><span class="t">${tu.time}</span><span class="who">${esc(tu.name)}<span class="tag">${withDay?esc(cap(shortDate(date)))+'. ':''}${tagOf(tu)}</span></span><button class="btn o sm" data-a="tsee" data-id="${tu.id}" data-v="${date}">Ver</button></div>`;
 function renderPanel(){
   const c = S.cfg, el = $('#panel');
   if(!A.ok){ el.innerHTML = `<div class="ptop"><h1>Acceso ${esc(c.short)}</h1></div><section class="sheet"><div class="form" style="border:0"><label for="pin" style="margin-top:0">Tu clave</label><input id="pin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-a="pin">Entrar</button>${DEMO?'<p class="mut gap">En esta muestra la clave es 1234.</p>':''}</div></section>`; return; }
   if(!A.date) A.date = today();
-  const V = {home:viewHome, day:viewDay, turno:viewTurno, new:viewNew, pick:viewPick, confirm:viewConfirm, msg:viewMsg, set:viewSet};
+  const V = {home:viewHome, day:viewDay, turno:viewTurno, cancel:viewCancel, new:viewNew, pick:viewPick, confirm:viewConfirm, msg:viewMsg, set:viewSet};
   if(['ho','co','ma'].includes(A.scr)) el.innerHTML = back('set','Volver a Ajustes') + '<div style="height:14px"></div>' + ({ho:viewHoras, co:viewCobros, ma:viewMas})[A.scr]();
   else el.innerHTML = (V[A.scr]||viewHome)();
 }
@@ -299,7 +299,12 @@ function viewDay(){ const sl = slots(A.date);
 function viewTurno(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); } const fn = esc(tu.name.split(' ')[0]);
   return back(A.from==='day'?'day':'home') + `<div class="ptop" style="padding-top:12px"><h1>${esc(tu.name)}</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(cap(longDate(A.tdate)))}, ${tu.time}</p><p class="mut">${tagOf(tu)}</p></div><div class="acts" style="background:none;box-shadow:none">`
     + (tu.status==='consulta' ? `<a class="btn" href="tel:+${waNum(tu.phone)}">Llamar a ${fn}</a><button class="btn o" data-a="conf" data-id="${tu.id}">Lo tomo: confirmarle por WhatsApp</button><button class="btn del" data-a="rej" data-id="${tu.id}">No puedo tomarlo: avisarle</button>`
-      : `${tu.status==='pedido'?`<button class="btn" data-a="conf" data-id="${tu.id}">Confirmarle por WhatsApp</button>`:''}<button class="btn o" data-a="rem" data-id="${tu.id}">Recordarle por WhatsApp</button><a class="btn o" target="_blank" rel="noopener" href="${esc(calLink(tu, A.tdate))}">Pasarlo a mi Google Calendar</a>${tu.weekly?`<button class="btn del" data-a="skip" data-id="${tu.id}">Liberar solo este día</button><button class="btn del" data-a="del" data-id="${tu.id}">Terminar el turno fijo</button>`:`<button class="btn del" data-a="del" data-id="${tu.id}">Cancelar el turno</button>`}`) + `</div></section>`; }
+      : `${tu.status==='pedido'?`<button class="btn" data-a="conf" data-id="${tu.id}">Confirmarle por WhatsApp</button>`:''}<button class="btn o" data-a="rem" data-id="${tu.id}">Recordarle por WhatsApp</button>${tu.weekly?`<button class="btn del" data-a="cask" data-v="skip">Cancelar solo este día</button><button class="btn del" data-a="del" data-id="${tu.id}">Terminar el turno fijo</button>`:`<button class="btn del" data-a="cask" data-v="del">Cancelar el turno</button>`}`) + `</div></section>`; }
+function viewCancel(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); }
+  return back('turno') + `<div class="ptop" style="padding-top:12px"><h1>Cancelar el turno</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(tu.name)}</p><p class="big" style="margin-top:6px">${esc(cap(longDate(A.tdate)))}, ${tu.time}</p></div></section>
+    <h2 class="sec">Quién lo cancela</h2>
+    <button class="btn o w opt" style="margin-top:0" data-a="cdo" data-v="pac"><b>Lo canceló ${esc(tu.name.split(' ')[0])}</b><span>Solo se libera el horario</span></button>
+    <button class="btn o w opt" data-a="cdo" data-v="yo"><b>Lo cancelo yo</b><span>Se libera el horario y te armo el WhatsApp para avisarle</span></button>`; }
 function viewNew(){ const w = A.w, c = S.cfg;
   return back(w.time?'day':'home') + `<div class="ptop" style="padding-top:12px"><h1>Anotar un turno</h1></div><section class="sheet"><div class="form" style="border:0">${w.time?`<p class="pick" style="margin-top:0">${esc(cap(longDate(w.date)))}, ${w.time}</p>`:''}
     <label for="nN" ${w.time?'':'style="margin-top:0"'}>Nombre</label><input id="nN" type="text" value="${esc(w.name||'')}"><label for="nP">WhatsApp</label><input id="nP" type="tel" value="${esc(w.phone||'')}">
@@ -316,7 +321,7 @@ function viewConfirm(){ const w = A.w;
   return back(w.req || !w.fromDay ? 'pick' : 'new') + `<div class="ptop" style="padding-top:12px"><h1>Revisá y guardá</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(w.name)}</p><p class="big" style="margin-top:6px">${esc(cap(longDate(w.date)))}, ${w.time}</p>
     <label class="chk" style="margin-top:18px"><input id="nW" type="checkbox"> Turno fijo: repetir todas las semanas</label><button class="btn w gap" data-a="wsave">Guardar turno</button></div></section>`; }
 function viewMsg(){ const m = A.msg; if(!m){ A.scr = 'home'; return viewHome(); }
-  return `<div class="ptop"><h1>${esc(m.title)}</h1></div><p class="note">Ya está escrito. Tocá “Abrir WhatsApp” y enviáselo.</p><div class="bubble" style="margin:0 0 18px">${esc(m.text)}</div><a class="btn w" target="_blank" rel="noopener" href="${esc(m.href)}">Abrir WhatsApp</a><button class="btn o w gap" data-a="msgx">Listo, volver a mi agenda</button>`; }
+  return `<div class="ptop"><h1>${esc(m.title)}</h1></div><p class="note">Ya está escrito. Tocá “Abrir WhatsApp” y enviáselo.${m.demo?' <b style="margin-top:6px">Es una persona de ejemplo</b>Su número no existe, así que WhatsApp no lo va a encontrar.':''}</p><div class="bubble" style="margin:0 0 18px">${esc(m.text)}</div><a class="btn w" target="_blank" rel="noopener" href="${esc(m.href)}">Abrir WhatsApp</a><button class="btn o w gap" data-a="msgx">Listo, volver a mi agenda</button>`; }
 function viewSet(){
   return back('home') + `<div class="ptop" style="padding-top:12px"><h1>Ajustes</h1></div>
     <button class="btn o w opt" style="margin-top:0" data-a="go" data-v="ho"><b>Mis horarios</b><span>Los días y horas en que atendés</span></button>
@@ -347,7 +352,7 @@ function readCobros(){ const c = S.cfg, num = v => Number(String(v||'').replace(
   document.querySelectorAll('.oOn').forEach(i => { const o = c.os[i.dataset.i]; o.on = i.checked; o.plus = num(document.querySelector('.oPl[data-i="'+i.dataset.i+'"]').value); }); }
 function calLink(t, date){ const s = day(date), m = mins(t.time), f = (mm) => date.replace(/-/g,'')+'T'+pad(Math.floor(mm/60))+pad(mm%60)+'00';
   return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Turno '+t.name)+'&dates='+f(m)+'/'+f(m+S.cfg.dur)+'&details='+encodeURIComponent(t.mode+'. WhatsApp: '+t.phone); }
-function showMsg(t, title, text){ A.msg = {title, text, href:waLink(t.phone, text)}; }
+function showMsg(t, title, text){ A.msg = {title, text, href:waLink(t.phone, text), demo:!!t.demo}; }
 function when(date){ const td = today(); return date===td ? 'de hoy' : date===iso(addDays(new Date(),1)) ? 'de mañana' : 'del '+shortDate(date); }
 
 // ===== Acciones =====
@@ -403,6 +408,11 @@ document.addEventListener('click', e => {
     if(a==='rem') showMsg(t, 'Recordatorio', `Hola ${fn}! Te recuerdo tu turno ${when(d)} a las ${t.time}${modeTxt(t)}. Te espero.`);
     if(a==='rej'){ showMsg(t, 'Aviso para ' + fn, `Hola ${fn}! Gracias por escribirme. En este momento no puedo tomar tu consulta. Espero que encuentres pronto un espacio.`); S.turnos = S.turnos.filter(x => x.id!==t.id); save(); renderSite(); }
     A.scr = 'msg'; renderPanel(); scrollTo(0,0); }
+  if(a==='cask'){ A.cmode = v; A.scr = 'cancel'; renderPanel(); scrollTo(0,0); }
+  if(a==='cdo'){ const t = S.turnos.find(x => x.id===A.tid); if(!t) return; const d = A.tdate, fn = t.name.split(' ')[0];
+    if(v==='yo') showMsg(t, 'Aviso para '+fn, `Hola ${fn}! Tengo que cancelar el turno ${when(d)} a las ${t.time}. Disculpá las molestias. Te escribo para pasarte otro horario.`);
+    if(A.cmode==='skip'){ if(t.date===d) t.date = iso(addDays(day(t.date),7)); else (t.skip = t.skip||[]).push(d); } else S.turnos = S.turnos.filter(x => x.id!==t.id);
+    save(); renderSite(); if(v==='yo') A.scr = 'msg'; else { A.scr = 'home'; toast('Turno cancelado. El horario quedó libre.'); } renderPanel(); scrollTo(0,0); }
   if(a==='msgx'){ A.msg = null; A.scr = 'home'; renderPanel(); scrollTo(0,0); }
   if(a==='skip'){ const t = S.turnos.find(x => x.id===b.dataset.id); if(t){ if(t.date===A.tdate) t.date = iso(addDays(day(t.date),7)); else (t.skip = t.skip||[]).push(A.tdate); save(); A.scr = 'home'; renderPanel(); renderSite(); toast('Ese día quedó libre.'); } }
   if(a==='del'){ S.turnos = S.turnos.filter(x => x.id!==b.dataset.id); save(); A.scr = 'home'; renderPanel(); renderSite(); toast('Turno cancelado. El horario quedó libre.'); }
