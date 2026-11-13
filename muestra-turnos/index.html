@@ -26,6 +26,9 @@ button{cursor:pointer}
 /* cabecera */
 .top{display:flex;gap:14px;align-items:center;padding:26px 0 8px}
 .mono{flex:none;width:56px;height:56px;border-radius:50%;background:var(--pet);color:#fff;display:grid;place-items:center;font:600 22px Literata,Georgia,serif;letter-spacing:.5px}
+.pho{flex:none;width:76px;height:76px;border-radius:50%;object-fit:cover;display:block}
+.tags{list-style:none;margin:-8px 0 22px;padding:0;border-top:1px solid var(--line)}
+.tags li{padding:9px 0;border-bottom:1px solid var(--line);font-size:17px}
 .top h1{font-size:30px}
 .top p{color:var(--mut);font-size:17px;margin-top:2px}
 .lead{margin:10px 0 22px;font-size:19px}
@@ -145,10 +148,12 @@ const DEFAULT = {
   blocked:[], blockedSlots:[],
   selfPick:true,   // true: quien entra elige un horario libre. false: deja sus datos y el profesional le da el turno
   osAll:false,     // true: trabaja con todas las obras sociales y confirma la cobertura
-  ask:{age:true, motivo:true},
+  ask:{age:true, motivo:true, pain:false},   // pain: pregunta si está con dolor (odontología)
   call:false,      // true: antes de dar el turno, el profesional llama por teléfono
   osNote:'',       // texto que ve quien elige obra social (si está vacío: trabaja con todas)
-  lic:''           // matrícula
+  lic:'',          // matrícula
+  photo:'',        // foto del profesional (archivo al lado del index); si está vacío va el monograma
+  tags:[]          // especialidades o servicios, se listan bajo la presentación
 };
 const WD = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const WD3 = ['dom','lun','mar','mié','jue','vie','sáb'];
@@ -181,13 +186,13 @@ function seed(){
   const turnos = [ w(0,'15:00','Marcela R.','341 555 0101','Presencial','IAPOS'), w(0,'18:00','Tomás G.','341 555 0102','Online','Particular'), w(1,'16:00','Lucía F.','341 555 0103','Presencial','OSDE'),
     w(2,'10:00','Hernán P.','341 555 0104','Presencial','Particular'), w(3,'17:00','Carla M.','341 555 0105','Online','Sancor Salud'), w(4,'11:00','Diego A.','341 555 0106','Presencial','Particular') ];
   const s = {cfg:JSON.parse(JSON.stringify(DEFAULT)), turnos, reqs:[]}; let n = 0;
-  if(!DEFAULT.selfPick) s.reqs.push({id:uid(), name:'Martín L.', phone:'341 555 0107', age:29, cov:'Particular', avail:'por la tarde. Lunes o miércoles', demo:true});
+  if(!DEFAULT.selfPick) s.reqs.push({id:uid(), name:'Martín L.', phone:'341 555 0107', age:29, cov:'Particular', avail:'por la tarde. Lunes o miércoles', pain:DEFAULT.ask.pain?'Sí':'', demo:true});
   for(let i=1;i<10 && n<2 && DEFAULT.selfPick;i++){ const d = iso(addDays(base,i)); const f = freeSlots(d, s); if(f.length>1){ s.turnos.push(n ? {id:uid(), date:d, time:f[1], name:'Sofía B.', phone:'341 555 0108', mode:'Online', cov:'Particular', kind:'paciente', status:'pedido', weekly:false, skip:[], demo:true}
       : {id:uid(), date:d, time:f[1], name:'Martín L.', phone:'341 555 0107', mode:'Presencial', cov:'IAPOS', age:29, kind:'consulta', status:'consulta', weekly:false, skip:[], demo:true}); n++; } }
   return s;
 }
 let S;
-function load(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r && r.cfg && r.cfg.os && r.cfg.ask && r.turnos){ S = r; S.reqs = S.reqs||[]; S.cfg.lic = S.cfg.lic||''; S.cfg.osNote = S.cfg.osNote||''; return; } }catch(e){} S = seed(); }
+function load(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r && r.cfg && r.cfg.os && r.cfg.ask && r.turnos){ S = r; S.reqs = S.reqs||[]; S.cfg.lic = S.cfg.lic||''; S.cfg.osNote = S.cfg.osNote||''; S.cfg.ask.pain = !!S.cfg.ask.pain; S.cfg.photo = DEFAULT.photo; S.cfg.tags = S.cfg.tags||DEFAULT.tags; return; } }catch(e){} S = seed(); }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
 // ===== Agenda =====
@@ -214,12 +219,13 @@ function siteReq(){ const c = S.cfg, f = P.f;
   h += `<label id="lA">Cuándo podés</label><label class="chk" style="margin-top:4px"><input type="checkbox" data-fc="am" ${f.am?'checked':''}> Por la mañana</label><label class="chk"><input type="checkbox" data-fc="pm" ${f.pm?'checked':''}> Por la tarde</label>
     <label for="fD">Qué días te quedan mejor</label><input id="fD" data-f="days" type="text" placeholder="Ej.: lunes y miércoles" value="${esc(f.days||'')}">`;
   if(c.ask.motivo) h += `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>`;
+  if(c.ask.pain) h += `<label id="lD">Estás con dolor?</label><div class="seg" role="group" aria-labelledby="lD" style="margin:0">${['Sí','No'].map(k => `<button data-a="pain" data-v="${k}" class="${f.pain===k?'on':''}" aria-pressed="${f.pain===k}">${k}</button>`).join('')}</div>`;
   return h + `<button class="btn w gap" data-a="sendreq">Pedir turno</button></div></section>`; }
-function msgReq(r, motivo){ return `Hola ${S.cfg.short}! Quiero pedir un turno.\nNombre: ${r.name}${r.age?'\nEdad: '+r.age:''}\nCobertura: ${r.cov==='Particular'?'particular':r.cov}\nPuedo: ${r.avail||'a convenir'}${motivo?'\nMotivo: '+motivo:''}\nMi WhatsApp: ${r.phone}`; }
+function msgReq(r, motivo){ return `Hola ${S.cfg.short}! Quiero pedir un turno.\nNombre: ${r.name}${r.age?'\nEdad: '+r.age:''}\nCobertura: ${r.cov==='Particular'?'particular':r.cov}\nPuedo: ${r.avail||'a convenir'}${motivo?'\nMotivo: '+motivo:''}${r.pain?'\nEstoy con dolor: '+r.pain.toLowerCase():''}\nMi WhatsApp: ${r.phone}`; }
 function renderSite(){
   const c = S.cfg, f = P.f, nuevo = P.kind==='nuevo'; if(!P.mode || !c.modes.includes(P.mode)) P.mode = c.modes[0];
   const ds = nextDays(14); if(!P.date || !freeSlots(P.date).length) P.date = ds.find(d => freeSlots(d).length) || null;
-  let h = `<header class="top"><div class="mono" aria-hidden="true">${esc(c.mono)}</div><div><h1>${esc(c.name)}</h1><p>${esc(c.role)}${c.lic?'. '+esc(c.lic):''}</p></div></header><p class="lead">${esc(c.lead)}</p>`;
+  let h = `<header class="top">${c.photo?`<img class="pho" src="${esc(c.photo)}" alt="${esc(c.name)}" width="76" height="76">`:`<div class="mono" aria-hidden="true">${esc(c.mono)}</div>`}<div><h1>${esc(c.name)}</h1><p>${esc(c.role)}${c.lic?'. '+esc(c.lic):''}</p></div></header><p class="lead">${esc(c.lead)}</p>${(c.tags||[]).length?`<ul class="tags">${c.tags.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`:''}`;
   if(P.step==='done' && P.last && P.last.req){ const t = P.last;
     h += `<section class="sheet"><div class="done"><h2>Turno pedido</h2><p class="gap">${c.call ? `${esc(c.short)} te llama para una primera charla y después te da el turno.` : `${esc(c.short)} te escribe por WhatsApp para darte el turno.`}</p>
       ${DEMO ? `<p class="gap mut">En la app real, acá se abre WhatsApp con este mensaje ya escrito para ${esc(c.short)}:</p><div class="bubble">${esc(msgReq(t, P.motivo))}</div>` : ''}
@@ -285,7 +291,7 @@ function renderPanel(){
 }
 function viewHome(){ const td = today(), pend = listPend(), hoy = slots(td).map(t => turnoAt(td,t)).filter(Boolean);
   let h = `<div class="ptop"><h1>Tu agenda</h1></div>`;
-  if(S.reqs.length) h += `<h2 class="sec" style="margin-top:0">${S.reqs.length===1?'1 pedido nuevo':S.reqs.length+' pedidos nuevos'}</h2><section class="sheet">${S.reqs.map(r => `<div class="req"><h3 style="font-size:20px">${esc(r.name)}</h3><p class="mut">${[r.age?r.age+' años':'', esc(r.cov||''), r.avail?'Puede '+esc(r.avail):''].filter(Boolean).join('. ')}.</p>${S.cfg.ask.motivo?'<p class="mut">El motivo de consulta te llega en el WhatsApp; acá no se guarda.</p>':''}${S.cfg.call?`<a class="btn w gap" href="tel:+${waNum(r.phone)}">Llamar a ${esc(r.name.split(' ')[0])}</a>`:''}<div class="quick gap" style="margin-bottom:0"><button class="btn ${S.cfg.call?'o':''}" data-a="reqturn" data-id="${r.id}">Darle turno</button><button class="btn del" data-a="reqrej" data-id="${r.id}">No puedo tomarlo</button></div></div>`).join('')}</section>`;
+  if(S.reqs.length) h += `<h2 class="sec" style="margin-top:0">${S.reqs.length===1?'1 pedido nuevo':S.reqs.length+' pedidos nuevos'}</h2><section class="sheet">${S.reqs.map(r => `<div class="req"><h3 style="font-size:20px">${esc(r.name)}</h3><p class="mut">${[r.age?r.age+' años':'', esc(r.cov||''), r.avail?'Puede '+esc(r.avail):''].filter(Boolean).join('. ')}.</p>${r.pain==='Sí'?'<p class="pick" style="margin:8px 0 0">Está con dolor.</p>':''}${S.cfg.ask.motivo?'<p class="mut">El motivo de consulta te llega en el WhatsApp; acá no se guarda.</p>':''}${S.cfg.call?`<a class="btn w gap" href="tel:+${waNum(r.phone)}">Llamar a ${esc(r.name.split(' ')[0])}</a>`:''}<div class="quick gap" style="margin-bottom:0"><button class="btn ${S.cfg.call?'o':''}" data-a="reqturn" data-id="${r.id}">Darle turno</button><button class="btn del" data-a="reqrej" data-id="${r.id}">No puedo tomarlo</button></div></div>`).join('')}</section>`;
   if(pend.length) h += `<h2 class="sec">Por resolver</h2><section class="sheet">${pend.map(t => rowT(t, t.date, true)).join('').replace('class="row"','class="row" style="border-top:0"')}</section>`;
   h += `<h2 class="sec">Hoy, ${esc(longDate(td))}</h2><section class="sheet">${hoy.length ? hoy.map(t => rowT(t, td)).join('').replace('class="row"','class="row" style="border-top:0"') : '<p class="empty" style="border-top:0">Hoy no tenés turnos.</p>'}</section>
     <button class="btn w" style="margin-top:22px" data-a="wnew">Anotar un turno</button><p class="hint" style="margin:8px 0 0">Para cuando arreglás el horario con alguien por teléfono o WhatsApp.</p>
@@ -314,7 +320,7 @@ function viewNew(){ const w = A.w, c = S.cfg;
     <label for="nC">Obra social o particular</label><select id="nC">${[...new Set(['Particular'].concat(c.os.filter(o => o.on).map(o => o.n), c.osAll?['Obra social']:[]))].map(o => `<option ${o===w.cov?'selected':''}>${esc(o)}</option>`).join('')}</select>
     <button class="btn w gap" data-a="wnext">${w.time?'Seguir':'Seguir: elegir día y hora'}</button></div></section>`; }
 function viewPick(){ const w = A.w, td = today(), ds = nextDays(14); if(!w.date || !freeOrAll(w.date).length) w.date = ds.find(d => freeOrAll(d).length) || '';
-  let h = back(w.req?'home':'new') + `<div class="ptop" style="padding-top:12px"><h1>Turno para ${esc(w.name)}</h1></div>${w.avail?`<p class="note">Dijo que puede ${esc(w.avail)}.</p>`:''}<section class="sheet"><h2>Elegí el día y la hora</h2><p class="sub">Abajo de cada día ves cuántos horarios libres te quedan.</p>
+  let h = back(w.req?'home':'new') + `<div class="ptop" style="padding-top:12px"><h1>Turno para ${esc(w.name)}</h1></div>${w.avail||w.pain==='Sí'?`<p class="note">${[w.pain==='Sí'?'Está con dolor.':'', w.avail?`Dijo que puede ${esc(w.avail)}.`:''].filter(Boolean).join(' ')}</p>`:''}<section class="sheet"><h2>Elegí el día y la hora</h2><p class="sub">Abajo de cada día ves cuántos horarios libres te quedan.</p>
     <div class="days">${ds.map(d => { const dd = day(d), n = freeOrAll(d).length, at = slots(d).length; return `<button data-a="wday" data-v="${d}" class="${d===w.date?'on':''}" ${n?'':'disabled'} aria-label="${esc(longDate(d))}, ${n?n+' libres':at?'completo':'no atendés'}"><span>${d===td?'hoy':WD3[dd.getDay()]}</span><b>${dd.getDate()}</b><small>${n?n+(n===1?' libre':' libres'):at?'lleno':'no'}</small></button>`; }).join('')}</div>`;
   if(!w.date) h += `<p class="empty">No te quedan horarios libres en los próximos días.</p>`;
   else { h += `<div class="daytitle">${esc(cap(longDate(w.date)))}</div>`; slots(w.date).forEach(t => { const tu = turnoAt(w.date,t);
@@ -385,14 +391,16 @@ document.addEventListener('click', e => {
     S.turnos.push(t); save(); P.last = t; P.motivo = nuevo ? (f.motivo||'').trim() : ''; P.step = 'done'; P.time = null; P.f = {}; renderSite(); scrollTo(0,0);
     if(c.wa) location.href = waLink(c.wa, msgPedido(t, P.motivo)); }
   if(a==='covk'){ P.f.covk = v; renderSite(); }
+  if(a==='pain'){ P.f.pain = v; renderSite(); }
   if(a==='sendreq'){ const f = P.f, name = (f.name||'').trim(), phone = (f.phone||'').trim();
     if(name.length<3){ toast('Falta tu nombre.'); $('#fN').focus(); return; }
     if(c.ask.age && !(Number(f.age)>0 && Number(f.age)<120)){ toast('Poné tu edad.'); $('#fE').focus(); return; }
     if(phone.replace(/\D/g,'').length<8){ toast('Revisá tu WhatsApp.'); $('#fP').focus(); return; }
     let cov = c.osAll ? (f.covk==='Particular' ? 'Particular' : f.covk==='Obra social' ? (f.other||'').trim() : '') : (f.cov==='Otra obra social' ? (f.other||'').trim() : (f.cov||''));
     if(!cov){ toast(f.covk==='Obra social' || f.cov==='Otra obra social' ? 'Escribí cuál es tu obra social.' : 'Elegí obra social o particular.'); return; }
+    if(c.ask.pain && !f.pain){ toast('Decinos si estás con dolor.'); return; }
     const avail = [[f.am?'por la mañana':'', f.pm?'por la tarde':''].filter(Boolean).join(' o '), (f.days||'').trim()].filter(Boolean).join('. ');
-    const r = {id:uid(), name, phone, age:c.ask.age?Number(f.age):0, cov, avail}; S.reqs.push(r); save(); P.last = Object.assign({req:true}, r); P.motivo = c.ask.motivo ? (f.motivo||'').trim() : ''; P.step = 'done'; P.f = {}; renderSite(); scrollTo(0,0);
+    const r = {id:uid(), name, phone, age:c.ask.age?Number(f.age):0, cov, avail, pain:c.ask.pain?f.pain:''}; S.reqs.push(r); save(); P.last = Object.assign({req:true}, r); P.motivo = c.ask.motivo ? (f.motivo||'').trim() : ''; P.step = 'done'; P.f = {}; renderSite(); scrollTo(0,0);
     if(c.wa) location.href = waLink(c.wa, msgReq(r, P.motivo)); }
   if(a==='again'){ P.step = 'pick'; P.last = null; renderSite(); }
   // panel
@@ -402,7 +410,7 @@ document.addEventListener('click', e => {
   if(a==='tsee'){ A.tid = b.dataset.id; A.tdate = v; A.from = A.scr; A.scr = 'turno'; renderPanel(); scrollTo(0,0); }
   if(a==='wnew'){ const p = (v||'').split('|'); A.w = {name:'', phone:'', cov:'Particular', date:p[0]||'', time:p[1]||'', fromDay:!!p[1]}; A.scr = 'new'; renderPanel(); scrollTo(0,0); }
   if(a==='wnext'){ const name = $('#nN').value.trim(); if(name.length<2){ toast('Falta el nombre.'); $('#nN').focus(); return; } Object.assign(A.w, {name, phone:$('#nP').value.trim(), cov:$('#nC').value}); A.scr = A.w.time ? 'confirm' : 'pick'; renderPanel(); scrollTo(0,0); }
-  if(a==='reqturn'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ A.w = {name:r.name, phone:r.phone, cov:r.cov, avail:r.avail, req:r.id, date:'', time:''}; A.scr = 'pick'; renderPanel(); scrollTo(0,0); } }
+  if(a==='reqturn'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ A.w = {name:r.name, phone:r.phone, cov:r.cov, avail:r.avail, pain:r.pain, req:r.id, date:'', time:''}; A.scr = 'pick'; renderPanel(); scrollTo(0,0); } }
   if(a==='wday'){ A.w.date = v; renderPanel(); }
   if(a==='wtime'){ A.w.time = v; A.scr = 'confirm'; renderPanel(); scrollTo(0,0); }
   if(a==='wsave'){ const w = A.w; if(turnoAt(w.date,w.time)){ toast('Ese horario ya está ocupado. Elegí otro.'); w.time = ''; A.scr = 'pick'; renderPanel(); return; }
