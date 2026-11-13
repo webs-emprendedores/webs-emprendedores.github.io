@@ -214,14 +214,14 @@ function siteReq(){ const c = S.cfg, f = P.f;
   h += `<label id="lA">Cuándo podés</label><label class="chk" style="margin-top:4px"><input type="checkbox" data-fc="am" ${f.am?'checked':''}> Por la mañana</label><label class="chk"><input type="checkbox" data-fc="pm" ${f.pm?'checked':''}> Por la tarde</label>
     <label for="fD">Qué días te quedan mejor</label><input id="fD" data-f="days" type="text" placeholder="Ej.: lunes y miércoles" value="${esc(f.days||'')}">`;
   if(c.ask.motivo) h += `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>`;
-  return h + `<button class="btn w gap" data-a="sendreq">Enviar mi pedido</button></div></section>`; }
+  return h + `<button class="btn w gap" data-a="sendreq">Pedir turno</button></div></section>`; }
 function msgReq(r, motivo){ return `Hola ${S.cfg.short}! Quiero pedir un turno.\nNombre: ${r.name}${r.age?'\nEdad: '+r.age:''}\nCobertura: ${r.cov==='Particular'?'particular':r.cov}\nPuedo: ${r.avail||'a convenir'}${motivo?'\nMotivo: '+motivo:''}\nMi WhatsApp: ${r.phone}`; }
 function renderSite(){
   const c = S.cfg, f = P.f, nuevo = P.kind==='nuevo'; if(!P.mode || !c.modes.includes(P.mode)) P.mode = c.modes[0];
   const ds = nextDays(14); if(!P.date || !freeSlots(P.date).length) P.date = ds.find(d => freeSlots(d).length) || null;
   let h = `<header class="top"><div class="mono" aria-hidden="true">${esc(c.mono)}</div><div><h1>${esc(c.name)}</h1><p>${esc(c.role)}${c.lic?'. '+esc(c.lic):''}</p></div></header><p class="lead">${esc(c.lead)}</p>`;
   if(P.step==='done' && P.last && P.last.req){ const t = P.last;
-    h += `<section class="sheet"><div class="done"><h2>Pedido enviado</h2><p class="gap">${c.call ? `${esc(c.short)} te llama para una primera charla y después te da el turno.` : `${esc(c.short)} te escribe por WhatsApp para darte el turno.`}</p>
+    h += `<section class="sheet"><div class="done"><h2>Turno pedido</h2><p class="gap">${c.call ? `${esc(c.short)} te llama para una primera charla y después te da el turno.` : `${esc(c.short)} te escribe por WhatsApp para darte el turno.`}</p>
       ${DEMO ? `<p class="gap mut">En la app real, acá se abre WhatsApp con este mensaje ya escrito para ${esc(c.short)}:</p><div class="bubble">${esc(msgReq(t, P.motivo))}</div>` : ''}
       <button class="btn o w gap" data-a="again">Volver al inicio</button></div></section>`;
   } else if(P.step==='done' && P.last){ const t = P.last, cons = t.kind==='consulta';
