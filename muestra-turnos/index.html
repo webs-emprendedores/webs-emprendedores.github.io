@@ -73,7 +73,11 @@ input[type=text],input[type=tel],input[type=date],select,textarea{width:100%;min
 input:focus,select:focus,textarea:focus{border-color:var(--pet);outline:0}
 .chk{display:flex;gap:10px;align-items:center;font-weight:400;margin:14px 0 0}
 .chk input{width:24px;height:24px;flex:none;accent-color:var(--pet)}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.two>div{min-width:0}
+input[type=date]{min-width:0;max-width:100%;-webkit-appearance:none;appearance:none;display:block}
+input[type=date]::-webkit-date-and-time-value{text-align:left}
+.back{margin:0 0 12px}
 .pick{margin:14px 0 0;padding:12px 14px;border-left:4px solid var(--amb);background:var(--ambbg);font-weight:700}
 .gap{margin-top:16px}
 
@@ -269,7 +273,7 @@ function renderPanel(){
 function listPend(){ const td = today(); return S.turnos.filter(t => t.status!=='confirmado' && t.date>=td).sort((a,b) => (a.date+a.time).localeCompare(b.date+b.time)); }
 function viewAgenda(){
   const c = S.cfg, pend = listPend(); let h = '';
-  if(A.msg) h += `<div class="note"><b>${esc(A.msg.title)}</b><div class="bubble">${esc(A.msg.text)}</div><div class="quick gap" style="margin-bottom:0"><a class="btn sm" target="_blank" rel="noopener" href="${esc(A.msg.href)}">Abrir WhatsApp</a><button class="btn o sm" data-a="msgx">Cerrar</button></div></div>`;
+  if(A.msg) return `<div class="note"><b>${esc(A.msg.title)}</b><p>Ya está escrito. Tocá “Abrir WhatsApp” y enviáselo.</p><div class="bubble">${esc(A.msg.text)}</div></div><a class="btn w" target="_blank" rel="noopener" href="${esc(A.msg.href)}">Abrir WhatsApp</a><button class="btn o w gap" data-a="msgx">Listo, volver a mi agenda</button>`;
   if(A.form) return h + viewForm();
   h += `<div class="quick"><button class="btn" data-a="new">Agendar turno</button><button class="btn o" data-a="link">Copiar mi link</button></div>
     <p class="hint">Con “Agendar turno” anotás vos un turno cuando arreglás el horario con alguien. “Copiar mi link” copia la dirección de tu página: pegala en WhatsApp o en tu perfil, y quien la abre ${c.selfPick?'elige su horario':'te deja sus datos'} ahí.</p>`;
@@ -291,7 +295,7 @@ function viewAgenda(){
   return h + `</section>`;
 }
 function viewForm(){ const f = A.form, free = freeOrAll(f.date);
-  return `<section class="sheet"><div class="form" style="border:0"><h3>${f.req?'Darle turno a '+esc(f.name):'Agendar un turno'}</h3><p class="mut">${f.req?'Elegí día y hora. Al guardar te armo el mensaje para confirmárselo por WhatsApp.':'Para cuando te escriben y lo anotás vos.'}</p>
+  return `<button class="btn o sm back" data-a="ncancel">← Volver</button><section class="sheet"><div class="form" style="border:0"><h3>${f.req?'Darle turno a '+esc(f.name):'Agendar un turno'}</h3><p class="mut">${f.req?'Elegí día y hora. Al guardar te armo el mensaje para confirmárselo por WhatsApp.':'Para cuando te escriben y lo anotás vos.'}</p>${f.req && f.avail ? `<p class="pick">Dijo que puede ${esc(f.avail)}.</p>` : ''}
     <div class="two"><div><label for="nD">Día</label><input id="nD" type="date" min="${today()}" value="${f.date}"></div><div><label for="nT">Hora</label><select id="nT">${free.length?free.map(t => `<option ${t===f.time?'selected':''}>${t}</option>`).join(''):'<option value="">Sin lugar</option>'}</select></div></div>
     <label for="nN">Nombre</label><input id="nN" type="text" value="${esc(f.name||'')}"><label for="nP">WhatsApp</label><input id="nP" type="tel" value="${esc(f.phone||'')}">
     <label for="nC">Obra social o particular</label><select id="nC">${[...new Set(['Particular'].concat(S.cfg.os.filter(o => o.on).map(o => o.n), f.cov?[f.cov]:[]))].map(o => `<option ${o===f.cov?'selected':''}>${esc(o)}</option>`).join('')}</select>
@@ -368,7 +372,7 @@ document.addEventListener('click', e => {
     const t = {id:uid(), date, time, name, phone, mode:$('#nM')?$('#nM').value:c.modes[0], cov:$('#nC').value, kind:'paciente', status:'confirmado', weekly:$('#nW').checked, skip:[]}; S.turnos.push(t);
     if(rq){ S.reqs = S.reqs.filter(x => x.id!==rq); const fee = c.fees.show && t.cov==='Particular' && c.fees.part ? ` La sesión es de ${money(c.fees.part)}.` : ''; showMsg(t, 'Mensaje para confirmarle', `Hola ${name.split(' ')[0]}! Te confirmo el turno ${when(date)} a las ${time}${modeTxt(t)}.${fee} ${c.cancel}`.trim()); }
     save(); A.form = null; A.date = date; renderPanel(); renderSite(); scrollTo(0,0); toast('Turno guardado.'); }
-  if(a==='reqturn'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ A.form = {date:A.date, time:'', name:r.name, phone:r.phone, cov:r.cov, req:r.id}; renderPanel(); scrollTo(0,0); } }
+  if(a==='reqturn'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ A.form = {date:A.date, time:'', name:r.name, phone:r.phone, cov:r.cov, avail:r.avail, req:r.id}; renderPanel(); scrollTo(0,0); } }
   if(a==='reqrej'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ showMsg(r, 'Aviso para '+r.name.split(' ')[0], `Hola ${r.name.split(' ')[0]}! Gracias por escribirme. En este momento no puedo tomar tu consulta. Espero que encuentres pronto un espacio.`); S.reqs = S.reqs.filter(x => x.id!==r.id); save(); renderPanel(); scrollTo(0,0); } }
   if(a==='link'){ const u = location.href.split('#')[0]; try{ navigator.clipboard.writeText(u).then(() => toast('Link copiado. Pegalo en el chat.'), () => toast(u)); }catch(err){ toast(u); } }
   if(a==='conf' || a==='rem' || a==='rej'){ const t = S.turnos.find(x => x.id===b.dataset.id); if(!t) return; const d = A.date, fn = t.name.split(' ')[0], o = c.os.find(x => x.n===t.cov);
