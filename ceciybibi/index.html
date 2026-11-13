@@ -15,12 +15,12 @@
 <meta name="theme-color" content="#35651c">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Jost:wght@400;500;600&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Knewave&family=Zilla+Slab:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--r:#c5281b;--g:#35651c;--ink:#2b2218;--mut:#665a4d;--bg:#fdf7eb;--soft:#f6ead3;--line:#e6d8bd;--gs:#e7efd9;--rs:#fbe3df}
+:root{--r:#c8281c;--g:#2f5d1e;--ink:#2b2218;--mut:#665a4d;--bg:#fdf7eb;--soft:#f6ead3;--line:#e6d8bd;--gs:#e7efd9;--rs:#fbe3df}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font-family:Jost,system-ui,sans-serif;font-size:17px;line-height:1.45}
+body{background:var(--bg);color:var(--ink);font-family:"Zilla Slab",Georgia,serif;font-size:17px;line-height:1.45}
 img{max-width:100%;display:block}
 button,input,select,textarea{font:inherit;color:inherit}
 .wrap{max-width:560px;margin:0 auto;padding:0 16px}
@@ -34,14 +34,14 @@ button,input,select,textarea{font:inherit;color:inherit}
 .btn:disabled{opacity:.55}
 .go{width:auto;min-height:46px;border-radius:999px;padding:8px 22px;font-size:17px}
 .k{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--r);font-weight:600}
-h1{font-family:Lora,serif;font-weight:700;font-size:34px;line-height:1.08} h1 i{font-style:normal;color:var(--g)}
-h2{font-family:Lora,serif;font-weight:700;font-size:27px;line-height:1.12;margin:2px 0 6px}
-h3{font-family:Lora,serif;font-weight:700;font-size:20px;line-height:1.2}
+h1{font-family:"Zilla Slab",Georgia,serif;font-weight:700;font-size:34px;line-height:1.08} h1 i{font-style:normal;color:var(--g)}
+h2{font-family:"Zilla Slab",Georgia,serif;font-weight:700;font-size:27px;line-height:1.12;margin:2px 0 6px}
+h3{font-family:"Zilla Slab",Georgia,serif;font-weight:700;font-size:20px;line-height:1.2}
 .mut{color:var(--mut);font-size:15.5px}
 section{padding:26px 0}
 .hero{padding:0 0 24px}
 .hero .ph{height:250px;background:url(img/hero.jpg) center 55%/cover;position:relative}
-.tag{position:absolute;left:16px;bottom:16px;background:var(--r);color:#fff;font-family:"Caveat Brush",cursive;font-size:25px;line-height:1;border-radius:10px;padding:8px 16px 7px;transform:rotate(-2deg)}
+.tag{position:absolute;left:16px;bottom:16px;background:var(--r);color:#fff;font-family:Knewave,cursive;font-size:25px;line-height:1;border-radius:10px;padding:8px 16px 7px;transform:rotate(-2deg)}
 .chips{display:flex;flex-wrap:wrap;gap:8px 16px;margin:14px 0 16px}
 .chip{display:flex;align-items:center;gap:7px;font-size:16px;font-weight:500;color:var(--g)}
 .chip i{font-style:normal;width:28px;height:28px;border-radius:50%;background:var(--gs);display:flex;align-items:center;justify-content:center;font-size:15px}
@@ -49,13 +49,13 @@ section{padding:26px 0}
 .dayb{padding:14px 14px 6px}
 .dayb + .dayb{border-top:1px solid var(--line)}
 .dayh{display:flex;align-items:center;gap:10px}
-.day{font-family:"Caveat Brush",cursive;font-size:23px;line-height:1;color:#fff;border-radius:10px;padding:7px 14px 6px;transform:rotate(-2deg);background:var(--r)}
+.day{font-family:Knewave,cursive;font-size:23px;line-height:1;color:#fff;border-radius:10px;padding:7px 14px 6px;transform:rotate(-2deg);background:var(--r)}
 .day.g{background:var(--g)}
 .dayh small{color:var(--mut);font-size:15.5px}
 .it{display:flex;align-items:center;gap:12px;padding:10px 0}
 .it img{width:62px;height:62px;border-radius:12px;object-fit:cover;flex:none}
 .it .tx{flex:1;min-width:0}
-.it .n{font-family:Lora,serif;font-weight:600;font-size:18px;line-height:1.18}
+.it .n{font-family:"Zilla Slab",Georgia,serif;font-weight:600;font-size:18px;line-height:1.18}
 .it .d{font-size:15.5px;color:var(--mut);line-height:1.25}
 .it .p{font-size:15.5px;font-weight:600;color:var(--g)}
 .st{display:flex;align-items:center;flex:none;border:1.5px solid var(--line);border-radius:999px;background:#fff}
@@ -87,7 +87,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--g);outline-offse
 .li b{font-weight:600;display:block;line-height:1.2} .li span.s{font-size:15.5px;color:var(--mut)}
 #bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:10px 0 12px;display:none;box-shadow:0 -6px 18px rgba(60,40,10,.08)}
 #bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
-#bar b{font-family:Lora,serif;font-size:22px;color:var(--g)}
+#bar b{font-family:"Zilla Slab",Georgia,serif;font-size:22px;color:var(--g)}
 #toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-size:16px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:88%;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%)}
 /* panel */
@@ -100,11 +100,11 @@ body.admin #site, body.admin #bar{display:none !important} body.admin #panel{dis
 .help{background:var(--gs);border-radius:12px;padding:10px 13px;font-size:15.5px;margin:6px 0 12px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
 .stats div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center}
-.stats b{display:block;font-family:Lora,serif;font-size:21px;color:var(--g);line-height:1.15} .stats span{font-size:14px;color:var(--mut)}
+.stats b{display:block;font-family:"Zilla Slab",Georgia,serif;font-size:21px;color:var(--g);line-height:1.15} .stats span{font-size:14px;color:var(--mut)}
 .wk{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0}
 .wk button{width:48px;height:48px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:22px;cursor:pointer}
 .dish{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:9px 0 3px}
-.dish .n{font-family:Lora,serif;font-weight:600;font-size:18px} .dish .q{font-family:Lora,serif;font-weight:700;font-size:25px;color:var(--g)}
+.dish .n{font-family:"Zilla Slab",Georgia,serif;font-weight:600;font-size:18px} .dish .q{font-family:"Zilla Slab",Georgia,serif;font-weight:700;font-size:25px;color:var(--g)}
 .who{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:7px 0;border-top:1px dashed var(--line);font-size:16px}
 .who .nm{flex:1 1 130px;min-width:0}
 .oc{padding:13px 14px;margin-top:10px}
@@ -112,86 +112,124 @@ body.admin #site, body.admin #bar{display:none !important} body.admin #panel{dis
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .box{padding:14px;margin-top:12px}
 .res{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)}
-.res b{font-family:Lora,serif;font-size:20px;color:var(--g)}
+.res b{font-family:"Zilla Slab",Georgia,serif;font-size:20px;color:var(--g)}
 .ph-mini{width:62px;height:62px;border-radius:12px;object-fit:cover}
 [hidden]{display:none !important}
 @media(min-width:700px){.hero .ph{height:330px;border-radius:0 0 22px 22px}}
+
+/* ===== Portada nueva ===== */
+body{font-variant-numeric:lining-nums}
+#site{background:#fbf4e4;font-size:18px;line-height:1.5}
+#site section{padding-top:0;padding-bottom:0}
+.mantel{height:18px;background:repeating-linear-gradient(0deg,rgba(47,93,30,.4) 0 9px,transparent 9px 18px),repeating-linear-gradient(90deg,rgba(47,93,30,.4) 0 9px,transparent 9px 18px),#f7f1df}
+.s-in{max-width:620px;margin:0 auto;padding-left:18px;padding-right:18px}
+.s-top{display:flex;align-items:center;justify-content:space-between;padding-top:12px}
+.s-top img{height:78px;border-radius:6px}
+.s-btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:8px 24px;border:0;border-radius:8px;background:var(--ink);color:#fff;font-weight:600;font-size:19px;text-decoration:none;cursor:pointer}
+.s-btn.w{width:100%;min-height:58px;font-size:20px;background:var(--g)}
+.s-btn.line{background:transparent;color:#fff;border:2px solid #fff;width:100%}
+.s-btn.ink{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.s-h1{font-family:Knewave,cursive;font-weight:400;font-size:clamp(50px,14.5vw,84px);line-height:.92;color:var(--r);transform:rotate(-2.5deg);transform-origin:left bottom;margin:22px 0 20px}
+.s-lead{font-size:19px;line-height:1.4}
+#site .s-intro{padding-bottom:22px}
+.band{color:#fff;padding:20px 0 14px}
+.band.b0{background:var(--r)} .band.b1{background:var(--g)} .band.off{background:#8d8676}
+.band-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.band-d{font-family:Knewave,cursive;font-size:46px;line-height:1}
+.band-f{font-size:18px}
+.band-i{display:flex;align-items:center;gap:14px;padding:10px 0 8px}
+.band-i img{width:76px;height:76px;object-fit:cover;border-radius:4px;flex:none}
+.band-t{flex:1;min-width:0}
+.band-t strong{display:block;font-size:24px;font-weight:700;line-height:1.14}
+.band-t span{display:block;font-size:18px;line-height:1.3}
+.band-off{font-weight:600;border:2px solid #fff;border-radius:6px;padding:4px 12px;white-space:nowrap}
+#site .st{border:0;background:rgba(255,255,255,.18);padding:3px;gap:0}
+#site .st button{width:46px;height:46px;border-radius:50%;background:#fff;color:var(--ink);font-size:28px;font-weight:600}
+#site .st b{min-width:40px;color:#fff;font-size:25px;font-weight:700}
+#site .st.on{background:rgba(255,255,255,.34)}
+#site .st:not(.on) button[data-st="-1"]{opacity:.45}
+.s-note{padding-top:14px;padding-bottom:6px;font-size:18px}
+.s-h2{font-size:30px;font-weight:700;line-height:1.1;margin:0 0 12px}
+.s-block{padding-top:34px;padding-bottom:8px}
+#site label{font-weight:600;font-size:18px;margin:16px 0 6px}
+#site input,#site textarea{border:2px solid var(--ink);border-radius:6px;font-size:19px;min-height:54px}
+#site .seg button{border:2px solid var(--ink);border-radius:6px;min-height:54px;font-size:18px}
+#site .seg button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+#site .sum{background:#fff;border:2px dashed var(--ink);border-radius:0;padding:14px 16px;font-size:18px}
+#site .sum .t{border-top:2px dashed var(--ink);font-size:22px}
+#site .err{font-weight:600;font-size:18px}
+.s-strip{display:flex;gap:10px;overflow-x:auto;padding:0 18px 10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.s-strip img{height:240px;width:auto;flex:none;border-radius:4px;scroll-snap-align:start}
+.s-steps{list-style:none;counter-reset:p;margin-top:4px}
+.s-steps li{counter-increment:p;display:flex;gap:16px;align-items:baseline;padding:8px 0;font-size:19px}
+.s-steps li:before{content:counter(p);font-family:Knewave,cursive;font-size:44px;line-height:.8;color:var(--r);flex:none;width:30px}
+.s-foot{background:var(--g);color:#fff;margin-top:38px;padding:30px 0 34px}
+.s-foot a.t{display:block;color:#fff;font-size:21px;font-weight:600;padding:9px 0;text-decoration:underline;text-underline-offset:4px}
+.s-foot p{font-size:18px}
+#bar b{font-size:24px}
+@media(min-width:700px){.s-strip{justify-content:center}}
 </style>
 </head>
 <body>
 <div id="site">
-<header class="top"><div class="wrap"><img src="img/logo.png" alt="Ceci y Bibi Viandas"><a class="btn go" href="#menu">Pedir</a></div></header>
+<div class="mantel" aria-hidden="true"></div>
+<header class="s-in s-top"><img src="img/logo.png" alt="Ceci y Bibi Viandas"><a class="s-btn" href="#semana">Pedir</a></header>
 
-<section class="hero">
-  <div class="ph"><div class="tag">Menú de la semana</div></div>
-  <div class="wrap" style="padding-top:18px">
-    <h1>Caseras, ricas y <i>abundantes.</i></h1>
-    <div class="chips"><div class="chip"><i>❄</i>Para freezar</div><div class="chip"><i>♥</i>Hechas en casa</div></div>
-    <a class="btn" href="#menu">Armar mi pedido</a>
-    <p class="mut" id="heroLine" style="text-align:center;margin-top:10px"></p>
-  </div>
+<section class="s-in s-intro">
+  <h1 class="s-h1">Esta semana cocinamos</h1>
+  <p class="s-lead" id="weekLabel"></p>
+  <p class="s-lead" id="heroLine"></p>
 </section>
 
-<section id="menu" style="padding-top:8px"><div class="wrap">
-  <div class="k">Menú de la semana</div>
-  <h2>Elegí tus viandas</h2>
-  <p class="mut" id="weekLabel"></p>
-  <div class="card" id="menuList" style="margin-top:12px"></div>
-  <p class="mut" id="menuNote" style="margin-top:10px"></p>
-</div></section>
+<section id="semana"><div id="menuList"></div><p class="s-in s-note" id="menuNote"></p></section>
 
-<section id="datos" hidden style="padding-top:6px"><div class="wrap">
-  <div class="k">Tu pedido</div>
-  <h2>Completá tus datos</h2>
+<section id="datos" hidden><div class="s-in s-block">
+  <h2 class="s-h2">Tu pedido</h2>
   <div class="sum" id="sum"></div>
   <label for="fName">Tu nombre</label><input id="fName" autocomplete="name">
   <label for="fPhone">Tu WhatsApp</label><input id="fPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="341 ...">
   <div id="entBox"><label>Entrega</label>
     <div class="seg" id="ent"><button type="button" data-v="retiro" class="on">Lo retiro</button><button type="button" data-v="envio">Necesito envío</button></div>
-    <p class="mut" id="entInfo" style="margin-top:8px"></p>
+    <p id="entInfo" style="margin-top:8px"></p>
     <div id="dirBox" hidden><label for="fDir">Dirección para el envío</label><input id="fDir" autocomplete="street-address"></div>
   </div>
-  <label for="fNotes">Aclaraciones (si hace falta)</label><textarea id="fNotes" placeholder="Por ejemplo: las empanadas, de carne"></textarea>
+  <label for="fNotes">Aclaraciones, si hace falta</label><textarea id="fNotes" placeholder="Por ejemplo: las empanadas, de carne"></textarea>
   <p class="err" id="fErr"></p>
-  <button class="btn" id="send" style="margin-top:16px">Enviar pedido por WhatsApp</button>
-  <p class="mut" style="text-align:center;margin-top:8px">Tu pedido nos llega armado, día por día.</p>
+  <button class="s-btn w" id="send" style="margin-top:18px">Enviar pedido por WhatsApp</button>
 </div></section>
 
-<section id="done" hidden><div class="wrap"><div class="card box" style="text-align:center">
-  <h2>Pedido listo ✔</h2>
-  <p style="margin:6px 0 14px">Ya lo anotamos. Mandanos el mensaje por WhatsApp para confirmarlo.</p>
-  <a class="btn" id="doneWa" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
-  <p class="mut" id="payInfo" style="margin-top:12px"></p>
-  <button class="btn o sm" id="again" style="margin:14px auto 0">Hacer otro pedido</button>
-</div></div></section>
-
-<section><div class="wrap">
-  <div class="k">Así llegan a tu mesa</div>
-  <div class="gal"><img src="img/g1.jpg" alt="Vianda de Ceci y Bibi" loading="lazy"><img src="img/g2.jpg" alt="Vianda de Ceci y Bibi" loading="lazy"><img src="img/g3.jpg" alt="Vianda de Ceci y Bibi" loading="lazy"></div>
-  <p style="margin-top:14px">Cocinamos con dedicación, como si fuera para nuestra propia familia. Para estudiantes, para familias, para adultos mayores y para tener en el freezer.</p>
+<section id="done" hidden><div class="s-in s-block">
+  <h2 class="s-h2">Pedido anotado</h2>
+  <p style="margin-bottom:16px">Mandanos el mensaje por WhatsApp para confirmarlo.</p>
+  <a class="s-btn w" id="doneWa" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a>
+  <p id="payInfo" style="margin-top:14px"></p>
+  <button class="s-btn ink" id="again" style="margin-top:14px">Hacer otro pedido</button>
 </div></section>
 
-<section class="soft"><div class="wrap">
-  <div class="k">Cómo pedir</div>
-  <div class="steps"><div><span>Elegí cuántas viandas querés de cada día.</span></div><div><span>Completá tus datos y mandanos el pedido por WhatsApp.</span></div><div><span>Te confirmamos y coordinamos la entrega.</span></div></div>
+<section><div class="s-in s-block"><h2 class="s-h2">Así salen de nuestra cocina</h2></div>
+  <div class="s-strip"><img src="img/hero.jpg" alt="Arrollado de pollo con papas" loading="lazy"><img src="img/g1.jpg" alt="Vianda de milanesa con puré" loading="lazy"><img src="img/g2.jpg" alt="Viandas listas para entregar" loading="lazy"><img src="img/g3.jpg" alt="Albóndigas de pollo con puré mixto" loading="lazy"></div>
+  <p class="s-in" style="padding-top:10px">Cocinamos con dedicación, como si fuera para nuestra propia familia. Las viandas son abundantes y se pueden freezar.</p>
+</section>
+
+<section><div class="s-in s-block">
+  <h2 class="s-h2">Cómo pedir</h2>
+  <ol class="s-steps"><li><span>Elegí cuántas viandas querés de cada día.</span></li><li><span>Completá tus datos y mandanos el pedido por WhatsApp.</span></li><li><span>Te confirmamos y coordinamos la entrega.</span></li></ol>
 </div></section>
 
-<section class="soft" style="padding-top:0"><div class="wrap">
-  <div style="text-align:center"><img src="img/logo.png" alt="Ceci y Bibi Viandas" style="height:104px;border-radius:14px;margin:0 auto"></div>
-  <div class="card" style="margin-top:14px">
-    <a class="li" id="waLink" href="#" target="_blank" rel="noopener"><div><b>WhatsApp</b><span class="s">Pedidos y consultas</span></div><span class="pill ok">Escribinos</span></a>
-    <a class="li" href="https://www.instagram.com/viandas.ceci.bibi.rosario/" target="_blank" rel="noopener"><div><b>Instagram</b><span class="s">@viandas.ceci.bibi.rosario</span></div><span class="pill no">Seguinos</span></a>
-    <div class="li"><div><b>Rosario, Santa Fe</b><span class="s" id="addr"></span></div></div>
-  </div>
-  <p style="text-align:center;margin-top:22px"><a href="#panel" class="mut" style="font-size:15px;padding:10px">Acceso Ceci y Bibi</a></p>
-</div></section>
-<div style="height:84px" class="soft"></div>
+<footer class="s-foot"><div class="s-in">
+  <a class="t" id="waLink" href="#" target="_blank" rel="noopener">Escribinos por WhatsApp</a>
+  <a class="t" href="https://www.instagram.com/viandas.ceci.bibi.rosario/" target="_blank" rel="noopener">Seguinos en Instagram</a>
+  <p style="padding:9px 0 22px">Retiro por <span id="addr"></span>, Rosario.</p>
+  <p><a href="#panel" style="color:#fff;font-size:15px;opacity:.85;padding:10px 10px 10px 0">Acceso Ceci y Bibi</a></p>
+</div></footer>
+<div class="mantel" aria-hidden="true"></div>
+<div style="height:84px;background:#f7f1df"></div>
 </div>
 
-<div id="bar"><div class="wrap"><div><span id="barN"></span><br><b id="barT"></b></div><button class="btn sm" id="barGo" style="min-height:52px;padding:8px 24px;font-size:18px">Continuar</button></div></div>
+<div id="bar"><div class="wrap"><div><span id="barN"></span><br><b id="barT"></b></div><button class="s-btn" id="barGo" style="background:var(--g)">Continuar</button></div></div>
 
 <div id="panel">
-  <header class="top"><div class="wrap"><img src="img/logo.png" alt=""><div style="text-align:right"><b style="font-family:Lora,serif;font-size:20px">Nuestro panel</b><br><a href="#" class="mut" style="color:var(--g);font-weight:500">Ver la página</a></div></div></header>
+  <header class="top"><div class="wrap"><img src="img/logo.png" alt=""><div style="text-align:right"><b style="font-family:"Zilla Slab",Georgia,serif;font-size:20px">Nuestro panel</b><br><a href="#" class="mut" style="color:var(--g);font-weight:500">Ver la página</a></div></div></header>
   <div class="wrap">
     <div id="loginBox" class="card box" style="margin-top:22px">
       <h3>Entrar al panel</h3>
@@ -271,14 +309,18 @@ function menuHtml(md, q, closedPill){ const one = onePrice(md);
 function cartLines(q){ const out = []; menuDays().forEach(d => d.items.forEach(p => { if(q[p.id] > 0) out.push({d, p, n:q[p.id]}); })); return out; }
 const cartTotal = L => L.reduce((s,l) => s + l.n*(Number(l.p.price)||0), 0), cartCount = L => L.reduce((s,l) => s + l.n, 0);
 
+function siteMenu(md){ const one = onePrice(md);
+  return md.map((d,k) => { const f = pd(d.date), off = !canOrder(d.date);
+    return `<div class="band ${off ? 'off' : 'b'+(k%2)}"><div class="s-in"><div class="band-h"><span class="band-d">${d.day}</span><span class="band-f">${f.getDate()} de ${MES[f.getMonth()]}</span></div>` + d.items.map(p =>
+      `<div class="band-i">${p.img?`<img src="${esc(p.img)}" alt="" loading="lazy">`:''}<div class="band-t"><strong>${esc(p.name)}</strong><span>${esc(p.desc)}</span>${one||!p.price?'':`<span>${money(p.price)}</span>`}</div>${off ? '<span class="band-off">Ya cerró</span>' : stepper(p, Q[p.id])}</div>`).join('') + '</div></div>'; }).join(''); }
 function renderSite(){
   const md = menuDays(), x = X(), one = onePrice(md), open = md.some(d => canOrder(d.date));
   Object.keys(Q).forEach(id => { const l = md.find(d => d.items.some(p => p.id===id)); if(!l || !canOrder(l.date)) delete Q[id]; });
-  $('#heroLine').textContent = (one ? money(one)+' cada vianda · ' : '') + 'Reservá con anticipación';
+  $('#heroLine').textContent = one ? 'Cada vianda cuesta '+money(one)+'.' : '';
   $('#weekLabel').textContent = weekText(md);
-  $('#menuList').innerHTML = md.length ? menuHtml(md, Q, true) : '<div class="dayb" style="padding-bottom:14px">Estamos armando el menú de la semana. Escribinos por WhatsApp y te contamos.</div>';
-  $('#menuNote').textContent = !md.length ? '' : open ? (one ? money(one)+' cada vianda. ' : '') + (Number(x.cutoff)===0 ? 'Podés pedir hasta el mismo día.' : Number(x.cutoff)>1 ? 'Los pedidos se toman hasta '+x.cutoff+' días antes.' : 'Los pedidos se toman hasta el día anterior.') : 'El menú de esta semana ya cerró. En breve publicamos el nuevo.';
-  $('#addr').textContent = (x.pickup||'').replace(/,?\s*Rosario.*$/i,'') || 'Rosario';
+  $('#menuList').innerHTML = md.length ? siteMenu(md) : '<p class="s-in">Estamos armando el menú de la semana. Escribinos por WhatsApp y te contamos.</p>';
+  $('#menuNote').textContent = !md.length ? '' : open ? (Number(x.cutoff)===0 ? 'Podés pedir hasta el mismo día.' : Number(x.cutoff)>1 ? 'Los pedidos se toman hasta '+x.cutoff+' días antes.' : 'Los pedidos se toman hasta el día anterior.') : 'El menú de esta semana ya cerró. En breve publicamos el nuevo.';
+  $('#addr').textContent = (x.pickup||'').replace(/,?\s*Rosario.*$/i,'') || 'el centro';
   $('#entInfo').textContent = ent==='retiro' ? (x.pickup ? 'Retirás por '+x.pickup+'.' : '') : 'El envío lo coordinamos por WhatsApp.';
   $('#ent').hidden = !x.envio; if(!x.envio){ ent = 'retiro'; $('#dirBox').hidden = true; }
   $('#waLink').href = 'https://wa.me/'+WA+'?text='+encodeURIComponent('Hola Ceci y Bibi! Les escribo desde la página.');
@@ -288,7 +330,7 @@ let ent = 'retiro';
 function renderCart(){ const L = cartLines(Q), n = cartCount(L), t = cartTotal(L);
   $('#bar').style.display = n && $('#done').hidden ? 'block' : 'none'; $('#datos').hidden = !n;
   $('#barN').textContent = n + (n===1 ? ' vianda' : ' viandas'); $('#barT').textContent = money(t);
-  $('#sum').innerHTML = L.map(l => `<div><span>${l.d.day} ${dm(l.d.date)} · ${l.n} × ${esc(l.p.name)}</span><span>${money(l.n*l.p.price)}</span></div>`).join('') + `<div class="t"><span>Total</span><span>${money(t)}</span></div>`; }
+  $('#sum').innerHTML = L.map(l => `<div><span>${l.d.day}: ${l.n} × ${esc(l.p.name)}</span><span>${money(l.n*l.p.price)}</span></div>`).join('') + `<div class="t"><span>Total</span><span>${money(t)}</span></div>`; }
 $('#menuList').addEventListener('click', e => { const b = e.target.closest('[data-st]'); if(!b) return; const id = b.dataset.id; Q[id] = Math.max(0, Math.min(30, (Q[id]||0) + Number(b.dataset.st))); if(!Q[id]) delete Q[id];
   const st = b.parentElement; st.querySelector('b').textContent = Q[id]||0; st.classList.toggle('on', !!Q[id]); $('#done').hidden = true; renderCart(); });
 $('#barGo').addEventListener('click', () => { $('#datos').scrollIntoView({behavior:'smooth', block:'start'}); });
@@ -307,7 +349,7 @@ $('#send').addEventListener('click', async () => {
   Q = {}; $('#fNotes').value = ''; $('#done').hidden = false; renderSite(); $('#done').scrollIntoView({block:'center'});
   setTimeout(() => { location.href = url; }, 500);
 });
-$('#again').addEventListener('click', () => { $('#done').hidden = true; $('#menu').scrollIntoView({behavior:'smooth'}); });
+$('#again').addEventListener('click', () => { $('#done').hidden = true; $('#semana').scrollIntoView({behavior:'smooth'}); });
 
 // ===== Panel =====
 let tab = 'coc', viewWeek = null, edit = null, manual = null;
