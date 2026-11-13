@@ -360,7 +360,7 @@ function calLink(t, date){ const s = day(date), m = mins(t.time), f = (mm) => da
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1), isAndroid = /Android/i.test(navigator.userAgent);
 function icsText(t, date){ const m = mins(t.time), f = mm => date.replace(/-/g,'')+'T'+pad(Math.floor(mm/60))+pad(mm%60)+'00', n = new Date(), st = n.getUTCFullYear()+pad(n.getUTCMonth()+1)+pad(n.getUTCDate())+'T'+pad(n.getUTCHours())+pad(n.getUTCMinutes())+pad(n.getUTCSeconds())+'Z';
   return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Turnos//ES','BEGIN:VEVENT','UID:'+t.id+'-'+date+'@turnos','DTSTAMP:'+st,'DTSTART:'+f(m),'DTEND:'+f(m+S.cfg.dur),'SUMMARY:Turno '+t.name].concat(t.weekly?['RRULE:FREQ=WEEKLY']:[], t.phone?['DESCRIPTION:WhatsApp '+t.phone]:[], ['END:VEVENT','END:VCALENDAR']).join('\r\n'); }
-function calBtn(tu, date){ if(isIOS) return `<a class="btn o" href="data:text/calendar;charset=utf-8,${encodeURIComponent(icsText(tu, date))}">Guardarlo en mi calendario</a>`;
+function calBtn(tu, date){ if(isIOS) return ''; // iPhone: Safari no abre el Calendario desde un archivo armado en la página (probado 13/11); necesita un .ics servido por un servidor
   if(isAndroid) return `<button class="btn o" data-a="ics" data-id="${tu.id}">Guardarlo en mi calendario</button>`;
   return `<a class="btn o" target="_blank" rel="noopener" href="${esc(calLink(tu, date))}">Guardarlo en Google Calendar</a>`; }
 function showMsg(t, title, text){ A.msg = {title, text, href:waLink(t.phone, text), demo:!!t.demo}; }
