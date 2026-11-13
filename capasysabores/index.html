@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capas y Sabores · Tortas y postres en San Luis</title>
+<meta name="description" content="Tortas, mesa dulce y postres a pedido en San Luis capital. Elegí, poné la fecha y pedí online.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Capas y Sabores">
+<meta property="og:description" content="Tortas, mesa dulce y postres a pedido en San Luis. Reservá tu fecha.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%81%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<meta name="theme-color" content="#b85f78">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fcf7f5; --card:#fff; --ink:#2f2a28; --mut:#6b615b; --line:#ece4da;
+  --mint:#f6e3e0; --mint2:#c97b8e; --green:#b85f78; --green2:#9c4b62; --teal:#6b4a3e; --teal2:#5a3d33;
+  --rose:#f8e4e6; --rose2:#b85f78; --ok:#4f9a6b; --warn:#c9902f; --no:#c25e67;
+  --serif:"Cormorant Garamond",Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Jost,system-ui,sans-serif;font-weight:400;background:var(--bg);color:var(--ink);line-height:1.6}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:500;line-height:1.05;letter-spacing:.005em}
+.kicker{font-size:.8rem;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:var(--teal2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--green);color:#fff;font-weight:500;font-size:.85rem;letter-spacing:.16em;text-transform:uppercase;padding:15px 26px;border-radius:0;border:1px solid var(--green);cursor:pointer;transition:.25s}
+.btn:hover{background:var(--green2);border-color:var(--green2)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#fff}
+.btn.sm{padding:10px 16px;font-size:.8rem}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+
+.demo-bar{background:var(--ink);color:#fff;text-align:center;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;padding:8px 12px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:.9rem;padding:12px 18px;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* header estilo boutique */
+header.top{position:sticky;top:0;z-index:20;background:rgba(251,248,243,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:76px}
+.nav ul{display:flex;gap:24px;white-space:nowrap;list-style:none;font-size:.82rem;letter-spacing:.16em;text-transform:uppercase}
+.nav ul a{position:relative;padding:4px 0}
+.nav ul a:after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--ink);transition:.3s}
+.nav ul a:hover:after{right:0}
+.brand{display:inline-flex;flex-direction:column;align-items:stretch;justify-self:center;font-family:'Dancing Script',cursive;font-size:2.5rem;font-weight:700;letter-spacing:0;line-height:.95}
+.brand .wm{align-self:flex-start}
+.brand{color:var(--green)}.brand .o{color:var(--teal)}
+.brand small{display:block;align-self:flex-start;font-family:var(--serif);font-weight:600;font-size:.6rem;letter-spacing:0;white-space:nowrap;color:var(--teal);margin-top:2px;text-transform:uppercase}
+@media(max-width:820px){.nav .brand{justify-self:start}}
+.nav .right{justify-self:end}
+@media(max-width:820px){.nav{grid-template-columns:1fr auto;height:66px}.nav ul{display:none}.brand{text-align:left;font-size:2rem}.nav .right .btn{padding:9px 12px}}
+
+/* hero editorial */
+.hero{padding:0;border-top:none}
+.hero-grid{display:grid;grid-template-columns:1.15fr 1fr;min-height:min(86vh,760px)}
+.hero-ph{position:relative;background:linear-gradient(160deg,var(--rose) 0%,#f7e6e3 45%,var(--mint) 100%);overflow:hidden;display:grid;place-items:center}
+.hero-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph-empty{font-family:var(--serif);font-style:italic;font-size:1.3rem;color:var(--green2);text-align:center;padding:20px;opacity:.7}
+.hero-txt{display:flex;flex-direction:column;justify-content:center;padding:60px 56px;background:var(--bg)}
+.hero h1{font-size:clamp(2.8rem,5.4vw,4.8rem);margin:18px 0 22px}
+.hero h1 em{font-style:italic;color:var(--rose2)}
+.hero p{color:var(--mut);font-size:1.12rem;max-width:460px;font-weight:400}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.chips{display:flex;gap:18px;flex-wrap:wrap;margin-top:40px;padding-top:22px;border-top:1px solid var(--line)}
+.chip{font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr;min-height:0}.hero-ph{aspect-ratio:4/4.4}.hero-txt{padding:40px 24px 48px}}
+
+section{padding:96px 0;border-top:1px solid var(--line)}
+.head{max-width:640px;margin:0 auto 48px;text-align:center}
+.head h2{font-size:clamp(2.2rem,4.4vw,3.4rem);margin-top:14px}
+.head p{color:var(--mut);margin-top:14px;font-weight:400;font-size:1.05rem}
+.head:after{content:"";display:block;width:44px;height:1px;background:var(--rose2);margin:26px auto 0}
+@media(max-width:820px){section{padding:68px 0}}
+
+/* fecha especial: banda verde Ladurée */
+#especial{padding:0;border-top:none}
+.special{background:var(--mint);display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:42px 56px}
+.special h3{font-size:clamp(1.8rem,3vw,2.4rem);margin-top:8px;font-style:italic}
+.special p{color:#5a3d33;margin-top:6px;font-weight:400;font-size:1.02rem}
+@media(max-width:820px){.special{grid-template-columns:1fr;padding:34px 24px}}
+
+/* catálogo editorial */
+.filters{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;margin-bottom:44px}
+.filters button{background:none;border:none;border-bottom:1px solid transparent;padding:4px 0;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);cursor:pointer}
+.filters button.on{color:var(--ink);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px 28px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);gap:36px 18px}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.prod{display:flex;flex-direction:column;text-align:center}
+.prod .img{aspect-ratio:4/5;display:grid;place-items:center;font-size:3rem;overflow:hidden;position:relative}
+.prod:nth-child(3n+1) .img{background:linear-gradient(170deg,#f6e4e2,var(--rose))}
+.prod:nth-child(3n+2) .img{background:linear-gradient(170deg,#e8f3ee,var(--mint))}
+.prod:nth-child(3n) .img{background:linear-gradient(170deg,#f9f1e6,#efe2cf)}
+.prod .img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s}
+.prod:hover .img img{transform:scale(1.04)}
+.prod .body{padding:22px 8px 0;display:flex;flex-direction:column;gap:8px;flex:1;align-items:center}
+.prod .cat{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green)}
+.prod h3{font-size:1.7rem}
+.prod p{color:var(--mut);font-size:1rem;font-weight:400;flex:1;max-width:320px}
+.prod .foot{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:10px}
+.price{font-family:var(--serif);font-size:1.45rem;font-weight:500}
+.price.ask{font-family:Jost;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.prod .btn{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.prod .btn:hover{background:var(--ink);color:#fff}
+
+/* recetas y compras */
+.rcard{background:#fff;border:1px solid var(--line);padding:14px;display:grid;gap:10px}
+.rcard h4{font-family:var(--serif);font-size:1.35rem}
+.rrow{display:grid;grid-template-columns:1fr 90px 70px 34px;gap:6px;align-items:center}
+@media(max-width:520px){.rrow{grid-template-columns:1fr 70px 34px}.rrow [data-k=ing]{grid-column:1/-1}}
+.rrow input,.rrow select{border:1px solid var(--line);padding:8px;width:100%;min-width:0;font-size:.95rem}
+.rrow button{border:none;background:none;color:var(--no);font-size:1.1rem;cursor:pointer}
+.rbase{display:flex;gap:8px;align-items:center;font-size:.95rem;color:var(--mut)}
+.rbase input{width:80px;border:1px solid var(--line);padding:8px}
+.shop{list-style:none;display:grid;gap:0}
+.shop li{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:1.05rem}
+.shop li b{font-weight:600;white-space:nowrap}
+.warn{background:#fbf0de;border-left:3px solid var(--warn);padding:10px 12px;font-size:.95rem;margin-top:12px}
+/* sobre mí */
+.about{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+.about img{width:100%;aspect-ratio:4/4.2;object-fit:cover;object-position:center 30%}
+.about h2{font-size:clamp(2.2rem,4.4vw,3.2rem);margin:14px 0 18px}
+.about p{color:var(--mut);font-size:1.08rem;margin-bottom:12px;max-width:520px}
+.about .sig{font-family:'Dancing Script',cursive;font-size:2.2rem;color:var(--green);margin-top:8px}
+@media(max-width:820px){.about{grid-template-columns:1fr;gap:28px}}
+
+/* galería */
+.gal{columns:4;column-gap:14px}
+.gal img{width:100%;display:block;margin-bottom:14px;break-inside:avoid}
+@media(max-width:900px){.gal{columns:3}}
+@media(max-width:560px){.gal{columns:2;column-gap:10px}.gal img{margin-bottom:10px}}
+
+/* reserva */
+#reservar{background:#f6efe7}
+.res{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+#reservar .head{text-align:left;margin:0 0 30px}
+#reservar .head:after{margin:22px 0 0}
+@media(max-width:860px){.res{grid-template-columns:1fr;gap:30px}}
+.steps{list-style:none;display:grid;gap:0;border-top:1px solid var(--line)}
+.steps li{display:flex;gap:18px;padding:20px 0;border-bottom:1px solid var(--line)}
+.steps b{flex:0 0 auto;font-family:var(--serif);font-style:italic;font-size:1.8rem;font-weight:500;color:var(--rose2);line-height:1}
+.steps strong{font-weight:500}
+.steps p{color:var(--mut);font-size:1rem;font-weight:400}
+form.card,.card{background:var(--card);border:1px solid var(--line);padding:30px}
+.f{display:grid;gap:6px;margin-bottom:16px}
+.f label{font-size:.78rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.f input,.f select,.f textarea{width:100%;border:none;border-bottom:1px solid var(--line);border-radius:0;padding:10px 2px;background:transparent}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--green)}
+.f textarea{min-height:80px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:460px){.row2{grid-template-columns:1fr}}
+.seg{display:flex;gap:10px}
+.seg label{flex:1;border:1px solid var(--line);padding:11px;text-align:center;cursor:pointer;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.seg input{display:none}
+.seg label:has(input:checked){border-color:var(--green);background:var(--mint);color:var(--green2)}
+.hint{font-size:.9rem;color:var(--mut);font-weight:400}
+.err{color:var(--no);font-size:.85rem;margin-top:-6px;margin-bottom:12px;display:none}
+.done{display:none;text-align:center;padding:30px 10px}
+.done h3{font-size:2.2rem;margin:10px 0;font-style:italic}
+.done p{color:var(--mut);font-weight:400}
+
+/* faq */
+.faq{max-width:760px;margin:0 auto;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line);padding:20px 0}
+.faq summary{cursor:pointer;font-family:var(--serif);font-size:1.35rem;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";color:var(--green);font-family:Jost;font-weight:300}
+.faq details[open] summary:after{content:"–"}
+.faq p{color:var(--mut);margin-top:10px;font-weight:400;font-size:1.02rem}
+
+footer{background:var(--ink);color:#e6ddd4;padding:56px 0 34px;font-size:.9rem}
+footer .wrap{display:grid;gap:22px;text-align:center}
+footer .fb{font-family:'Dancing Script',cursive;font-size:2.8rem;font-weight:700;color:#e9a9b8}
+footer .fl{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;letter-spacing:.14em;text-transform:uppercase;font-size:.82rem}
+footer a:hover{color:#fff}
+.wa-float{position:fixed;right:16px;bottom:16px;width:54px;height:54px;border-radius:50%;background:var(--green);display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.18);z-index:30}
+.wa-float svg{width:26px;height:26px;fill:#fff}
+
+/* ===== panel privado ===== */
+#panel{display:none;min-height:100vh;background:#f6f1ea}
+body.admin #site{display:none}
+body.admin #panel{display:block}
+.p-top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+.p-top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.p-top .brand{font-family:var(--serif);font-size:1.15rem;text-align:left;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.p-top .btn{white-space:nowrap}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:12px 24px;max-width:1180px;margin:0 auto}
+.tabs button{flex:0 0 auto;border:1px solid var(--line);background:#fff;padding:10px 16px;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.tabs button.on{background:var(--green);color:#fff;border-color:var(--green)}
+.pv{display:none;padding:10px 0 60px}
+.pv.on{display:block}
+.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:700px){.sum{grid-template-columns:repeat(2,1fr)}}
+.sum div{background:#fff;border:1px solid var(--line);padding:14px}
+.sum b{display:block;font-family:var(--serif);font-size:1.8rem;font-weight:500}
+.sum span{font-size:.85rem;color:var(--mut)}
+.olist{display:grid;gap:10px}
+.order{background:#fff;border:1px solid var(--line);padding:16px;display:grid;gap:12px}
+.order .t{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.order h4{font-size:1.4rem}
+.order .meta{font-size:.95rem;color:var(--mut)}
+.date{background:var(--mint);color:var(--green2);padding:6px 10px;font-weight:500;font-size:.8rem;text-align:center;white-space:nowrap}
+.date.past{background:#eee;color:#999}
+.pay{display:flex;gap:6px;flex-wrap:wrap}
+.pay button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:.82rem;font-weight:500;cursor:pointer}
+.pay button.on[data-v="sin"]{background:#fbe6e8;border-color:var(--no);color:var(--no)}
+.pay button.on[data-v="sena"]{background:#fbf0de;border-color:var(--warn);color:#99671a}
+.pay button.on[data-v="total"]{background:#e3f2e8;border-color:var(--ok);color:var(--ok)}
+.money{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.money label{font-size:.82rem;color:var(--mut);display:grid;gap:4px}
+.money input{border:1px solid var(--line);padding:8px;width:100%}
+.money .saldo{font-weight:600;font-size:1rem;padding:8px 0}
+.oact{display:flex;gap:8px;flex-wrap:wrap}
+.oact .btn{letter-spacing:.08em;text-transform:none;font-size:.82rem}
+.pfilter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.pfilter button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:.84rem;cursor:pointer}
+.pfilter button.on{background:var(--mint);border-color:var(--green);color:var(--green2);font-weight:500}
+.plist{display:grid;gap:10px}
+.pitem{background:#fff;border:1px solid var(--line);padding:14px;display:grid;grid-template-columns:1fr 130px auto;gap:10px;align-items:center}
+.pitem input[type=text],.pitem input[type=number]{border:1px solid var(--line);padding:8px;width:100%}
+.pitem .nm{font-weight:500}
+.pitem .sub{font-size:.78rem;color:var(--mut)}
+@media(max-width:560px){.pitem{grid-template-columns:1fr 1fr}.pitem .nmw{grid-column:1/-1}}
+.sw{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--mut);cursor:pointer}
+.empty{color:var(--mut);text-align:center;padding:30px;background:#fff;border:1px dashed var(--line)}
+.login{max-width:380px;margin:12vh auto;text-align:center}
+.login h2{margin:10px 0 18px;font-size:2rem}
+.login input{width:100%;border:1px solid var(--line);padding:12px;text-align:center;font-size:1.2rem;letter-spacing:.3em;margin-bottom:12px}
+.blocked{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.blocked span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:.85rem;display:flex;gap:8px;align-items:center}
+.blocked button{border:none;background:none;color:var(--no);cursor:pointer;font-weight:700}
+#pv-agenda .card h3{font-size:1.5rem}
+.help{background:#fff;border:1px solid var(--line);border-left:3px solid var(--teal);padding:14px 16px;margin-bottom:14px}
+.help summary{cursor:pointer;font-weight:500;color:var(--teal2)}
+.help ol{margin:10px 0 0 18px;display:grid;gap:8px;font-size:1rem;color:#4a423d}
+.pcard{background:#fff;border:1px solid var(--line);padding:14px;display:grid;grid-template-columns:110px 1fr;gap:14px}
+.pcard .ph{width:110px;aspect-ratio:4/5;background:var(--rose);display:grid;place-items:center;font-size:2rem;overflow:hidden}
+.pcard .ph img{width:100%;height:100%;object-fit:cover}
+.pcard .up{display:block;text-align:center;font-size:.78rem;border:1px solid var(--line);padding:7px 4px;margin-top:6px;cursor:pointer;background:#fff}
+.pcard .up input{display:none}
+.pcard .fs{display:grid;gap:8px}
+.pcard input[type=text],.pcard input[type=number],.pcard textarea{border:1px solid var(--line);padding:8px;width:100%;font-size:.92rem}
+.pcard textarea{min-height:60px;resize:vertical}
+.pcard .r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pcard .r input[type=number]{width:140px}
+.pcard .lbl{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.pcard .del{border:none;background:none;color:var(--no);font-size:.85rem;cursor:pointer;margin-left:auto}
+@media(max-width:480px){.pcard{grid-template-columns:90px 1fr}.pcard .ph{width:90px}}
+@media(max-width:820px){.brand{font-size:1.55rem}.nav .right .btn{padding:9px 10px;font-size:.72rem;letter-spacing:.08em}}
+.about img{border-radius:0}
+</style>
+</head>
+<body>
+
+<!-- ================= SITIO PÚBLICO ================= -->
+<div id="site">
+
+<header class="top">
+  <div class="wrap nav">
+    <ul>
+      <li><a href="#catalogo">Catálogo</a></li>
+      <li><a href="#como">Cómo trabajo</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#reservar">Hacer pedido</a></li>
+    </ul>
+    <a href="#" class="brand"><span class="wm">Capas y sabores</span><small>Dulces y salados</small></a>
+    <div class="right"><a class="btn sm" href="#reservar">Hacer pedido</a></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-ph" id="heroPh"><img src="img/meringue.jpg" alt="Torta con merengues y frutos rojos de Capas y Sabores" style="object-position:center 45%"></div>
+    <div class="hero-txt">
+      <span class="kicker">Tortas, mesa dulce y postres · San Luis</span>
+      <h1>Tu torta, <em>a tu gusto</em>, para tu festejo.</h1>
+      <p>Soy Maru. Hago tortas, mesa dulce y postres a pedido en San Luis capital. Elegí del catálogo o contame tu idea, poné la fecha y listo.</p>
+      <div class="ctas">
+        <a class="btn" href="#reservar">Hacer mi pedido</a>
+        <a class="btn ghost" href="#catalogo">Ver catálogo</a>
+      </div>
+      <div class="chips">
+        <span class="chip">Cumpleaños</span>
+        <span class="chip">Temáticas</span>
+        <span class="chip">Mesa dulce</span>
+        <span class="chip">Postres</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="especial">
+  <div class="special" id="specialBox"></div>
+</section>
+
+<section id="catalogo">
+  <div class="wrap">
+    <div class="head">
+      <span class="kicker">Catálogo</span>
+      <h2>Elegí lo que más te guste.</h2>
+      <p>Los precios se actualizan seguido. Si algo dice "Consultar", depende del tamaño y la decoración.</p>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="como">
+  <div class="wrap about">
+    <img src="img/hb.jpg" alt="Torta blanca de cumpleaños de Capas y Sabores" loading="lazy">
+    <div>
+      <span class="kicker">Cómo trabajo</span>
+      <h2>Todo a pedido, con 48 horas de anticipación.</h2>
+      <p>Cada torta la hago para tu festejo: elegís el tamaño, el sabor y el motivo. También armo mesa dulce y postres.</p>
+      <p>Hago envíos a domicilio en San Luis capital, o la retirás. Contame qué querés festejar y la armamos.</p>
+      <div class="sig">Maru</div>
+    </div>
+  </div>
+</section>
+
+<section id="galeria">
+  <div class="wrap">
+    <div class="head">
+      <span class="kicker">Galería</span>
+      <h2>Algunos de mis trabajos.</h2>
+      <p>Cada torta se hace a pedido: elegís la temática, los colores y el relleno.</p>
+    </div>
+    <div class="gal" id="gal"></div>
+  </div>
+</section>
+
+<section id="reservar">
+  <div class="wrap res">
+    <div>
+      <div class="head">
+        <span class="kicker">Hacé tu pedido</span>
+        <h2>Pedí tu torta en dos minutos.</h2>
+        <p>Los pedidos se toman con 48 horas de anticipación. Elegí la fecha y si está libre, es tuya.</p>
+      </div>
+      <ol class="steps">
+        <li><b>1</b><div><strong>Completá el pedido</strong><p>Elegí la fecha y lo que querés. No se cobra nada todavía.</p></div></li>
+        <li><b>2</b><div><strong>Pagás la seña</strong><p>Te paso por WhatsApp el precio y los datos para la seña.</p></div></li>
+        <li><b>3</b><div><strong>Listo, la fecha es tuya</strong><p>Te confirmo por WhatsApp y el resto lo abonás al retirar o al recibirla.</p></div></li>
+      </ol>
+    </div>
+
+    <form class="card" id="resForm" novalidate>
+      <div id="resFields">
+        <div class="f"><label for="rProd">Qué querés encargar?</label><select id="rProd"></select></div>
+        <div class="row2">
+          <div class="f"><label for="rDate">Fecha del evento</label><input type="date" id="rDate" required></div>
+          <div class="f"><label for="rPeople">Para cuántas personas?</label><select id="rPeople"><option value="8">8 personas</option><option value="12">12 personas</option><option value="15" selected>15 personas</option><option value="20">20 personas</option><option value="30">30 personas</option><option value="40">40 personas</option></select></div>
+        </div>
+        <div class="err" id="dateErr"></div>
+        <div class="f"><label for="rFill">Sabor y relleno</label><input id="rFill" placeholder="Ej: vainilla con dulce de leche"></div>
+        <div class="row2">
+          <div class="f"><label for="rTheme">Motivo o temática</label><input id="rTheme" placeholder="Ej: flores, fútbol, 15 años"></div>
+          <div class="f"><label for="rFrase">Nombre y edad para la torta</label><input id="rFrase" placeholder="Ej: Juana, 8 años"></div>
+        </div>
+        <div class="f"><label>Entrega</label>
+          <div class="seg">
+            <label><input type="radio" name="rDel" value="Retiro" checked><span>Retiro</span></label>
+            <label><input type="radio" name="rDel" value="Envío"><span>Envío a domicilio</span></label>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="f"><label for="rName">Tu nombre</label><input id="rName" required placeholder="Nombre y apellido"></div>
+          <div class="f"><label for="rPhone">Tu WhatsApp</label><input id="rPhone" type="tel" required placeholder="266 ..."></div>
+        </div>
+        <div class="f"><label for="rNotes">Algo más que quieras contarme</label><textarea id="rNotes" placeholder="Colores, detalles... Si tenés una foto de referencia, me la mandás por WhatsApp."></textarea></div>
+        <div class="err" id="formErr">Completá tu nombre, tu WhatsApp y la fecha.</div>
+        <button class="btn" type="submit" style="width:100%">Enviar pedido</button>
+        <p class="hint" style="text-align:center;margin-top:10px">Te respondo por WhatsApp para confirmar.</p>
+      </div>
+      <div class="done" id="resDone">
+        <div style="font-size:2.4rem">🎉</div>
+        <h3>Pedido recibido!</h3>
+        <p>Ya tengo tu pedido para el <strong id="doneDate"></strong>.</p><div id="doneSena" class="card" style="margin-top:14px;text-align:left"></div>
+        <a class="btn" id="doneWa" target="_blank" rel="noopener" style="margin-top:16px;width:100%">Enviar el pedido por WhatsApp</a>
+        <button class="btn ghost" type="button" id="newRes" style="margin-top:10px;width:100%">Hacer otro pedido</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section id="preguntas">
+  <div class="wrap">
+    <div class="head"><span class="kicker">Preguntas frecuentes</span><h2>Lo que más me preguntan.</h2></div>
+    <div class="faq">
+      <details><summary>Con cuánta anticipación tengo que pedir?</summary><p>Los pedidos se toman con 48 horas de anticipación. Para mesas dulces y eventos grandes, cuanto antes mejor.</p></details>
+      <details><summary>Cómo se reserva la fecha?</summary><p>Completás el pedido, te confirmo por WhatsApp y con la seña la fecha queda reservada.</p></details>
+      <details><summary>Hacen envíos?</summary><p>Sí, hago envíos a domicilio en San Luis capital. También la podés retirar.</p></details>
+      <details><summary>Para cuántas personas hacés las tortas?</summary><p>Elegí la cantidad de personas en el pedido y te confirmo el tamaño.</p></details>
+      <details><summary>Puedo elegir sabores y decoración?</summary><p>Sí. Me contás el sabor, el relleno, los colores y el motivo. Si tenés una foto de referencia, me la mandás por WhatsApp.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fb">Capas y Sabores</div>
+    <div class="fl"><a href="https://www.instagram.com/capasysaboresbymaru/" target="_blank" rel="noopener">Instagram</a><a href="#reservar">Hacer pedido</a><a href="#admin">Acceso Maru</a></div>
+    <span>© 2026 Capas y Sabores</span>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/5492664298553" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
+</a>
+</div>
+
+<!-- ================= PANEL PRIVADO ================= -->
+<div id="panel">
+  <div id="loginBox" class="login card">
+    <span class="kicker">Panel de Maru</span>
+    <h2>Ingresá tu clave</h2>
+    <input type="password" id="pin" inputmode="numeric" maxlength="6" placeholder="••••">
+    <button class="btn" id="pinBtn" style="width:100%">Entrar</button>
+    <p style="margin-top:14px"><a href="#" class="hint" style="text-decoration:underline">Volver a la página</a></p>
+  </div>
+
+  <div id="panelApp" style="display:none">
+    <div class="p-top"><div class="wrap"><span class="brand" style="font-size:1.05rem">Panel de Maru</span><a class="btn ghost sm" href="#">Ver página</a></div></div>
+    <div class="tabs">
+      <button class="on" data-t="pedidos">📋 Pedidos</button>
+      <button data-t="precios">🧁 Productos</button>
+      <button data-t="calc">💰 Cuánto cobrar</button>
+      <button data-t="agenda">📅 Agenda</button>
+    </div>
+    <div class="wrap">
+      <!-- Pedidos -->
+      <div class="pv on" id="pv-pedidos">
+        <details class="help" open><summary>Cómo se usa?</summary><ol>
+          <li>Cada pedido que hacen desde tu página <b>aparece acá solo</b> y además te llega armado por WhatsApp. Si te piden por otro lado, cargalo con <b>+ Cargar pedido</b>.</li>
+          <li>Tocá <b>💬 Escribirle</b> para confirmarle el precio y pasarle los datos de la seña.</li>
+          <li>Anotá el <b>precio total</b> y <b>cuánto te pagó</b>: el saldo se calcula solo.</li>
+          <li>El estado se marca solo: <b>Sin pagar</b> (no pagó nada), <b>Seña</b> (pagó una parte) o <b>Pagado total</b>. También lo podés tocar vos.</li>
+          <li>Cuando lo entregás, tocá <b>✅ Entregado</b> y deja de aparecer en "Próximos".</li>
+          <li>Con los botones de arriba ves solo los que no pagaron, los que tienen seña, etc.</li>
+        </ol></details>
+        <p class="hint" style="margin-bottom:12px">Tus pedidos, productos y costos quedan guardados en una planilla de respaldo. Los datos son tuyos y no se usan para nada más.</p>
+        <div class="sum" id="sum"></div>
+        <button class="btn sm" id="newOrderBtn" style="margin-bottom:12px">+ Cargar pedido</button>
+        <form class="card" id="newOrder" style="display:none;margin-bottom:14px">
+          <h3 style="font-size:1.4rem;margin-bottom:10px">Nuevo pedido</h3>
+          <div class="f"><label>Producto</label><input id="noProd" list="prodList" placeholder="Ej: Torta Franui"></div>
+          <div class="row2"><div class="f"><label>Fecha</label><input type="date" id="noDate"></div><div class="f"><label>Personas</label><input type="number" id="noPeople"></div></div>
+          <div class="row2"><div class="f"><label>Nombre</label><input id="noName"></div><div class="f"><label>WhatsApp</label><input id="noPhone" type="tel"></div></div>
+          <div class="f"><label>Entrega</label><select id="noDel"><option>Retiro</option><option>Envío</option></select></div>
+          <div class="f"><label>Notas</label><textarea id="noNotes" placeholder="Temática, sabor, frase..."></textarea></div>
+          <div style="display:flex;gap:8px"><button class="btn sm" type="submit">Guardar pedido</button><button class="btn sm ghost" type="button" id="noCancel">Cancelar</button></div>
+        </form>
+        <div class="pfilter" id="ofilter">
+          <button class="on" data-f="prox">Próximos</button>
+          <button data-f="sin">Sin pagar</button>
+          <button data-f="sena">Con seña</button>
+          <button data-f="total">Pagados</button>
+          <button data-f="todos">Todos</button>
+        </div>
+        <div class="olist" id="olist"></div>
+      </div>
+      <!-- Precios -->
+      <div class="pv" id="pv-precios">
+        <details class="help" open><summary>Cómo se usa?</summary><ol>
+          <li>Tocá <b>📷 Cambiar foto</b> para elegir una foto de tu galería o sacar una con la cámara. Se recorta sola en formato vertical.</li>
+          <li>Escribí el nombre, la descripción y el precio. Si dejás el precio vacío, en la página dice "Consultar".</li>
+          <li><b>Visible</b> prendido: se ve en la página. Apagado: queda guardado pero escondido (sirve para los boxes de fechas especiales).</li>
+          <li><b>+ Agregar producto</b> crea uno nuevo escondido. Completalo, ponele foto y prendé "Visible".</li>
+          <li>Todo se guarda solo, no hay que tocar ningún botón de guardar.</li>
+        </ol></details>
+        <datalist id="catList"></datalist><datalist id="prodList"></datalist>
+        <div class="plist" id="plist"></div>
+        <button class="btn ghost" id="addProd" style="margin-top:14px">+ Agregar producto</button>
+      </div>
+      <!-- Recetas -->
+      <div class="pv" id="pv-recetas">
+        <details class="help" open><summary>Cómo se usa?</summary><ol>
+          <li>Cargá una sola vez qué lleva cada producto y para cuántas personas es esa receta.</li>
+          <li>Las cantidades que ves son de <b>ejemplo</b>: cambialas por las tuyas.</li>
+          <li>Con eso, la solapa <b>Compras</b> te arma sola la lista del súper según los pedidos que tengas.</li>
+        </ol></details>
+        <div class="plist" id="rlist"></div>
+      </div>
+      <!-- Compras -->
+      <div class="pv" id="pv-compras">
+        <details class="help" open><summary>Cómo se usa?</summary><ol>
+          <li>De entrada ves los próximos 7 días; podés cambiar las fechas. Se suman los pedidos con seña o pagados.</li>
+          <li>Las cantidades se ajustan solas a la cantidad de personas de cada pedido.</li>
+          <li>Tocá <b>Mandármela por WhatsApp</b> para tener la lista en el celu cuando vas a comprar.</li>
+        </ol></details>
+        <div class="card" style="margin-bottom:14px">
+          <div class="row2"><div class="f"><label>Desde</label><input type="date" id="cFrom"></div><div class="f"><label>Hasta</label><input type="date" id="cTo"></div></div>
+          <label class="sw"><input type="checkbox" id="cAll"> Contar también los pedidos sin seña</label>
+        </div>
+        <div class="card" id="clist"></div>
+      </div>
+      <!-- Cuánto cobrar -->
+      <div class="pv" id="pv-calc">
+        <details class="help" open><summary>Cómo se usa</summary><ol>
+          <li>Cargá lo que gastás en hacer <b>un</b> producto y las horas que te lleva.</li>
+          <li>Poné cuánto querés ganar por hora y el margen que le sumás.</li>
+          <li>El <b>precio sugerido</b> se calcula solo. Los números que cargues quedan guardados.</li>
+        </ol></details>
+        <div class="card" style="margin-bottom:14px">
+          <div class="f"><label for="kName">Producto</label><input id="kName" data-k="name" placeholder="Ej: Torta de 20 porciones"></div>
+          <div class="row2"><div class="f"><label for="kIng">Ingredientes ($)</label><input id="kIng" type="number" data-k="ing" placeholder="0"></div><div class="f"><label for="kPack">Caja, base y decoración ($)</label><input id="kPack" type="number" data-k="pack" placeholder="0"></div></div>
+          <div class="row2"><div class="f"><label for="kHours">Horas de trabajo</label><input id="kHours" type="number" step="0.5" data-k="hours" placeholder="0"></div><div class="f"><label for="kRate">Cuánto vale tu hora ($)</label><input id="kRate" type="number" data-k="rate" placeholder="0"></div></div>
+          <div class="row2"><div class="f"><label for="kGas">Gas, luz y envío ($)</label><input id="kGas" type="number" data-k="gas" placeholder="0"></div><div class="f"><label for="kMargin">Margen (%)</label><input id="kMargin" type="number" data-k="margin" placeholder="30"></div></div>
+        </div>
+        <div class="card" id="kOut"></div>
+      </div>
+      <!-- Agenda -->
+      <div class="pv" id="pv-agenda">
+        <details class="help" open><summary>Cómo se usa?</summary><ol>
+          <li><b>Pedidos por día:</b> cuántos pedidos podés hacer en un día. Cuando se llena, la página no deja reservar esa fecha.</li>
+          <li><b>Días que no tomo pedidos:</b> elegí la fecha y tocá "Bloquear día". Para desbloquearlo, tocá la ×.</li>
+          <li><b>Clave de acceso:</b> abajo de todo podés cambiar la clave de este panel.</li>
+          <li><b>Fecha especial:</b> el cartel amarillo de arriba de la página. Cambiá el texto según la época o apagalo.</li>
+        </ol></details>
+        <div class="card" style="margin-bottom:14px">
+          <h3 style="font-size:1.15rem">Pedidos por día</h3>
+          <p class="hint" style="margin:6px 0 10px">Cuando un día llega a este número, la página ya no deja reservar esa fecha.</p>
+          <input type="number" id="maxDay" min="1" style="border:1px solid var(--line);border-radius:10px;padding:10px;width:120px">
+        </div>
+        <div class="card" style="margin-bottom:14px">
+          <h3 style="font-size:1.15rem">Días que no tomo pedidos</h3>
+          <p class="hint" style="margin:6px 0 10px">Vacaciones, días con agenda llena, etc.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap"><input type="date" id="blockDate" style="border:1px solid var(--line);border-radius:10px;padding:10px"><button class="btn sm" id="blockBtn">Bloquear día</button></div>
+          <div class="blocked" id="blockedList"></div>
+        </div>
+        <div class="card">
+          <h3 style="font-size:1.15rem">Fecha especial destacada</h3>
+          <p class="hint" style="margin:6px 0 10px">Aparece arriba en la página (Día de la Madre, Navidad, San Valentín...).</p>
+          <div class="f"><label for="spTitle">Título</label><input id="spTitle"></div>
+          <div class="f"><label for="spText">Texto</label><input id="spText"></div>
+          <label class="sw"><input type="checkbox" id="spOn"> Mostrar en la página</label>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3 style="font-size:1.15rem">Datos para la seña</h3>
+          <p class="hint" style="margin:6px 0 10px">Se le muestran al cliente apenas hace el pedido.</p>
+          <div class="f"><label for="alias">Alias o CBU</label><input id="alias" placeholder="Tu alias de Mercado Pago o banco"></div>
+          <div class="f"><label for="aliasName">A nombre de</label><input id="aliasName"></div>
+          <div class="f"><label for="senaPct">Seña (%)</label><input id="senaPct" type="number" min="0" max="100"></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3 style="font-size:1.15rem">Clave de acceso</h3>
+          <p class="hint" style="margin:6px 0 10px">Es la clave para entrar a este panel. Solo números, de 4 a 8.</p>
+          <div class="row2"><div class="f"><label for="npin">Clave nueva</label><input id="npin" type="password" inputmode="numeric" maxlength="8"></div><div class="f"><label for="npin2">Repetila</label><input id="npin2" type="password" inputmode="numeric" maxlength="8"></div></div>
+          <button class="btn sm" type="button" id="pinSave">Cambiar clave</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== Configuración =====
+const DEMO = true;              // true = demo (WhatsApp desactivado, cartel visible)
+const WA = '5492664298553';
+const PIN = '1234';             // clave del panel (en la versión final se cambia)
+const KEY = 'maru_demo_v1';
+const HIT = 'https://abacus.jasoncameron.dev/hit/websemprendedores/capasysabores';
+const API = 'https://script.google.com/macros/s/AKfycbxcv-Wg40xQbjDn92_8W6i2VpEqXS3vZTsNDH_NzN2BYKyMLi3Kw2AdU8P28SN9gRof/exec';               // URL del Apps Script (vacío = demo, se guarda en este navegador)
+
+// ===== Datos iniciales (precios tomados de sus publicaciones; ella los actualiza) =====
+const today = new Date(); today.setHours(0,0,0,0);
+const iso = d => new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+const addDays = n => { const d = new Date(today); d.setDate(d.getDate()+n); return iso(d); };
+
+const DEFAULT = {
+  products: [
+    {id:'p1', cat:'Tortas a tu gusto', name:'Torta temática', desc:'Del personaje o el motivo que quieras. Contame la idea y la armamos.', price:null, visible:true, img:'img/buzz.jpg'},
+    {id:'p2', cat:'Tortas a tu gusto', name:'Torta de cumpleaños con nombre', desc:'Decorada en crema, con el nombre y los colores que me digas.', price:null, visible:true, img:'img/juana.jpg'},
+    {id:'p3', cat:'Tortas a tu gusto', name:'Torta decorada en crema', desc:'Con ondas y flores, para cualquier festejo.', price:null, visible:true, img:'img/daisy.jpg'},
+    {id:'p4', cat:'Tortas a tu gusto', name:'Torta con merengues y frutos rojos', desc:'Con merenguitos de colores y frutos rojos arriba.', price:null, visible:true, img:'img/meringue.jpg'},
+    {id:'p5', cat:'Tartas y postres', name:'Tarta de frutos rojos', desc:'Tarta dulce cubierta de frutos rojos.', price:null, visible:true, img:'img/tarta.jpg'},
+    {id:'p6', cat:'Boxes', name:'Box dulce para regalar', desc:'Mini torta y dulces en caja, lista para regalar.', price:null, visible:true, img:'img/box.jpg'}
+  ],
+  recipes: {},
+  orders: [
+    {id:'o1', created: addDays(-1), date: addDays(3), product:'Torta temática', people:20, fill:'Vainilla con dulce de leche', delivery:'Envío', name:'Lucía (pedido de ejemplo)', phone:'', notes:'Motivo: astronauta · Nombre/edad: Juana, 8 años', pay:'sena', total:0, paid:0, done:false},
+    {id:'o2', created: addDays(-1), date: addDays(5), product:'Tarta de frutos rojos', people:8, fill:'', delivery:'Retiro', name:'Carla (pedido de ejemplo)', phone:'', notes:'', pay:'sin', total:0, paid:0, done:false}
+  ],
+  calc: {name:'', ing:'', pack:'', hours:'', rate:'', gas:'', margin:30},
+  settings: {maxPerDay:3, blocked:[], spOn:true, spTitle:'Fiestas de fin de año', spText:'Reservá tu fecha con tiempo.', alias:'', aliasName:'', senaPct:50}
+};
+
+// ===== Guardado (en la demo se guarda en este navegador) =====
+let S;
+function load(){
+  if(API){ S = JSON.parse(JSON.stringify(DEFAULT)); S.orders=[]; S.busy={}; try{ const c=JSON.parse(localStorage.getItem(KEY+'_pub')); if(c){ S.products=c.products; S.settings=c.settings; } }catch(e){} return; }
+  try{ S = JSON.parse(localStorage.getItem(KEY)); }catch(e){ S = null; } if(!S) S = JSON.parse(JSON.stringify(DEFAULT)); }
+async function api(body){ const r = await fetch(API, body ? {method:'POST', body:JSON.stringify(body)} : undefined); return r.json(); }
+let pinOk=''; try{ pinOk=sessionStorage.getItem(KEY+'_pin')||''; }catch(e){}
+// kind: 'o' guarda un pedido, 'od' borra un pedido, 'p' productos, 's' agenda
+function save(kind, x){
+  if(!API){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} return; }
+  if(!pinOk || !kind) return;
+  const body = kind==='o' ? {a:'saveOrder', order:x} : kind==='od' ? {a:'delOrder', id:x} : kind==='p' ? {a:'saveProducts', products:S.products} : kind==='c' ? {a:'saveCalc', calc:S.calc} : {a:'saveSettings', settings:S.settings};
+  body.pin = pinOk;
+  api(body).then(r => { if(!r.ok) toast(r.msg||'No se pudo guardar'); }).catch(() => toast('Sin conexión: no se guardó. Probá de nuevo.'));
+}
+async function pullPub(){ try{ const r = await api(); if(r.ok){ S.products=r.products; S.settings=r.settings; S.busy=r.busy; try{ localStorage.setItem(KEY+'_pub', JSON.stringify({products:r.products, settings:r.settings})); }catch(e){} renderSite(); } }catch(e){} }
+async function pullAll(){ const r = await api({a:'all', pin:pinOk}); if(r.ok){ S.products=r.products; S.orders=r.orders; S.settings=r.settings; if(r.calc) S.calc=Object.assign({}, DEFAULT.calc, r.calc); } return r; }
+load(); if(!S.recipes) S.recipes=JSON.parse(JSON.stringify(DEFAULT.recipes)); if(S.settings.senaPct==null) S.settings.senaPct=50; if(!S.calc) S.calc=JSON.parse(JSON.stringify(DEFAULT.calc));
+
+const $ = s => document.querySelector(s);
+const money = n => '$' + Number(n||0).toLocaleString('es-AR');
+const fmtDate = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('es-AR',{weekday:'short', day:'numeric', month:'short'}); };
+const esc = s => String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let tH; function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(tH); tH=setTimeout(()=>t.classList.remove('show'),2800); }
+
+// ===== Sitio público =====
+let curCat = 'Todo';
+function renderSite(){
+  const sp = S.settings;
+  $('#especial').style.display = sp.spOn ? '' : 'none';
+  $('#specialBox').innerHTML = `<div><span class="kicker">Fecha especial</span><h3>${esc(sp.spTitle)}</h3><p>${esc(sp.spText)}</p></div><a class="btn" href="#reservar">Hacer pedido</a>`;
+
+  const vis = S.products.filter(p => p.visible);
+  const cats = ['Todo', ...new Set(vis.map(p => p.cat))];
+  $('#filters').innerHTML = cats.map(c => `<button class="${c===curCat?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
+  $('#grid').innerHTML = vis.filter(p => curCat==='Todo' || p.cat===curCat).map(p => `
+    <article class="prod">
+      <div class="img">${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy">` : (p.emoji||'🧁')}</div>
+      <div class="body">
+        <span class="cat">${esc(p.cat)}</span>
+        <h3>${esc(p.name)}</h3>
+        <p>${esc(p.desc)}</p>
+        <div class="foot">
+          ${p.price ? `<span class="price">${money(p.price)}</span>` : `<span class="price ask">Consultar</span>`}
+          <button class="btn sm" data-pick="${esc(p.name)}">Pedir</button>
+        </div>
+      </div>
+    </article>`).join('');
+
+  $('#rProd').innerHTML = vis.map(p => `<option>${esc(p.name)}</option>`).join('') + '<option>Otro / a medida</option>';
+  $('#rDate').min = addDays(2);
+}
+$('#filters').addEventListener('click', e => { const b=e.target.closest('button'); if(!b) return; curCat=b.dataset.c; renderSite(); });
+$('#grid').addEventListener('click', e => { const b=e.target.closest('[data-pick]'); if(!b) return; $('#rProd').value=b.dataset.pick; $('#reservar').scrollIntoView({behavior:'smooth'}); });
+
+function dateProblem(d){
+  if(!d) return '';
+  if(d < addDays(2)) return 'Los pedidos se toman con 48 horas de anticipación. Elegí una fecha desde pasado mañana.';
+  if(S.settings.blocked.includes(d)) return 'Ese día no estoy tomando pedidos. Probá con otra fecha.';
+  const n = (API && !logged) ? (S.busy[d]||0) : S.orders.filter(o => o.date===d && !o.done).length;
+  if(n >= S.settings.maxPerDay) return 'Ese día ya tengo la agenda completa. Probá con otra fecha.';
+  return '';
+}
+$('#rDate').addEventListener('change', () => { const p=dateProblem($('#rDate').value); $('#dateErr').textContent=p; $('#dateErr').style.display=p?'block':'none'; });
+
+$('#resForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const d=$('#rDate').value, name=$('#rName').value.trim(), phone=$('#rPhone').value.trim();
+  if(!d || !name || !phone){ $('#formErr').style.display='block'; return; }
+  $('#formErr').style.display='none';
+  const p=dateProblem(d); if(p){ $('#dateErr').textContent=p; $('#dateErr').style.display='block'; return; }
+  const o = {id:'o'+Date.now(), created:iso(new Date()), date:d, product:$('#rProd').value, people:Number($('#rPeople').value)||'', fill:$('#rFill').value, delivery:document.querySelector('input[name=rDel]:checked').value, name, phone, notes:[$('#rTheme').value.trim()&&('Motivo: '+$('#rTheme').value.trim()), $('#rFrase').value.trim()&&('Nombre/edad: '+$('#rFrase').value.trim()), $('#rNotes').value.trim()].filter(Boolean).join(' · '), pay:'sin', total:0, paid:0, done:false};
+  if(API){ const btn=e.target.querySelector('button[type=submit]'); if(btn) btn.disabled=true;
+    try{ const r = await api({a:'order', order:o}); if(btn) btn.disabled=false; if(!r.ok){ $('#dateErr').textContent=r.msg; $('#dateErr').style.display='block'; return; } S.busy[d]=(S.busy[d]||0)+1; }
+    catch(err){ if(btn) btn.disabled=false; toast('No se pudo enviar. Revisá tu conexión y probá de nuevo.'); return; } }
+  else { S.orders.push(o); save(); renderPanel(); }
+  const msg = encodeURIComponent(['Hola Maru! Te hice un pedido desde tu página:', '• '+o.product, '• Fecha: '+fmtDate(d), '• Personas: '+(o.people||'-'), o.fill&&('• Sabor y relleno: '+o.fill), o.notes&&('• '+o.notes), '• '+o.delivery, '• A nombre de: '+name+' ('+phone+')'].filter(Boolean).join('\n'));
+  const waUrl = `https://wa.me/${WA}?text=${msg}`; $('#doneWa').href = waUrl;
+  $('#doneDate').textContent = fmtDate(d);
+  const st=S.settings, pr=(S.products.find(p=>p.name===o.product)||{}).price;
+  const pct=st.senaPct||50, monto=pr?Math.round(pr*pct/100/100)*100:0;
+  $('#doneSena').innerHTML = st.alias
+    ? `<strong>Para reservar la fecha, transferí la seña${monto?` de ${money(monto)}`:` (${pct}% del total)`}:</strong><p style="margin-top:8px">Alias: <b>${esc(st.alias)}</b>${st.aliasName?`<br>A nombre de: ${esc(st.aliasName)}`:''}</p><p class="hint" style="margin-top:8px">Mandame el comprobante por WhatsApp y listo.</p>`
+    : `<strong>Te escribo por WhatsApp para confirmar el precio y pasarte los datos de la seña.</strong>`;
+  $('#resFields').style.display='none'; $('#resDone').style.display='block';
+  hit('-pedidos'); window.open(waUrl, '_blank');
+});
+$('#newRes').addEventListener('click', () => { $('#resForm').reset(); $('#resFields').style.display=''; $('#resDone').style.display='none'; });
+
+// ===== Panel privado =====
+let oFilter='prox';
+function renderPanel(){
+  const up = S.orders.filter(o => o.date >= iso(today) && !o.done);
+  const debt = S.orders.filter(o=>!o.done).reduce((a,o)=>a+Math.max(0,(o.total||0)-(o.paid||0)),0);
+  const next7 = up.filter(o => o.date <= addDays(7)).length;
+  $('#sum').innerHTML = `
+    <div><b>${up.length}</b><span>Pedidos próximos</span></div>
+    <div><b>${next7}</b><span>En los próximos 7 días</span></div>
+    <div><b>${S.orders.filter(o=>o.pay==='sin'&&!o.done).length}</b><span>Sin seña</span></div>
+    <div><b>${money(debt)}</b><span>Saldo por cobrar</span></div>`;
+  if(!window._vis){ window._vis=1; fetch(HIT.replace('/hit/','/get/')).then(r=>r.json()).then(j=>{ window._visN=j.value; renderPanel(); }).catch(()=>{}); }
+  if(window._visN!=null) $('#sum').insertAdjacentHTML('beforeend', `<div><b>${window._visN}</b><span>Visitas a tu página</span></div>`);
+
+  let list = [...S.orders];
+  if(oFilter==='prox') list = list.filter(o=>!o.done && o.date>=iso(today));
+  else if(oFilter!=='todos') list = list.filter(o=>o.pay===oFilter);
+  list.sort((a,b)=>a.date.localeCompare(b.date));
+
+  $('#olist').innerHTML = list.length ? list.map(o => {
+    const saldo = Math.max(0,(o.total||0)-(o.paid||0));
+    return `<div class="order" data-id="${o.id}">
+      <div class="t">
+        <div><h4>${esc(o.product)}</h4><div class="meta">${esc(o.name)} · ${esc(o.phone)}<br>${o.people?o.people+' personas · ':''}${o.fill?esc(o.fill)+' · ':''}${esc(o.delivery)}${o.done?' · ✅ Entregado':''}</div></div>
+        <div class="date ${o.date<iso(today)?'past':''}">${fmtDate(o.date)}</div>
+      </div>
+      ${o.notes?`<div class="meta">📝 ${esc(o.notes)}</div>`:''}
+      <div class="pay">
+        <button data-v="sin" class="${o.pay==='sin'?'on':''}">Sin pagar</button>
+        <button data-v="sena" class="${o.pay==='sena'?'on':''}">Seña</button>
+        <button data-v="total" class="${o.pay==='total'?'on':''}">Pagado total</button>
+      </div>
+      <div class="money">
+        <label>Precio total<input type="number" data-k="total" value="${o.total||''}" placeholder="$"></label>
+        <label>Pagó<input type="number" data-k="paid" value="${o.paid||''}" placeholder="$"></label>
+        <label>Saldo<span class="saldo">${money(saldo)}</span></label>
+      </div>
+      <div class="oact">
+        <button class="btn sm ghost" data-a="wa">💬 Escribirle</button>
+        <button class="btn sm ghost" data-a="done">${o.done?'↩️ Marcar pendiente':'✅ Entregado'}</button>
+        <button class="btn sm ghost" data-a="del">🗑️ Borrar</button>
+      </div>
+    </div>`;}).join('') : `<div class="empty">No hay pedidos en esta vista.</div>`;
+}
+$('#ofilter').addEventListener('click', e => { const b=e.target.closest('button'); if(!b) return; oFilter=b.dataset.f; [...$('#ofilter').children].forEach(x=>x.classList.toggle('on',x===b)); renderPanel(); });
+$('#olist').addEventListener('click', e => {
+  const card=e.target.closest('.order'); if(!card) return; const o=S.orders.find(x=>x.id===card.dataset.id);
+  const pb=e.target.closest('.pay button');
+  if(pb){ o.pay=pb.dataset.v; if(o.pay==='total' && o.total) o.paid=o.total; if(o.pay==='sin') o.paid=0; save('o',o); renderPanel(); return; }
+  const a=e.target.closest('[data-a]'); if(!a) return;
+  if(a.dataset.a==='done'){ o.done=!o.done; save('o',o); renderPanel(); }
+  if(a.dataset.a==='del'){ if(card.dataset.confirm==='1'){ S.orders=S.orders.filter(x=>x!==o); save('od',o.id); renderPanel(); } else { card.dataset.confirm='1'; a.textContent='Seguro? Tocá de nuevo'; } }
+  if(a.dataset.a==='wa'){ if(!o.phone){ toast('Este pedido no tiene WhatsApp cargado.'); } else window.open('https://wa.me/549'+o.phone.replace(/\D/g,''),'_blank'); }
+});
+$('#olist').addEventListener('change', e => {
+  const inp=e.target.closest('input[data-k]'); if(!inp) return;
+  const o=S.orders.find(x=>x.id===e.target.closest('.order').dataset.id);
+  o[inp.dataset.k]=Number(inp.value)||0;
+  if(o.paid<=0) o.pay='sin'; else if(o.total && o.paid>=o.total) o.pay='total'; else o.pay='sena';
+  save('o',o); renderPanel();
+});
+
+function renderPrices(){
+  const cats=[...new Set(S.products.map(p=>p.cat))];
+  $('#catList').innerHTML=cats.map(c=>`<option value="${esc(c)}">`).join('');
+  $('#plist').innerHTML = S.products.map(p => `
+    <div class="pcard" data-id="${p.id}">
+      <div>
+        <div class="ph">${p.img?`<img src="${esc(p.img)}" alt="">`:(p.emoji||'🧁')}</div>
+        <label class="up">📷 Cambiar foto<input type="file" accept="image/*" data-k="img"></label>
+      </div>
+      <div class="fs">
+        <div><div class="lbl">Nombre</div><input type="text" data-k="name" value="${esc(p.name)}"></div>
+        <div><div class="lbl">Categoría</div><input type="text" data-k="cat" value="${esc(p.cat)}" list="catList"></div>
+        <div><div class="lbl">Descripción</div><textarea data-k="desc">${esc(p.desc)}</textarea></div>
+        <div class="r">
+          <div><div class="lbl">Precio</div><input type="number" data-k="price" value="${p.price||''}" placeholder="Consultar"></div>
+          <label class="sw"><input type="checkbox" data-k="visible" ${p.visible?'checked':''}> Visible</label>
+          <button class="del" type="button" data-a="pdel">🗑️ Borrar</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function shrink(file){ return new Promise((res,rej)=>{ const fr=new FileReader(); fr.onerror=rej; fr.onload=()=>{ const im=new Image(); im.onerror=rej; im.onload=()=>{
+  const W=720,H=900, r=Math.max(W/im.width,H/im.height), w=im.width*r, h=im.height*r;
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d'); x.fillStyle='#fbf8f3'; x.fillRect(0,0,W,H);
+  x.drawImage(im,(W-w)/2,(H-h)/2,w,h); res(c.toDataURL('image/jpeg',0.78)); }; im.src=fr.result; }; fr.readAsDataURL(file); }); }
+$('#plist').addEventListener('change', async e => {
+  const it=e.target.closest('.pcard'); if(!it) return; const p=S.products.find(x=>x.id===it.dataset.id); const k=e.target.dataset.k;
+  if(k==='img'){ const f=e.target.files[0]; if(!f) return;
+    if(API){ try{ toast('Subiendo foto…'); const r=await api({a:'photo', pin:pinOk, data:await shrink(f), name:p.name+'.jpg'}); if(!r.ok){ toast(r.msg||'No se pudo subir'); return; } p.img=r.url; save('p'); renderPrices(); renderSite(); toast('Foto actualizada ✔'); }catch(err){ toast('No se pudo subir la foto, probá de nuevo.'); } return; }
+    try{ const prev=p.img; p.img=await shrink(f); try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(err){ p.img=prev; toast('No hay más lugar para fotos en la demo. En la versión final no tiene límite.'); return; } renderPrices(); renderSite(); toast('Foto actualizada ✔'); }catch(err){ toast('No se pudo leer esa foto, probá con otra.'); } return; }
+  if(k==='price') p.price = Number(e.target.value)||null;
+  else if(k==='visible') p.visible = e.target.checked;
+  else if(k==='name') p.name = e.target.value.trim()||p.name;
+  else if(k==='cat') p.cat = e.target.value.trim()||p.cat;
+  else if(k==='desc') p.desc = e.target.value.trim();
+  save('p'); renderSite(); toast('Guardado ✔');
+});
+$('#plist').addEventListener('click', e => {
+  const b=e.target.closest('[data-a="pdel"]'); if(!b) return; const it=b.closest('.pcard');
+  if(b.dataset.c==='1'){ S.products=S.products.filter(x=>x.id!==it.dataset.id); save('p'); renderPrices(); renderSite(); toast('Producto borrado'); }
+  else { b.dataset.c='1'; b.textContent='Seguro? Tocá de nuevo'; }
+});
+$('#addProd').addEventListener('click', () => {
+  S.products.unshift({id:'p'+Date.now(), cat:'Tortas', name:'Nuevo producto', desc:'', price:null, visible:false, img:''});
+  save('p'); renderPrices(); window.scrollTo({top:0,behavior:'smooth'}); toast('Producto nuevo arriba de todo: completalo y prendé "Visible".');
+});
+
+// Pedido cargado a mano
+$('#newOrderBtn').addEventListener('click', () => { $('#prodList').innerHTML=S.products.map(p=>`<option value="${esc(p.name)}">`).join(''); $('#newOrder').style.display=''; $('#newOrderBtn').style.display='none'; });
+$('#noCancel').addEventListener('click', () => { $('#newOrder').reset(); $('#newOrder').style.display='none'; $('#newOrderBtn').style.display=''; });
+$('#newOrder').addEventListener('submit', e => {
+  e.preventDefault(); const d=$('#noDate').value, n=$('#noName').value.trim();
+  if(!d||!n){ toast('Completá al menos la fecha y el nombre.'); return; }
+  const no={id:'o'+Date.now(), created:iso(new Date()), date:d, product:$('#noProd').value.trim()||'A medida', people:Number($('#noPeople').value)||'', fill:'', delivery:$('#noDel').value, name:n, phone:$('#noPhone').value.trim(), notes:$('#noNotes').value.trim(), pay:'sin', total:0, paid:0, done:false};
+  S.orders.push(no); save('o',no); $('#noCancel').click(); renderPanel(); toast('Pedido cargado ✔');
+});
+
+function renderAgenda(){
+  const st=S.settings;
+  $('#maxDay').value=st.maxPerDay;
+  $('#spTitle').value=st.spTitle; $('#spText').value=st.spText; $('#spOn').checked=st.spOn; $('#alias').value=st.alias||''; $('#aliasName').value=st.aliasName||''; $('#senaPct').value=st.senaPct??50;
+  $('#blockedList').innerHTML = st.blocked.sort().map(d=>`<span>${fmtDate(d)} <button data-d="${d}" aria-label="Quitar">×</button></span>`).join('') || '<span class="hint" style="border:none;background:none">No hay días bloqueados.</span>';
+}
+$('#maxDay').addEventListener('change', e => { S.settings.maxPerDay=Math.max(1,Number(e.target.value)||1); save('s'); toast('Guardado ✔'); });
+$('#blockBtn').addEventListener('click', () => { const d=$('#blockDate').value; if(!d) return; if(!S.settings.blocked.includes(d)) S.settings.blocked.push(d); save('s'); renderAgenda(); toast('Día bloqueado'); });
+$('#blockedList').addEventListener('click', e => { const b=e.target.closest('button[data-d]'); if(!b) return; S.settings.blocked=S.settings.blocked.filter(x=>x!==b.dataset.d); save('s'); renderAgenda(); });
+['spTitle','spText'].forEach(id => $('#'+id).addEventListener('change', e => { S.settings[id]=e.target.value; save('s'); renderSite(); toast('Guardado ✔'); }));
+$('#spOn').addEventListener('change', e => { S.settings.spOn=e.target.checked; save('s'); renderSite(); toast('Guardado ✔'); });
+['alias','aliasName'].forEach(id => $('#'+id).addEventListener('change', e => { S.settings[id]=e.target.value.trim(); save('s'); toast('Guardado ✔'); }));
+$('#senaPct').addEventListener('change', e => { S.settings.senaPct=Math.min(100,Math.max(0,Number(e.target.value)||0)); save('s'); toast('Guardado ✔'); });
+
+// ===== Recetas =====
+function renderRecipes(){
+  $('#rlist').innerHTML = S.products.map(p => { const r=S.recipes[p.name]||{base:15,items:[]};
+    return `<div class="rcard" data-n="${esc(p.name)}">
+      <h4>${esc(p.name)}</h4>
+      <div class="rbase">Esta receta es para <input type="number" min="1" data-k="base" value="${r.base}"> personas</div>
+      ${r.items.map((it,i)=>`<div class="rrow" data-i="${i}"><input data-k="ing" value="${esc(it[0])}" placeholder="Ingrediente"><input type="number" data-k="qty" value="${it[1]}" placeholder="Cant."><select data-k="unit">${['g','ml','u'].map(u=>`<option ${u===it[2]?'selected':''}>${u}</option>`).join('')}</select><button type="button" data-a="rdel" aria-label="Quitar">×</button></div>`).join('')}
+      <button class="btn sm ghost" type="button" data-a="radd">+ Agregar ingrediente</button>
+    </div>`; }).join('');
+}
+$('#rlist').addEventListener('change', e => {
+  const c=e.target.closest('.rcard'); if(!c) return; const n=c.dataset.n; const r=S.recipes[n]=S.recipes[n]||{base:15,items:[]};
+  const k=e.target.dataset.k;
+  if(k==='base'){ r.base=Math.max(1,Number(e.target.value)||1); }
+  else { const i=Number(e.target.closest('.rrow').dataset.i); const it=r.items[i]; if(k==='ing') it[0]=e.target.value.trim(); if(k==='qty') it[1]=Number(e.target.value)||0; if(k==='unit') it[2]=e.target.value; }
+  save('r'); toast('Guardado ✔');
+});
+$('#rlist').addEventListener('click', e => {
+  const b=e.target.closest('[data-a]'); if(!b) return; const c=b.closest('.rcard'); const n=c.dataset.n; const r=S.recipes[n]=S.recipes[n]||{base:15,items:[]};
+  if(b.dataset.a==='radd'){ r.items.push(['',0,'g']); }
+  if(b.dataset.a==='rdel'){ r.items.splice(Number(b.closest('.rrow').dataset.i),1); }
+  save('r'); renderRecipes();
+});
+
+// ===== Compras =====
+const fmtQty=(q,u)=> u==='g'? (q>=1000? (Math.round(q/100)/10).toLocaleString('es-AR')+' kg' : Math.round(q)+' g') : u==='ml'? (q>=1000? (Math.round(q/100)/10).toLocaleString('es-AR')+' l' : Math.round(q)+' ml') : Math.ceil(q)+' u';
+function weekRange(){ return [iso(today), addDays(6)]; }
+function renderCompras(){
+  if(!$('#cFrom').value){ const [a,b]=weekRange(); $('#cFrom').value=a; $('#cTo').value=b; }
+  const from=$('#cFrom').value, to=$('#cTo').value, all=$('#cAll').checked;
+  const os=S.orders.filter(o=>!o.done && o.date>=from && o.date<=to && (all || o.pay!=='sin'));
+  const tot={}, sin=[];
+  os.forEach(o=>{ const r=S.recipes[o.product]; if(!r||!r.items.length){ sin.push(o.product); return; } const f=(Number(o.people)||r.base)/r.base;
+    r.items.forEach(([ing,q,u])=>{ if(!ing) return; const k=ing.toLowerCase()+'|'+u; tot[k]=tot[k]||{ing,u,q:0}; tot[k].q+=q*f; }); });
+  const items=Object.values(tot).sort((a,b)=>a.ing.localeCompare(b.ing));
+  window._shopText = `Lista de compras (${fmtDate(from)} al ${fmtDate(to)}):%0A` + items.map(x=>`• ${x.ing}: ${fmtQty(x.q,x.u)}`).join('%0A');
+  $('#clist').innerHTML = `<h3 style="font-size:1.4rem">Tenés que comprar</h3>
+    <p class="hint" style="margin:4px 0 10px">Para ${os.length} pedido${os.length===1?'':'s'} entre el ${fmtDate(from)} y el ${fmtDate(to)}.</p>
+    ${items.length? `<ul class="shop">${items.map(x=>`<li><span>${esc(x.ing)}</span><b>${fmtQty(x.q,x.u)}</b></li>`).join('')}</ul>` : '<div class="empty">No hay pedidos en esas fechas.</div>'}
+    ${sin.length? `<div class="warn">Sin receta cargada: ${[...new Set(sin)].map(esc).join(', ')}. Cargala en la solapa Recetas para sumarla.</div>`:''}
+    ${items.length? `<button class="btn" type="button" id="shopWa" style="margin-top:16px;width:100%">Mandármela por WhatsApp</button>`:''}`;
+}
+['cFrom','cTo','cAll'].forEach(id=>$('#'+id).addEventListener('change',renderCompras));
+$('#clist').addEventListener('click', e => { if(!e.target.closest('#shopWa')) return; if(DEMO) toast('Demo: acá se abre tu WhatsApp con la lista lista para guardar.'); else window.open(`https://wa.me/${WA}?text=${window._shopText}`,'_blank'); });
+
+document.querySelector('.tabs').addEventListener('click', e => {
+  const b=e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.pv').forEach(v=>v.classList.toggle('on', v.id==='pv-'+b.dataset.t));
+  if(b.dataset.t==='precios') renderPrices();
+  if(b.dataset.t==='agenda') renderAgenda();
+  if(b.dataset.t==='calc') renderCalc();
+  renderPanel();
+  if(API && b.dataset.t==='pedidos') pullAll().then(r=>{ if(r.ok) renderPanel(); }).catch(()=>{});
+});
+
+
+// ===== Cuánto cobrar =====
+function calcOut(){ const c=S.calc, n=k=>Number(c[k])||0; const costo=n('ing')+n('pack')+n('gas'), mano=n('hours')*n('rate'), base=costo+mano, precio=Math.ceil(base*(1+n('margin')/100)/100)*100;
+  $('#kOut').innerHTML = base>0 ? `<h3 style="font-size:1.4rem">${esc(c.name||'Tu producto')}</h3><ul class="shop"><li><span>Gastos</span><b>${money(costo)}</b></li><li><span>Tu trabajo (${n('hours')} h)</span><b>${money(mano)}</b></li><li><span>Margen (${n('margin')}%)</span><b>${money(precio-base)}</b></li></ul><p style="margin-top:14px;font-size:1.05rem">Precio sugerido: <b style="font-size:1.7rem;color:var(--green)">${money(precio)}</b></p>` : '<div class="empty">Cargá tus gastos y tus horas, y acá aparece el precio sugerido.</div>'; }
+function renderCalc(){ document.querySelectorAll('#pv-calc [data-k]').forEach(i=>{ i.value=S.calc[i.dataset.k]??''; }); calcOut(); }
+document.getElementById('pv-calc').addEventListener('input', e => { const k=e.target.dataset.k; if(!k) return; S.calc[k]=e.target.value; calcOut(); });
+document.getElementById('pv-calc').addEventListener('change', e => { if(e.target.dataset.k) save('c'); });
+
+// ===== Contador de visitas (propio) =====
+function hit(sfx){ try{ fetch(HIT+(sfx||'')).catch(()=>{}); }catch(e){} }
+try{ if(location.hash!=='#admin' && !sessionStorage.getItem(KEY+'_v')){ sessionStorage.setItem(KEY+'_v','1'); hit(''); } }catch(e){}
+
+// ===== Cambio de clave =====
+$('#pinSave').addEventListener('click', async () => { const a=$('#npin').value.trim(), b=$('#npin2').value.trim();
+  if(!/^\d{4,8}$/.test(a)){ toast('La clave tiene que tener entre 4 y 8 números.'); return; }
+  if(a!==b){ toast('Las dos claves no coinciden.'); return; }
+  try{ const r=await api({a:'setPin', pin:pinOk, newPin:a}); if(!r.ok){ toast(r.msg||'No se pudo cambiar la clave'); return; }
+    pinOk=a; try{ sessionStorage.setItem(KEY+'_pin',a); }catch(e){} $('#npin').value=''; $('#npin2').value=''; toast('Clave cambiada ✔'); }
+  catch(e){ toast('Sin conexión. Probá de nuevo.'); } });
+
+// ===== Login y rutas =====
+let logged=false;
+try{ logged = sessionStorage.getItem(KEY+'_in')==='1' && (!API || !!pinOk); }catch(e){}
+function route(){
+  const admin = location.hash==='#admin';
+  document.body.classList.toggle('admin', admin);
+  if(admin){ $('#loginBox').style.display=logged?'none':''; $('#panelApp').style.display=logged?'':'none'; if(logged){ renderPanel(); } window.scrollTo(0,0); }
+}
+$('#pinBtn').addEventListener('click', async () => {
+  const v=$('#pin').value;
+  if(API){ try{ pinOk=v; const r=await pullAll(); if(!r.ok){ pinOk=''; toast('Clave incorrecta'); return; } }catch(e){ pinOk=''; toast('Sin conexión. Probá de nuevo.'); return; }
+    logged=true; try{ sessionStorage.setItem(KEY+'_in','1'); sessionStorage.setItem(KEY+'_pin',v); }catch(e){} hit('-panel'); renderSite(); route(); return; }
+  if(v===PIN){ logged=true; try{sessionStorage.setItem(KEY+'_in','1');}catch(e){} hit('-panel'); route(); }
+  else { toast('Clave incorrecta'); }
+});
+$('#pin').addEventListener('keydown', e => { if(e.key==='Enter') $('#pinBtn').click(); });
+window.addEventListener('hashchange', route);
+
+// ===== Modo demo =====
+if(DEMO){
+} else {
+  $('#demoBar').remove(); document.querySelector('meta[name=robots]').remove();
+}
+
+document.getElementById('gal').innerHTML=['img/spider.jpg','img/stitch.jpg','img/hello.jpg','img/cookies.jpg','img/juana.jpg','img/hb.jpg','img/buzz.jpg','img/daisy.jpg','img/meringue.jpg','img/tarta.jpg','img/box.jpg'].map(u=>`<img src="${u}" alt="Trabajo de Capas y Sabores" loading="lazy">`).join('');
+function fitBrand(){ document.querySelectorAll('.brand').forEach(b=>{ const w=b.querySelector('.wm'), sm=b.querySelector('small'); if(!w||!sm) return;
+  sm.style.fontSize=''; sm.style.letterSpacing='0px';
+  const ls=parseFloat(getComputedStyle(w).letterSpacing)||0, target=w.getBoundingClientRect().width-ls;
+  let fs=parseFloat(getComputedStyle(sm).fontSize); const nat=sm.getBoundingClientRect().width;
+  if(nat>0){ sm.style.fontSize=(fs*target/nat)+'px'; } }); }
+window.addEventListener('resize', fitBrand); if(document.fonts) document.fonts.ready.then(fitBrand); fitBrand();
+renderSite(); route();
+if(API){ if(logged){ pullAll().then(r=>{ if(r.ok){ renderSite(); route(); } }).catch(()=>{}); } else pullPub(); }
+</script>
+</body>
+</html>
