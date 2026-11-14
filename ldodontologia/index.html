@@ -195,6 +195,10 @@ input,select,textarea{border-radius:3px!important}
 .sp li{padding:4px 0;border-top:1px solid var(--line)}
 .pro2 .btn{min-height:46px;padding:0 8px;margin-top:auto}
 .addr{text-align:center;color:var(--mut);font-size:15px}
+.fot{display:flex;gap:14px;align-items:center}
+.fot .btn{display:inline-flex;align-items:center;cursor:pointer}
+.orow.tg{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px}
+.tgi{font-size:17px;min-width:0}
 .av{padding:16px;margin-bottom:14px}
 .av h3{font-size:22px}
 .av .bubble{margin:12px 0 16px}
@@ -517,7 +521,7 @@ document.addEventListener('click', e => {
   if(a==='unblockday'){ c.blocked = c.blocked.filter(x => x!==A.date); save(); renderPanel(); renderSite(); }
   if(a==='hsave'){ let bad = false; document.querySelectorAll('.hOn').forEach(i => { const d = i.dataset.d, f = document.querySelector('.hF[data-d="'+d+'"]').value, t = document.querySelector('.hT[data-d="'+d+'"]').value; if(i.checked && mins(t)<=mins(f)) bad = true; c.days[d] = {on:i.checked, from:f, to:t}; });
     if(bad){ toast('Revisá: la hora de cierre tiene que ser después de la de inicio.'); return; } c.step = Number($('#hS').value); c.dur = Number($('#hD').value); save(); renderPanel(); renderSite(); toast('Horarios guardados.'); }
-  if(a==='msave'){ const ms = [...document.querySelectorAll('.mM:checked')].map(i => i.value); if(!ms.length){ toast('Marcá al menos una forma de atender.'); return; } c.name = $('#mN').value.trim() || c.name; { const ws = c.name.split(/\s+/).filter(w => w && !/\.$/.test(w)); if(ws.length){ c.short = ws[0]; c.mono = ws.map(w => w[0]).join('').slice(0,2).toUpperCase(); } } c.lic = $('#mL').value.trim(); c.role = $('#mR').value.trim() || c.role; c.wa = $('#mW').value.trim(); c.selfPick = $('#mS').value==='1'; c.modes = ms; c.place = $('#mP').value.trim(); c.cancel = $('#mC').value.trim(); save(); renderPanel(); renderSite(); toast('Guardado.'); }
+  if(a==='msave'){ const ms = [...document.querySelectorAll('.mM:checked')].map(i => i.value); if(!ms.length){ toast('Marcá al menos una forma de atender.'); return; } const own = $('#mO').checked, my = $('#mW').value.trim(); if(own && waNum(my).length<12){ toast('Escribí tu número de WhatsApp con la característica.'); return; } c.lic = $('#mL').value.trim(); c.role = $('#mR').value.trim() || c.role; c.ownWa = own; c.myWa = my; c.wa = own ? my : DEFAULT.wa; c.tags = [...document.querySelectorAll('#mT .tgi')].map(x => x.textContent.trim()).filter(Boolean); c.selfPick = false; c.modes = ms; c.place = $('#mP').value.trim(); c.cancel = $('#mC').value.trim(); save(); syncPros(); renderPanel(); renderSite(); toast('Guardado.'); }
   if(a==='osadd'){ readCobros(); const n = $('#oNew').value.trim(); if(!n){ toast('Escribí el nombre de la obra social.'); return; } c.os.push({n, on:true, plus:0}); save(); renderPanel(); renderSite(); }
   if(a==='osdel'){ readCobros(); c.os.splice(Number(v),1); save(); renderPanel(); renderSite(); }
   if(a==='csave'){ readCobros(); save(); renderPanel(); renderSite(); toast('Honorarios guardados.'); }
@@ -532,7 +536,19 @@ document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id===
 const API = 'https://script.google.com/macros/s/AKfycbxcv-Wg40xQbjDn92_8W6i2VpEqXS3vZTsNDH_NzN2BYKyMLi3Kw2AdU8P28SN9gRof/exec';
 let CUR = null, OWN = -1, SNAP = null, LAST = 0, QUEUE = Promise.resolve();
 async function api(body){ body.c = PROS[CUR].c; const r = await fetch(API, {method:'POST', body:JSON.stringify(body)}); return r.json(); }
-const proCfg = (i, extra) => { const c = Object.assign(JSON.parse(JSON.stringify(DEFAULT)), PROS[i], (extra && extra.cfg) || {}); c.photo = PROS[i].photo; delete c.c; delete c.slug; c.blocked = c.blocked||[]; c.blockedSlots = c.blockedSlots||[]; return c; };
+PROS.forEach(p => { p.photo0 = p.photo; p.tags0 = p.tags; });
+// el nombre no se cambia desde el panel; la foto, las especialidades y el WhatsApp propio salen de lo que guardó cada una
+const proCfg = (i, extra) => { const x = (extra && extra.cfg) || {}, p = PROS[i], c = Object.assign(JSON.parse(JSON.stringify(DEFAULT)), x); c.name = p.name; c.short = p.short; c.mono = p.mono; c.photo = x.photo || p.photo0; c.tags = Array.isArray(x.tags) ? x.tags : p.tags0; c.ownWa = !!x.ownWa; c.myWa = x.myWa || ''; c.wa = c.ownWa && c.myWa ? c.myWa : DEFAULT.wa; c.blocked = c.blocked||[]; c.blockedSlots = c.blockedSlots||[]; return c; };
+// portada: toma la foto y las especialidades guardadas (se consulta como mucho cada 10 minutos por aparato)
+const CK = 'ld_portada_v1'; let COV = {}, COVL = false; try{ COV = JSON.parse(localStorage.getItem(CK)) || {}; }catch(e){}
+const covKey = () => JSON.stringify(PROS.map(p => [p.photo, p.tags]));
+const applyCov = () => PROS.forEach(p => { const x = COV[p.c]; if(x){ p.photo = x.photo || p.photo0; p.tags = Array.isArray(x.tags) ? x.tags : p.tags0; } });
+const storeCov = () => { try{ localStorage.setItem(CK, JSON.stringify(COV)); }catch(e){} };
+applyCov();
+async function loadCov(){ if(COVL || (COV.t && Date.now()-COV.t < 600000)) return; COVL = true; const before = covKey();
+  await Promise.all(PROS.map(async p => { try{ const d = await fetch(API, {method:'POST', body:JSON.stringify({a:'pub', c:p.c})}).then(r => r.json()); const x = d.settings && d.settings.extra && d.settings.extra.cfg; if(d.ok) COV[p.c] = {photo:(x && x.photo) || '', tags:x && Array.isArray(x.tags) ? x.tags : null}; }catch(e){} }));
+  COV.t = Date.now(); storeCov(); applyCov(); COVL = false; if(covKey()!==before && CUR===null && !location.hash.slice(1)) renderSite(); }
+function syncPros(){ const p = PROS[CUR]; p.photo = S.cfg.photo; p.tags = S.cfg.tags.slice(); COV[p.c] = {photo:S.cfg.photo, tags:S.cfg.tags.slice()}; storeCov(); }
 const LBL = {confirmado:'Turno confirmado', pedido:'Turno por confirmar', consulta:'Primera consulta'};
 const line = (k,v) => v ? k+': '+v : '';
 const pick = (notes,k) => { const m = String(notes||'').split('\n').find(l => l.indexOf(k+': ')===0); return m ? m.slice(k.length+2) : ''; };
@@ -579,7 +595,7 @@ const HALF = `<i class="ln"></i><div class="cl l"><i></i></div><div class="cl d"
 const LOGO = `<div class="lg" role="img" aria-label="LD Odontología"><div class="hf t">${HALF}</div><div class="hf b">${HALF}</div><i class="wd"></i></div>`;
 const face = (p, cls) => p.photo ? `<img class="pho ${cls||''}" src="${p.photo}" alt="" width="76" height="76">` : `<div class="mono ${cls||''}" aria-hidden="true">${p.mono}</div>`;
 function renderSite(){ const el = $('#site');
-  if(CUR===null){ el.innerHTML = `<div class="cover">${LOGO}
+  if(CUR===null){ loadCov(); el.innerHTML = `<div class="cover">${LOGO}
     <div><p class="kick">Odontología integral</p><p class="lead ctr">Niños, adolescentes y adultos.</p></div>
     <div><h2 class="cq">Con quién querés tu turno</h2><div class="duo">${PROS.map((p,i) => `<section class="sheet pro2"><div class="hd">${face(p)}<h3>${p.name}</h3></div><ul class="sp">${p.tags.map(x => `<li>${x}</li>`).join('')}</ul><button class="btn w" data-ld="pro" data-v="${i}">Pedir turno</button></section>`).join('')}</div></div>
     <p class="addr">${esc(DEFAULT.place)}</p></div>`; return; }
@@ -596,7 +612,35 @@ function renderPanel(){ const el = $('#panel'); if(OWN>=0 && CUR===null){ CUR = 
   if(!A.ok) el.insertAdjacentHTML('afterbegin', brand(true) + (OWN>=0 ? '' : `<button class="back" data-ld="unwho">Volver</button>`));
   else if(A.scr==='home' && Date.now()-LAST>45000){ LAST = Date.now(); refresh(); }
 }
+// ----- Mis datos: foto, especialidades y WhatsApp propio (el nombre no se cambia) -----
+const tagRow = x => `<div class="orow tg"><span class="tgi">${esc(x)}</span><button class="btn del sm" data-ld="tagdel">Quitar</button></div>`;
+function viewMas(){ const c = S.cfg;
+  return `<section class="sheet"><div class="form" style="border:0"><h3>Tus datos</h3>
+    <label style="margin-top:12px">Tu foto</label><div class="fot"><span id="mFv">${face({photo:c.photo, mono:c.mono})}</span><div><label class="btn o" for="mF">Cambiar mi foto</label><input id="mF" type="file" accept="image/*" hidden><p class="mut gap">Es la que ven tus pacientes en la página.</p></div></div>
+    <label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
+    <label for="mL">Tu matrícula</label><input id="mL" type="text" value="${esc(c.lic)}" placeholder="Ej.: M.P. 1234">
+    <label>Tus especialidades</label><div id="mT">${(c.tags||[]).map(tagRow).join('')}</div>
+    <div class="two" style="grid-template-columns:1fr auto;margin-top:8px"><input id="tNew" type="text" aria-label="Especialidad nueva" placeholder="Ej.: Implantes"><button class="btn o" data-ld="tagadd">Agregar</button></div>
+    <input type="hidden" id="mS" value="0">
+    <label>Cómo atendés</label>${['Presencial','Online'].map(m => `<label class="chk"><input type="checkbox" class="mM" value="${m}" ${c.modes.includes(m)?'checked':''}> ${m}</label>`).join('')}
+    <label for="mP">Dónde atendés</label><textarea id="mP" rows="2">${esc(c.place)}</textarea><label for="mC">Aviso de cancelación</label><textarea id="mC" rows="2">${esc(c.cancel)}</textarea>
+    <label class="chk" style="margin-top:22px;font-weight:700"><input type="checkbox" id="mO" ${c.ownWa?'checked':''}> Quiero responder con mi WhatsApp</label>
+    <p class="mut gap">Si lo activás, el aviso de cada pedido te llega a tu número y los mensajes a tus pacientes los mandás vos, desde tu celular. Si no, todo sale desde el celular del consultorio.</p>
+    <div id="mOW" ${c.ownWa?'':'hidden'}><label for="mW">Tu número de WhatsApp</label><input id="mW" type="tel" value="${esc(c.myWa||'')}" placeholder="Ej.: 370 400 1234"></div>
+    <p class="mut" style="margin-top:18px">Los cambios quedan cuando tocás Guardar.</p><button class="btn w gap" data-a="msave">Guardar</button></div></section>`; }
+function showMsg(t, title, text){ const full = text + '\n' + S.cfg.name + ' – LD Odontología';
+  if(S.cfg.ownWa){ A.msg = {title, text:full, own:true, href:t.phone ? waLink(t.phone, full) : ''}; return; }
+  A.msg = {title, text:full, queued:!!t.phone}; if(t.phone) queueAviso(t, title, full); }
+function viewMsg(){ const m = A.msg; if(!m){ A.scr = 'home'; return viewHome(); }
+  const note = m.own ? (m.href ? 'El mensaje ya está escrito. Tocá el botón y se abre tu WhatsApp para enviarlo.' : 'Esta persona no tiene WhatsApp cargado: avisale vos.') : (m.queued ? 'Este mensaje quedó en la lista de avisos. Se manda desde el celular del consultorio.' : 'Esta persona no tiene WhatsApp cargado: el aviso no se puede mandar desde el consultorio.');
+  return `<div class="ptop"><h1>${esc(m.title)}</h1></div><p class="note">${note}</p><div class="bubble" style="margin:0 0 18px">${esc(m.text)}</div>${m.own && m.href ? `<a class="btn w" target="_blank" rel="noopener" href="${esc(m.href)}">Abrir WhatsApp</a><button class="btn o w gap" data-a="msgx">Listo, volver a mi agenda</button>` : `<button class="btn w" data-a="msgx">Listo, volver a mi agenda</button>`}`; }
+function squareShot(file){ return new Promise((res, rej) => { const fr = new FileReader(); fr.onerror = rej; fr.onload = () => { const im = new Image(); im.onerror = rej; im.onload = () => { const s = Math.min(im.width, im.height), c = document.createElement('canvas'); c.width = c.height = Math.min(480, s); c.getContext('2d').drawImage(im, (im.width-s)/2, (im.height-s)/2, s, s, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', .85)); }; im.src = fr.result; }; fr.readAsDataURL(file); }); }
+document.addEventListener('change', async e => { const t = e.target;
+  if(t.id==='mO'){ $('#mOW').hidden = !t.checked; if(t.checked) $('#mW').focus(); }
+  if(t.id==='mF' && t.files && t.files[0]){ toast('Subiendo la foto…'); try{ const r = await api({a:'photo', pin:A.pin, data:await squareShot(t.files[0]), name:'perfil_'+PROS[CUR].slug+'.jpg'}); if(!r.ok) throw 0; S.cfg.photo = r.url; save(); syncPros(); const v = $('#mFv'); if(v) v.innerHTML = face({photo:r.url, mono:S.cfg.mono}); toast('Foto cambiada.'); }catch(x){ toast('No se pudo subir la foto. Probá de nuevo.'); } t.value = ''; } });
 document.addEventListener('click', async e => { const b = e.target.closest('[data-ld]'); if(!b) return; const a = b.dataset.ld, v = Number(b.dataset.v);
+  if(a==='tagadd'){ const n = $('#tNew').value.trim(); if(!n){ toast('Escribí la especialidad.'); return; } $('#mT').insertAdjacentHTML('beforeend', tagRow(n)); $('#tNew').value = ''; }
+  if(a==='tagdel'){ b.closest('.tg').remove(); }
   if(a==='pro') choose(v);
   if(a==='unpro'){ CUR = null; S = null; renderSite(); scrollTo(0,0); }
   if(a==='who'){ CUR = v; S = {cfg:proCfg(v), turnos:[], reqs:[]}; A.ok = false; renderPanel(); scrollTo(0,0); const p = $('#pin'); if(p) p.focus(); }
