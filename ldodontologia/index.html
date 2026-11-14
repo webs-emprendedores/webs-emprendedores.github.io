@@ -565,7 +565,11 @@ const snapOf = () => { const m = {}; S.turnos.forEach(x => m[x.id] = JSON.string
 function setData(d){ const x = fromOrders(d.orders||[]); S = {cfg:proCfg(CUR, d.settings && d.settings.extra), turnos:x.turnos, reqs:x.reqs}; SNAP = snapOf(); LAST = Date.now(); }
 function load(){}
 // guardar = mandar a la planilla solo lo que cambió
-function save(){ if(!S || !A.ok || !SNAP) return; const now = snapOf(), up = [], del = [];
+const dirty = () => { if(!S || !SNAP) return false; const n = snapOf(); return n.cfg!==SNAP.cfg || Object.keys(n.m).some(id => n.m[id]!==SNAP.m[id]) || Object.keys(SNAP.m).some(id => !(id in n.m)); };
+const PK = () => 'ld_pend_' + PROS[CUR].c;
+function pendStore(){ try{ if(!dirty()){ localStorage.removeItem(PK()); return; } const n = snapOf(); localStorage.setItem(PK(), JSON.stringify({up:Object.keys(n.m).filter(id => n.m[id]!==SNAP.m[id]).map(id => JSON.parse(n.m[id])), del:Object.keys(SNAP.m).filter(id => !(id in n.m)), cfg:n.cfg!==SNAP.cfg ? JSON.parse(n.cfg) : null})); }catch(e){} }
+let RETRY = null; function pend(on){ pendStore();  let b = $('#pend'); if(on && !b){ b = document.createElement('div'); b.id = 'pend'; b.setAttribute('role','status'); b.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:60;padding:12px 16px;background:#8a1c1c;color:#fff;font-weight:700;font-size:16px;line-height:1.35;text-align:center'; b.textContent = 'Sin conexión: hay cambios sin guardar. No cierres la app; se guardan solos cuando vuelva la señal.'; document.body.appendChild(b); } if(!on && b){ b.remove(); toast('Listo, quedó todo guardado.'); } clearTimeout(RETRY); if(on) RETRY = setTimeout(() => { if(A.ok && dirty()) save(); else pend(false); }, 8000); }
+function save(){ if(!S || !A.ok || !SNAP) return; const prev = SNAP, now = snapOf(), up = [], del = [];
   Object.keys(now.m).forEach(id => { if(now.m[id]!==SNAP.m[id]) up.push(JSON.parse(now.m[id])); });
   Object.keys(SNAP.m).forEach(id => { if(!(id in now.m)) del.push(id); });
   const cfgCh = now.cfg!==SNAP.cfg; SNAP = now; if(!up.length && !del.length && !cfgCh) return;
@@ -574,13 +578,19 @@ function save(){ if(!S || !A.ok || !SNAP) return; const now = snapOf(), up = [],
       if(up.length){ const r = await api({a:'saveOrders', pin, orders:up}); if(!r.ok) throw 0; }
       if(del.length){ const r = await api({a:'delOrders', pin, ids:del}); if(!r.ok) throw 0; }
       if(cfgCh){ const r = await api({a:'saveSettings', pin, settings:{maxPerDay:9999, blocked:[], spOn:false, senaPct:0, extra:{kind:'turnos', cfg}}}); if(!r.ok) throw 0; }
-    }catch(e){ toast('No se pudo guardar. Revisá la conexión y volvé a intentar.'); } });
+      if($('#pend') && !dirty()) pend(false); else pendStore();
+    }catch(e){ /* lo que no se pudo guardar vuelve a quedar como pendiente y se reintenta solo */
+      up.forEach(o => { if(o.id in prev.m) SNAP.m[o.id] = prev.m[o.id]; else delete SNAP.m[o.id]; }); del.forEach(id => { SNAP.m[id] = prev.m[id]; }); if(cfgCh) SNAP.cfg = prev.cfg;
+      if(!$('#pend')) toast('No se pudo guardar. Se reintenta solo.'); pend(true); } });
 }
 async function login(pin, btn){ if(!pin){ toast('Escribí tu clave.'); return; } if(btn) btn.disabled = true;
-  try{ A.pin = pin; const d = await api({a:'all', pin}); if(!d.ok){ A.pin = ''; toast(d.msg||'Clave incorrecta.'); if(btn) btn.disabled = false; return; }
+  try{ A.pin = pin; let d = await api({a:'all', pin}); if(!d.ok){ A.pin = ''; toast(d.msg||'Clave incorrecta.'); if(btn) btn.disabled = false; return; }
+    /* cambios que quedaron sin guardar la vez anterior (se cerró la app sin señal) */
+    let pd = null; try{ pd = JSON.parse(localStorage.getItem(PK())); }catch(e){}
+    if(pd){ let ok = true; if(pd.up && pd.up.length) ok = (await api({a:'saveOrders', pin, orders:pd.up})).ok && ok; if(pd.del && pd.del.length) ok = (await api({a:'delOrders', pin, ids:pd.del})).ok && ok; if(pd.cfg) ok = (await api({a:'saveSettings', pin, settings:{maxPerDay:9999, blocked:[], spOn:false, senaPct:0, extra:{kind:'turnos', cfg:pd.cfg}}})).ok && ok; if(!ok) throw 0; localStorage.removeItem(PK()); d = await api({a:'all', pin}); }
     setData(d); A.ok = true; A.scr = 'home'; renderPanel(); scrollTo(0,0);
   }catch(e){ A.pin = ''; toast('No hay conexión. Probá de nuevo.'); if(btn) btn.disabled = false; } }
-async function refresh(){ if(!A.ok || CUR===null) return; try{ await QUEUE; const d = await api({a:'all', pin:A.pin}); if(d.ok && A.ok){ const before = JSON.stringify(SNAP.m); setData(d); if(JSON.stringify(SNAP.m)!==before && A.scr==='home') renderPanel0(); } }catch(e){} }
+async function refresh(){ if(!A.ok || CUR===null) return; try{ await QUEUE; if(dirty()){ save(); return; } const d = await api({a:'all', pin:A.pin}); if(d.ok && A.ok){ const before = JSON.stringify(SNAP.m); setData(d); if(JSON.stringify(SNAP.m)!==before && A.scr==='home') renderPanel0(); } }catch(e){} }
 async function sendReq(r, btn){ if(btn) btn.disabled = true;
   try{ const d = await api({a:'order', order:toOrder(Object.assign({created:today()}, r), true)}); if(!d.ok){ toast(d.msg||'No se pudo enviar. Probá de nuevo.'); if(btn) btn.disabled = false; return; }
     P.last = Object.assign({req:true}, r); P.motivo = r.motivo; P.step = 'done'; P.f = {}; renderSite(); scrollTo(0,0);
@@ -655,10 +665,14 @@ const PC = !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 const AVK = 'ld_avisos_clave'; const avGet = () => { try{ return localStorage.getItem(AVK)||''; }catch(e){ return ''; } }; const avSet = v => { try{ v ? localStorage.setItem(AVK, v) : localStorage.removeItem(AVK); }catch(e){} };
 const AV = {c:'ld-avisos', pin:avGet()}; let AVL = null, AVO = {};
 const avApi = body => fetch(API, {method:'POST', body:JSON.stringify(Object.assign({c:AV.c}, body))}).then(r => r.json());
-function queueAviso(t, title, text){ avApi({a:'order', order:{date:today(), name:t.name, phone:t.phone, product:'Aviso de '+S.cfg.short, delivery:title, notes:text}}).then(r => { if(!r.ok) throw 0; }).catch(() => toast('No se pudo dejar el aviso. Revisá la conexión.')); }
+const AQK = 'ld_avisos_pend'; let AQ = []; try{ AQ = JSON.parse(localStorage.getItem(AQK)) || []; }catch(e){} let AQT = null, AQB = false;
+const aqStore = () => { try{ localStorage.setItem(AQK, JSON.stringify(AQ)); }catch(e){} };
+async function aqFlush(){ if(AQB) return; AQB = true; clearTimeout(AQT); while(AQ.length){ try{ const r = await avApi({a:'order', order:AQ[0]}); if(!r.ok) throw 0; AQ.shift(); aqStore(); }catch(e){ AQT = setTimeout(aqFlush, 8000); break; } } AQB = false; }
+function queueAviso(t, title, text){ AQ.push({date:today(), name:t.name, phone:t.phone, product:'Aviso de '+S.cfg.short, delivery:title, notes:text}); aqStore(); aqFlush(); }
+if(AQ.length) aqFlush();
 async function renderAvisos(load){ const el = $('#panel'); const head = brand(true) + `<div class="ptop"><h1>Avisos para mandar</h1></div>`;
   if(!AV.pin){ AVL = null; el.innerHTML = head + `<section class="sheet"><div class="form" style="border:0"><label for="avPin" style="margin-top:0">Clave del consultorio</label><input id="avPin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-ld="avpin">Entrar</button><p class="mut gap">Se pide una sola vez en este aparato.</p></div></section>`; return; }
-  if(load || !AVL){ if(!AVL) el.innerHTML = head + '<p class="mut">Cargando…</p>'; try{ const d = await avApi({a:'all', pin:AV.pin}); if(!d.ok && /Clave/.test(d.msg||'')){ AV.pin = ''; avSet(''); toast('Clave incorrecta.'); return renderAvisos(false); } if(!d.ok && d.msg){ toast(d.msg); } if(d.ok){ avSet(AV.pin); AVL = d.orders; /* si después vino una cancelación o un rechazo, los avisos anteriores a esa persona ya no van */ const old = AVL.filter(o => AVL.some(n => n!==o && n.phone===o.phone && n.product===o.product && n.id>o.id && n.delivery.indexOf('Aviso para ')===0)).map(o => o.id); if(old.length){ AVL = AVL.filter(o => !old.includes(o.id)); avApi({a:'delOrders', pin:AV.pin, ids:old}).catch(()=>{}); } } }catch(e){} if(location.hash!=='#avisos') return; }
+  if(load || !AVL){ if(!AVL) el.innerHTML = head + '<p class="mut">Cargando…</p>'; try{ const d = await avApi({a:'all', pin:AV.pin}); if(!d.ok && /Clave/.test(d.msg||'')){ AV.pin = ''; avSet(''); toast('Clave incorrecta.'); return renderAvisos(false); } if(!d.ok && d.msg){ toast(d.msg); } if(d.ok){ avSet(AV.pin); AVL = d.orders; /* si después vino una cancelación o un rechazo, los avisos anteriores a esa persona ya no van */ const old = AVL.filter(o => AVL.some(n => n!==o && n.phone===o.phone && n.name===o.name && n.product===o.product && n.id>o.id && n.delivery.indexOf('Aviso para ')===0)).map(o => o.id); if(old.length){ AVL = AVL.filter(o => !old.includes(o.id)); avApi({a:'delOrders', pin:AV.pin, ids:old}).catch(()=>{}); } } }catch(e){} if(location.hash!=='#avisos') return; }
   if(!AVL){ el.innerHTML = head + '<p class="note">No hay conexión. Probá de nuevo en un rato.</p>'; return; }
   el.innerHTML = head + (AVL.length ? `<p class="mut" style="margin-bottom:14px">${PC ? 'Tocá “Abrir WhatsApp”: se abre WhatsApp Web con el mensaje escrito. Envialo y volvé a esta pestaña.' : 'Tocá “Abrir WhatsApp”, enviá el mensaje y volvé acá.'}</p>` + AVL.map(o => `<section class="sheet av"><h3>${esc(o.name)}</h3><p class="kick l">${esc(o.product)}. ${esc(o.delivery)}</p><div class="bubble">${esc(o.notes)}</div>
       <a class="btn w" ${PC ? 'target="ldwhatsapp"' : 'target="_blank" rel="noopener"'} data-ld="avopen" data-id="${o.id}" href="${esc(PC ? 'https://web.whatsapp.com/send?phone='+waNum(o.phone)+'&text='+encodeURIComponent(o.notes) : waLink(o.phone, o.notes))}">${AVO[o.id]?'Abrir WhatsApp de nuevo':'Abrir WhatsApp'}</a>${AVO[o.id]?`<button class="btn o w gap" data-ld="avdone" data-id="${o.id}">Ya lo mandé, sacarlo de la lista</button>`:''}</section>`).join('')
