@@ -181,6 +181,8 @@ input,select,textarea{border-radius:3px!important}
 @keyframes lgT{0%,54%{clip-path:inset(0 0 48.4% 0)}66%,100%{clip-path:inset(0 0 58.22% 0)}}
 @keyframes lgB{0%,54%{clip-path:inset(50% 0 0 0)}66%,100%{clip-path:inset(59.89% 0 0 0)}}
 @keyframes lgW{0%,66%{opacity:0}78%,100%{opacity:1}}
+.lg.sm{height:104px;margin:16px auto 4px}
+.lg.sm *{animation-delay:var(--ld,0s)!important}
 @media (prefers-reduced-motion:reduce){.lg *{animation:none!important}}
 .cover .kick{margin-top:0}
 .cover .lead.ctr{margin:4px 0 0;font-size:17px}
@@ -670,7 +672,7 @@ const aqStore = () => { try{ localStorage.setItem(AQK, JSON.stringify(AQ)); }cat
 async function aqFlush(){ if(AQB) return; AQB = true; clearTimeout(AQT); while(AQ.length){ try{ const r = await avApi({a:'order', order:AQ[0]}); if(!r.ok) throw 0; AQ.shift(); aqStore(); }catch(e){ AQT = setTimeout(aqFlush, 8000); break; } } AQB = false; }
 function queueAviso(t, title, text){ AQ.push({date:today(), name:t.name, phone:t.phone, product:'Aviso de '+S.cfg.short, delivery:title, notes:text}); aqStore(); aqFlush(); }
 if(AQ.length) aqFlush();
-async function renderAvisos(load){ const el = $('#panel'); const head = brand(true) + `<div class="ptop"><h1>Avisos para mandar</h1></div>`;
+async function renderAvisos(load){ const el = $('#panel'); /* el logo animado sigue donde iba aunque la lista se vuelva a dibujar */ const head = LOGO.replace('class="lg"', 'class="lg sm" style="--ld:-' + ((performance.now()/1000)%12).toFixed(2) + 's"') + `<div class="ptop"><h1>Avisos para mandar</h1></div>`;
   if(!AV.pin){ AVL = null; el.innerHTML = head + `<section class="sheet"><div class="form" style="border:0"><label for="avPin" style="margin-top:0">Clave del consultorio</label><input id="avPin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-ld="avpin">Entrar</button><p class="mut gap">Se pide una sola vez en este aparato.</p></div></section>`; return; }
   if(load || !AVL){ if(!AVL) el.innerHTML = head + '<p class="mut">Cargando…</p>'; try{ const d = await avApi({a:'all', pin:AV.pin}); if(!d.ok && /Clave/.test(d.msg||'')){ AV.pin = ''; avSet(''); toast('Clave incorrecta.'); return renderAvisos(false); } if(!d.ok && d.msg){ toast(d.msg); } if(d.ok){ avSet(AV.pin); AVL = d.orders; /* si después vino una cancelación o un rechazo, los avisos anteriores a esa persona ya no van */ const old = AVL.filter(o => AVL.some(n => n!==o && n.phone===o.phone && n.name===o.name && n.product===o.product && n.id>o.id && n.delivery.indexOf('Aviso para ')===0)).map(o => o.id); if(old.length){ AVL = AVL.filter(o => !old.includes(o.id)); avApi({a:'delOrders', pin:AV.pin, ids:old}).catch(()=>{}); } } }catch(e){} if(location.hash!=='#avisos') return; }
   if(!AVL){ el.innerHTML = head + '<p class="note">No hay conexión. Probá de nuevo en un rato.</p>'; return; }
