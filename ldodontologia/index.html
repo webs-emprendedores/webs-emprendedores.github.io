@@ -161,6 +161,28 @@ input,select,textarea{border-radius:3px!important}
 .tags li{font-size:16px;padding:8px 0;border-bottom:1px solid var(--line);min-width:0}
 .who{justify-content:flex-start;gap:14px;min-height:84px;margin-top:10px;font-size:20px;font-family:"Playfair Display",Georgia,serif;font-weight:600}
 .who .s{width:56px;height:56px;font-size:28px}
+/* portada: entra entera en la pantalla del celular */
+.wrap:has(.cover){padding-bottom:0}
+.cover{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:space-between;gap:10px;padding:18px 0 16px}
+.lg{display:block;height:clamp(92px,23svh,190px);width:auto;max-width:78%;margin:0 auto}
+.lg g{transform-box:view-box;transform-origin:301px 179.5px;animation:4.6s ease-in-out infinite alternate}
+.lg .lu{animation-name:lgIU;transform-origin:301px 150px}.lg .ld{animation-name:lgID;transform-origin:301px 215px}.lg .up{animation-name:lgU}.lg .dn{animation-name:lgD}.lg .wd{animation-name:lgW}
+@keyframes lgIU{0%,4%{transform:translateY(33px) scaleY(0)}20%,54%{transform:translateY(33px) scaleY(1)}72%,100%{transform:translateY(0) scaleY(1)}}
+@keyframes lgID{0%,4%{transform:translateY(-33px) scaleY(0)}20%,54%{transform:translateY(-33px) scaleY(1)}72%,100%{transform:translateY(0) scaleY(1)}}
+@keyframes lgU{0%,18%{transform:translateY(33px) scaleX(0);opacity:0}22%{opacity:1}44%,54%{transform:translateY(33px) scaleX(1);opacity:1}72%,100%{transform:translateY(0) scaleX(1);opacity:1}}
+@keyframes lgD{0%,18%{transform:translateY(-33px) scaleX(0);opacity:0}22%{opacity:1}44%,54%{transform:translateY(-33px) scaleX(1);opacity:1}72%,100%{transform:translateY(0) scaleX(1);opacity:1}}
+@keyframes lgW{0%,58%{transform:scaleX(.82);opacity:0}80%,100%{transform:scaleX(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.lg g{animation:none}}
+.cover .kick{margin-top:0}
+.cover .lead.ctr{margin:4px 0 0;font-size:17px}
+.cq{font-size:21px;text-align:center;margin-bottom:10px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pro2{padding:12px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
+.pro2 .pho,.pro2 .mono{width:60px;height:60px}
+.pro2 .mono{font-size:30px}
+.pro2 h3{font-size:19px;line-height:1.15}
+.pro2 .btn{min-height:46px;padding:0 8px;margin-top:auto}
+.addr{text-align:center;color:var(--mut);font-size:15px}
 .av{padding:16px;margin-bottom:14px}
 .av h3{font-size:22px}
 .av .bubble{margin:12px 0 16px}
@@ -539,13 +561,18 @@ async function sendReq(r, btn){ if(btn) btn.disabled = true;
   }catch(e){ toast('No hay conexión. Probá de nuevo.'); if(btn) btn.disabled = false; } }
 
 const brand = small => `<div class="brand${small?' sm':''}"><img src="logo.png" alt="LD Odontología" width="609" height="359"></div>`;
+// logo animado: aparece la línea, de ella salen la L y la D, se parten al medio y aparece la palabra; va y viene
+const LOGO = `<svg class="lg" viewBox="0 0 609 359" role="img" aria-label="LD Odontología"><defs>
+  <clipPath id="kTL"><rect x="0" y="0" width="297" height="150"/></clipPath><clipPath id="kTD"><rect x="305" y="0" width="304" height="150"/></clipPath>
+  <clipPath id="kBL"><rect x="0" y="215" width="297" height="144"/></clipPath><clipPath id="kBD"><rect x="305" y="215" width="304" height="144"/></clipPath>
+  <clipPath id="kW"><rect x="0" y="150" width="609" height="65"/></clipPath><clipPath id="kIT"><rect x="297" y="0" width="8" height="150"/></clipPath><clipPath id="kIB"><rect x="297" y="215" width="8" height="144"/></clipPath></defs>
+  ${[['lu','kIT'],['ld','kIB'],['up','kTL'],['up','kTD'],['dn','kBL'],['dn','kBD'],['wd','kW']].map(x => `<g class="${x[0]}"><image href="logo.png" width="609" height="359" clip-path="url(#${x[1]})"/></g>`).join('')}</svg>`;
 const face = (p, cls) => p.photo ? `<img class="pho ${cls||''}" src="${p.photo}" alt="" width="76" height="76">` : `<div class="mono ${cls||''}" aria-hidden="true">${p.mono}</div>`;
 function renderSite(){ const el = $('#site');
-  if(CUR===null){ el.innerHTML = brand() + `<p class="kick">Odontología integral</p><p class="lead ctr">Niños, adolescentes y adultos.</p>
-    <h2 class="sec">Con quién querés tu turno</h2>
-    ${PROS.map((p,i) => `<section class="sheet pro">${face(p)}<div class="pin"><h3>${p.name}</h3><p class="kick l">Odontóloga</p><ul class="tags">${p.tags.map(x => `<li>${x}</li>`).join('')}</ul></div><button class="btn w" data-ld="pro" data-v="${i}">Pedir turno con ${p.short}</button></section>`).join('')}
-    <section class="info"><h2>Consultorio</h2><dl><dt>Dónde</dt><dd>${esc(DEFAULT.place)}</dd></dl></section>
-    <footer><span>LD Odontología</span></footer>`; return; }
+  if(CUR===null){ el.innerHTML = `<div class="cover">${LOGO}
+    <div><p class="kick">Odontología integral</p><p class="lead ctr">Niños, adolescentes y adultos.</p></div>
+    <div><h2 class="cq">Con quién querés tu turno</h2><div class="duo">${PROS.map((p,i) => `<section class="sheet pro2">${face(p)}<h3>${p.name}</h3><button class="btn w" data-ld="pro" data-v="${i}">Pedir turno</button></section>`).join('')}</div></div>
+    <p class="addr">${esc(DEFAULT.place)}</p></div>`; return; }
   if(!S){ el.innerHTML = brand(true) + '<p class="lead ctr">Cargando…</p>'; return; }
   renderSite0(); el.insertAdjacentHTML('afterbegin', brand(true) + `<button class="back" data-ld="unpro">Elegir otra profesional</button>`);
 }
