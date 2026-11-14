@@ -161,6 +161,9 @@ input,select,textarea{border-radius:3px!important}
 .tags li{font-size:16px;padding:8px 0;border-bottom:1px solid var(--line);min-width:0}
 .who{justify-content:flex-start;gap:14px;min-height:84px;margin-top:10px;font-size:20px;font-family:"Playfair Display",Georgia,serif;font-weight:600}
 .who .s{width:56px;height:56px;font-size:28px}
+.av{padding:16px;margin-bottom:14px}
+.av h3{font-size:22px}
+.av .bubble{margin:12px 0 16px}
 #site>.back,#panel>.back{margin-top:6px}
 </style>
 </head>
@@ -369,7 +372,7 @@ function viewConfirm(){ const w = A.w;
   return back(w.req || !w.fromDay ? 'pick' : 'new') + `<div class="ptop" style="padding-top:12px"><h1>Revisá y guardá</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(w.name)}</p><p class="big" style="margin-top:6px">${esc(cap(longDate(w.date)))}, ${w.time}</p>
     <label class="chk" style="margin-top:18px"><input id="nW" type="checkbox"> Turno fijo: repetir todas las semanas</label><button class="btn w gap" data-a="wsave">Guardar turno</button></div></section>`; }
 function viewMsg(){ const m = A.msg; if(!m){ A.scr = 'home'; return viewHome(); }
-  return `<div class="ptop"><h1>${esc(m.title)}</h1></div><p class="note">Ya está escrito. Tocá “Abrir WhatsApp” y enviáselo.${m.demo?' <b style="margin-top:6px">Es una persona de ejemplo</b>Su número no existe, así que WhatsApp no lo va a encontrar.':''}</p><div class="bubble" style="margin:0 0 18px">${esc(m.text)}</div><a class="btn w" target="_blank" rel="noopener" href="${esc(m.href)}">Abrir WhatsApp</a><button class="btn o w gap" data-a="msgx">Listo, volver a mi agenda</button>`; }
+  return `<div class="ptop"><h1>${esc(m.title)}</h1></div><p class="note">${m.queued ? 'Este mensaje quedó en la lista de avisos. Se manda desde el celular del consultorio.' : 'Esta persona no tiene WhatsApp cargado: el aviso no se puede mandar desde el consultorio.'}</p><div class="bubble" style="margin:0 0 18px">${esc(m.text)}</div><button class="btn w" data-a="msgx">Listo, volver a mi agenda</button>`; }
 function viewSet(){
   return back('home') + `<div class="ptop" style="padding-top:12px"><h1>Ajustes</h1></div>
     <button class="btn o w opt" style="margin-top:0" data-a="go" data-v="ho"><b>Mis horarios</b><span>Los días y horas en que atendés</span></button>
@@ -408,7 +411,7 @@ function icsText(t, date){ const m = mins(t.time), f = mm => date.replace(/-/g,'
 function calBtn(tu, date){ if(isIOS) return ''; // iPhone: Safari no abre el Calendario desde un archivo armado en la página (probado 13/11); necesita un .ics servido por un servidor
   if(isAndroid) return `<button class="btn o" data-a="ics" data-id="${tu.id}">Guardarlo en mi calendario</button>`;
   return `<a class="btn o" target="_blank" rel="noopener" href="${esc(calLink(tu, date))}">Guardarlo en Google Calendar</a>`; }
-function showMsg(t, title, text){ A.msg = {title, text, href:waLink(t.phone, text), demo:!!t.demo}; }
+function showMsg(t, title, text){ const full = text + '\n' + S.cfg.name + ' – LD Odontología'; A.msg = {title, text:full, queued:!!t.phone}; if(t.phone) queueAviso(t, title, full); }
 function when(date){ const td = today(); return date===td ? 'de hoy' : date===iso(addDays(new Date(),1)) ? 'de mañana' : 'del '+shortDate(date); }
 
 // ===== Acciones =====
@@ -455,12 +458,12 @@ document.addEventListener('click', e => {
   if(a==='wsave'){ const w = A.w; if(turnoAt(w.date,w.time)){ toast('Ese horario ya está ocupado. Elegí otro.'); w.time = ''; A.scr = 'pick'; renderPanel(); return; }
     const t = {id:uid(), date:w.date, time:w.time, name:w.name, phone:w.phone, mode:c.modes[0], cov:w.cov, kind:'paciente', status:'confirmado', weekly:$('#nW').checked, skip:[], age:w.age||0, motivo:w.motivo||'', pain:w.pain||''}; S.turnos.push(t);
     if(w.req) S.reqs = S.reqs.filter(x => x.id!==w.req); save(); renderSite(); A.w = null;
-    if(t.phone){ const fee = c.fees.show && t.cov==='Particular' && c.fees.part ? ` La sesión es de ${money(c.fees.part)}.` : ''; showMsg(t, 'Turno guardado', `Hola ${t.name.split(' ')[0]}! Te confirmo el turno ${when(t.date)} a las ${t.time}${modeTxt(t)}.${fee} ${c.cancel}`.trim()); A.scr = 'msg'; }
+    if(t.phone){ const fee = c.fees.show && t.cov==='Particular' && c.fees.part ? ` La consulta es de ${money(c.fees.part)}.` : ''; showMsg(t, 'Turno guardado', `Hola ${t.name.split(' ')[0]}! Te confirmo el turno ${when(t.date)} a las ${t.time}${modeTxt(t)}.${fee} ${c.cancel}`.trim()); A.scr = 'msg'; }
     else { A.scr = 'home'; toast('Turno guardado.'); }
     renderPanel(); scrollTo(0,0); }
   if(a==='reqrej'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ showMsg(r, 'Aviso para '+r.name.split(' ')[0], `Hola ${r.name.split(' ')[0]}! Gracias por escribirme. En este momento no puedo tomar tu consulta. Espero que encuentres pronto un espacio.`); S.reqs = S.reqs.filter(x => x.id!==r.id); save(); A.scr = 'msg'; renderPanel(); scrollTo(0,0); } }
   if(a==='conf' || a==='rem' || a==='rej'){ const t = S.turnos.find(x => x.id===b.dataset.id); if(!t) return; const d = A.tdate, fn = t.name.split(' ')[0], o = c.os.find(x => x.n===t.cov);
-    const fee = !c.fees.show ? '' : t.cov==='Particular' ? (c.fees.part ? ` La sesión es de ${money(c.fees.part)}.` : '') : (o && o.plus>0 ? ` Con ${o.n} hay un adicional de ${money(o.plus)} por sesión.` : '');
+    const fee = !c.fees.show ? '' : t.cov==='Particular' ? (c.fees.part ? ` La consulta es de ${money(c.fees.part)}.` : '') : (o && o.plus>0 ? ` Con ${o.n} hay un adicional de ${money(o.plus)} por sesión.` : '');
     if(a==='conf'){ t.status = 'confirmado'; save(); showMsg(t, 'Mensaje de confirmación', `Hola ${fn}! Te confirmo el turno ${when(d)} a las ${t.time}${modeTxt(t)}.${fee} ${c.cancel}`.trim()); }
     if(a==='rem') showMsg(t, 'Recordatorio', `Hola ${fn}! Te recuerdo tu turno ${when(d)} a las ${t.time}${modeTxt(t)}. Te espero.`);
     if(a==='rej'){ showMsg(t, 'Aviso para ' + fn, `Hola ${fn}! Gracias por escribirme. En este momento no puedo tomar tu consulta. Espero que encuentres pronto un espacio.`); S.turnos = S.turnos.filter(x => x.id!==t.id); save(); renderSite(); }
@@ -564,11 +567,25 @@ document.addEventListener('click', async e => { const b = e.target.closest('[dat
   if(a==='setpin'){ const n = $('#nPin').value.trim(); if(!/^\d{4,8}$/.test(n)){ toast('La clave tiene que tener entre 4 y 8 números.'); return; } b.disabled = true;
     try{ const r = await api({a:'setPin', pin:A.pin, newPin:n}); if(r.ok){ A.pin = n; $('#nPin').value = ''; toast('Clave cambiada.'); } else toast(r.msg||'No se pudo cambiar.'); }catch(x){ toast('No hay conexión. Probá de nuevo.'); } b.disabled = false; }
 });
-document.addEventListener('visibilitychange', () => { if(!document.hidden && A.ok && A.scr==='home') refresh(); });
+// ----- Avisos: los mensajes a pacientes salen siempre desde el celular del consultorio -----
+const AV = {c:'ld-avisos', pin:'7391'}; let AVL = null, AVO = {};
+const avApi = body => fetch(API, {method:'POST', body:JSON.stringify(Object.assign({c:AV.c}, body))}).then(r => r.json());
+function queueAviso(t, title, text){ avApi({a:'order', order:{date:today(), name:t.name, phone:t.phone, product:'Aviso de '+S.cfg.short, delivery:title, notes:text}}).then(r => { if(!r.ok) throw 0; }).catch(() => toast('No se pudo dejar el aviso. Revisá la conexión.')); }
+async function renderAvisos(load){ const el = $('#panel'); const head = brand(true) + `<div class="ptop"><h1>Avisos para mandar</h1></div>`;
+  if(load || !AVL){ if(!AVL) el.innerHTML = head + '<p class="mut">Cargando…</p>'; try{ const d = await avApi({a:'all', pin:AV.pin}); if(d.ok){ AVL = d.orders; /* si después vino una cancelación o un rechazo, los avisos anteriores a esa persona ya no van */ const old = AVL.filter(o => AVL.some(n => n!==o && n.phone===o.phone && n.product===o.product && n.id>o.id && n.delivery.indexOf('Aviso para ')===0)).map(o => o.id); if(old.length){ AVL = AVL.filter(o => !old.includes(o.id)); avApi({a:'delOrders', pin:AV.pin, ids:old}).catch(()=>{}); } } }catch(e){} if(location.hash!=='#avisos') return; }
+  if(!AVL){ el.innerHTML = head + '<p class="note">No hay conexión. Probá de nuevo en un rato.</p>'; return; }
+  el.innerHTML = head + (AVL.length ? `<p class="mut" style="margin-bottom:14px">Tocá “Abrir WhatsApp”, enviá el mensaje y volvé acá.</p>` + AVL.map(o => `<section class="sheet av"><h3>${esc(o.name)}</h3><p class="kick l">${esc(o.product)}. ${esc(o.delivery)}</p><div class="bubble">${esc(o.notes)}</div>
+      <a class="btn w" target="_blank" rel="noopener" data-ld="avopen" data-id="${o.id}" href="${esc(waLink(o.phone, o.notes))}">${AVO[o.id]?'Abrir WhatsApp de nuevo':'Abrir WhatsApp'}</a>${AVO[o.id]?`<button class="btn o w gap" data-ld="avdone" data-id="${o.id}">Ya lo mandé, sacarlo de la lista</button>`:''}</section>`).join('')
+    : '<section class="sheet"><p class="empty" style="border-top:0">No hay avisos para mandar.</p></section>') + `<button class="btn o w gap" data-ld="avload">Actualizar la lista</button><p class="mut" style="margin-top:8px">Se actualiza sola cada minuto y cada vez que volvés a esta pantalla.</p>`; }
+document.addEventListener('click', e => { const b = e.target.closest('[data-ld="avopen"],[data-ld="avdone"],[data-ld="avload"]'); if(!b) return; const id = b.dataset.id; if(b.dataset.ld==='avload'){ b.disabled = true; renderAvisos(true); return; }
+  if(b.dataset.ld==='avopen'){ AVO[id] = true; setTimeout(() => renderAvisos(false), 400); }
+  else { AVL = AVL.filter(o => o.id!==id); renderAvisos(false); avApi({a:'delOrder', pin:AV.pin, id}).then(r => { if(!r.ok) throw 0; }).catch(() => toast('No se pudo sacar de la lista. Revisá la conexión.')); } });
+setInterval(() => { if(location.hash==='#avisos' && !document.hidden) renderAvisos(true); }, 60000);
+document.addEventListener('visibilitychange', () => { if(document.hidden) return; if(location.hash==='#avisos') renderAvisos(true); else if(A.ok && A.scr==='home') refresh(); });
 fetch('https://abacus.jasoncameron.dev/hit/websemprendedores/ldodontologia' + (location.hash.length>1?'-panel':'')).catch(()=>{});
 
 // ===== Arranque =====
-function route(){ const h = location.hash.slice(1); OWN = PROS.findIndex(x => x.slug===h); const p = h==='panel' || OWN>=0; if(OWN>=0 && CUR!==OWN){ CUR = null; S = null; A.ok = false; A.pin = ''; } $('#site').hidden = p; $('#panel').hidden = !p; if(p) renderPanel(); else renderSite(); scrollTo(0,0); }
+function route(){ const h = location.hash.slice(1); OWN = PROS.findIndex(x => x.slug===h); const p = h==='panel' || h==='avisos' || OWN>=0; if(OWN>=0 && CUR!==OWN){ CUR = null; S = null; A.ok = false; A.pin = ''; } $('#site').hidden = p; $('#panel').hidden = !p; if(h==='avisos') renderAvisos(true); else if(p) renderPanel(); else renderSite(); scrollTo(0,0); }
 addEventListener('hashchange', route); route();
 </script>
 </body>
