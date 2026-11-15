@@ -127,6 +127,14 @@ footer a{color:var(--mut)}
 #toast.on{opacity:1}
 @media (prefers-reduced-motion:reduce){#toast{transition:none}}
 </style>
+<style>/*NOV v1*/
+#nov{position:fixed;inset:0;z-index:90;background:rgba(20,20,20,.45);display:flex;align-items:flex-start;justify-content:center;padding:16px}
+#nov .nb{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45}
+#nov h2{font-size:24px;line-height:1.15;margin:0 0 10px;color:#1d1d1d}
+#nov ul{margin:0 0 12px;padding-left:20px}#nov li{margin:6px 0}
+#nov .ok2{margin:0 0 16px;color:#3d3d3d}
+#nov button{width:100%;min-height:52px;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
+</style>
 <style>
 /* Lucrecia Badur: porcelana, grafito y una línea fina. Todo alineado a la misma grilla. */
 :root{--bg:#F3F4F2;--paper:#fff;--ink:#1D2529;--mut:#4A555A;--line:#D5D9D8;--pet:#2F4047;--pet2:#222F35;--amb:#8C7A5B;--ambbg:#F3EFE7;--off:#808B8F}
@@ -316,7 +324,7 @@ function listPend(){ const td = today(); return S.turnos.filter(t => t.status!==
 function freeOrAll(date){ const td = today(), n = new Date(), now = n.getHours()*60+n.getMinutes(); return slots(date).filter(t => !turnoAt(date,t) && !isBlocked(date,t) && (date>td || (date===td && mins(t)>now))); }
 const tagOf = tu => [tu.status==='consulta'?'<b>Consulta nueva</b>':tu.status==='pedido'?'<b>Sin confirmar</b>':'', tu.age?tu.age+' años':'', esc(tu.cov||''), S.cfg.modes.length>1?esc(tu.mode):'', tu.weekly?'Turno fijo':''].filter(Boolean).join('. ');
 const rowT = (tu, date, withDay) => `<div class="row"><span class="t">${tu.time}</span><span class="who">${esc(tu.name)}<span class="tag">${withDay?esc(cap(shortDate(date)))+'. ':''}${tagOf(tu)}</span></span><button class="btn o sm" data-a="tsee" data-id="${tu.id}" data-v="${date}">Ver</button></div>`;
-function renderPanel(){
+function renderPanel(){ if(A.ok) setTimeout(novShow, 0);
   const c = S.cfg, el = $('#panel');
   if(!A.ok){ el.innerHTML = `<div class="ptop"><h1>Acceso ${esc(c.short)}</h1></div><section class="sheet"><div class="form" style="border:0"><label for="pin" style="margin-top:0">Tu clave</label><input id="pin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-a="pin">Entrar</button>${DEMO?'<p class="mut gap">En esta muestra la clave es 1234.</p>':''}</div></section>`; return; }
   if(!A.date) A.date = today();
@@ -508,6 +516,14 @@ document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id===
 // ===== Arranque =====
 function route(){ const p = location.hash==='#panel'; $('#site').hidden = p; $('#panel').hidden = !p; if(p) renderPanel(); else renderSite(); scrollTo(0,0); }
 load(); addEventListener('hashchange', route); route();
+
+/*NOV v1*/ const NOV = null;   /* lo completa novedades.py al publicar una actualización */
+function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov')) return; let k = 'nov_'+location.pathname; try{ if(localStorage.getItem(k)===NOV.v) return; }catch(e){}
+  const d = document.createElement('div'); d.id = 'nov'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','novT');
+  const e = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  d.innerHTML = '<div class="nb"><h2 id="novT">Actualizamos tu app</h2><ul>' + NOV.items.map(x => '<li>'+e(x)+'</li>').join('') + '</ul><p class="ok2">' + e(NOV.safe) + '</p><button type="button" id="novOk">Entendido</button></div>';
+  document.body.appendChild(d); const b = document.getElementById('novOk'); b.focus();
+  b.addEventListener('click', () => { try{ localStorage.setItem(k, NOV.v); }catch(x){} d.remove(); }); } /*NOV fin*/
 </script>
 </body>
 </html>
