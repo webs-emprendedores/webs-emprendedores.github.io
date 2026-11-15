@@ -195,7 +195,7 @@ function seed(){
   return s;
 }
 let S;
-function load(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r && r.cfg && r.cfg.os && r.cfg.ask && r.turnos){ S = r; S.reqs = S.reqs||[]; S.cfg.lic = S.cfg.lic||''; S.cfg.osNote = S.cfg.osNote||''; S.cfg.ask.pain = !!S.cfg.ask.pain; S.cfg.photo = DEFAULT.photo; S.cfg.tags = S.cfg.tags||DEFAULT.tags; return; } }catch(e){} S = seed(); }
+function load(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r && r.cfg && r.cfg.os && r.cfg.ask && r.turnos){ S = r; S.reqs = S.reqs||[]; S.cfg.lic = S.cfg.lic||''; S.cfg.osNote = S.cfg.osNote||''; S.cfg.ask = {age:true, motivo:true, pain:!!DEFAULT.ask.pain}; S.cfg.call = !!S.cfg.call; S.cfg.photo = DEFAULT.photo; S.cfg.tags = S.cfg.tags||DEFAULT.tags; return; } }catch(e){} S = seed(); }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
 // ===== Agenda =====
@@ -244,12 +244,12 @@ function renderSite(){
       <button class="btn o w gap" data-a="again">Volver al inicio</button></div></section>`;
   } else if(P.step==='done' && P.last){ const t = P.last, cons = t.kind==='consulta';
     h += `<section class="sheet"><div class="done"><h2>${cons?'Consulta enviada':'Turno pedido'}</h2><p class="gap"><b>${esc(cap(longDate(t.date)))}, ${t.time}</b><br>${c.modes.length>1?esc(t.mode)+', ':''}${c.dur} minutos.</p>
-      <p class="gap">${cons ? `Antes de confirmarlo, ${esc(c.short)} te llama para una primera charla.` : `${esc(c.short)} te lo confirma por WhatsApp.`}</p>
+      <p class="gap">${cons && c.call ? `Antes de confirmarlo, ${esc(c.short)} te llama para una primera charla.` : `${esc(c.short)} te lo confirma por WhatsApp.`}</p>
       ${DEMO ? `<p class="gap mut">En la app real, acá se abre WhatsApp con este mensaje ya escrito para ${esc(c.short)}:</p><div class="bubble">${esc(msgPedido(t, P.motivo))}</div>` : ''}
       <button class="btn o w gap" data-a="again">Volver al inicio</button></div></section>`;
   } else if(!c.selfPick){ h += siteReq();
   } else {
-    h += `<section class="sheet"><h2>Elegí día y horario</h2><p class="sub">${nuevo ? `Elegí el horario que te queda bien. Antes de confirmarlo, ${esc(c.short)} te llama para una primera charla.` : `Turnos de ${c.dur} minutos. Mirá los libres y pedí el tuyo.`}</p>
+    h += `<section class="sheet"><h2>Elegí día y horario</h2><p class="sub">${nuevo ? `Elegí el horario que te queda bien. ${esc(c.short)} te lo confirma por WhatsApp.` : `Turnos de ${c.dur} minutos. Mirá los libres y pedí el tuyo.`}</p>
       <div class="seg" role="group" aria-label="Tipo de consulta">${[['nuevo','Primera consulta'],['paciente','Ya soy paciente']].map(([k,l]) => `<button data-a="kind" data-v="${k}" class="${k===P.kind?'on':''}" aria-pressed="${k===P.kind}">${l}</button>`).join('')}</div>`;
     if(c.modes.length>1) h += `<div class="seg" role="group" aria-label="Modalidad">${c.modes.map(m => `<button data-a="mode" data-v="${esc(m)}" class="${m===P.mode?'on':''}" aria-pressed="${m===P.mode}">${esc(m)}</button>`).join('')}</div>`;
     h += `<div class="days">${ds.map(d => { const dd = day(d), n = freeSlots(d).length; return `<button data-a="day" data-v="${d}" class="${d===P.date?'on':''}" ${n?'':'disabled'} aria-label="${esc(longDate(d))}${n?'':', sin turnos'}"><span>${WD3[dd.getDay()]}</span><b>${dd.getDate()}</b></button>`; }).join('')}</div>`;
@@ -298,7 +298,7 @@ function renderPanel(){
   if(!A.ok){ el.innerHTML = `<div class="ptop"><h1>Acceso ${esc(c.short)}</h1></div><section class="sheet"><div class="form" style="border:0"><label for="pin" style="margin-top:0">Tu clave</label><input id="pin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-a="pin">Entrar</button>${DEMO?'<p class="mut gap">En esta muestra la clave es 1234.</p>':''}</div></section>`; return; }
   if(!A.date) A.date = today();
   const V = {home:viewHome, day:viewDay, turno:viewTurno, cancel:viewCancel, new:viewNew, pick:viewPick, confirm:viewConfirm, msg:viewMsg, set:viewSet};
-  if(['ho','co','ma'].includes(A.scr)) el.innerHTML = back('set','Volver a Ajustes') + '<div style="height:14px"></div>' + ({ho:viewHoras, co:viewCobros, ma:viewMas})[A.scr]();
+  if(['ho','co','ma','mo'].includes(A.scr)) el.innerHTML = back('set','Volver a Ajustes') + '<div style="height:14px"></div>' + ({ho:viewHoras, co:viewCobros, ma:viewMas, mo:viewModo})[A.scr]();
   else el.innerHTML = (V[A.scr]||viewHome)();
 }
 function viewHome(){ const td = today(), pend = listPend(), hoy = slots(td).map(t => turnoAt(td,t)).filter(Boolean);
@@ -347,7 +347,8 @@ function viewSet(){
   return back('home') + `<div class="ptop" style="padding-top:12px"><h1>Ajustes</h1></div>
     <button class="btn o w opt" style="margin-top:0" data-a="go" data-v="ho"><b>Mis horarios</b><span>Los días y horas en que atendés</span></button>
     <button class="btn o w opt" data-a="go" data-v="co"><b>Honorarios y obras sociales</b><span>Cuánto cobrás y con cuáles trabajás</span></button>
-    <button class="btn o w opt" data-a="go" data-v="ma"><b>Mis datos</b><span>Tu nombre, tu WhatsApp y cómo das los turnos</span></button>
+    <button class="btn o w opt" data-a="go" data-v="mo"><b>Cómo das los turnos</b><span>Quién elige el horario, si llamás antes y si atendés presencial u online</span></button>
+    <button class="btn o w opt" data-a="go" data-v="ma"><b>Mis datos</b><span>Tu título, tu WhatsApp, tu presentación y dónde atendés</span></button>
     ${DEMO?`<p class="note" style="margin-top:22px"><b>Esto es una muestra</b>Lo que cargues acá queda solo en este celular. En tu app, los turnos se guardan en una planilla de tu propia cuenta de Google.</p><button class="btn o w" data-a="reset">Volver a los datos de ejemplo</button>`:''}
     <button class="btn o w gap" data-a="out">Cerrar con clave</button>`; }
 function viewHoras(){ const c = S.cfg, hs = []; for(let m=7*60;m<=22*60;m+=30) hs.push(hhmm(m));
@@ -359,11 +360,17 @@ function viewMas(){ const c = S.cfg;
   return `<section class="sheet"><div class="form" style="border:0"><h3>Tus datos</h3>
     <label for="mT">Título</label><select id="mT">${['','Lic.','Dr.','Dra.','Od.','Klgo.','Mg.'].map(x => `<option value="${x}" ${(c.title||'')===x?'selected':''}>${x||'Sin título'}</option>`).join('')}</select><p class="mut" style="margin-top:6px">Tu nombre en la página: <b>${esc(c.name)}</b>. Para cambiarlo, escribinos.</p><label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
     <label for="mL">Tu matrícula</label><input id="mL" type="text" value="${esc(c.lic)}" placeholder="Ej.: M.P. 1234">
-    <label for="mS">Quien entra a tu página</label><select id="mS"><option value="1" ${c.selfPick?'selected':''}>Elige un horario libre de mi agenda</option><option value="0" ${c.selfPick?'':'selected'}>Me deja sus datos y yo le doy el turno</option></select>
     <label for="mW">Tu WhatsApp (ahí te llegan los pedidos)</label><input id="mW" type="tel" value="${esc(c.wa)}" placeholder="Ej.: 341 555 1234">
-    <label>Cómo atendés</label>${['Presencial','Online'].map(m => `<label class="chk"><input type="checkbox" class="mM" value="${m}" ${c.modes.includes(m)?'checked':''}> ${m}</label>`).join('')}
     <label for="mD">Cómo te presentás (lo primero que se lee)</label><textarea id="mD" rows="2">${esc(c.lead)}</textarea><label for="mG">Especialidades (separalas con coma)</label><input id="mG" type="text" value="${esc((c.tags||[]).join(', '))}" placeholder="Ej.: Ortodoncia, Endodoncia"><label for="mP">Dónde atendés</label><textarea id="mP" rows="2">${esc(c.place)}</textarea><label for="mC">Aviso de cancelación</label><textarea id="mC" rows="2">${esc(c.cancel)}</textarea>
     <button class="btn w gap" data-a="msave">Guardar</button></div></section>`; }
+function viewModo(){ const c = S.cfg, sp = A.mo ? A.mo.sp : c.selfPick, ca = A.mo ? A.mo.call : c.call, md = A.mo ? A.mo.modes : c.modes;
+  return `<section class="sheet"><h2>Cómo das los turnos</h2><p class="sub">Tildá lo que va con tu forma de trabajar. Podés cambiarlo cuando quieras.</p>
+    <div class="form"><h3>Quién elige el horario</h3>
+    <label class="chk"><input type="radio" name="moS" class="moS" value="1" ${sp?'checked':''}> Quien entra a tu página elige un horario libre de tu agenda</label>
+    <label class="chk"><input type="radio" name="moS" class="moS" value="0" ${sp?'':'checked'}> Te deja sus datos y vos le das el turno</label>
+    ${sp?'':`<label class="chk" style="margin-left:28px"><input type="checkbox" id="moC" ${ca?'checked':''}> Antes de darle el turno, lo llamo por teléfono</label>`}</div>
+    <div class="form"><h3>Cómo atendés</h3>${['Presencial','Online'].map(m => `<label class="chk"><input type="checkbox" class="mM" value="${m}" ${md.includes(m)?'checked':''}> ${m==='Online'?'Online (videollamada)':m}</label>`).join('')}
+    <button class="btn w gap" data-a="mosave">Guardar</button></div></section>`; }
 function viewCobros(){ const c = S.cfg;
   return `<section class="sheet"><h2>Tus honorarios</h2><p class="sub">Lo que cargues acá es lo que ve quien pide una primera consulta.</p>
     <div class="form"><label for="cP" style="margin-top:0">${RW.Ses} particular ($)</label><input id="cP" type="tel" inputmode="numeric" value="${c.fees.part||''}"><label class="chk"><input id="cS" type="checkbox" ${c.fees.show?'checked':''}> Mostrar los valores en mi página</label></div>
@@ -418,7 +425,7 @@ document.addEventListener('click', e => {
   if(a==='again'){ P.step = 'pick'; P.last = null; renderSite(); }
   // panel
   if(a==='pin'){ if($('#pin').value.trim()==='1234'){ A.ok = true; A.scr = 'home'; renderPanel(); } else toast('Clave incorrecta.'); }
-  if(a==='go'){ A.scr = v; if(v==='home'){ A.w = null; A.msg = null; } renderPanel(); scrollTo(0,0); }
+  if(a==='go'){ A.scr = v; A.mo = null; if(v==='home'){ A.w = null; A.msg = null; } renderPanel(); scrollTo(0,0); }
   if(a==='pday'){ A.date = v; renderPanel(); }
   if(a==='tsee'){ A.tid = b.dataset.id; A.tdate = v; A.from = A.scr; A.scr = 'turno'; renderPanel(); scrollTo(0,0); }
   if(a==='wnew'){ const p = (v||'').split('|'); A.w = {name:'', phone:'', cov:'Particular', date:p[0]||'', time:p[1]||'', fromDay:!!p[1]}; A.scr = 'new'; renderPanel(); scrollTo(0,0); }
@@ -454,14 +461,16 @@ document.addEventListener('click', e => {
   if(a==='unblockday'){ c.blocked = c.blocked.filter(x => x!==A.date); save(); renderPanel(); renderSite(); }
   if(a==='hsave'){ let bad = false; document.querySelectorAll('.hOn').forEach(i => { const d = i.dataset.d, f = document.querySelector('.hF[data-d="'+d+'"]').value, t = document.querySelector('.hT[data-d="'+d+'"]').value; if(i.checked && mins(t)<=mins(f)) bad = true; c.days[d] = {on:i.checked, from:f, to:t}; });
     if(bad){ toast('Revisá: la hora de cierre tiene que ser después de la de inicio.'); return; } c.step = Number($('#hS').value); c.dur = Number($('#hD').value); save(); renderPanel(); renderSite(); toast('Horarios guardados.'); }
-  if(a==='msave'){ const ms = [...document.querySelectorAll('.mM:checked')].map(i => i.value); if(!ms.length){ toast('Marcá al menos una forma de atender.'); return; } c.title = $('#mT').value; c.lead = $('#mD').value.trim(); c.tags = $('#mG').value.split(',').map(x => x.trim()).filter(Boolean); /* el nombre no se cambia desde el panel (regla 15/11): lo cambiamos nosotros */ c.lic = $('#mL').value.trim(); c.role = $('#mR').value.trim() || c.role; c.wa = $('#mW').value.trim(); c.selfPick = $('#mS').value==='1'; c.modes = ms; c.place = $('#mP').value.trim(); c.cancel = $('#mC').value.trim(); save(); renderPanel(); renderSite(); toast('Guardado.'); }
+  if(a==='mosave'){ const ms = [...document.querySelectorAll('.mM:checked')].map(i => i.value); if(!ms.length){ toast('Marcá al menos una forma de atender.'); return; } const s = document.querySelector('.moS:checked'); c.selfPick = !!s && s.value==='1'; c.call = !c.selfPick && !!($('#moC') && $('#moC').checked); c.modes = ms; A.mo = null; save(); renderPanel(); renderSite(); toast('Guardado.'); }
+  if(a==='msave'){ c.title = $('#mT').value; c.lead = $('#mD').value.trim(); c.tags = $('#mG').value.split(',').map(x => x.trim()).filter(Boolean); /* el nombre no se cambia desde el panel (regla 15/11): lo cambiamos nosotros */ c.lic = $('#mL').value.trim(); c.role = $('#mR').value.trim() || c.role; c.wa = $('#mW').value.trim(); c.place = $('#mP').value.trim(); c.cancel = $('#mC').value.trim(); save(); renderPanel(); renderSite(); toast('Guardado.'); }
   if(a==='osadd'){ readCobros(); const n = $('#oNew').value.trim(); if(!n){ toast('Escribí el nombre de la obra social.'); return; } c.os.push({n, on:true, plus:0}); save(); renderPanel(); renderSite(); }
   if(a==='osdel'){ readCobros(); c.os.splice(Number(v),1); save(); renderPanel(); renderSite(); }
   if(a==='csave'){ readCobros(); save(); renderPanel(); renderSite(); toast('Honorarios guardados.'); }
   if(a==='reset'){ S = seed(); save(); A.date = today(); A.scr = 'home'; renderPanel(); renderSite(); toast('Datos de ejemplo restaurados.'); }
   if(a==='out'){ A.ok = false; A.scr = 'home'; renderPanel(); scrollTo(0,0); }
 });
-document.addEventListener('change', e => { const fc = e.target.dataset && e.target.dataset.fc; if(fc) P.f[fc] = e.target.checked;  });
+document.addEventListener('change', e => { const fc = e.target.dataset && e.target.dataset.fc; if(fc) P.f[fc] = e.target.checked;
+  if(e.target.classList && e.target.classList.contains('moS')){ A.mo = {sp:e.target.value==='1', call:!!($('#moC') ? $('#moC').checked : S.cfg.call), modes:[...document.querySelectorAll('.mM:checked')].map(i => i.value)}; renderPanel(); } });
 document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.f; if(!k) return; P.f[k] = e.target.value; if(k==='cov'){ renderSite(); const el = $('#fC'); if(el) el.focus(); } });
 document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id==='pin') $('[data-a="pin"]').click(); });
 
