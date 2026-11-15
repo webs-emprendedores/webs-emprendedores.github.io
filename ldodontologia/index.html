@@ -226,7 +226,7 @@ const DEFAULT = {
   lead:'Atiendo a adultos, en consultorio en Rosario y por videollamada.',
   wa:'', modes:['Presencial','Online'], place:'Zona centro, Rosario. La dirección exacta te llega al confirmar.',
   dur:50, step:60, cancel:'Si no podés venir, avisame con 24 horas de anticipación.', fees:{part:30000, show:true, partOn:true},
-  os:[{n:'IAPOS',on:true,plus:10000},{n:'OSDE',on:true,plus:0},{n:'Swiss Medical',on:true,plus:0},{n:'Sancor Salud',on:true,plus:8000},{n:'Medifé',on:true,plus:0},{n:'Jerárquicos Salud',on:true,plus:0},{n:'PAMI',on:false,plus:0},{n:'Galeno',on:false,plus:0}],
+  os:[],          // obras sociales: arranca VACÍA, la carga el profesional (Dardo 15/11 18:34)
   days:{1:{on:true,from:'14:00',to:'20:00'},2:{on:true,from:'14:00',to:'20:00'},3:{on:true,from:'09:00',to:'13:00'},4:{on:true,from:'14:00',to:'20:00'},5:{on:true,from:'09:00',to:'13:00'},6:{on:false,from:'09:00',to:'12:00'}},
   blocked:[], blockedSlots:[],
   selfPick:true,   // true: quien entra elige un horario libre. false: deja sus datos y el profesional le da el turno
@@ -274,7 +274,7 @@ function seed(){
   const s = {cfg:JSON.parse(JSON.stringify(DEFAULT)), turnos, reqs:[]}; let n = 0;
   if(!DEFAULT.selfPick) s.reqs.push({id:uid(), name:'Martín L.', phone:'341 555 0107', age:29, cov:'Particular', avail:'por la tarde. Lunes o miércoles', pain:DEFAULT.q2?'Sí':'', demo:true});
   for(let i=1;i<10 && n<2 && DEFAULT.selfPick;i++){ const d = iso(addDays(base,i)); const f = freeSlots(d, s); if(f.length>1){ s.turnos.push(n ? {id:uid(), date:d, time:f[1], name:'Sofía B.', phone:'341 555 0108', mode:'Online', cov:'Particular', kind:'paciente', status:'pedido', weekly:false, skip:[], demo:true}
-      : {id:uid(), date:d, time:f[1], name:'Martín L.', phone:'341 555 0107', mode:'Presencial', cov:'IAPOS', age:29, kind:'consulta', status:'consulta', weekly:false, skip:[], demo:true}); n++; } }
+      : {id:uid(), date:d, time:f[1], name:'Martín L.', phone:'341 555 0107', mode:'Presencial', cov:'Particular', age:29, kind:'consulta', status:'consulta', weekly:false, skip:[], demo:true}); n++; } }
   return s;
 }
 let S;
