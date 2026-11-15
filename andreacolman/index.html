@@ -126,6 +126,13 @@ footer a{color:var(--mut)}
 #toast.on{opacity:1}
 @media (prefers-reduced-motion:reduce){#toast{transition:none}}
 </style>
+<style>
+.byw{margin:6px 0 0;font-size:15px}
+.byw a{color:var(--off);text-decoration:none}
+.fot{display:flex;gap:14px;align-items:center}
+.fot .btn{display:inline-flex;align-items:center;cursor:pointer}
+.quick a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -136,8 +143,8 @@ footer a{color:var(--mut)}
 
 <script>
 // ===== Datos del profesional (se adaptan a cada cliente) =====
-const DEMO = true;                 // muestra: nada sale de este celular
-const KEY = 'turnos_andreacolman_v1';
+const DEMO = false;                 // muestra: nada sale de este celular
+const KEY = 'turnos_andreacolman_func_v1';
 const DEFAULT = {
   name:'Daniela Paz', short:'Daniela', role:'Psicóloga', mono:'DP',
   lead:'Atiendo a adultos, en consultorio en Rosario y por videollamada.',
@@ -156,7 +163,8 @@ const DEFAULT = {
   photo:'',        // foto del profesional (archivo al lado del index); si está vacío va el monograma
   tags:[]          // especialidades o servicios, se listan bajo la presentación
 };
-Object.assign(DEFAULT, {"name": "Andrea Colman", "short": "Andrea", "role": "Psicóloga", "mono": "AC", "lead": "Atención psicológica.", "modes": ["Presencial"], "place": "", "cancel": "", "fees": {"part": 0, "show": true}, "os": [], "osAll": true, "selfPick": false, "ask": {"age": true, "motivo": false}, "days": {"1": {"on": true, "from": "14:00", "to": "20:00"}, "2": {"on": true, "from": "14:00", "to": "20:00"}, "3": {"on": true, "from": "14:00", "to": "20:00"}, "4": {"on": true, "from": "14:00", "to": "20:00"}, "5": {"on": true, "from": "14:00", "to": "20:00"}, "6": {"on": false, "from": "14:00", "to": "20:00"}}});
+Object.assign(DEFAULT, {"name": "Andrea Colman", "short": "Andrea", "role": "Psicóloga", "mono": "AC", "lead": "Atención psicológica.", "modes": ["Presencial"], "place": "", "cancel": "", "fees": {"part": 0, "show": true}, "os": [], "osAll": true, "selfPick": false, "ask": {"age": true, "motivo": false}, "days": {"1": {"on": true, "from": "14:00", "to": "20:00"}, "2": {"on": true, "from": "14:00", "to": "20:00"}, "3": {"on": true, "from": "14:00", "to": "20:00"}, "4": {"on": true, "from": "14:00", "to": "20:00"}, "5": {"on": true, "from": "14:00", "to": "20:00"}, "6": {"on": false, "from": "14:00", "to": "20:00"}}, "photo": "perfil.png"});
+const CLIENT = 'andreacolman';
 const WD = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const WD3 = ['dom','lun','mar','mié','jue','vie','sáb'];
 const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -194,8 +202,8 @@ function seed(){
   return s;
 }
 let S;
-function load(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r && r.cfg && r.cfg.os && r.cfg.ask && r.turnos){ S = r; S.reqs = S.reqs||[]; S.cfg.lic = S.cfg.lic||''; S.cfg.osNote = S.cfg.osNote||''; S.cfg.ask.pain = !!S.cfg.ask.pain; S.cfg.photo = DEFAULT.photo; S.cfg.tags = S.cfg.tags||DEFAULT.tags; return; } }catch(e){} S = seed(); }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load0(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r && r.cfg && r.cfg.os && r.cfg.ask && r.turnos){ S = r; S.reqs = S.reqs||[]; S.cfg.lic = S.cfg.lic||''; S.cfg.osNote = S.cfg.osNote||''; S.cfg.ask.pain = !!S.cfg.ask.pain; S.cfg.photo = DEFAULT.photo; S.cfg.tags = S.cfg.tags||DEFAULT.tags; return; } }catch(e){} S = seed(); }
+function save0(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
 // ===== Agenda =====
 function slots(date, s){ s = s||S; const c = s.cfg.days[day(date).getDay()]; if(!c || !c.on || s.cfg.blocked.includes(date)) return []; const out = []; for(let m = mins(c.from); m + Math.min(s.cfg.step, s.cfg.dur) <= mins(c.to); m += s.cfg.step) out.push(hhmm(m)); return out; }
@@ -233,7 +241,7 @@ function renderSite(){
   let h = `<header class="top">${c.photo?`<img class="pho" src="${esc(c.photo)}" alt="${esc(c.name)}" width="76" height="76">`:`<div class="mono" aria-hidden="true">${esc(c.mono)}</div>`}<div><h1>${c.title?esc(c.title)+' ':''}${esc(c.name)}</h1><p>${esc(c.role)}${c.lic?'. '+esc(c.lic):''}</p></div></header><p class="lead">${esc(c.lead)}</p>${(c.tags||[]).length?`<ul class="tags">${c.tags.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`:''}`;
   if(P.step==='done' && P.last && P.last.req){ const t = P.last;
     h += `<section class="sheet"><div class="done"><h2>Turno pedido</h2><p class="gap">${c.call ? `${esc(c.short)} te llama para una primera charla y después te da el turno.` : `${esc(c.short)} te escribe por WhatsApp para darte el turno.`}</p>
-      ${DEMO ? `<p class="gap mut">En la app real, acá se abre WhatsApp con este mensaje ya escrito para ${esc(c.short)}:</p><div class="bubble">${esc(msgReq(t, P.motivo))}</div>` : ''}
+      ${c.wa ? `<p class="gap mut">Si WhatsApp no se abrió solo, tocá acá para avisarle:</p><a class="btn w gap" href="${waLink(c.wa, msgReq(t, P.motivo))}">Avisar por WhatsApp</a>` : ''}
       <button class="btn o w gap" data-a="again">Volver al inicio</button></div></section>`;
   } else if(P.step==='done' && P.last){ const t = P.last, cons = t.kind==='consulta';
     h += `<section class="sheet"><div class="done"><h2>${cons?'Consulta enviada':'Turno pedido'}</h2><p class="gap"><b>${esc(cap(longDate(t.date)))}, ${t.time}</b><br>${c.modes.length>1?esc(t.mode)+', ':''}${c.dur} minutos.</p>
@@ -272,7 +280,7 @@ function renderSite(){
   if(!c.selfPick && c.fees.show && c.fees.part) rows.push(['Honorarios', 'Sesión particular: '+money(c.fees.part)+'.']);
   if(c.cancel) rows.push(['Si tenés que cancelar', c.cancel]);
   h += (rows.length ? `<section class="info"><h2>Antes de venir</h2><dl>${rows.map(r => `<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl></section>` : '') + `
-    <footer><span>${esc(c.name)}, ${esc(c.role.toLowerCase())}</span></footer>`;
+    <footer><span>${esc(c.name)}, ${esc(c.role.toLowerCase())}</span></footer><p class="byw"><a href="https://www.instagram.com/webs.emprendedores/" target="_blank" rel="noopener">Hecha por @webs.emprendedores</a></p>`;
   $('#site').innerHTML = h;
 }
 function msgPedido(t, motivo){ const cu = `${cap(longDate(t.date))}, ${t.time}${modeTxt(t)}`;
@@ -286,7 +294,7 @@ function listPend(){ const td = today(); return S.turnos.filter(t => t.status!==
 function freeOrAll(date){ const td = today(), n = new Date(), now = n.getHours()*60+n.getMinutes(); return slots(date).filter(t => !turnoAt(date,t) && !isBlocked(date,t) && (date>td || (date===td && mins(t)>now))); }
 const tagOf = tu => [tu.status==='consulta'?'<b>Consulta nueva</b>':tu.status==='pedido'?'<b>Sin confirmar</b>':'', tu.age?tu.age+' años':'', esc(tu.cov||''), S.cfg.modes.length>1?esc(tu.mode):'', tu.weekly?'Turno fijo':''].filter(Boolean).join('. ');
 const rowT = (tu, date, withDay) => `<div class="row"><span class="t">${tu.time}</span><span class="who">${esc(tu.name)}<span class="tag">${withDay?esc(cap(shortDate(date)))+'. ':''}${tagOf(tu)}</span></span><button class="btn o sm" data-a="tsee" data-id="${tu.id}" data-v="${date}">Ver</button></div>`;
-function renderPanel(){
+function renderPanel0(){
   const c = S.cfg, el = $('#panel');
   if(!A.ok){ el.innerHTML = `<div class="ptop"><h1>Acceso ${esc(c.short)}</h1></div><section class="sheet"><div class="form" style="border:0"><label for="pin" style="margin-top:0">Tu clave</label><input id="pin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-a="pin">Entrar</button>${DEMO?'<p class="mut gap">En esta muestra la clave es 1234.</p>':''}</div></section>`; return; }
   if(!A.date) A.date = today();
@@ -296,8 +304,9 @@ function renderPanel(){
 }
 function viewHome(){ const td = today(), pend = listPend(), hoy = slots(td).map(t => turnoAt(td,t)).filter(Boolean);
   let h = `<div class="ptop"><h1>Tu agenda</h1></div>`;
-  if(S.reqs.length) h += `<h2 class="sec" style="margin-top:0">${S.reqs.length===1?'1 pedido nuevo':S.reqs.length+' pedidos nuevos'}</h2><section class="sheet">${S.reqs.map(r => `<div class="req"><h3 style="font-size:20px">${esc(r.name)}</h3><p class="mut">${[r.age?r.age+' años':'', esc(r.cov||''), r.avail?'Puede '+esc(r.avail):''].filter(Boolean).join('. ')}.</p>${r.pain==='Sí'?'<p class="pick" style="margin:8px 0 0">Está con dolor.</p>':''}${S.cfg.ask.motivo?'<p class="mut">El motivo de consulta te llega en el WhatsApp; acá no se guarda.</p>':''}${S.cfg.call?`<a class="btn w gap" href="tel:+${waNum(r.phone)}">Llamar a ${esc(r.name.split(' ')[0])}</a>`:''}<div class="quick gap" style="margin-bottom:0"><button class="btn ${S.cfg.call?'o':''}" data-a="reqturn" data-id="${r.id}">Darle turno</button><button class="btn del" data-a="reqrej" data-id="${r.id}">No puedo tomarlo</button></div></div>`).join('')}</section>`;
+  if(S.reqs.length) h += `<h2 class="sec" style="margin-top:0">${S.reqs.length===1?'1 pedido nuevo':S.reqs.length+' pedidos nuevos'}</h2><section class="sheet">${S.reqs.map(r => `<div class="req"><h3 style="font-size:20px">${esc(r.name)}</h3><p class="mut">${[r.age?r.age+' años':'', esc(r.cov||''), r.avail?'Puede '+esc(r.avail):''].filter(Boolean).join('. ')}.</p>${r.pain==='Sí'?'<p class="pick" style="margin:8px 0 0">Está con dolor.</p>':''}${r.motivo?'<p style="margin-top:6px"><b>Motivo:</b> '+esc(r.motivo)+'</p>':''}${S.cfg.call?`<a class="btn w gap" href="tel:+${waNum(r.phone)}">Llamar a ${esc(r.name.split(' ')[0])}</a>`:''}<div class="quick gap" style="margin-bottom:0"><button class="btn ${S.cfg.call?'o':''}" data-a="reqturn" data-id="${r.id}">Darle turno</button><button class="btn del" data-a="reqrej" data-id="${r.id}">No puedo tomarlo</button></div></div>`).join('')}</section>`;
   if(pend.length) h += `<h2 class="sec">Por resolver</h2><section class="sheet">${pend.map(t => rowT(t, t.date, true)).join('').replace('class="row"','class="row" style="border-top:0"')}</section>`;
+  h += remSection();
   h += `<h2 class="sec">Hoy, ${esc(longDate(td))}</h2><section class="sheet">${hoy.length ? hoy.map(t => rowT(t, td)).join('').replace('class="row"','class="row" style="border-top:0"') : '<p class="empty" style="border-top:0">Hoy no tenés turnos.</p>'}</section>
     <button class="btn w" style="margin-top:22px" data-a="wnew">Anotar un turno</button><p class="hint" style="margin:8px 0 0">Para cuando arreglás el horario con alguien por teléfono o WhatsApp.</p>
     <div class="quick" style="margin:22px 0 0"><button class="btn o" data-a="go" data-v="day">Ver otros días</button><button class="btn o" data-a="go" data-v="set">Ajustes</button></div>`;
@@ -342,6 +351,7 @@ function viewSet(){
     <button class="btn o w opt" data-a="go" data-v="co"><b>Honorarios y obras sociales</b><span>Cuánto cobrás y con cuáles trabajás</span></button>
     <button class="btn o w opt" data-a="go" data-v="ma"><b>Mis datos</b><span>Tu nombre, tu WhatsApp y cómo das los turnos</span></button>
     ${DEMO?`<p class="note" style="margin-top:22px"><b>Esto es una muestra</b>Lo que cargues acá queda solo en este celular. En tu app, los turnos se guardan en una planilla de tu propia cuenta de Google.</p><button class="btn o w" data-a="reset">Volver a los datos de ejemplo</button>`:''}
+    <div class="form"><label for="nPin">Cambiar mi clave (de 4 a 8 números)</label><input id="nPin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn o w gap" data-f2="setpin">Guardar clave nueva</button></div>
     <button class="btn o w gap" data-a="out">Cerrar con clave</button>`; }
 function viewHoras(){ const c = S.cfg, hs = []; for(let m=7*60;m<=22*60;m+=30) hs.push(hhmm(m));
   return `<section class="sheet"><h2>Tus horarios</h2><p class="sub">${c.selfPick ? 'Los días y horas que marques son los que ve quien entra a tu página para elegir su turno.' : 'Con estos días y horas se arma tu agenda: son los horarios libres que te aparecen a vos cuando le das un turno a alguien. Quien entra a tu página no los ve.'}</p>
@@ -350,9 +360,10 @@ function viewHoras(){ const c = S.cfg, hs = []; for(let m=7*60;m<=22*60;m+=30) h
     <button class="btn w gap" data-a="hsave">Guardar horarios</button></div></section>`; }
 function viewMas(){ const c = S.cfg;
   return `<section class="sheet"><div class="form" style="border:0"><h3>Tus datos</h3>
+    <label style="margin-top:12px">Tu foto</label><div class="fot"><span id="mFv">${face(c)}</span><div><label class="btn o" for="mF">Cambiar mi foto</label><input id="mF" type="file" accept="image/*" hidden><p class="mut gap">Es la que ven tus pacientes en tu página.</p></div></div>
     <label for="mT">Título</label><select id="mT">${['','Lic.','Dr.','Dra.','Od.','Klgo.','Mg.'].map(x => `<option value="${x}" ${(c.title||'')===x?'selected':''}>${x||'Sin título'}</option>`).join('')}</select><p class="mut" style="margin-top:6px">Tu nombre en la página: <b>${esc(c.name)}</b>. Para cambiarlo, escribinos.</p><label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
     <label for="mL">Tu matrícula</label><input id="mL" type="text" value="${esc(c.lic)}" placeholder="Ej.: M.P. 1234">
-    <label for="mS">Quien entra a tu página</label><select id="mS"><option value="1" ${c.selfPick?'selected':''}>Elige un horario libre de mi agenda</option><option value="0" ${c.selfPick?'':'selected'}>Me deja sus datos y yo le doy el turno</option></select>
+    <input type="hidden" id="mS" value="0">
     <label for="mW">Tu WhatsApp (ahí te llegan los pedidos)</label><input id="mW" type="tel" value="${esc(c.wa)}" placeholder="Ej.: 341 555 1234">
     <label>Cómo atendés</label>${['Presencial','Online'].map(m => `<label class="chk"><input type="checkbox" class="mM" value="${m}" ${c.modes.includes(m)?'checked':''}> ${m}</label>`).join('')}
     <label for="mD">Cómo te presentás (lo primero que se lee)</label><textarea id="mD" rows="2">${esc(c.lead)}</textarea><label for="mG">Especialidades (separalas con coma)</label><input id="mG" type="text" value="${esc((c.tags||[]).join(', '))}" placeholder="Ej.: Ortodoncia, Endodoncia"><label for="mP">Dónde atendés</label><textarea id="mP" rows="2">${esc(c.place)}</textarea><label for="mC">Aviso de cancelación</label><textarea id="mC" rows="2">${esc(c.cancel)}</textarea>
@@ -405,21 +416,20 @@ document.addEventListener('click', e => {
     if(!cov){ toast(f.covk==='Obra social' || f.cov==='Otra obra social' ? 'Escribí cuál es tu obra social.' : 'Elegí obra social o particular.'); return; }
     if(c.ask.pain && !f.pain){ toast('Decinos si estás con dolor.'); return; }
     const avail = [[f.am?'por la mañana':'', f.pm?'por la tarde':''].filter(Boolean).join(' o '), (f.days||'').trim()].filter(Boolean).join('. ');
-    const r = {id:uid(), name, phone, age:c.ask.age?Number(f.age):0, cov, avail, pain:c.ask.pain?f.pain:''}; S.reqs.push(r); save(); P.last = Object.assign({req:true}, r); P.motivo = c.ask.motivo ? (f.motivo||'').trim() : ''; P.step = 'done'; P.f = {}; renderSite(); scrollTo(0,0);
-    if(c.wa) location.href = waLink(c.wa, msgReq(r, P.motivo)); }
+    const r = {id:uid(), name, phone, age:c.ask.age?Number(f.age):0, cov, avail, pain:c.ask.pain?f.pain:''}; r.motivo = c.ask.motivo ? (f.motivo||'').trim() : ''; sendReq(r, b); }
   if(a==='again'){ P.step = 'pick'; P.last = null; renderSite(); }
   // panel
-  if(a==='pin'){ if($('#pin').value.trim()==='1234'){ A.ok = true; A.scr = 'home'; renderPanel(); } else toast('Clave incorrecta.'); }
+  if(a==='pin'){ login($('#pin').value.trim(), b); }
   if(a==='go'){ A.scr = v; if(v==='home'){ A.w = null; A.msg = null; } renderPanel(); scrollTo(0,0); }
   if(a==='pday'){ A.date = v; renderPanel(); }
   if(a==='tsee'){ A.tid = b.dataset.id; A.tdate = v; A.from = A.scr; A.scr = 'turno'; renderPanel(); scrollTo(0,0); }
   if(a==='wnew'){ const p = (v||'').split('|'); A.w = {name:'', phone:'', cov:'Particular', date:p[0]||'', time:p[1]||'', fromDay:!!p[1]}; A.scr = 'new'; renderPanel(); scrollTo(0,0); }
   if(a==='wnext'){ const name = $('#nN').value.trim(); if(name.length<2){ toast('Falta el nombre.'); $('#nN').focus(); return; } Object.assign(A.w, {name, phone:$('#nP').value.trim(), cov:$('#nC').value}); A.scr = A.w.time ? 'confirm' : 'pick'; renderPanel(); scrollTo(0,0); }
-  if(a==='reqturn'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ A.w = {name:r.name, phone:r.phone, cov:r.cov, avail:r.avail, pain:r.pain, req:r.id, date:'', time:''}; A.scr = 'pick'; renderPanel(); scrollTo(0,0); } }
+  if(a==='reqturn'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ A.w = {name:r.name, phone:r.phone, cov:r.cov, avail:r.avail, pain:r.pain, age:r.age, motivo:r.motivo, req:r.id, date:'', time:''}; A.scr = 'pick'; renderPanel(); scrollTo(0,0); } }
   if(a==='wday'){ A.w.date = v; renderPanel(); }
   if(a==='wtime'){ A.w.time = v; A.scr = 'confirm'; renderPanel(); scrollTo(0,0); }
   if(a==='wsave'){ const w = A.w; if(turnoAt(w.date,w.time)){ toast('Ese horario ya está ocupado. Elegí otro.'); w.time = ''; A.scr = 'pick'; renderPanel(); return; }
-    const t = {id:uid(), date:w.date, time:w.time, name:w.name, phone:w.phone, mode:c.modes[0], cov:w.cov, kind:'paciente', status:'confirmado', weekly:$('#nW').checked, skip:[]}; S.turnos.push(t);
+    const t = {id:uid(), date:w.date, time:w.time, name:w.name, phone:w.phone, mode:c.modes[0], cov:w.cov, kind:'paciente', status:'confirmado', weekly:$('#nW').checked, skip:[], age:w.age||0, motivo:w.motivo||'', pain:w.pain||'', created:today()}; S.turnos.push(t);
     if(w.req) S.reqs = S.reqs.filter(x => x.id!==w.req); save(); renderSite(); A.w = null;
     if(t.phone){ const fee = c.fees.show && t.cov==='Particular' && c.fees.part ? ` La sesión es de ${money(c.fees.part)}.` : ''; showMsg(t, 'Turno guardado', `Hola ${t.name.split(' ')[0]}! Te confirmo el turno ${when(t.date)} a las ${t.time}${modeTxt(t)}.${fee} ${c.cancel}`.trim()); A.scr = 'msg'; }
     else { A.scr = 'home'; toast('Turno guardado.'); }
@@ -451,15 +461,107 @@ document.addEventListener('click', e => {
   if(a==='osdel'){ readCobros(); c.os.splice(Number(v),1); save(); renderPanel(); renderSite(); }
   if(a==='csave'){ readCobros(); save(); renderPanel(); renderSite(); toast('Honorarios guardados.'); }
   if(a==='reset'){ S = seed(); save(); A.date = today(); A.scr = 'home'; renderPanel(); renderSite(); toast('Datos de ejemplo restaurados.'); }
-  if(a==='out'){ A.ok = false; A.scr = 'home'; renderPanel(); scrollTo(0,0); }
+  if(a==='out'){ A.pin = ''; A.ok = false; S.turnos = []; S.reqs = []; A.scr = 'home'; renderPanel(); scrollTo(0,0); }
 });
 document.addEventListener('change', e => { const fc = e.target.dataset && e.target.dataset.fc; if(fc) P.f[fc] = e.target.checked;  });
 document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.f; if(!k) return; P.f[k] = e.target.value; if(k==='cov'){ renderSite(); const el = $('#fC'); if(el) el.focus(); } });
 document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id==='pin') $('[data-a="pin"]').click(); });
 
+// ===== App funcional: datos en la planilla del profesional =====
+const API = 'https://script.google.com/macros/s/AKfycbxcv-Wg40xQbjDn92_8W6i2VpEqXS3vZTsNDH_NzN2BYKyMLi3Kw2AdU8P28SN9gRof/exec';
+let SNAP = null, LAST = 0, QUEUE = Promise.resolve();
+const api = body => fetch(API, {method:'POST', body:JSON.stringify(Object.assign(body, {c:CLIENT}))}).then(r => r.json());
+const hit = k => fetch('https://abacus.jasoncameron.dev/hit/websemprendedores/' + CLIENT + k).catch(()=>{});
+// el nombre no se cambia desde el panel (lo cambiamos nosotros): siempre sale de DEFAULT
+function mkCfg(extra){ const x = (extra && extra.cfg) || {}, c = Object.assign(JSON.parse(JSON.stringify(DEFAULT)), x);
+  c.name = DEFAULT.name; c.short = DEFAULT.short; c.mono = DEFAULT.mono; c.photo = x.photo || DEFAULT.photo; c.selfPick = false;
+  c.blocked = c.blocked||[]; c.blockedSlots = c.blockedSlots||[]; c.tags = Array.isArray(c.tags) ? c.tags : []; c.remDone = c.remDone||[]; return c; }
+const face = c => c.photo ? `<img class="pho" src="${esc(c.photo)}" alt="" width="76" height="76">` : `<div class="mono" aria-hidden="true">${esc(c.mono)}</div>`;
+const LBL = {confirmado:'Turno confirmado', pedido:'Turno por confirmar', consulta:'Primera consulta'};
+const line = (k,v) => v ? k+': '+v : '';
+const pick = (notes,k) => { const m = String(notes||'').split('\n').find(l => l.indexOf(k+': ')===0); return m ? m.slice(k.length+2) : ''; };
+function toOrder(x, isReq){ return isReq
+  ? {id:x.id, created:x.created||today(), date:x.created||today(), product:'Pedido nuevo', people:x.age||'', fill:'', delivery:x.cov||'', name:x.name, phone:x.phone||'', notes:[line('Puede',x.avail), line('Motivo',x.motivo), line('Con dolor',x.pain)].filter(Boolean).join('\n'), pay:'sin', total:0, paid:0, done:false}
+  : {id:x.id, created:x.created||today(), date:x.date, product:LBL[x.status]||LBL.confirmado, people:x.age||'', fill:x.time, delivery:x.cov||'', name:x.name, phone:x.phone||'', notes:[line('Motivo',x.motivo), line('Con dolor',x.pain), line('Semanas liberadas',(x.skip||[]).join(', '))].filter(Boolean).join('\n'), pay:'sin', total:0, paid:0, done:!!x.weekly}; }
+function fromOrders(list){ const turnos = [], reqs = [];
+  list.forEach(o => { const base = {id:o.id, created:o.created, name:o.name, phone:o.phone, age:Number(o.people)||0, cov:o.delivery, motivo:pick(o.notes,'Motivo'), pain:pick(o.notes,'Con dolor')};
+    if(o.product==='Pedido nuevo') reqs.push(Object.assign(base, {avail:pick(o.notes,'Puede')}));
+    else { const st = Object.keys(LBL).find(k => LBL[k]===o.product) || 'confirmado'; const sk = pick(o.notes,'Semanas liberadas');
+      turnos.push(Object.assign(base, {date:o.date, time:o.fill, mode:S.cfg.modes[0], kind:st==='consulta'?'consulta':'paciente', status:st, weekly:!!o.done, skip:sk?sk.split(', '):[]})); } });
+  return {turnos, reqs}; }
+const snapOf = () => { const m = {}; S.turnos.forEach(x => m[x.id] = JSON.stringify(toOrder(x,false))); S.reqs.forEach(x => m[x.id] = JSON.stringify(toOrder(x,true))); return {m, cfg:JSON.stringify(S.cfg)}; };
+function setData(d){ S.cfg = mkCfg(d.settings && d.settings.extra); const x = fromOrders(d.orders||[]); S.turnos = x.turnos; S.reqs = x.reqs; SNAP = snapOf(); LAST = Date.now(); cacheCfg(); }
+const CK = KEY + '_pub'; const cacheCfg = () => { try{ localStorage.setItem(CK, JSON.stringify(S.cfg)); }catch(e){} };
+function load(){}
+const dirty = () => { if(!S || !SNAP) return false; const n = snapOf(); return n.cfg!==SNAP.cfg || Object.keys(n.m).some(id => n.m[id]!==SNAP.m[id]) || Object.keys(SNAP.m).some(id => !(id in n.m)); };
+const PK = () => KEY + '_pend';
+const setts = cfg => ({maxPerDay:9999, blocked:[], spOn:false, senaPct:0, extra:{kind:'turnos', cfg}});
+function pendStore(){ try{ if(!dirty()){ localStorage.removeItem(PK()); return; } const n = snapOf(); localStorage.setItem(PK(), JSON.stringify({up:Object.keys(n.m).filter(id => n.m[id]!==SNAP.m[id]).map(id => JSON.parse(n.m[id])), del:Object.keys(SNAP.m).filter(id => !(id in n.m)), cfg:n.cfg!==SNAP.cfg ? JSON.parse(n.cfg) : null})); }catch(e){} }
+let RETRY = null; function pend(on){ pendStore(); let b = $('#pend'); if(on && !b){ b = document.createElement('div'); b.id = 'pend'; b.setAttribute('role','status'); b.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:60;padding:12px 16px;background:#8a1c1c;color:#fff;font-weight:700;font-size:16px;line-height:1.35;text-align:center'; b.textContent = 'Sin conexión: hay cambios sin guardar. No cierres la app; se guardan solos cuando vuelva la señal.'; document.body.appendChild(b); } if(!on && b){ b.remove(); toast('Listo, quedó todo guardado.'); } clearTimeout(RETRY); if(on) RETRY = setTimeout(() => { if(A.ok && dirty()) save(); else pend(false); }, 8000); }
+function save(){ if(!S || !A.ok || !SNAP) return; cacheCfg(); const prev = SNAP, now = snapOf(), up = [], del = [];
+  Object.keys(now.m).forEach(id => { if(now.m[id]!==SNAP.m[id]) up.push(JSON.parse(now.m[id])); });
+  Object.keys(SNAP.m).forEach(id => { if(!(id in now.m)) del.push(id); });
+  const cfgCh = now.cfg!==SNAP.cfg; SNAP = now; if(!up.length && !del.length && !cfgCh) return;
+  const pin = A.pin, cfg = JSON.parse(now.cfg);
+  QUEUE = QUEUE.then(async () => { try{
+      if(up.length){ const r = await api({a:'saveOrders', pin, orders:up}); if(!r.ok) throw 0; }
+      if(del.length){ const r = await api({a:'delOrders', pin, ids:del}); if(!r.ok) throw 0; }
+      if(cfgCh){ const r = await api({a:'saveSettings', pin, settings:setts(cfg)}); if(!r.ok) throw 0; }
+      if($('#pend') && !dirty()) pend(false); else pendStore();
+    }catch(e){ /* lo que no se pudo guardar vuelve a quedar pendiente y se reintenta solo */
+      up.forEach(o => { if(o.id in prev.m) SNAP.m[o.id] = prev.m[o.id]; else delete SNAP.m[o.id]; }); del.forEach(id => { SNAP.m[id] = prev.m[id]; }); if(cfgCh) SNAP.cfg = prev.cfg;
+      if(!$('#pend')) toast('No se pudo guardar. Se reintenta solo.'); pend(true); } });
+}
+async function login(pin, btn){ if(!pin){ toast('Escribí tu clave.'); return; } if(btn) btn.disabled = true;
+  try{ A.pin = pin; let d = await api({a:'all', pin}); if(!d.ok){ A.pin = ''; toast(d.msg||'Clave incorrecta.'); if(btn) btn.disabled = false; return; }
+    let pd = null; try{ pd = JSON.parse(localStorage.getItem(PK())); }catch(e){}
+    if(pd){ let ok = true; if(pd.up && pd.up.length) ok = (await api({a:'saveOrders', pin, orders:pd.up})).ok && ok; if(pd.del && pd.del.length) ok = (await api({a:'delOrders', pin, ids:pd.del})).ok && ok; if(pd.cfg) ok = (await api({a:'saveSettings', pin, settings:setts(pd.cfg)})).ok && ok; if(!ok) throw 0; localStorage.removeItem(PK()); d = await api({a:'all', pin}); }
+    setData(d); A.ok = true; A.scr = 'home'; renderPanel(); scrollTo(0,0);
+  }catch(e){ A.pin = ''; toast('No hay conexión. Probá de nuevo.'); if(btn) btn.disabled = false; } }
+async function refresh(){ if(!A.ok) return; try{ await QUEUE; if(dirty()){ save(); return; } const d = await api({a:'all', pin:A.pin}); if(d.ok && A.ok){ const before = JSON.stringify(SNAP.m); setData(d); if(JSON.stringify(SNAP.m)!==before && A.scr==='home') renderPanel0(); } }catch(e){} }
+async function sendReq(r, btn){ if(btn) btn.disabled = true;
+  try{ const d = await api({a:'order', order:toOrder(Object.assign({created:today()}, r), true)}); if(!d.ok){ toast(d.msg||'No se pudo enviar. Probá de nuevo.'); if(btn) btn.disabled = false; return; }
+    P.last = Object.assign({req:true}, r); P.motivo = r.motivo; P.step = 'done'; P.f = {}; renderSite(); scrollTo(0,0); hit('-pedidos');
+    if(S.cfg.wa) location.href = waLink(S.cfg.wa, msgReq(r, r.motivo));
+  }catch(e){ toast('No hay conexión. Probá de nuevo.'); if(btn) btn.disabled = false; } }
+function renderPanel(){ renderPanel0(); if(A.ok && A.scr==='home' && Date.now()-LAST>45000){ LAST = Date.now(); refresh(); } }
+
+// ----- Recordatorios programados (Dardo, 15/11) -----
+const nowStamp = () => { const n = new Date(); return iso(n)+' '+pad(n.getHours())+':'+pad(n.getMinutes()); };
+const padT = h => { const p = String(h).split(':'); return pad(Number(p[0]))+':'+(p[1]||'00'); };
+function remDue(d, time){ return Number(String(time).split(':')[0]) < 13 ? iso(addDays(day(d),-1))+' 10:00' : d+' 09:00'; }
+function remList(){ const now = nowStamp(), td = today(), out = [];
+  [td, iso(addDays(new Date(),1))].forEach(d => slots(d).concat(S.turnos.filter(x => x.date===d).map(x => x.time)).filter((v,i,a) => a.indexOf(v)===i).forEach(time => { const tu = turnoAt(d, time);
+    if(!tu || tu.status!=='confirmado' || !tu.phone) return;
+    /* turno dado para hoy o mañana: sin recordatorio (la confirmación está fresca) */
+    if(d===tu.date && d <= iso(addDays(day(tu.created||td),1))) return;
+    const k = tu.id+'|'+d; if(S.cfg.remDone.includes(k)) return;
+    if(remDue(d, tu.time) <= now && now < d+' '+padT(tu.time)) out.push({tu, d, k}); }));
+  return out; }
+function remMsg(tu, d){ const fn = tu.name.split(' ')[0], am = Number(String(tu.time).split(':')[0]) < 13 && d!==today();
+  return `Hola ${fn}! Te recuerdo tu turno de ${am?'mañana':'hoy'}, ${shortDate(d)}, a las ${tu.time}${modeTxt(tu)}. Te espero.`; }
+function remSection(){ const l = remList(); if(!l.length) return '';
+  return `<h2 class="sec">${l.length===1?'1 recordatorio para mandar':l.length+' recordatorios para mandar'}</h2><p class="hint" style="margin:-4px 0 10px">Aparecen solos el día que toca. Tocá “Mandar recordatorio” y se abre tu WhatsApp con el mensaje escrito.</p><section class="sheet">${l.map(x => `<div class="req"><h3 style="font-size:20px">${esc(x.tu.name)}</h3><p class="mut">${esc(cap(shortDate(x.d)))}, ${x.tu.time}.</p><div class="quick gap" style="margin-bottom:0"><a class="btn" target="_blank" rel="noopener" data-f2="remsent" data-k="${x.k}" href="${esc(waLink(x.tu.phone, remMsg(x.tu, x.d)))}">Mandar recordatorio</a><button class="btn o" data-f2="remskip" data-k="${x.k}">No mandar</button></div></div>`).join('')}</section>`; }
+function remMark(k){ const td = today(); S.cfg.remDone = S.cfg.remDone.filter(x => x.split('|')[1] >= td).concat([k]); save(); }
+
+// ----- foto, clave y recordatorios -----
+function squareShot(file){ return new Promise((res, rej) => { const fr = new FileReader(); fr.onerror = rej; fr.onload = () => { const im = new Image(); im.onerror = rej; im.onload = () => { const s = Math.min(im.width, im.height), c = document.createElement('canvas'); c.width = c.height = Math.min(480, s); c.getContext('2d').drawImage(im, (im.width-s)/2, (im.height-s)/2, s, s, 0, 0, c.width, c.height); res(c.toDataURL('image/jpeg', .85)); }; im.src = fr.result; }; fr.readAsDataURL(file); }); }
+document.addEventListener('change', async e => { const t = e.target;
+  if(t.id==='mF' && t.files && t.files[0]){ toast('Subiendo la foto…'); try{ const r = await api({a:'photo', pin:A.pin, data:await squareShot(t.files[0]), name:'perfil_'+CLIENT+'.jpg'}); if(!r.ok) throw 0; S.cfg.photo = r.url; save(); const v = $('#mFv'); if(v) v.innerHTML = face(S.cfg); renderSite(); toast('Foto cambiada.'); }catch(x){ toast('No se pudo subir la foto. Probá de nuevo.'); } t.value = ''; } });
+document.addEventListener('click', async e => { const b = e.target.closest('[data-f2]'); if(!b) return; const a = b.dataset.f2;
+  if(a==='remsent'){ const k = b.dataset.k; setTimeout(() => { remMark(k); if(A.scr==='home') renderPanel0(); }, 600); }
+  if(a==='remskip'){ remMark(b.dataset.k); renderPanel0(); toast('Listo, ese recordatorio no se manda.'); }
+  if(a==='setpin'){ const n = $('#nPin').value.trim(); if(!/^\d{4,8}$/.test(n)){ toast('La clave tiene que tener entre 4 y 8 números.'); return; } b.disabled = true;
+    try{ const r = await api({a:'setPin', pin:A.pin, newPin:n}); if(r.ok){ A.pin = n; $('#nPin').value = ''; toast('Clave cambiada.'); } else toast(r.msg||'No se pudo cambiar.'); }catch(x){ toast('No hay conexión. Probá de nuevo.'); } b.disabled = false; }
+});
+document.addEventListener('visibilitychange', () => { if(!document.hidden && A.ok && A.scr==='home') refresh(); });
+
 // ===== Arranque =====
+function boot(){ let c0 = null; try{ c0 = JSON.parse(localStorage.getItem(CK)); }catch(e){}
+  S = {cfg:mkCfg(c0 ? {cfg:c0} : null), turnos:[], reqs:[]}; addEventListener('hashchange', route); route(); hit(location.hash==='#panel' ? '-panel' : '');
+  api({a:'pub'}).then(d => { if(d.ok && !A.ok){ S.cfg = mkCfg(d.settings && d.settings.extra); cacheCfg(); if(location.hash!=='#panel') renderSite(); } }).catch(()=>{}); }
 function route(){ const p = location.hash==='#panel'; $('#site').hidden = p; $('#panel').hidden = !p; if(p) renderPanel(); else renderSite(); scrollTo(0,0); }
-load(); addEventListener('hashchange', route); route();
+boot();
 </script>
 </body>
 </html>
