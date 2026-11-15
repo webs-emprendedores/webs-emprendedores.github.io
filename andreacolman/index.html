@@ -155,7 +155,7 @@ const DEFAULT = {
   photo:'',        // foto del profesional (archivo al lado del index); si está vacío va el monograma
   tags:[]          // especialidades o servicios, se listan bajo la presentación
 };
-Object.assign(DEFAULT, {"name": "Andrea Colman", "short": "Andrea", "role": "Psicóloga", "mono": "AC", "lead": "Atención psicológica para adultos.", "modes": ["Presencial"], "place": "", "cancel": "", "fees": {"part": 0, "show": true}, "os": [], "osAll": true, "selfPick": false, "ask": {"age": true, "motivo": false}});
+Object.assign(DEFAULT, {"name": "Andrea Colman", "short": "Andrea", "role": "Psicóloga", "mono": "AC", "lead": "Atención psicológica.", "modes": ["Presencial"], "place": "", "cancel": "", "fees": {"part": 0, "show": true}, "os": [], "osAll": true, "selfPick": false, "ask": {"age": true, "motivo": false}, "days": {"1": {"on": true, "from": "14:00", "to": "20:00"}, "2": {"on": true, "from": "14:00", "to": "20:00"}, "3": {"on": true, "from": "14:00", "to": "20:00"}, "4": {"on": true, "from": "14:00", "to": "20:00"}, "5": {"on": true, "from": "14:00", "to": "20:00"}, "6": {"on": false, "from": "14:00", "to": "20:00"}}});
 const WD = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const WD3 = ['dom','lun','mar','mié','jue','vie','sáb'];
 const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -208,6 +208,8 @@ let P = {kind:'nuevo', mode:null, date:null, time:null, step:'pick', last:null, 
 const covList = () => ['Particular'].concat(S.cfg.os.filter(o => o.on).map(o => o.n)).concat(['Otra obra social']);
 function feeLine(cov){ const c = S.cfg, o = c.os.find(x => x.n===cov); if(!cov) return ''; if(cov==='Otra obra social') return `${c.short} te confirma si trabaja con esa obra social.`; if(!c.fees.show) return '';
   if(cov==='Particular') return c.fees.part ? `Sesión particular: ${money(c.fees.part)}.` : ''; return o ? (o.plus>0 ? `Con ${o.n} se paga un adicional de ${money(o.plus)} por sesión.` : `Con ${o.n} no pagás nada aparte.`) : ''; }
+// franjas que de verdad atiende (regla 15/11: no ofrecer "Por la mañana" a quien atiende solo a la tarde)
+function franjas(c){ const on = Object.values(c.days||{}).filter(d => d && d.on); return {am: on.some(d => d.from < '13:00'), pm: on.some(d => d.to > '13:00')}; }
 function siteReq(){ const c = S.cfg, f = P.f;
   let h = `<section class="sheet"><h2>Pedí tu turno</h2><p class="sub">${c.call ? `Dejá tus datos y ${esc(c.short)} te llama para una primera charla antes de darte el turno.` : `Dejá tus datos y ${esc(c.short)} te escribe por WhatsApp con el horario.`}</p><div class="form" style="border-top:0;padding-top:0">
     <label for="fN" style="margin-top:0">Nombre y apellido</label><input id="fN" data-f="name" type="text" autocomplete="name" value="${esc(f.name||'')}">`;
@@ -217,7 +219,8 @@ function siteReq(){ const c = S.cfg, f = P.f;
       + (f.covk==='Obra social' ? `<label for="fO">Cuál es tu obra social</label><input id="fO" data-f="other" type="text" value="${esc(f.other||'')}"><p class="pick">${esc(c.osNote || 'Trabajo con todas. Te confirmo la cobertura antes de darte el turno.')}</p>` : '');
   else { const fl = feeLine(f.cov); h += `<label for="fC">Obra social o particular</label><select id="fC" data-f="cov"><option value="">Elegí una opción</option>${covList().map(o => `<option ${o===f.cov?'selected':''}>${esc(o)}</option>`).join('')}</select>`
       + (f.cov==='Otra obra social' ? `<label for="fO">Cuál es tu obra social</label><input id="fO" data-f="other" type="text" value="${esc(f.other||'')}">` : '') + (fl ? `<p class="pick">${esc(fl)}</p>` : ''); }
-  h += `<label id="lA">Cuándo podés</label><label class="chk" style="margin-top:4px"><input type="checkbox" data-fc="am" ${f.am?'checked':''}> Por la mañana</label><label class="chk"><input type="checkbox" data-fc="pm" ${f.pm?'checked':''}> Por la tarde</label>
+  const FR = franjas(c);
+  h += (FR.am && FR.pm ? `<label id="lA">Cuándo podés</label><label class="chk" style="margin-top:4px"><input type="checkbox" data-fc="am" ${f.am?'checked':''}> Por la mañana</label><label class="chk"><input type="checkbox" data-fc="pm" ${f.pm?'checked':''}> Por la tarde</label>` : '') + `
     <label for="fD">Qué días te quedan mejor</label><input id="fD" data-f="days" type="text" placeholder="Ej.: lunes y miércoles" value="${esc(f.days||'')}">`;
   if(c.ask.motivo) h += `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>`;
   if(c.ask.pain) h += `<label id="lD">Estás con dolor?</label><div class="seg" role="group" aria-labelledby="lD" style="margin:0">${['Sí','No'].map(k => `<button data-a="pain" data-v="${k}" class="${f.pain===k?'on':''}" aria-pressed="${f.pain===k}">${k}</button>`).join('')}</div>`;
