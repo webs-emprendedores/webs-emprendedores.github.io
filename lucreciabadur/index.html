@@ -151,6 +151,8 @@ h1,h2,h3{font-family:Manrope,"Source Sans 3",system-ui,sans-serif;font-weight:70
 // ===== Datos del profesional (se adaptan a cada cliente) =====
 const DEMO = true;                 // muestra: nada sale de este celular
 const KEY = 'turnos_lucreciabadur_v1';
+const RUBRO = 'odo';               // rubro: 'psi' (psicólogos y afines) u 'odo' (odontólogos y afines). Una sola plantilla para los dos: lo común no se desfasa
+const RW = RUBRO==='odo' ? {ses:'consulta', Ses:'Consulta'} : {ses:'sesión', Ses:'Sesión'};
 const DEFAULT = {
   name:'Daniela Paz', short:'Daniela', role:'Psicóloga', mono:'DP',
   lead:'Atiendo a adultos, en consultorio en Rosario y por videollamada.',
@@ -221,7 +223,7 @@ const nextDays = n => Array.from({length:n}, (_,i) => iso(addDays(new Date(), i)
 let P = {kind:'nuevo', mode:null, date:null, time:null, step:'pick', last:null, motivo:'', f:{}};
 const covList = () => ['Particular'].concat(S.cfg.os.filter(o => o.on).map(o => o.n)).concat(['Otra obra social']);
 function feeLine(cov){ const c = S.cfg, o = c.os.find(x => x.n===cov); if(!cov) return ''; if(cov==='Otra obra social') return `${c.short} te confirma si trabaja con esa obra social.`; if(!c.fees.show) return '';
-  if(cov==='Particular') return c.fees.part ? `Sesión particular: ${money(c.fees.part)}.` : ''; return o ? (o.plus>0 ? `Con ${o.n} se paga un adicional de ${money(o.plus)} por sesión.` : `Con ${o.n} no pagás nada aparte.`) : ''; }
+  if(cov==='Particular') return c.fees.part ? `${RW.Ses} particular: ${money(c.fees.part)}.` : ''; return o ? (o.plus>0 ? `Con ${o.n} se paga un adicional de ${money(o.plus)} por ${RW.ses}.` : `Con ${o.n} no pagás nada aparte.`) : ''; }
 // franjas que de verdad atiende (regla 15/11: no ofrecer "Por la mañana" a quien atiende solo a la tarde)
 // Días y franjas que atiende, según los horarios cargados en el panel (Dardo 15/11: lo que ve el paciente sale de ahí)
 const ORD = [1,2,3,4,5,6,0];
@@ -288,7 +290,7 @@ function renderSite(){
   if(donde) rows.push(['Dónde', donde]);
   if(c.selfPick) rows.push(['Cuánto dura', c.dur+' minutos.']);
   if(c.selfPick && nuevo) rows.push(['Honorarios', !c.fees.show && f.cov!=='Otra obra social' ? 'Te los paso al confirmar el turno.' : (feeLine(f.cov) || 'Cuando elijas obra social o particular, acá ves cuánto es.')]);
-  if(!c.selfPick && c.fees.show && c.fees.part) rows.push(['Honorarios', 'Sesión particular: '+money(c.fees.part)+'.']);
+  if(!c.selfPick && c.fees.show && c.fees.part) rows.push(['Honorarios', RW.Ses+' particular: '+money(c.fees.part)+'.']);
   if(c.cancel) rows.push(['Si tenés que cancelar', c.cancel]);
   h += (rows.length ? `<section class="info"><h2>Antes de venir</h2><dl>${rows.map(r => `<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl></section>` : '') + `
     <footer><span>${esc(c.name)}, ${esc(c.role.toLowerCase())}</span></footer>`;
@@ -365,7 +367,7 @@ function viewSet(){
 function viewHoras(){ const c = S.cfg, hs = []; for(let m=7*60;m<=22*60;m+=30) hs.push(hhmm(m));
   return `<section class="sheet"><h2>Tus horarios</h2><p class="sub">${c.selfPick ? 'Los días y horas que marques son los que ve quien entra a tu página para elegir su turno.' : 'Con estos días y horas se arma tu agenda: son los horarios libres que te aparecen a vos cuando le das un turno a alguien. Quien entra a tu página no los ve.'}</p>
     ${[1,2,3,4,5,6].map(d => { const x = c.days[d]; return `<div class="hrow"><label class="chk"><input type="checkbox" data-d="${d}" class="hOn" ${x.on?'checked':''}> ${cap(WD[d])}</label><select class="hF" data-d="${d}" aria-label="${WD[d]} desde">${hs.map(v => `<option ${v===x.from?'selected':''}>${v}</option>`).join('')}</select><select class="hT" data-d="${d}" aria-label="${WD[d]} hasta">${hs.map(v => `<option ${v===x.to?'selected':''}>${v}</option>`).join('')}</select></div>`; }).join('')}
-    <div class="form"><div class="two"><div><label for="hS" style="margin-top:0">Un turno cada</label><select id="hS">${[[30,'30 minutos'],[45,'45 minutos'],[60,'1 hora'],[90,'1 hora y media']].map(([v,l]) => `<option value="${v}" ${v===c.step?'selected':''}>${l}</option>`).join('')}</select></div><div><label for="hD" style="margin-top:0">La sesión dura</label><select id="hD">${[30,40,45,50,60,90].map(v => `<option value="${v}" ${v===c.dur?'selected':''}>${v} minutos</option>`).join('')}</select></div></div>
+    <div class="form"><div class="two"><div><label for="hS" style="margin-top:0">Un turno cada</label><select id="hS">${[[30,'30 minutos'],[45,'45 minutos'],[60,'1 hora'],[90,'1 hora y media']].map(([v,l]) => `<option value="${v}" ${v===c.step?'selected':''}>${l}</option>`).join('')}</select></div><div><label for="hD" style="margin-top:0">La ${RW.ses} dura</label><select id="hD">${[30,40,45,50,60,90].map(v => `<option value="${v}" ${v===c.dur?'selected':''}>${v} minutos</option>`).join('')}</select></div></div>
     <button class="btn w gap" data-a="hsave">Guardar horarios</button></div></section>`; }
 function viewMas(){ const c = S.cfg;
   return `<section class="sheet"><div class="form" style="border:0"><h3>Tus datos</h3>
@@ -378,8 +380,8 @@ function viewMas(){ const c = S.cfg;
     <button class="btn w gap" data-a="msave">Guardar</button></div></section>`; }
 function viewCobros(){ const c = S.cfg;
   return `<section class="sheet"><h2>Tus honorarios</h2><p class="sub">Lo que cargues acá es lo que ve quien pide una primera consulta.</p>
-    <div class="form"><label for="cP" style="margin-top:0">Sesión particular ($)</label><input id="cP" type="tel" inputmode="numeric" value="${c.fees.part||''}"><label class="chk"><input id="cS" type="checkbox" ${c.fees.show?'checked':''}> Mostrar los valores en mi página</label></div>
-    <div class="form"><h3>Obras sociales</h3><label class="chk" style="margin-top:8px"><input id="cA" type="checkbox" ${c.osAll?'checked':''}> No uso lista: me escriben cuál tienen y yo les confirmo la cobertura</label><p class="mut gap">Si preferís una lista, destildá lo de arriba y marcá con cuáles trabajás. Si con alguna cobrás un adicional por sesión, poné el monto.</p></div>
+    <div class="form"><label for="cP" style="margin-top:0">${RW.Ses} particular ($)</label><input id="cP" type="tel" inputmode="numeric" value="${c.fees.part||''}"><label class="chk"><input id="cS" type="checkbox" ${c.fees.show?'checked':''}> Mostrar los valores en mi página</label></div>
+    <div class="form"><h3>Obras sociales</h3><label class="chk" style="margin-top:8px"><input id="cA" type="checkbox" ${c.osAll?'checked':''}> No uso lista: me escriben cuál tienen y yo les confirmo la cobertura</label><p class="mut gap">Si preferís una lista, destildá lo de arriba y marcá con cuáles trabajás. Si con alguna cobrás un adicional por ${RW.ses}, poné el monto.</p></div>
     ${c.os.map((o,i) => `<div class="orow"><label class="chk"><input type="checkbox" class="oOn" data-i="${i}" ${o.on?'checked':''}> ${esc(o.n)}</label><input class="oPl" data-i="${i}" type="tel" inputmode="numeric" placeholder="Adicional" aria-label="Adicional con ${esc(o.n)}" value="${o.plus||''}"><button class="btn del sm" data-a="osdel" data-v="${i}" aria-label="Quitar ${esc(o.n)}">Quitar</button></div>`).join('')}
     <div class="form"><label for="oNew" style="margin-top:0">Agregar una obra social</label><div class="two" style="grid-template-columns:1fr auto"><input id="oNew" type="text"><button class="btn o" data-a="osadd">Agregar</button></div><button class="btn w gap" data-a="csave">Guardar honorarios</button></div></section>`; }
 function readCobros(){ const c = S.cfg, num = v => Number(String(v||'').replace(/\D/g,''))||0; c.fees.part = num($('#cP').value); c.fees.show = $('#cS').checked; c.osAll = $('#cA').checked;
@@ -441,12 +443,12 @@ document.addEventListener('click', e => {
   if(a==='wsave'){ const w = A.w; if(turnoAt(w.date,w.time)){ toast('Ese horario ya está ocupado. Elegí otro.'); w.time = ''; A.scr = 'pick'; renderPanel(); return; }
     const t = {id:uid(), date:w.date, time:w.time, name:w.name, phone:w.phone, mode:c.modes[0], cov:w.cov, kind:'paciente', status:'confirmado', weekly:$('#nW').checked, skip:[]}; S.turnos.push(t);
     if(w.req) S.reqs = S.reqs.filter(x => x.id!==w.req); save(); renderSite(); A.w = null;
-    if(t.phone){ const fee = c.fees.show && t.cov==='Particular' && c.fees.part ? ` La sesión es de ${money(c.fees.part)}.` : ''; showMsg(t, 'Turno guardado', `Hola ${t.name.split(' ')[0]}! Te confirmo el turno ${when(t.date)} a las ${t.time}${modeTxt(t)}.${fee} ${c.cancel}`.trim()); A.scr = 'msg'; }
+    if(t.phone){ const fee = c.fees.show && t.cov==='Particular' && c.fees.part ? ` La ${RW.ses} es de ${money(c.fees.part)}.` : ''; showMsg(t, 'Turno guardado', `Hola ${t.name.split(' ')[0]}! Te confirmo el turno ${when(t.date)} a las ${t.time}${modeTxt(t)}.${fee} ${c.cancel}`.trim()); A.scr = 'msg'; }
     else { A.scr = 'home'; toast('Turno guardado.'); }
     renderPanel(); scrollTo(0,0); }
   if(a==='reqrej'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ showMsg(r, 'Aviso para '+r.name.split(' ')[0], `Hola ${r.name.split(' ')[0]}! Gracias por escribirme. En este momento no puedo tomar tu consulta. Espero que encuentres pronto un espacio.`); S.reqs = S.reqs.filter(x => x.id!==r.id); save(); A.scr = 'msg'; renderPanel(); scrollTo(0,0); } }
   if(a==='conf' || a==='rem' || a==='rej'){ const t = S.turnos.find(x => x.id===b.dataset.id); if(!t) return; const d = A.tdate, fn = t.name.split(' ')[0], o = c.os.find(x => x.n===t.cov);
-    const fee = !c.fees.show ? '' : t.cov==='Particular' ? (c.fees.part ? ` La sesión es de ${money(c.fees.part)}.` : '') : (o && o.plus>0 ? ` Con ${o.n} hay un adicional de ${money(o.plus)} por sesión.` : '');
+    const fee = !c.fees.show ? '' : t.cov==='Particular' ? (c.fees.part ? ` La ${RW.ses} es de ${money(c.fees.part)}.` : '') : (o && o.plus>0 ? ` Con ${o.n} hay un adicional de ${money(o.plus)} por ${RW.ses}.` : '');
     if(a==='conf'){ t.status = 'confirmado'; save(); showMsg(t, 'Mensaje de confirmación', `Hola ${fn}! Te confirmo el turno ${when(d)} a las ${t.time}${modeTxt(t)}.${fee} ${c.cancel}`.trim()); }
     if(a==='rem') showMsg(t, 'Recordatorio', `Hola ${fn}! Te recuerdo tu turno ${when(d)} a las ${t.time}${modeTxt(t)}. Te espero.`);
     if(a==='rej'){ showMsg(t, 'Aviso para ' + fn, `Hola ${fn}! Gracias por escribirme. En este momento no puedo tomar tu consulta. Espero que encuentres pronto un espacio.`); S.turnos = S.turnos.filter(x => x.id!==t.id); save(); renderSite(); }
