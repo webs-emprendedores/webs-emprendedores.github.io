@@ -126,6 +126,11 @@ footer a{color:var(--mut)}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);max-width:92vw;padding:12px 18px;border-radius:8px;background:var(--ink);color:#fff;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.on{opacity:1}
 @media (prefers-reduced-motion:reduce){#toast{transition:none}}
+/* PLUS: bloqueado en gris pero legible (Dardo 15/11) */
+.btn.lockb{background:#ececec;color:#4a4a4a;border:2px dashed #9a9a9a;box-shadow:none;display:flex;align-items:center;justify-content:center;gap:10px}
+.ptag{font-size:13px;font-weight:800;letter-spacing:.08em;background:#4a4a4a;color:#fff;border-radius:6px;padding:3px 7px}
+.plist{margin:10px 0 0;padding-left:22px;font-size:17px;line-height:1.5}.plist li{margin:4px 0}
+.fap{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}.fap:first-child{border-top:0}.fap .mut{grid-column:1}.fap .btn{grid-row:1 / span 2;grid-column:2}
 </style>
 <style>/*NOV v1*/
 #nov{position:fixed;inset:0;z-index:90;background:rgba(20,20,20,.45);display:flex;align-items:flex-start;justify-content:center;padding:16px}
@@ -396,7 +401,7 @@ function renderPanel0(){ if(A.ok) setTimeout(novShow, 0);
   const c = S.cfg, el = $('#panel');
   if(!A.ok){ el.innerHTML = `<div class="ptop"><h1>Acceso ${esc(c.short)}</h1></div><section class="sheet"><div class="form" style="border:0"><label for="pin" style="margin-top:0">Tu clave</label><input id="pin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-a="pin">Entrar</button>${DEMO?'<p class="mut gap">En esta muestra la clave es 1234.</p>':''}</div></section>`; return; }
   if(!A.date) A.date = today();
-  const V = {home:viewHome, day:viewDay, turno:viewTurno, cancel:viewCancel, new:viewNew, pick:viewPick, confirm:viewConfirm, msg:viewMsg, set:viewSet};
+  const V = {plus:viewPlus, ficha:viewFicha, fnew:viewFichaNew, home:viewHome, day:viewDay, turno:viewTurno, cancel:viewCancel, new:viewNew, pick:viewPick, confirm:viewConfirm, msg:viewMsg, set:viewSet};
   if(['ho','co','ma','mo'].includes(A.scr)) el.innerHTML = back('set','Volver a Ajustes') + '<div style="height:14px"></div>' + ({ho:viewHoras, co:viewCobros, ma:viewMas, mo:viewModo})[A.scr]();
   else el.innerHTML = (V[A.scr]||viewHome)();
 }
@@ -419,7 +424,7 @@ function viewDay(){ const sl = slots(A.date);
 function viewTurno(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); } const fn = esc(tu.name.split(' ')[0]);
   return back(A.from==='day'?'day':'home') + `<div class="ptop" style="padding-top:12px"><h1>${esc(tu.name)}</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(cap(longDate(A.tdate)))}, ${tu.time}</p><p class="mut">${tagOf(tu)}</p></div><div class="acts" style="background:none;box-shadow:none">`
     + (tu.status==='consulta' ? `<a class="btn" href="tel:+${waNum(tu.phone)}">Llamar a ${fn}</a><button class="btn o" data-a="conf" data-id="${tu.id}">Lo tomo: confirmarle por WhatsApp</button><button class="btn del" data-a="rej" data-id="${tu.id}">No puedo tomarlo: avisarle</button>`
-      : `${tu.status==='pedido'?`<button class="btn" data-a="conf" data-id="${tu.id}">Confirmarle por WhatsApp</button>`:''}<button class="btn o" data-a="rem" data-id="${tu.id}">Recordarle por WhatsApp</button>${calBtn(tu, A.tdate)}${tu.weekly?`<button class="btn del" data-a="cask" data-v="skip">Cancelar solo este día</button><button class="btn del" data-a="del" data-id="${tu.id}">Terminar el turno fijo</button>`:`<button class="btn del" data-a="cask" data-v="del">Cancelar el turno</button>`}`) + `</div></section>`; }
+      : `${tu.status==='pedido'?`<button class="btn" data-a="conf" data-id="${tu.id}">Confirmarle por WhatsApp</button>`:''}<button class="btn o" data-a="rem" data-id="${tu.id}">Recordarle por WhatsApp</button>${calBtn(tu, A.tdate)}${tu.weekly?`<button class="btn del" data-a="cask" data-v="skip">Cancelar solo este día</button><button class="btn del" data-a="del" data-id="${tu.id}">Terminar el turno fijo</button>`:`<button class="btn del" data-a="cask" data-v="del">Cancelar el turno</button>`}`) + `</div></section>` + fichaBtn(tu); }
 function viewCancel(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); }
   return back('turno') + `<div class="ptop" style="padding-top:12px"><h1>Cancelar el turno</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(tu.name)}</p><p class="big" style="margin-top:6px">${esc(cap(longDate(A.tdate)))}, ${tu.time}</p></div></section>
     <h2 class="sec">Quién lo cancela</h2>
@@ -580,6 +585,42 @@ document.addEventListener('change', e => { const fc = e.target.dataset && e.targ
 document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.f; if(!k) return; P.f[k] = e.target.value; if(k==='cov'){ renderSite(); const el = $('#fC'); if(el) el.focus(); } });
 document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id==='pin') $('[data-a="pin"]').click(); });
 
+// ===== PLUS (Dardo 15/11): extras que se desbloquean con un pago único (= un mes). Primero: ficha de seguimiento (odontólogos) =====
+// No es historia clínica: qué se le hizo, cuándo y cuándo le toca volver. Vive en la planilla del profesional.
+let BILL = null;   // estado de cobro (lo trae el backend con "all"); en la muestra no hay
+const PLUS = {ficha:{t:'Ficha de tus pacientes', l:['Qué le hiciste y cuándo','Cuándo le toca volver, con el aviso listo','Notas tuyas por paciente']}};
+const hasPlus = k => DEMO ? !!(S.cfg.demoPlus||{})[k] : !!(BILL && (BILL.plus||[]).includes(k));
+const samePac = (a,b) => waNum(a.phone) && waNum(a.phone)===waNum(b.phone) || (!waNum(a.phone) && a.name.trim().toLowerCase()===b.name.trim().toLowerCase());
+function fichaBtn(tu){ if(RUBRO!=='odo') return ''; const fn = esc(tu.name.split(' ')[0]);
+  return hasPlus('ficha') ? `<button class="btn o w gap" data-a="fichaver">Ver ficha de ${fn}</button>`
+    : `<button class="btn w gap lockb" data-a="go" data-v="plus">Ver ficha de ${fn} <span class="ptag">PLUS</span></button>`; }
+function viewPlus(){ const p = PLUS.ficha, pr = BILL && BILL.precios && BILL.precios.plus;
+  return back('turno') + `<section class="sheet"><h2>${p.t}</h2><div class="form" style="border:0;padding-top:0"><ul class="plist">${p.l.map(x => `<li>${x}</li>`).join('')}</ul>
+    <p class="big" style="margin-top:14px">${pr ? money(pr) : 'Lo mismo que un mes de tu app'}</p><p class="mut">Pago único, lo mismo que un mes. Queda activado para siempre.</p>
+    <button class="btn w gap" data-a="plusbuy" data-v="ficha">Activar el Plus</button><button class="btn o w gap" data-a="go" data-v="turno">Ahora no</button></div></section>`; }
+function plusBuy(k, b){ if(DEMO){ S.cfg.demoPlus = Object.assign({}, S.cfg.demoPlus, {[k]:true}); save(); toast('En la muestra se activa gratis para que lo veas.'); A.scr = 'turno'; renderPanel(); } }
+function fichasDe(tu){ return (S.fichas||[]).filter(f => samePac(f, tu)).sort((a,b) => b.date.localeCompare(a.date)); }
+function viewFicha(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); } const fs = fichasDe(tu), nx = fs.find(f => f.next), fn = esc(tu.name.split(' ')[0]);
+  return back('turno') + `<div class="ptop" style="padding-top:12px"><h1>Ficha de ${esc(tu.name)}</h1></div><section class="sheet">`
+    + (fs.length ? fs.map(f => `<div class="fap"><b>${esc(shortDate(f.date))} · ${esc(f.what)}</b>${f.det?`<span class="mut">${esc(f.det)}</span>`:''}<button class="btn del sm" data-a="fichadel" data-id="${f.id}" aria-label="Borrar este registro">Borrar</button></div>`).join('') : `<p class="mut" style="padding:16px">Todavía no anotaste nada de ${fn}.</p>`)
+    + `</section>${nx ? `<p class="note">Le toca volver el ${esc(shortDate(nx.next))}${nx.what?' ('+esc(nx.what.toLowerCase())+')':''}.</p>` : ''}
+    <button class="btn w gap" data-a="go" data-v="fnew">Anotar lo que le hiciste</button>${nx && tu.phone ? `<button class="btn o w gap" data-a="fichawa">Avisarle cuándo le toca volver</button>` : ''}`; }
+function viewFichaNew(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); }
+  return back('ficha') + `<section class="sheet"><h2>Anotar en la ficha de ${esc(tu.name.split(' ')[0])}</h2><div class="form" style="border:0">
+    <label for="fiD">Fecha</label><input id="fiD" type="date" value="${A.tdate && A.tdate<=today() ? A.tdate : today()}">
+    <label for="fiW">Qué le hiciste</label><input id="fiW" type="text" maxlength="80" placeholder="Ej.: Limpieza, toxina botulínica, control de brackets">
+    <label for="fiT">Detalle (cantidad, zona, lo que quieras recordar)</label><textarea id="fiT" rows="3" maxlength="300"></textarea>
+    <label for="fiN">Cuándo le toca volver (si corresponde)</label><input id="fiN" type="date">
+    <button class="btn w gap" data-a="fichasave">Guardar en la ficha</button></div></section>`; }
+document.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if(!b || !A.ok) return; const a = b.dataset.a, tu = S.turnos.find(x => x.id===A.tid);
+  if(a==='plusbuy') plusBuy(b.dataset.v, b);
+  if(a==='fichaver'){ A.scr = 'ficha'; renderPanel(); scrollTo(0,0); }
+  if(a==='fichasave' && tu){ const w = $('#fiW').value.trim(), d = $('#fiD').value, n = $('#fiN').value; if(!w){ toast('Escribí qué le hiciste.'); $('#fiW').focus(); return; } if(n && n<=d){ toast('La fecha para volver tiene que ser después.'); return; }
+    S.fichas = (S.fichas||[]).concat([{id:uid(), name:tu.name, phone:tu.phone||'', date:d||today(), what:w, det:$('#fiT').value.trim(), next:n||''}]); save(); A.scr = 'ficha'; renderPanel(); scrollTo(0,0); toast('Guardado en la ficha.'); }
+  if(a==='fichadel'){ if(b.dataset.sure!=='1'){ b.dataset.sure = '1'; b.textContent = 'Tocá de nuevo para borrar'; return; } S.fichas = (S.fichas||[]).filter(f => f.id!==b.dataset.id); save(); renderPanel(); }
+  if(a==='fichawa' && tu){ const nx = fichasDe(tu).find(f => f.next); if(nx){ showMsg(tu, 'Aviso para volver', `Hola ${tu.name.split(' ')[0]}! Te escribo para recordarte que el ${shortDate(nx.next)} te toca volver${nx.what?' ('+nx.what.toLowerCase()+')':''}. Avisame qué día te queda bien y te doy el turno.`); A.scr = 'msg'; renderPanel(); scrollTo(0,0); } }
+});
+
 // ===== LD Odontología: dos profesionales, datos en la planilla =====
 const API = 'https://script.google.com/macros/s/AKfycbxcv-Wg40xQbjDn92_8W6i2VpEqXS3vZTsNDH_NzN2BYKyMLi3Kw2AdU8P28SN9gRof/exec';
 let CUR = null, OWN = -1, SNAP = null, LAST = 0, QUEUE = Promise.resolve();
@@ -603,14 +644,14 @@ const pick = (notes,k) => { const m = String(notes||'').split('\n').find(l => l.
 function toOrder(x, isReq){ return isReq
   ? {id:x.id, created:x.created||today(), date:x.created||today(), product:'Pedido nuevo', people:x.age||'', fill:'', delivery:x.cov||'', name:x.name, phone:x.phone||'', notes:[line('Puede',x.avail), line('Motivo',x.motivo), line('Con dolor',x.pain)].filter(Boolean).join('\n'), pay:'sin', total:0, paid:0, done:false}
   : {id:x.id, created:x.created||today(), date:x.date, product:LBL[x.status]||LBL.confirmado, people:x.age||'', fill:x.time, delivery:x.cov||'', name:x.name, phone:x.phone||'', notes:[line('Motivo',x.motivo), line('Con dolor',x.pain), line('Semanas liberadas',(x.skip||[]).join(', '))].filter(Boolean).join('\n'), pay:'sin', total:0, paid:0, done:!!x.weekly}; }
-function fromOrders(list){ const turnos = [], reqs = [];
-  list.forEach(o => { const base = {id:o.id, created:o.created, name:o.name, phone:o.phone, age:Number(o.people)||0, cov:o.delivery, motivo:pick(o.notes,'Motivo'), pain:pick(o.notes,'Con dolor')};
+function fromOrders(list){ const turnos = [], reqs = [], fichas = [];
+  list.forEach(o => { if(o.product==='Ficha'){ fichas.push({id:o.id, created:o.created, name:o.name, phone:o.phone, date:o.date, what:pick(o.notes,'Qué'), det:pick(o.notes,'Detalle'), next:o.fill||''}); return; } const base = {id:o.id, created:o.created, name:o.name, phone:o.phone, age:Number(o.people)||0, cov:o.delivery, motivo:pick(o.notes,'Motivo'), pain:pick(o.notes,'Con dolor')};
     if(o.product==='Pedido nuevo') reqs.push(Object.assign(base, {avail:pick(o.notes,'Puede')}));
     else { const st = Object.keys(LBL).find(k => LBL[k]===o.product) || 'confirmado'; const sk = pick(o.notes,'Semanas liberadas');
       turnos.push(Object.assign(base, {date:o.date, time:o.fill, mode:'Presencial', kind:st==='consulta'?'consulta':'paciente', status:st, weekly:!!o.done, skip:sk?sk.split(', '):[]})); } });
-  return {turnos, reqs}; }
-const snapOf = () => { const m = {}; S.turnos.forEach(x => m[x.id] = JSON.stringify(toOrder(x,false))); S.reqs.forEach(x => m[x.id] = JSON.stringify(toOrder(x,true))); return {m, cfg:JSON.stringify(S.cfg)}; };
-function setData(d){ const x = fromOrders(d.orders||[]); S = {cfg:proCfg(CUR, d.settings && d.settings.extra), turnos:x.turnos, reqs:x.reqs}; SNAP = snapOf(); LAST = Date.now(); }
+  return {turnos, reqs, fichas}; }
+const snapOf = () => { const m = {}; S.turnos.forEach(x => m[x.id] = JSON.stringify(toOrder(x,false))); S.reqs.forEach(x => m[x.id] = JSON.stringify(toOrder(x,true))); (S.fichas||[]).forEach(x => m[x.id] = JSON.stringify(fichaOrder(x))); return {m, cfg:JSON.stringify(S.cfg)}; };
+function setData(d){ const x = fromOrders(d.orders||[]); S = {cfg:proCfg(CUR, d.settings && d.settings.extra), turnos:x.turnos, reqs:x.reqs, fichas:x.fichas}; BILL = d.bill || null; setTimeout(plusAfterLogin, 0); SNAP = snapOf(); LAST = Date.now(); }
 function load(){}
 // guardar = mandar a la planilla solo lo que cambió
 const dirty = () => { if(!S || !SNAP) return false; const n = snapOf(); return n.cfg!==SNAP.cfg || Object.keys(n.m).some(id => n.m[id]!==SNAP.m[id]) || Object.keys(SNAP.m).some(id => !(id in n.m)); };
@@ -756,6 +797,16 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-ld="
 setInterval(() => { if(location.hash==='#avisos' && !document.hidden && AV.pin && AVL) renderAvisos(true); }, 60000);
 document.addEventListener('visibilitychange', () => { if(document.hidden) return; if(location.hash==='#avisos'){ if(AV.pin && AVL) renderAvisos(true); } else if(A.ok && A.scr==='home') refresh(); });
 fetch('https://abacus.jasoncameron.dev/hit/websemprendedores/ldodontologia' + (location.hash.length>1?'-panel':'')).catch(()=>{});
+
+// ----- PLUS en la app funcional: ficha en la planilla (producto "Ficha") y activación con Mercado Pago -----
+let PAGO_PEND = ''; { const m = location.hash.match(/&pago=(ok|error|pendiente)/); if(m){ PAGO_PEND = m[1]; history.replaceState(null, '', location.pathname + location.search + location.hash.replace(/&pago=\w+/, '')); } }
+const fichaOrder = x => ({id:x.id, created:x.created||today(), date:x.date, product:'Ficha', people:'', fill:x.next||'', delivery:'', name:x.name, phone:x.phone||'', notes:[line('Qué',x.what), line('Detalle',x.det)].filter(Boolean).join('\n')});
+async function plusBuy(k, b){ if(!BILL || !BILL.mp){ toast('Para activarlo, escribinos a @webs.emprendedores por Instagram.'); return; } b.disabled = true;
+  try{ const r = await api({a:'payLink', pin:A.pin, item:'plus', plus:k, back:location.origin + location.pathname + (location.hash.split('&')[0] || '#panel')});
+    if(r.ok && r.url){ location.href = r.url; return; } toast(r.msg || 'No se pudo armar el pago. Probá de nuevo en un rato.'); }catch(e){ toast('No hay conexión. Probá de nuevo.'); } b.disabled = false; }
+function plusAfterLogin(){ if(!PAGO_PEND || !A.pin) return; const p = PAGO_PEND; PAGO_PEND = '';
+  if(p==='error'){ toast('El pago no se completó. Podés probar de nuevo cuando quieras.'); return; }
+  api({a:'payCheck', pin:A.pin}).then(r => { if(r && r.ok){ BILL = r.bill; renderPanel(); toast((BILL.plus||[]).length ? 'Listo: el Plus quedó activado.' : 'Estamos esperando la confirmación del pago. Puede tardar unos minutos.'); } }).catch(() => {}); }
 
 // ===== Arranque =====
 function route(){ const h = location.hash.slice(1); OWN = PROS.findIndex(x => x.slug===h); const p = h==='panel' || h==='avisos' || OWN>=0; if(OWN>=0 && CUR!==OWN){ CUR = null; S = null; A.ok = false; A.pin = ''; } $('#site').hidden = p; $('#panel').hidden = !p; if(h==='avisos') renderAvisos(true); else if(p) renderPanel(); else renderSite(); scrollTo(0,0); }
