@@ -210,6 +210,13 @@ const covList = () => ['Particular'].concat(S.cfg.os.filter(o => o.on).map(o => 
 function feeLine(cov){ const c = S.cfg, o = c.os.find(x => x.n===cov); if(!cov) return ''; if(cov==='Otra obra social') return `${c.short} te confirma si trabaja con esa obra social.`; if(!c.fees.show) return '';
   if(cov==='Particular') return c.fees.part ? `Sesión particular: ${money(c.fees.part)}.` : ''; return o ? (o.plus>0 ? `Con ${o.n} se paga un adicional de ${money(o.plus)} por sesión.` : `Con ${o.n} no pagás nada aparte.`) : ''; }
 // franjas que de verdad atiende (regla 15/11: no ofrecer "Por la mañana" a quien atiende solo a la tarde)
+// Días y franjas que atiende, según los horarios cargados en el panel (Dardo 15/11: lo que ve el paciente sale de ahí)
+const ORD = [1,2,3,4,5,6,0];
+function agenda(c){ return ORD.filter(d => c.days && c.days[d] && c.days[d].on).map(d => { const x = c.days[d]; return {d, am:x.from < '13:00', pm:x.to > '13:00'}; }); }
+function diasTxt(ds){ const n = ds.map(d => ORD.indexOf(d)); if(ds.length>=3 && n.every((v,i) => !i || v===n[i-1]+1)) return WD[ds[0]]+' a '+WD[ds[ds.length-1]]; const w = ds.map(d => WD[d]); return w.length>1 ? w.slice(0,-1).join(', ')+' y '+w[w.length-1] : w[0]; }
+function agendaTxt(c){ const g = {}; agenda(c).forEach(x => { const k = x.am && x.pm ? 'de mañana y de tarde' : x.am ? 'por la mañana' : 'por la tarde'; (g[k] = g[k]||[]).push(x.d); });
+  return ['por la mañana','por la tarde','de mañana y de tarde'].filter(k => g[k]).map(k => cap(diasTxt(g[k]))+' '+k+'.').join(' '); }
+function cuandoOpts(c){ const o = []; agenda(c).forEach(x => { if(x.am) o.push({k:'d'+x.d+'am', l:cap(WD[x.d])+' por la mañana'}); if(x.pm) o.push({k:'d'+x.d+'pm', l:cap(WD[x.d])+' por la tarde'}); }); return o; }
 function franjas(c){ const on = Object.values(c.days||{}).filter(d => d && d.on); return {am: on.some(d => d.from < '13:00'), pm: on.some(d => d.to > '13:00')}; }
 function siteReq(){ const c = S.cfg, f = P.f;
   let h = `<section class="sheet"><h2>Pedí tu turno</h2><p class="sub">${c.call ? `Dejá tus datos y ${esc(c.short)} te llama para una primera charla antes de darte el turno.` : `Dejá tus datos y ${esc(c.short)} te escribe por WhatsApp con el horario.`}</p><div class="form" style="border-top:0;padding-top:0">
@@ -220,9 +227,8 @@ function siteReq(){ const c = S.cfg, f = P.f;
       + (f.covk==='Obra social' ? `<label for="fO">Cuál es tu obra social</label><input id="fO" data-f="other" type="text" value="${esc(f.other||'')}"><p class="pick">${esc(c.osNote || 'Trabajo con todas. Te confirmo la cobertura antes de darte el turno.')}</p>` : '');
   else { const fl = feeLine(f.cov); h += `<label for="fC">Obra social o particular</label><select id="fC" data-f="cov"><option value="">Elegí una opción</option>${covList().map(o => `<option ${o===f.cov?'selected':''}>${esc(o)}</option>`).join('')}</select>`
       + (f.cov==='Otra obra social' ? `<label for="fO">Cuál es tu obra social</label><input id="fO" data-f="other" type="text" value="${esc(f.other||'')}">` : '') + (fl ? `<p class="pick">${esc(fl)}</p>` : ''); }
-  const FR = franjas(c);
-  h += (FR.am && FR.pm ? `<label id="lA">Cuándo podés</label><label class="chk" style="margin-top:4px"><input type="checkbox" data-fc="am" ${f.am?'checked':''}> Por la mañana</label><label class="chk"><input type="checkbox" data-fc="pm" ${f.pm?'checked':''}> Por la tarde</label>` : '') + `
-    <label for="fD">Qué días te quedan mejor</label><input id="fD" data-f="days" type="text" placeholder="Ej.: lunes y miércoles" value="${esc(f.days||'')}">`;
+  const OP = cuandoOpts(c);
+  if(OP.length) h += `<label id="lA">Cuándo podés</label><p class="pick" style="margin:2px 0 6px">${esc(c.short)} atiende: ${esc(agendaTxt(c))}</p><p class="mut" style="margin-bottom:4px">Marcá todo lo que te quede bien.</p>${OP.map(o => `<label class="chk"><input type="checkbox" data-fc="${o.k}" ${f[o.k]?'checked':''}> ${esc(o.l)}</label>`).join('')}`;
   if(c.ask.motivo) h += `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>`;
   if(c.ask.pain) h += `<label id="lD">Estás con dolor?</label><div class="seg" role="group" aria-labelledby="lD" style="margin:0">${['Sí','No'].map(k => `<button data-a="pain" data-v="${k}" class="${f.pain===k?'on':''}" aria-pressed="${f.pain===k}">${k}</button>`).join('')}</div>`;
   return h + `<button class="btn w gap" data-a="sendreq">Pedir turno</button></div></section>`; }
@@ -404,7 +410,8 @@ document.addEventListener('click', e => {
     let cov = c.osAll ? (f.covk==='Particular' ? 'Particular' : f.covk==='Obra social' ? (f.other||'').trim() : '') : (f.cov==='Otra obra social' ? (f.other||'').trim() : (f.cov||''));
     if(!cov){ toast(f.covk==='Obra social' || f.cov==='Otra obra social' ? 'Escribí cuál es tu obra social.' : 'Elegí obra social o particular.'); return; }
     if(c.ask.pain && !f.pain){ toast('Decinos si estás con dolor.'); return; }
-    const avail = [[f.am?'por la mañana':'', f.pm?'por la tarde':''].filter(Boolean).join(' o '), (f.days||'').trim()].filter(Boolean).join('. ');
+    const OP = cuandoOpts(c), pk = OP.filter(o => f[o.k]); if(OP.length && !pk.length){ toast('Marcá cuándo podés.'); return; }
+    const avail = pk.map((o,i) => i ? o.l.toLowerCase() : o.l).join(', ');
     const r = {id:uid(), name, phone, age:c.ask.age?Number(f.age):0, cov, avail, pain:c.ask.pain?f.pain:''}; S.reqs.push(r); save(); P.last = Object.assign({req:true}, r); P.motivo = c.ask.motivo ? (f.motivo||'').trim() : ''; P.step = 'done'; P.f = {}; renderSite(); scrollTo(0,0);
     if(c.wa) location.href = waLink(c.wa, msgReq(r, P.motivo)); }
   if(a==='again'){ P.step = 'pick'; P.last = null; renderSite(); }
