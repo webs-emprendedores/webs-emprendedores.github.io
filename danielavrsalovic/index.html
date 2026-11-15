@@ -110,6 +110,7 @@ footer a{color:var(--mut)}
 .tabs{display:flex;border:2px solid var(--ink);border-radius:8px;overflow:hidden;margin-bottom:16px}
 .tabs button{flex:1;min-height:46px;padding:0 2px;border:0;background:#fff;font-weight:700;font-size:16px}
 .orow{display:grid;grid-template-columns:1fr 100px auto;gap:8px;align-items:center;padding:8px 16px;border-top:1px solid var(--line)}
+.orow.os2{display:block}.os2 .osl{display:flex;justify-content:space-between;align-items:center;gap:8px}.os2 .osc{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin:2px 0 4px 30px}
 .orow .chk{margin:0;font-weight:700}
 .orow input[type=tel]{min-height:46px;padding:6px 8px}
 .tabs button.on{background:var(--ink);color:#fff}
@@ -144,21 +145,21 @@ const DEFAULT = {
   name:'Daniela Paz', short:'Daniela', role:'Psicóloga', mono:'DP',
   lead:'Atiendo a adultos, en consultorio en Rosario y por videollamada.',
   wa:'', modes:['Presencial','Online'], place:'Zona centro, Rosario. La dirección exacta te llega al confirmar.',
-  dur:50, step:60, cancel:'Si no podés venir, avisame con 24 horas de anticipación.', fees:{part:30000, show:true},
+  dur:50, step:60, cancel:'Si no podés venir, avisame con 24 horas de anticipación.', fees:{part:30000, show:true, partOn:true},
   os:[{n:'IAPOS',on:true,plus:10000},{n:'OSDE',on:true,plus:0},{n:'Swiss Medical',on:true,plus:0},{n:'Sancor Salud',on:true,plus:8000},{n:'Medifé',on:true,plus:0},{n:'Jerárquicos Salud',on:true,plus:0},{n:'PAMI',on:false,plus:0},{n:'Galeno',on:false,plus:0}],
   days:{1:{on:true,from:'14:00',to:'20:00'},2:{on:true,from:'14:00',to:'20:00'},3:{on:true,from:'09:00',to:'13:00'},4:{on:true,from:'14:00',to:'20:00'},5:{on:true,from:'09:00',to:'13:00'},6:{on:false,from:'09:00',to:'12:00'}},
   blocked:[], blockedSlots:[],
   selfPick:true,   // true: quien entra elige un horario libre. false: deja sus datos y el profesional le da el turno
-  osAll:false,     // true: trabaja con todas las obras sociales y confirma la cobertura
+  osOther:true,    // el paciente puede escribir otra obra social que no está en la lista ("Otra")
+  q2:'',           // pregunta extra de Sí o No (ej.: Estás con dolor?). Vacía: no se pregunta
   ask:{age:true, motivo:true, pain:false},   // pain: pregunta si está con dolor (odontología)
   call:false,      // true: antes de dar el turno, el profesional llama por teléfono
-  osNote:'',       // texto que ve quien elige obra social (si está vacío: trabaja con todas)
   lic:'',          // matrícula
   title:'',        // título (Lic., Dra.): lo elige el profesional; el nombre no se cambia desde el panel
   photo:'',        // foto del profesional (archivo al lado del index); si está vacío va el monograma
   tags:[]          // especialidades o servicios, se listan bajo la presentación
 };
-Object.assign(DEFAULT, {"name": "Daniela Vrsalovic", "short": "Daniela", "role": "Psicóloga", "mono": "DV", "lead": "Atención psicológica.", "modes": ["Presencial"], "place": "", "cancel": "", "fees": {"part": 0, "show": true}, "os": [], "osAll": true, "osNote": "Te confirmo si trabajo con tu obra social.", "selfPick": false, "call": true, "title": "Lic.", "ask": {"age": true, "motivo": true, "pain": false}});
+Object.assign(DEFAULT, {"name": "Daniela Vrsalovic", "short": "Daniela", "role": "Psicóloga", "mono": "DV", "lead": "Atención psicológica.", "modes": ["Presencial"], "place": "", "cancel": "", "fees": {"part": 0, "show": true}, "os": [], "selfPick": false, "call": true, "title": "Lic.", "osOther": true});
 const WD = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const WD3 = ['dom','lun','mar','mié','jue','vie','sáb'];
 const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -190,13 +191,13 @@ function seed(){
   const turnos = [ w(0,'15:00','Marcela R.','341 555 0101','Presencial','IAPOS'), w(0,'18:00','Tomás G.','341 555 0102','Online','Particular'), w(1,'16:00','Lucía F.','341 555 0103','Presencial','OSDE'),
     w(2,'10:00','Hernán P.','341 555 0104','Presencial','Particular'), w(3,'17:00','Carla M.','341 555 0105','Online','Sancor Salud'), w(4,'11:00','Diego A.','341 555 0106','Presencial','Particular') ];
   const s = {cfg:JSON.parse(JSON.stringify(DEFAULT)), turnos, reqs:[]}; let n = 0;
-  if(!DEFAULT.selfPick) s.reqs.push({id:uid(), name:'Martín L.', phone:'341 555 0107', age:29, cov:'Particular', avail:'por la tarde. Lunes o miércoles', pain:DEFAULT.ask.pain?'Sí':'', demo:true});
+  if(!DEFAULT.selfPick) s.reqs.push({id:uid(), name:'Martín L.', phone:'341 555 0107', age:29, cov:'Particular', avail:'por la tarde. Lunes o miércoles', pain:DEFAULT.q2?'Sí':'', demo:true});
   for(let i=1;i<10 && n<2 && DEFAULT.selfPick;i++){ const d = iso(addDays(base,i)); const f = freeSlots(d, s); if(f.length>1){ s.turnos.push(n ? {id:uid(), date:d, time:f[1], name:'Sofía B.', phone:'341 555 0108', mode:'Online', cov:'Particular', kind:'paciente', status:'pedido', weekly:false, skip:[], demo:true}
       : {id:uid(), date:d, time:f[1], name:'Martín L.', phone:'341 555 0107', mode:'Presencial', cov:'IAPOS', age:29, kind:'consulta', status:'consulta', weekly:false, skip:[], demo:true}); n++; } }
   return s;
 }
 let S;
-function load(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r && r.cfg && r.cfg.os && r.cfg.ask && r.turnos){ S = r; S.reqs = S.reqs||[]; S.cfg.lic = S.cfg.lic||''; S.cfg.osNote = S.cfg.osNote||''; S.cfg.ask = {age:true, motivo:true, pain:!!DEFAULT.ask.pain}; S.cfg.call = !!S.cfg.call; S.cfg.photo = DEFAULT.photo; S.cfg.tags = S.cfg.tags||DEFAULT.tags; return; } }catch(e){} S = seed(); }
+function load(){ try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r && r.cfg && r.cfg.os && r.cfg.ask && r.turnos){ S = r; S.reqs = S.reqs||[]; S.cfg.lic = S.cfg.lic||''; normCfg(S.cfg); S.cfg.photo = DEFAULT.photo; S.cfg.tags = S.cfg.tags||DEFAULT.tags; return; } }catch(e){} S = seed(); }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
 // ===== Agenda =====
@@ -208,9 +209,23 @@ const nextDays = n => Array.from({length:n}, (_,i) => iso(addDays(new Date(), i)
 
 // ===== Página pública =====
 let P = {kind:'nuevo', mode:null, date:null, time:null, step:'pick', last:null, motivo:'', f:{}};
-const covList = () => ['Particular'].concat(S.cfg.os.filter(o => o.on).map(o => o.n)).concat(['Otra obra social']);
-function feeLine(cov){ const c = S.cfg, o = c.os.find(x => x.n===cov); if(!cov) return ''; if(cov==='Otra obra social') return `${c.short} te confirma si trabaja con esa obra social.`; if(!c.fees.show) return '';
-  if(cov==='Particular') return c.fees.part ? `${RW.Ses} particular: ${money(c.fees.part)}.` : ''; return o ? (o.plus>0 ? `Con ${o.n} se paga un adicional de ${money(o.plus)} por ${RW.ses}.` : `Con ${o.n} no pagás nada aparte.`) : ''; }
+// Configuración: completa lo que falte sin pisar lo que el profesional ya eligió (regla 15/11)
+function normCfg(c){ c.fees = Object.assign({part:0, show:true, partOn:true}, c.fees||{}); if(c.fees.partOn===undefined) c.fees.partOn = true;
+  c.os = (c.os||[]).map(o => Object.assign({n:'', on:true, plus:0}, o, {cop: o.cop!==undefined ? !!o.cop : Number(o.plus)>0}));
+  if(c.osOther===undefined) c.osOther = true; if(c.osAll){ c.osOther = true; } delete c.osAll;
+  if(!c.q2) c.q2 = c.ask && c.ask.pain ? 'Estás con dolor?' : ''; /* configuraciones viejas con la pregunta del dolor la conservan */ c.ask = {age:true, motivo:true}; c.call = !!c.call; return c; }
+normCfg(DEFAULT);
+const osOn = () => S.cfg.os.filter(o => o.on && o.n);
+// lo que puede elegir el paciente: Particular (si lo atiende), las obras sociales activadas y "Otra" (si la activó, o si no cargó ninguna)
+const covList = () => (S.cfg.fees.partOn ? ['Particular'] : []).concat(osOn().map(o => o.n)).concat(S.cfg.osOther || !osOn().length ? ['Otra obra social'] : []);
+const q2Field = f => S.cfg.q2 ? `<label id="lD">${esc(S.cfg.q2)}</label><div class="seg" role="group" aria-labelledby="lD" style="margin:0">${['Sí','No'].map(k => `<button data-a="pain" data-v="${k}" class="${f.pain===k?'on':''}" aria-pressed="${f.pain===k}">${k}</button>`).join('')}</div>` : '';
+const q2Txt = (a, c) => a && (c||S.cfg).q2 ? (c||S.cfg).q2+' '+a : '';
+const covLbl = o => o==='Otra obra social' && !osOn().length ? 'Obra social' : o==='Otra obra social' ? 'Otra' : o;
+function covField(f){ const fl = feeLine(f.cov), L = covList(); if(L.length===1 && !f.cov) f.cov = L[0];
+  return `<label for="fC">${S.cfg.fees.partOn ? 'Obra social o particular' : 'Tu obra social'}</label><select id="fC" data-f="cov">${L.length>1?'<option value="">Elegí una opción</option>':''}${L.map(o => `<option value="${esc(o)}" ${o===f.cov?'selected':''}>${esc(covLbl(o))}</option>`).join('')}</select>`
+    + (f.cov==='Otra obra social' ? `<label for="fO">Cuál es tu obra social</label><input id="fO" data-f="other" type="text" value="${esc(f.other||'')}">` : '') + (fl ? `<p class="pick">${esc(fl)}</p>` : ''); }
+function feeLine(cov){ const c = S.cfg, o = c.os.find(x => x.n===cov); if(!cov) return ''; if(cov==='Otra obra social') return `${c.short} te confirma si trabaja con tu obra social.`; if(!c.fees.show) return '';
+  if(cov==='Particular') return c.fees.part ? `${RW.Ses} particular: ${money(c.fees.part)}.` : ''; return o ? (o.cop && o.plus>0 ? `Con ${o.n} pagás un copago de ${money(o.plus)} por ${RW.ses}.` : `Con ${o.n} no pagás nada aparte.`) : ''; }
 // franjas que de verdad atiende (regla 15/11: no ofrecer "Por la mañana" a quien atiende solo a la tarde)
 // Días y franjas que atiende, según los horarios cargados en el panel (Dardo 15/11: lo que ve el paciente sale de ahí)
 const ORD = [1,2,3,4,5,6,0];
@@ -225,16 +240,13 @@ function siteReq(){ const c = S.cfg, f = P.f;
     <label for="fN" style="margin-top:0">Nombre y apellido</label><input id="fN" data-f="name" type="text" autocomplete="name" value="${esc(f.name||'')}">`;
   if(c.ask.age) h += `<label for="fE">Edad</label><input id="fE" data-f="age" type="tel" inputmode="numeric" maxlength="3" value="${esc(f.age||'')}">`;
   h += `<label for="fP">Tu WhatsApp</label><input id="fP" data-f="phone" type="tel" autocomplete="tel" placeholder="Ej.: 341 555 1234" value="${esc(f.phone||'')}">`;
-  if(c.osAll) h += `<label id="lC">Obra social o particular</label><div class="seg" role="group" aria-labelledby="lC" style="margin:0">${['Particular','Obra social'].map(k => `<button data-a="covk" data-v="${k}" class="${f.covk===k?'on':''}" aria-pressed="${f.covk===k}">${k}</button>`).join('')}</div>`
-      + (f.covk==='Obra social' ? `<label for="fO">Cuál es tu obra social</label><input id="fO" data-f="other" type="text" value="${esc(f.other||'')}"><p class="pick">${esc(c.osNote || 'Trabajo con todas. Te confirmo la cobertura antes de darte el turno.')}</p>` : '');
-  else { const fl = feeLine(f.cov); h += `<label for="fC">Obra social o particular</label><select id="fC" data-f="cov"><option value="">Elegí una opción</option>${covList().map(o => `<option ${o===f.cov?'selected':''}>${esc(o)}</option>`).join('')}</select>`
-      + (f.cov==='Otra obra social' ? `<label for="fO">Cuál es tu obra social</label><input id="fO" data-f="other" type="text" value="${esc(f.other||'')}">` : '') + (fl ? `<p class="pick">${esc(fl)}</p>` : ''); }
+  h += covField(f);
   const OP = cuandoOpts(c);
   if(OP.length) h += `<label id="lA">Cuándo podés</label><p class="pick" style="margin:2px 0 6px">${esc(c.short)} atiende: ${esc(agendaTxt(c))}</p><p class="mut" style="margin-bottom:4px">Marcá todo lo que te quede bien.</p>${OP.map(o => `<label class="chk"><input type="checkbox" data-fc="${o.k}" ${f[o.k]?'checked':''}> ${esc(o.l)}</label>`).join('')}`;
   if(c.ask.motivo) h += `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>`;
-  if(c.ask.pain) h += `<label id="lD">Estás con dolor?</label><div class="seg" role="group" aria-labelledby="lD" style="margin:0">${['Sí','No'].map(k => `<button data-a="pain" data-v="${k}" class="${f.pain===k?'on':''}" aria-pressed="${f.pain===k}">${k}</button>`).join('')}</div>`;
+  h += q2Field(f);
   return h + `<button class="btn w gap" data-a="sendreq">Pedir turno</button></div></section>`; }
-function msgReq(r, motivo){ return `Hola ${S.cfg.short}! Quiero pedir un turno.\nNombre: ${r.name}${r.age?'\nEdad: '+r.age:''}\nCobertura: ${r.cov==='Particular'?'particular':r.cov}\nPuedo: ${r.avail||'a convenir'}${motivo?'\nMotivo: '+motivo:''}${r.pain?'\nEstoy con dolor: '+r.pain.toLowerCase():''}\nMi WhatsApp: ${r.phone}`; }
+function msgReq(r, motivo){ return `Hola ${S.cfg.short}! Quiero pedir un turno.\nNombre: ${r.name}${r.age?'\nEdad: '+r.age:''}\nCobertura: ${r.cov==='Particular'?'particular':r.cov}\nPuedo: ${r.avail||'a convenir'}${motivo?'\nMotivo: '+motivo:''}${q2Txt(r.pain)?'\n'+q2Txt(r.pain):''}\nMi WhatsApp: ${r.phone}`; }
 function renderSite(){
   const c = S.cfg, f = P.f, nuevo = P.kind==='nuevo'; if(!P.mode || !c.modes.includes(P.mode)) P.mode = c.modes[0];
   const ds = nextDays(14); if(!P.date || !freeSlots(P.date).length) P.date = ds.find(d => freeSlots(d).length) || null;
@@ -264,11 +276,8 @@ function renderSite(){
       <label for="fN">Nombre y apellido</label><input id="fN" data-f="name" type="text" autocomplete="name" value="${esc(f.name||'')}">`;
       if(nuevo) h += `<label for="fE">Edad</label><input id="fE" data-f="age" type="tel" inputmode="numeric" maxlength="3" value="${esc(f.age||'')}">`;
       h += `<label for="fP">Tu WhatsApp</label><input id="fP" data-f="phone" type="tel" autocomplete="tel" placeholder="Ej.: 341 555 1234" value="${esc(f.phone||'')}">`;
-      if(nuevo){ const fl = feeLine(f.cov);
-        h += `<label for="fC">Obra social o particular</label><select id="fC" data-f="cov"><option value="">Elegí una opción</option>${covList().map(o => `<option ${o===f.cov?'selected':''}>${esc(o)}</option>`).join('')}</select>`
-          + (f.cov==='Otra obra social' ? `<label for="fO">Cuál es tu obra social</label><input id="fO" data-f="other" type="text" value="${esc(f.other||'')}">` : '')
-          + (fl ? `<p class="pick">${esc(fl)}</p>` : '')
-          + `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>`; }
+      if(nuevo){ h += covField(f)
+          + `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>` + q2Field(f); }
       h += `<button class="btn w gap" data-a="send">${nuevo?'Enviar mi consulta':'Pedir este turno'}</button><p class="mut gap">${esc(c.cancel)}</p></div>`; }
     h += `</section>`;
   }
@@ -304,7 +313,7 @@ function renderPanel(){
 }
 function viewHome(){ const td = today(), pend = listPend(), hoy = slots(td).map(t => turnoAt(td,t)).filter(Boolean);
   let h = `<div class="ptop"><h1>Tu agenda</h1></div>`;
-  if(S.reqs.length) h += `<h2 class="sec" style="margin-top:0">${S.reqs.length===1?'1 pedido nuevo':S.reqs.length+' pedidos nuevos'}</h2><section class="sheet">${S.reqs.map(r => `<div class="req"><h3 style="font-size:20px">${esc(r.name)}</h3><p class="mut">${[r.age?r.age+' años':'', esc(r.cov||''), r.avail?'Puede '+esc(r.avail):''].filter(Boolean).join('. ')}.</p>${r.pain==='Sí'?'<p class="pick" style="margin:8px 0 0">Está con dolor.</p>':''}${S.cfg.ask.motivo?'<p class="mut">El motivo de consulta te llega en el WhatsApp; acá no se guarda.</p>':''}${S.cfg.call?`<a class="btn w gap" href="tel:+${waNum(r.phone)}">Llamar a ${esc(r.name.split(' ')[0])}</a>`:''}<div class="quick gap" style="margin-bottom:0"><button class="btn ${S.cfg.call?'o':''}" data-a="reqturn" data-id="${r.id}">Darle turno</button><button class="btn del" data-a="reqrej" data-id="${r.id}">No puedo tomarlo</button></div></div>`).join('')}</section>`;
+  if(S.reqs.length) h += `<h2 class="sec" style="margin-top:0">${S.reqs.length===1?'1 pedido nuevo':S.reqs.length+' pedidos nuevos'}</h2><section class="sheet">${S.reqs.map(r => `<div class="req"><h3 style="font-size:20px">${esc(r.name)}</h3><p class="mut">${[r.age?r.age+' años':'', esc(r.cov||''), r.avail?'Puede '+esc(r.avail):''].filter(Boolean).join('. ')}.</p>${q2Txt(r.pain)?'<p class="pick" style="margin:8px 0 0">'+esc(q2Txt(r.pain))+'</p>':''}${S.cfg.ask.motivo?'<p class="mut">El motivo de consulta te llega en el WhatsApp; acá no se guarda.</p>':''}${S.cfg.call?`<a class="btn w gap" href="tel:+${waNum(r.phone)}">Llamar a ${esc(r.name.split(' ')[0])}</a>`:''}<div class="quick gap" style="margin-bottom:0"><button class="btn ${S.cfg.call?'o':''}" data-a="reqturn" data-id="${r.id}">Darle turno</button><button class="btn del" data-a="reqrej" data-id="${r.id}">No puedo tomarlo</button></div></div>`).join('')}</section>`;
   if(pend.length) h += `<h2 class="sec">Por resolver</h2><section class="sheet">${pend.map(t => rowT(t, t.date, true)).join('').replace('class="row"','class="row" style="border-top:0"')}</section>`;
   h += `<h2 class="sec">Hoy, ${esc(longDate(td))}</h2><section class="sheet">${hoy.length ? hoy.map(t => rowT(t, td)).join('').replace('class="row"','class="row" style="border-top:0"') : '<p class="empty" style="border-top:0">Hoy no tenés turnos.</p>'}</section>
     <button class="btn w" style="margin-top:22px" data-a="wnew">Anotar un turno</button><p class="hint" style="margin:8px 0 0">Para cuando arreglás el horario con alguien por teléfono o WhatsApp.</p>
@@ -330,10 +339,10 @@ function viewCancel(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.s
 function viewNew(){ const w = A.w, c = S.cfg;
   return back(w.time?'day':'home') + `<div class="ptop" style="padding-top:12px"><h1>Anotar un turno</h1></div><section class="sheet"><div class="form" style="border:0">${w.time?`<p class="pick" style="margin-top:0">${esc(cap(longDate(w.date)))}, ${w.time}</p>`:''}
     <label for="nN" ${w.time?'':'style="margin-top:0"'}>Nombre</label><input id="nN" type="text" value="${esc(w.name||'')}"><label for="nP">WhatsApp</label><input id="nP" type="tel" value="${esc(w.phone||'')}">
-    <label for="nC">Obra social o particular</label><select id="nC">${[...new Set(['Particular'].concat(c.os.filter(o => o.on).map(o => o.n), c.osAll?['Obra social']:[]))].map(o => `<option ${o===w.cov?'selected':''}>${esc(o)}</option>`).join('')}</select>
+    <label for="nC">Obra social o particular</label><select id="nC">${[...new Set(['Particular'].concat(c.os.filter(o => o.on).map(o => o.n), []))].map(o => `<option ${o===w.cov?'selected':''}>${esc(o)}</option>`).join('')}</select>
     <button class="btn w gap" data-a="wnext">${w.time?'Seguir':'Seguir: elegir día y hora'}</button></div></section>`; }
 function viewPick(){ const w = A.w, td = today(), ds = nextDays(14); if(!w.date || !freeOrAll(w.date).length) w.date = ds.find(d => freeOrAll(d).length) || '';
-  let h = back(w.req?'home':'new') + `<div class="ptop" style="padding-top:12px"><h1>Turno para ${esc(w.name)}</h1></div>${w.avail||w.pain==='Sí'?`<p class="note">${[w.pain==='Sí'?'Está con dolor.':'', w.avail?`Dijo que puede ${esc(w.avail)}.`:''].filter(Boolean).join(' ')}</p>`:''}<section class="sheet"><h2>Elegí el día y la hora</h2><p class="sub">Abajo de cada día ves cuántos horarios libres te quedan.</p>
+  let h = back(w.req?'home':'new') + `<div class="ptop" style="padding-top:12px"><h1>Turno para ${esc(w.name)}</h1></div>${w.avail||q2Txt(w.pain)?`<p class="note">${[q2Txt(w.pain), w.avail?`Dijo que puede ${esc(w.avail)}.`:''].filter(Boolean).join(' ')}</p>`:''}<section class="sheet"><h2>Elegí el día y la hora</h2><p class="sub">Abajo de cada día ves cuántos horarios libres te quedan.</p>
     <div class="days">${ds.map(d => { const dd = day(d), n = freeOrAll(d).length, at = slots(d).length; return `<button data-a="wday" data-v="${d}" class="${d===w.date?'on':''}" ${n?'':'disabled'} aria-label="${esc(longDate(d))}, ${n?n+' libres':at?'completo':'no atendés'}"><span>${d===td?'hoy':WD3[dd.getDay()]}</span><b>${dd.getDate()}</b><small>${n?n+(n===1?' libre':' libres'):at?'lleno':'no'}</small></button>`; }).join('')}</div>`;
   if(!w.date) h += `<p class="empty">No te quedan horarios libres en los próximos días.</p>`;
   else { h += `<div class="daytitle">${esc(cap(longDate(w.date)))}</div>`; const fr = freeOrAll(w.date); slots(w.date).forEach(t => { const tu = turnoAt(w.date,t); if(!tu && !isBlocked(w.date,t) && !fr.includes(t)) return;
@@ -371,15 +380,22 @@ function viewModo(){ const c = S.cfg, sp = A.mo ? A.mo.sp : c.selfPick, ca = A.m
     <label class="chk"><input type="radio" name="moS" class="moS" value="0" ${sp?'':'checked'}> Te deja sus datos y vos le das el turno</label>
     ${sp?'':`<label class="chk" style="margin-left:28px"><input type="checkbox" id="moC" ${ca?'checked':''}> Antes de darle el turno, lo llamo por teléfono</label>`}</div>
     <div class="form"><h3>Cómo atendés</h3>${['Presencial','Online'].map(m => `<label class="chk"><input type="checkbox" class="mM" value="${m}" ${md.includes(m)?'checked':''}> ${m==='Online'?'Online (videollamada)':m}</label>`).join('')}
+    </div><div class="form"><h3>Una pregunta más (si querés)</h3><p class="mut">Se responde con Sí o No y va abajo del motivo de consulta. Si la dejás vacía, no se pregunta.</p>
+    <label for="moQ">Tu pregunta</label><input id="moQ" type="text" maxlength="60" value="${esc(A.mo ? A.mo.q2 : c.q2)}" placeholder="Ej.: Estás con dolor? / Es una emergencia?">
     <button class="btn w gap" data-a="mosave">Guardar</button></div></section>`; }
 function viewCobros(){ const c = S.cfg;
-  return `<section class="sheet"><h2>Tus honorarios</h2><p class="sub">Lo que cargues acá es lo que ve quien pide una primera consulta.</p>
-    <div class="form"><label for="cP" style="margin-top:0">${RW.Ses} particular ($)</label><input id="cP" type="tel" inputmode="numeric" value="${c.fees.part||''}"><label class="chk"><input id="cS" type="checkbox" ${c.fees.show?'checked':''}> Mostrar los valores en mi página</label></div>
-    <div class="form"><h3>Obras sociales</h3><label class="chk" style="margin-top:8px"><input id="cA" type="checkbox" ${c.osAll?'checked':''}> No uso lista: me escriben cuál tienen y yo les confirmo la cobertura</label><p class="mut gap">Si preferís una lista, destildá lo de arriba y marcá con cuáles trabajás. Si con alguna cobrás un adicional por ${RW.ses}, poné el monto.</p></div>
-    ${c.os.map((o,i) => `<div class="orow"><label class="chk"><input type="checkbox" class="oOn" data-i="${i}" ${o.on?'checked':''}> ${esc(o.n)}</label><input class="oPl" data-i="${i}" type="tel" inputmode="numeric" placeholder="Adicional" aria-label="Adicional con ${esc(o.n)}" value="${o.plus||''}"><button class="btn del sm" data-a="osdel" data-v="${i}" aria-label="Quitar ${esc(o.n)}">Quitar</button></div>`).join('')}
-    <div class="form"><label for="oNew" style="margin-top:0">Agregar una obra social</label><div class="two" style="grid-template-columns:1fr auto"><input id="oNew" type="text"><button class="btn o" data-a="osadd">Agregar</button></div><button class="btn w gap" data-a="csave">Guardar honorarios</button></div></section>`; }
-function readCobros(){ const c = S.cfg, num = v => Number(String(v||'').replace(/\D/g,''))||0; c.fees.part = num($('#cP').value); c.fees.show = $('#cS').checked; c.osAll = $('#cA').checked;
-  document.querySelectorAll('.oOn').forEach(i => { const o = c.os[i.dataset.i]; o.on = i.checked; o.plus = num(document.querySelector('.oPl[data-i="'+i.dataset.i+'"]').value); }); }
+  return `<section class="sheet"><h2>Honorarios y obras sociales</h2><p class="sub">Tildá con qué atendés. Quien pide turno ve solo lo que tildes, y el monto aparece recién cuando elige.</p>
+    <div class="form"><h3>Particular</h3><label class="chk"><input id="cPo" type="checkbox" ${c.fees.partOn?'checked':''}> Atiendo particular</label>
+    <label for="cP">Valor de la ${RW.ses} particular ($)</label><input id="cP" type="tel" inputmode="numeric" value="${c.fees.part||''}"></div>
+    <div class="form"><h3>Obras sociales</h3><p class="mut">Tildá con cuáles trabajás. Si alguna tiene copago, tildalo y poné el monto.</p></div>
+    ${c.os.map((o,i) => `<div class="orow os2"><div class="osl"><label class="chk"><input type="checkbox" class="oOn" data-i="${i}" ${o.on?'checked':''}> <b>${esc(o.n)}</b></label><button class="btn del sm" data-a="osdel" data-v="${i}" aria-label="Quitar ${esc(o.n)}">Quitar</button></div>
+      <div class="osc"><label class="chk"><input type="checkbox" class="oCp" data-i="${i}" ${o.cop?'checked':''}> Copago</label><input class="oPl" data-i="${i}" type="tel" inputmode="numeric" placeholder="Monto" aria-label="Copago con ${esc(o.n)}" value="${o.plus||''}"></div></div>`).join('')}
+    <div class="form"><label for="oNew" style="margin-top:0">Agregar una obra social</label><div class="two" style="grid-template-columns:1fr auto"><input id="oNew" type="text"><button class="btn o" data-a="osadd">Agregar</button></div>
+    <label class="chk" style="margin-top:18px"><input id="cOt" type="checkbox" ${c.osOther?'checked':''}> Que el paciente pueda escribir otra obra social que no está en mi lista</label>
+    <label class="chk"><input id="cS" type="checkbox" ${c.fees.show?'checked':''}> Mostrar los montos en mi página</label>
+    <button class="btn w gap" data-a="csave">Guardar</button></div></section>`; }
+function readCobros(){ const c = S.cfg, num = v => Number(String(v||'').replace(/\D/g,''))||0; c.fees.part = num($('#cP').value); c.fees.partOn = $('#cPo').checked; c.fees.show = $('#cS').checked; c.osOther = $('#cOt').checked;
+  document.querySelectorAll('.oOn').forEach(i => { const o = c.os[i.dataset.i]; o.on = i.checked; o.cop = document.querySelector('.oCp[data-i="'+i.dataset.i+'"]').checked; o.plus = o.cop ? num(document.querySelector('.oPl[data-i="'+i.dataset.i+'"]').value) : 0; }); }
 function calLink(t, date){ const s = day(date), m = mins(t.time), f = (mm) => date.replace(/-/g,'')+'T'+pad(Math.floor(mm/60))+pad(mm%60)+'00';
   return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Turno '+t.name)+'&dates='+f(m)+'/'+f(m+S.cfg.dur)+'&details='+encodeURIComponent('WhatsApp: '+t.phone)+(t.weekly?'&recur='+encodeURIComponent('RRULE:FREQ=WEEKLY'):''); }
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1), isAndroid = /Android/i.test(navigator.userAgent);
@@ -405,9 +421,10 @@ document.addEventListener('click', e => {
     if(phone.replace(/\D/g,'').length<8){ toast('Revisá tu WhatsApp.'); $('#fP').focus(); return; }
     if(nuevo && !f.cov){ toast('Elegí obra social o particular.'); $('#fC').focus(); return; }
     if(nuevo && f.cov==='Otra obra social' && !(f.other||'').trim()){ toast('Escribí cuál es tu obra social.'); $('#fO').focus(); return; }
+    if(nuevo && c.q2 && !f.pain){ toast('Respondé: '+c.q2); return; }
     if(turnoAt(P.date,P.time)){ toast('Ese horario se acaba de ocupar. Elegí otro.'); P.time = null; renderSite(); return; }
     const t = {id:uid(), date:P.date, time:P.time, name, phone, mode:P.mode, kind:nuevo?'consulta':'paciente', status:nuevo?'consulta':'pedido', weekly:false, skip:[]};
-    if(nuevo){ t.age = Number(f.age); t.cov = f.cov==='Otra obra social' ? f.other.trim() : f.cov; }
+    if(nuevo){ t.age = Number(f.age); t.cov = f.cov==='Otra obra social' ? f.other.trim() : f.cov; if(c.q2) t.pain = f.pain; }
     S.turnos.push(t); save(); P.last = t; P.motivo = nuevo ? (f.motivo||'').trim() : ''; P.step = 'done'; P.time = null; P.f = {}; renderSite(); scrollTo(0,0);
     if(c.wa) location.href = waLink(c.wa, msgPedido(t, P.motivo)); }
   if(a==='covk'){ P.f.covk = v; renderSite(); }
@@ -416,12 +433,12 @@ document.addEventListener('click', e => {
     if(name.length<3){ toast('Falta tu nombre.'); $('#fN').focus(); return; }
     if(c.ask.age && !(Number(f.age)>0 && Number(f.age)<120)){ toast('Poné tu edad.'); $('#fE').focus(); return; }
     if(phone.replace(/\D/g,'').length<8){ toast('Revisá tu WhatsApp.'); $('#fP').focus(); return; }
-    let cov = c.osAll ? (f.covk==='Particular' ? 'Particular' : f.covk==='Obra social' ? (f.other||'').trim() : '') : (f.cov==='Otra obra social' ? (f.other||'').trim() : (f.cov||''));
-    if(!cov){ toast(f.covk==='Obra social' || f.cov==='Otra obra social' ? 'Escribí cuál es tu obra social.' : 'Elegí obra social o particular.'); return; }
-    if(c.ask.pain && !f.pain){ toast('Decinos si estás con dolor.'); return; }
+    let cov = f.cov==='Otra obra social' ? (f.other||'').trim() : (f.cov||'');
+    if(!cov){ toast(f.cov==='Otra obra social' ? 'Escribí cuál es tu obra social.' : 'Elegí obra social o particular.'); return; }
+    if(c.q2 && !f.pain){ toast('Respondé: '+c.q2); return; }
     const OP = cuandoOpts(c), pk = OP.filter(o => f[o.k]); if(OP.length && !pk.length){ toast('Marcá cuándo podés.'); return; }
     const avail = pk.map((o,i) => i ? o.l.toLowerCase() : o.l).join(', ');
-    const r = {id:uid(), name, phone, age:c.ask.age?Number(f.age):0, cov, avail, pain:c.ask.pain?f.pain:''}; S.reqs.push(r); save(); P.last = Object.assign({req:true}, r); P.motivo = c.ask.motivo ? (f.motivo||'').trim() : ''; P.step = 'done'; P.f = {}; renderSite(); scrollTo(0,0);
+    const r = {id:uid(), name, phone, age:c.ask.age?Number(f.age):0, cov, avail, pain:c.q2?f.pain:''}; S.reqs.push(r); save(); P.last = Object.assign({req:true}, r); P.motivo = c.ask.motivo ? (f.motivo||'').trim() : ''; P.step = 'done'; P.f = {}; renderSite(); scrollTo(0,0);
     if(c.wa) location.href = waLink(c.wa, msgReq(r, P.motivo)); }
   if(a==='again'){ P.step = 'pick'; P.last = null; renderSite(); }
   // panel
@@ -442,7 +459,7 @@ document.addEventListener('click', e => {
     renderPanel(); scrollTo(0,0); }
   if(a==='reqrej'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ showMsg(r, 'Aviso para '+r.name.split(' ')[0], `Hola ${r.name.split(' ')[0]}! Gracias por escribirme. En este momento no puedo tomar tu consulta. Espero que encuentres pronto un espacio.`); S.reqs = S.reqs.filter(x => x.id!==r.id); save(); A.scr = 'msg'; renderPanel(); scrollTo(0,0); } }
   if(a==='conf' || a==='rem' || a==='rej'){ const t = S.turnos.find(x => x.id===b.dataset.id); if(!t) return; const d = A.tdate, fn = t.name.split(' ')[0], o = c.os.find(x => x.n===t.cov);
-    const fee = !c.fees.show ? '' : t.cov==='Particular' ? (c.fees.part ? ` La ${RW.ses} es de ${money(c.fees.part)}.` : '') : (o && o.plus>0 ? ` Con ${o.n} hay un adicional de ${money(o.plus)} por ${RW.ses}.` : '');
+    const fee = !c.fees.show ? '' : t.cov==='Particular' ? (c.fees.part ? ` La ${RW.ses} es de ${money(c.fees.part)}.` : '') : (o && o.cop && o.plus>0 ? ` Con ${o.n} el copago es de ${money(o.plus)} por ${RW.ses}.` : '');
     if(a==='conf'){ t.status = 'confirmado'; save(); showMsg(t, 'Mensaje de confirmación', `Hola ${fn}! Te confirmo el turno ${when(d)} a las ${t.time}${modeTxt(t)}.${fee} ${c.cancel}`.trim()); }
     if(a==='rem') showMsg(t, 'Recordatorio', `Hola ${fn}! Te recuerdo tu turno ${when(d)} a las ${t.time}${modeTxt(t)}. Te espero.`);
     if(a==='rej'){ showMsg(t, 'Aviso para ' + fn, `Hola ${fn}! Gracias por escribirme. En este momento no puedo tomar tu consulta. Espero que encuentres pronto un espacio.`); S.turnos = S.turnos.filter(x => x.id!==t.id); save(); renderSite(); }
@@ -462,16 +479,16 @@ document.addEventListener('click', e => {
   if(a==='unblockday'){ c.blocked = c.blocked.filter(x => x!==A.date); save(); renderPanel(); renderSite(); }
   if(a==='hsave'){ let bad = false; document.querySelectorAll('.hOn').forEach(i => { const d = i.dataset.d, f = document.querySelector('.hF[data-d="'+d+'"]').value, t = document.querySelector('.hT[data-d="'+d+'"]').value; if(i.checked && mins(t)<=mins(f)) bad = true; c.days[d] = {on:i.checked, from:f, to:t}; });
     if(bad){ toast('Revisá: la hora de cierre tiene que ser después de la de inicio.'); return; } c.step = Number($('#hS').value); c.dur = Number($('#hD').value); save(); renderPanel(); renderSite(); toast('Horarios guardados.'); }
-  if(a==='mosave'){ const ms = [...document.querySelectorAll('.mM:checked')].map(i => i.value); if(!ms.length){ toast('Marcá al menos una forma de atender.'); return; } const s = document.querySelector('.moS:checked'); c.selfPick = !!s && s.value==='1'; c.call = !c.selfPick && !!($('#moC') && $('#moC').checked); c.modes = ms; A.mo = null; save(); renderPanel(); renderSite(); toast('Guardado.'); }
+  if(a==='mosave'){ const ms = [...document.querySelectorAll('.mM:checked')].map(i => i.value); if(!ms.length){ toast('Marcá al menos una forma de atender.'); return; } const s = document.querySelector('.moS:checked'); c.selfPick = !!s && s.value==='1'; c.call = !c.selfPick && !!($('#moC') && $('#moC').checked); c.modes = ms; c.q2 = $('#moQ').value.trim().replace(/^¿/,''); A.mo = null; save(); renderPanel(); renderSite(); toast('Guardado.'); }
   if(a==='msave'){ c.title = $('#mT').value; c.lead = $('#mD').value.trim(); c.tags = $('#mG').value.split(',').map(x => x.trim()).filter(Boolean); /* el nombre no se cambia desde el panel (regla 15/11): lo cambiamos nosotros */ c.lic = $('#mL').value.trim(); c.role = $('#mR').value.trim() || c.role; c.wa = $('#mW').value.trim(); c.place = $('#mP').value.trim(); c.cancel = $('#mC').value.trim(); save(); renderPanel(); renderSite(); toast('Guardado.'); }
-  if(a==='osadd'){ readCobros(); const n = $('#oNew').value.trim(); if(!n){ toast('Escribí el nombre de la obra social.'); return; } c.os.push({n, on:true, plus:0}); save(); renderPanel(); renderSite(); }
+  if(a==='osadd'){ readCobros(); const n = $('#oNew').value.trim(); if(!n){ toast('Escribí el nombre de la obra social.'); return; } c.os.push({n, on:true, cop:false, plus:0}); save(); renderPanel(); renderSite(); }
   if(a==='osdel'){ readCobros(); c.os.splice(Number(v),1); save(); renderPanel(); renderSite(); }
-  if(a==='csave'){ readCobros(); save(); renderPanel(); renderSite(); toast('Honorarios guardados.'); }
+  if(a==='csave'){ readCobros(); const sc = c.os.find(o => o.on && o.cop && !o.plus); if(sc){ toast('Poné el monto del copago de '+sc.n+'.'); return; } save(); renderPanel(); renderSite(); toast('Honorarios guardados.'); }
   if(a==='reset'){ S = seed(); save(); A.date = today(); A.scr = 'home'; renderPanel(); renderSite(); toast('Datos de ejemplo restaurados.'); }
   if(a==='out'){ A.ok = false; A.scr = 'home'; renderPanel(); scrollTo(0,0); }
 });
 document.addEventListener('change', e => { const fc = e.target.dataset && e.target.dataset.fc; if(fc) P.f[fc] = e.target.checked;
-  if(e.target.classList && e.target.classList.contains('moS')){ A.mo = {sp:e.target.value==='1', call:!!($('#moC') ? $('#moC').checked : S.cfg.call), modes:[...document.querySelectorAll('.mM:checked')].map(i => i.value)}; renderPanel(); } });
+  if(e.target.classList && e.target.classList.contains('moS')){ A.mo = {q2:$('#moQ') ? $('#moQ').value : S.cfg.q2, sp:e.target.value==='1', call:!!($('#moC') ? $('#moC').checked : S.cfg.call), modes:[...document.querySelectorAll('.mM:checked')].map(i => i.value)}; renderPanel(); } });
 document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.f; if(!k) return; P.f[k] = e.target.value; if(k==='cov'){ renderSite(); const el = $('#fC'); if(el) el.focus(); } });
 document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id==='pin') $('[data-a="pin"]').click(); });
 
