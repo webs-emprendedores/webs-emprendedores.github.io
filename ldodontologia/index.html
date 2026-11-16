@@ -217,7 +217,7 @@ footer a{color:var(--mut)}
 const DEMO = false;                 // muestra: nada sale de este celular
 const KEY = 'turnos_ld_v1';
 const RUBRO = 'odo';               // rubro: 'psi' (psicólogos y afines) u 'odo' (odontólogos y afines). Una sola plantilla para los dos: lo común no se desfasa
-const RW = RUBRO==='odo' ? {ses:'consulta', Ses:'Consulta', dura:'El turno dura'} : {ses:'sesión', Ses:'Sesión', dura:'La sesión dura'};
+const RW = RUBRO==='odo' ? {ses:'consulta', Ses:'Consulta', dura:'El turno dura', q2ej:'Ej.: Estás con dolor? / Es una emergencia?', tagej:'Ej.: Ortodoncia, Endodoncia'} : {ses:'sesión', Ses:'Sesión', dura:'La sesión dura', q2ej:'Ej.: Es una emergencia?', tagej:'Ej.: Ansiedad, Terapia de pareja'};
 const DEFAULT = {
   name:'Daniela Paz', short:'Daniela', role:'Psicóloga', mono:'DP',
   lead:'Atiendo a adultos, en consultorio en Rosario y por videollamada.',
@@ -258,7 +258,10 @@ const mins = t => { const p = t.split(':').map(Number); return p[0]*60+p[1]; };
 const hhmm = m => pad(Math.floor(m/60))+':'+pad(m%60);
 const uid = () => 't'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
 let toastT; function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2600); }
-function waNum(p){ let n = String(p||'').replace(/\D/g,''); if(!n) return ''; if(!n.startsWith('54')) n = '549'+n.replace(/^0/,''); return n; }
+/* WhatsApp argentino en cualquier formato -> 549 + característica + número (Dardo 16/11: que se formatee solo, por el 9). Saca +, 54, 0 y 15. */
+function waNum(p){ let n = String(p||'').replace(/\D/g,'').replace(/^00/,''); if(!n) return ''; if(n.startsWith('549') && n.length>=12) return n; if(n.startsWith('54') && n.length>10) n = n.slice(2); n = n.replace(/^0/,'');
+  if(n.length===12){ for(const i of [2,3,4]){ if(n.substr(i,2)==='15'){ n = n.slice(0,i) + n.slice(i+2); break; } } } return '549'+n; }
+const waOk = p => /^549\d{10}$/.test(waNum(p)), waShow = w => String(w||'').replace(/^549/,'');
 const waLink = (p,txt) => 'https://wa.me/'+waNum(p)+'?text='+encodeURIComponent(txt);
 const modeTxt = t => S.cfg.modes.length>1 && t.mode ? ` (${t.mode.toLowerCase()})` : '';
 
@@ -447,10 +450,10 @@ function viewHoras(){ const c = S.cfg, hs = []; for(let m=7*60;m<=22*60;m+=30) h
     <button class="btn w gap" data-a="hsave">Guardar horarios</button></div></section>`; }
 function viewMas(){ const c = S.cfg;
   return `<section class="sheet"><div class="form" style="border:0"><h3>Tus datos</h3>
-    <label for="mT">Título</label><select id="mT">${['','Lic.','Dr.','Dra.','Od.','Klgo.','Mg.'].map(x => `<option value="${x}" ${(c.title||'')===x?'selected':''}>${x||'Sin título'}</option>`).join('')}</select><p class="mut" style="margin-top:6px">Tu nombre en la página: <b>${esc(c.name)}</b>. Para cambiarlo, escribinos.</p><label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
+    <label for="mT">Título</label><input id="mT" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Lic."><p class="mut" style="margin-top:6px">Tu nombre en la página: <b>${esc(c.name)}</b>. Para cambiarlo, escribinos.</p><label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
     <label for="mL">Tu matrícula</label><input id="mL" type="text" value="${esc(c.lic)}" placeholder="Ej.: M.P. 1234">
-    <label for="mW">Tu WhatsApp (ahí te llegan los pedidos)</label><input id="mW" type="tel" value="${esc(c.wa)}" placeholder="Ej.: 341 555 1234">
-    <label for="mD">Cómo te presentás (lo primero que se lee)</label><textarea id="mD" rows="2">${esc(c.lead)}</textarea><label for="mG">Especialidades (separalas con coma)</label><input id="mG" type="text" value="${esc((c.tags||[]).join(', '))}" placeholder="Ej.: Ortodoncia, Endodoncia"><label for="mP">Dónde atendés</label><textarea id="mP" rows="2">${esc(c.place)}</textarea><label for="mC">Aviso de cancelación</label><textarea id="mC" rows="2">${esc(c.cancel)}</textarea>
+    <label for="mW">Tu WhatsApp (ahí te llegan los pedidos de turno)</label><input id="mW" type="tel" value="${esc(waShow(c.wa))}" placeholder="Ej.: 341 555 1234"><p class="mut" style="margin-top:6px">Con la característica, sin 0 ni 15. Podés copiarlo como figura en WhatsApp: la app lo acomoda sola.</p>
+    <label for="mD">Cómo te presentás (lo primero que se lee)</label><textarea id="mD" rows="2">${esc(c.lead)}</textarea><label for="mG">Especialidades (separalas con coma)</label><input id="mG" type="text" value="${esc((c.tags||[]).join(', '))}" placeholder="${RW.tagej}"><label for="mP">Dónde atendés</label><textarea id="mP" rows="2">${esc(c.place)}</textarea><label for="mC">Aviso de cancelación</label><textarea id="mC" rows="2">${esc(c.cancel)}</textarea>
     <button class="btn w gap" data-a="msave">Guardar</button></div></section>`; }
 function viewModo(){ const c = S.cfg, sp = A.mo ? A.mo.sp : c.selfPick, ca = A.mo ? A.mo.call : c.call, md = A.mo ? A.mo.modes : c.modes;
   return `<section class="sheet"><h2>Cómo das los turnos</h2><p class="sub">Tildá lo que va con tu forma de trabajar. Podés cambiarlo cuando quieras.</p>
@@ -460,7 +463,7 @@ function viewModo(){ const c = S.cfg, sp = A.mo ? A.mo.sp : c.selfPick, ca = A.m
     ${sp?'':`<label class="chk" style="margin-left:28px"><input type="checkbox" id="moC" ${ca?'checked':''}> Antes de darle el turno, lo llamo por teléfono</label>`}</div>
     <div class="form"><h3>Cómo atendés</h3>${['Presencial','Online'].map(m => `<label class="chk"><input type="checkbox" class="mM" value="${m}" ${md.includes(m)?'checked':''}> ${m==='Online'?'Online (videollamada)':m}</label>`).join('')}
     </div><div class="form"><h3>Una pregunta más (si querés)</h3><p class="mut">Se responde con Sí o No y va abajo del motivo de consulta. Si la dejás vacía, no se pregunta.</p>
-    <label for="moQ">Tu pregunta</label><input id="moQ" type="text" maxlength="60" value="${esc(A.mo ? A.mo.q2 : c.q2)}" placeholder="Ej.: Estás con dolor? / Es una emergencia?">
+    <label for="moQ">Tu pregunta</label><input id="moQ" type="text" maxlength="60" value="${esc(A.mo ? A.mo.q2 : c.q2)}" placeholder="${RW.q2ej}">
     <button class="btn w gap" data-a="mosave">Guardar</button></div></section>`; }
 function viewCobros(){ const c = S.cfg;
   return `<section class="sheet"><h2>Honorarios y obras sociales</h2><p class="sub">Tildá con qué atendés. Quien pide turno ve solo lo que tildes, y el monto aparece recién cuando elige.</p>
