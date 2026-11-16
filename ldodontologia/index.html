@@ -476,7 +476,7 @@ function siteReq(){ const c = S.cfg, f = P.f;
   if(OP.length) h += `<label id="lA">Cuándo podés</label><p class="pick" style="margin:2px 0 6px">${esc(c.short)} atiende: ${esc(agendaTxt(c))}</p><p class="mut" style="margin-bottom:4px">Marcá todo lo que te quede bien.</p>${OP.map(o => `<label class="chk"><input type="checkbox" data-fc="${o.k}" ${f[o.k]?'checked':''}> ${esc(o.l)}</label>`).join('')}`;
   if(c.ask.motivo) h += `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>`;
   h += q2Field(f);
-  return h + `<button class="btn w gap" data-a="sendreq">Pedir turno</button><p class="hint priv">Tus datos los ve solo ${esc(S.cfg.short)} y se usan para darte el turno.</p></div></section>`; }
+  return h + `<button class="btn w gap" data-a="sendreq">Pedir turno</button><p class="hint priv">Tus datos los ve solo el consultorio y se usan para darte el turno.</p></div></section>`; }
 function msgReq(r, motivo){ return `Hola! Quiero pedir un turno con ${S.cfg.name}.\nNombre: ${r.name}${r.age?'\nEdad: '+r.age:''}\nCobertura: ${r.cov==='Particular'?'particular':r.cov}\nPuedo: ${r.avail||'a convenir'}${motivo?'\nMotivo: '+motivo:''}${q2Txt(r.pain)?'\n'+q2Txt(r.pain):''}\nMi WhatsApp: ${r.phone}`; }
 function renderSite0(){
   const c = S.cfg, f = P.f, nuevo = P.kind==='nuevo'; if(!P.mode || !c.modes.includes(P.mode)) P.mode = c.modes[0];
@@ -509,7 +509,7 @@ function renderSite0(){
       h += `<label for="fP">Tu WhatsApp</label><input id="fP" data-f="phone" type="tel" autocomplete="tel" placeholder="Ej.: 341 555 1234" value="${esc(f.phone||'')}">`;
       if(nuevo){ h += covField(f)
           + `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>` + q2Field(f); }
-      h += `<button class="btn w gap" data-a="send">${nuevo?'Enviar mi consulta':'Pedir este turno'}</button><p class="hint priv">Tus datos los ve solo ${esc(c.short)} y se usan para darte el turno.</p>${c.cancel?`<p class="hint" style="margin:8px 0 0">${esc(c.cancel)}</p>`:''}</div>`; }
+      h += `<button class="btn w gap" data-a="send">${nuevo?'Enviar mi consulta':'Pedir este turno'}</button><p class="hint priv">Tus datos los ve solo el consultorio y se usan para darte el turno.</p>${c.cancel?`<p class="hint" style="margin:8px 0 0">${esc(c.cancel)}</p>`:''}</div>`; }
     h += `</section>`;
   }
   const donde = c.modes.length>1 ? (P.mode==='Online' ? 'Por videollamada.' : c.place) : (c.modes[0]==='Online' ? 'Por videollamada.' : c.place);
