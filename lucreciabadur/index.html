@@ -588,24 +588,28 @@ document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.id===
 // ===== PLUS (Dardo 15/11): extras que se desbloquean con un pago único (= un mes). Primero: ficha de seguimiento (odontólogos) =====
 // No es historia clínica: qué se le hizo, cuándo y cuándo le toca volver. Vive en la planilla del profesional.
 let BILL = null;   // estado de cobro (lo trae el backend con "all"); en la muestra no hay
-const PLUS = {ficha:{t:'Ficha de tus pacientes', l:['Qué le hiciste y cuándo','Cuándo le toca volver, con el aviso listo','Notas tuyas por paciente']}};
+// El Plus se llama igual en todos los rubros, "Gestión de pacientes" (Dardo 16/11): la base es la gestión de turnos y el Plus suma la gestión de pacientes de ESE rubro.
+// odo: qué se le hizo y cuándo vuelve. psi: lo administrativo (sesiones autorizadas por la obra social, asistencias y pagos). Sin notas clínicas.
+const PLUS = {ficha:{t:'Gestión de pacientes', l: RUBRO==='odo' ? ['Qué le hiciste a cada paciente y cuándo','Cuándo le toca volver, con el aviso listo','Notas tuyas por paciente']
+  : ['Cuántas sesiones le autorizó la obra social y cuántas le quedan','Qué sesiones pagó y cuáles debe, con el recordatorio listo','Asistencias y ausencias de cada paciente']}};
+const FB = RUBRO==='odo' ? 'Ver ficha de ' : 'Ver cuenta de ';
 const hasPlus = k => DEMO ? !!(S.cfg.demoPlus||{})[k] : !!(BILL && (BILL.plus||[]).includes(k));
 const samePac = (a,b) => waNum(a.phone) && waNum(a.phone)===waNum(b.phone) || (!waNum(a.phone) && a.name.trim().toLowerCase()===b.name.trim().toLowerCase());
-function fichaBtn(tu){ if(RUBRO!=='odo') return ''; const fn = esc(tu.name.split(' ')[0]);
-  return hasPlus('ficha') ? `<button class="btn o w gap" data-a="fichaver">Ver ficha de ${fn}</button>`
-    : `<button class="btn w gap lockb" data-a="go" data-v="plus">Ver ficha de ${fn} <span class="ptag">PLUS</span></button>`; }
+function fichaBtn(tu){ const fn = esc(tu.name.split(' ')[0]);
+  return hasPlus('ficha') ? `<button class="btn o w gap" data-a="fichaver">${FB}${fn}</button>`
+    : `<button class="btn w gap lockb" data-a="go" data-v="plus">${FB}${fn} <span class="ptag">PLUS</span></button>`; }
 function viewPlus(){ const p = PLUS.ficha, pr = BILL && BILL.precios && BILL.precios.plus;
   return back('turno') + `<section class="sheet"><h2>${p.t}</h2><div class="form" style="border:0;padding-top:0"><ul class="plist">${p.l.map(x => `<li>${x}</li>`).join('')}</ul>
     <p class="big" style="margin-top:14px">${pr ? money(pr) : 'Lo mismo que un mes de tu app'}</p><p class="mut">Pago único, lo mismo que un mes. Queda activado para siempre.</p>
     <button class="btn w gap" data-a="plusbuy" data-v="ficha">Activar el Plus</button><button class="btn o w gap" data-a="go" data-v="turno">Ahora no</button></div></section>`; }
 function plusBuy(k, b){ if(DEMO){ S.cfg.demoPlus = Object.assign({}, S.cfg.demoPlus, {[k]:true}); save(); toast('En la muestra se activa gratis para que lo veas.'); A.scr = 'turno'; renderPanel(); } }
 function fichasDe(tu){ return (S.fichas||[]).filter(f => samePac(f, tu)).sort((a,b) => b.date.localeCompare(a.date)); }
-function viewFicha(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); } const fs = fichasDe(tu), nx = fs.find(f => f.next), fn = esc(tu.name.split(' ')[0]);
+function viewFicha(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); } if(RUBRO!=='odo') return viewCuenta(tu); const fs = fichasDe(tu), nx = fs.find(f => f.next), fn = esc(tu.name.split(' ')[0]);
   return back('turno') + `<div class="ptop" style="padding-top:12px"><h1>Ficha de ${esc(tu.name)}</h1></div><section class="sheet">`
     + (fs.length ? fs.map(f => `<div class="fap"><b>${esc(shortDate(f.date))} · ${esc(f.what)}</b>${f.det?`<span class="mut">${esc(f.det)}</span>`:''}<button class="btn del sm" data-a="fichadel" data-id="${f.id}" aria-label="Borrar este registro">Borrar</button></div>`).join('') : `<p class="mut" style="padding:16px">Todavía no anotaste nada de ${fn}.</p>`)
     + `</section>${nx ? `<p class="note">Le toca volver el ${esc(shortDate(nx.next))}${nx.what?' ('+esc(nx.what.toLowerCase())+')':''}.</p>` : ''}
     <button class="btn w gap" data-a="go" data-v="fnew">Anotar lo que le hiciste</button>${nx && tu.phone ? `<button class="btn o w gap" data-a="fichawa">Avisarle cuándo le toca volver</button>` : ''}`; }
-function viewFichaNew(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); }
+function viewFichaNew(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); } if(RUBRO!=='odo') return viewCuentaNew(tu);
   return back('ficha') + `<section class="sheet"><h2>Anotar en la ficha de ${esc(tu.name.split(' ')[0])}</h2><div class="form" style="border:0">
     <label for="fiD">Fecha</label><input id="fiD" type="date" value="${A.tdate && A.tdate<=today() ? A.tdate : today()}">
     <label for="fiW">Qué le hiciste</label><input id="fiW" type="text" maxlength="80" placeholder="Ej.: Limpieza, toxina botulínica, control de brackets">
@@ -619,6 +623,41 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-a]')
     S.fichas = (S.fichas||[]).concat([{id:uid(), name:tu.name, phone:tu.phone||'', date:d||today(), what:w, det:$('#fiT').value.trim(), next:n||''}]); save(); A.scr = 'ficha'; renderPanel(); scrollTo(0,0); toast('Guardado en la ficha.'); }
   if(a==='fichadel'){ if(b.dataset.sure!=='1'){ b.dataset.sure = '1'; b.textContent = 'Tocá de nuevo para borrar'; return; } S.fichas = (S.fichas||[]).filter(f => f.id!==b.dataset.id); save(); renderPanel(); }
   if(a==='fichawa' && tu){ const nx = fichasDe(tu).find(f => f.next); if(nx){ showMsg(tu, 'Aviso para volver', `Hola ${tu.name.split(' ')[0]}! Te escribo para recordarte que el ${shortDate(nx.next)} te toca volver${nx.what?' ('+nx.what.toLowerCase()+')':''}. Avisame qué día te queda bien y te doy el turno.`); A.scr = 'msg'; renderPanel(); scrollTo(0,0); } }
+});
+
+// ----- Gestión de pacientes para psicólogos y afines: cuenta administrativa del paciente (registros k: 'aut' autorización, 'ses' sesión, 'aus' ausencia) -----
+function cuenta(tu){ const fs = fichasDe(tu), aut = fs.find(f => f.k==='aut') || null, ses = fs.filter(f => f.k==='ses'), us = aut ? ses.filter(f => f.date>=aut.date).length : 0, deb = ses.filter(f => !f.paid && f.amt>0);
+  return {fs, aut, us, quedan: aut ? Math.max(0, aut.n - us) : null, deb, debe: deb.reduce((s,f) => s + f.amt, 0)}; }
+const feeOf = tu => { const o = S.cfg.os.find(x => x.n===tu.cov); return o ? (o.cop ? o.plus : 0) : (S.cfg.fees.part||0); };
+function viewCuenta(tu){ const q = cuenta(tu), fn = esc(tu.name.split(' ')[0]), lbl = f => f.k==='aut' ? `Autorización: ${f.n} sesiones${f.next?', hasta el '+shortDate(f.next):''}` : f.k==='aus' ? 'No vino' : 'Sesión' + (f.amt>0 ? (f.paid ? `, pagó ${money(f.amt)}` : `, debe ${money(f.amt)}`) : '');
+  return back('turno') + `<div class="ptop" style="padding-top:12px"><h1>Cuenta de ${esc(tu.name)}</h1></div>
+    <section class="sheet"><div class="form" style="border:0"><h3>Obra social</h3>${q.aut ? `<p class="big">Le quedan ${q.quedan} de ${q.aut.n}</p><p class="mut">Sesiones autorizadas${q.aut.next?' hasta el '+esc(shortDate(q.aut.next)):''}. Usó ${q.us}.</p>` : `<p class="mut">Si viene por obra social, anotá cuántas sesiones le autorizaron y la app te avisa cuando le quedan pocas.</p>`}
+      <button class="btn o w gap" data-a="cnew" data-v="aut">${q.aut?'Anotar una autorización nueva':'Anotar la autorización'}</button></div></section>
+    ${q.aut && q.quedan<=2 ? `<p class="note" style="margin-top:18px">${q.quedan===0?'Ya usó todas las sesiones autorizadas.':'Le queda'+(q.quedan===1?' 1 sesión autorizada.':'n 2 sesiones autorizadas.')} Pedile la orden nueva.</p>${tu.phone?`<button class="btn o w gap" data-a="cwa" data-v="orden">Avisarle que pida la orden nueva</button>`:''}` : ''}
+    ${q.debe>0 ? `<p class="note" style="margin-top:18px">Debe ${money(q.debe)} (${q.deb.length} ${q.deb.length===1?'sesión':'sesiones'}).</p>${tu.phone?`<button class="btn o w gap" data-a="cwa" data-v="pago">Recordarle el pago</button>`:''}` : ''}
+    <button class="btn w gap" data-a="cnew" data-v="ses">Anotar una sesión</button>
+    <section class="sheet" style="margin-top:16px">${q.fs.length ? q.fs.map(f => `<div class="fap"><b>${esc(shortDate(f.date))} · ${esc(lbl(f))}</b>${f.k==='ses' && !f.paid && f.amt>0 ? `<button class="btn o sm" data-a="cpaid" data-id="${f.id}">Marcar pagada</button>` : `<button class="btn del sm" data-a="fichadel" data-id="${f.id}" aria-label="Borrar este registro">Borrar</button>`}</div>`).join('') : `<p class="mut" style="padding:16px">Todavía no anotaste nada de ${fn}.</p>`}</section>`; }
+function viewCuentaNew(tu){ const fn = esc(tu.name.split(' ')[0]), d = A.tdate && A.tdate<=today() ? A.tdate : today();
+  if(A.fk==='aut') return back('ficha') + `<section class="sheet"><h2>Autorización de ${fn}</h2><div class="form" style="border:0">
+    <label for="caN">Cuántas sesiones le autorizaron</label><input id="caN" type="tel" inputmode="numeric" maxlength="3">
+    <label for="caD">Desde qué fecha cuentan</label><input id="caD" type="date" value="${today()}">
+    <label for="caH">Hasta cuándo vale (si tiene vencimiento)</label><input id="caH" type="date">
+    <button class="btn w gap" data-a="cusave" data-v="aut">Guardar</button></div></section>`;
+  return back('ficha') + `<section class="sheet"><h2>Sesión de ${fn}</h2><div class="form" style="border:0">
+    <label for="csD">Fecha</label><input id="csD" type="date" value="${d}">
+    <label class="chk"><input type="radio" name="csV" class="csV" value="ses" checked> Vino</label><label class="chk"><input type="radio" name="csV" class="csV" value="aus"> No vino</label>
+    <label for="csM">Cuánto le corresponde pagar ($)</label><input id="csM" type="tel" inputmode="numeric" value="${feeOf(tu)||''}"><p class="mut" style="margin-top:6px">Dejalo vacío si no paga nada aparte.</p>
+    <label class="chk"><input id="csP" type="checkbox"> Ya lo pagó</label>
+    <button class="btn w gap" data-a="cusave" data-v="ses">Guardar</button></div></section>`; }
+document.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if(!b || !A.ok) return; const a = b.dataset.a, v = b.dataset.v, tu = S.turnos.find(x => x.id===A.tid); if(!tu) return; const num = x => Number(String(x||'').replace(/\D/g,''))||0;
+  const add = r => { S.fichas = (S.fichas||[]).concat([Object.assign({id:uid(), name:tu.name, phone:tu.phone||'', what:'', det:'', next:''}, r)]); save(); A.scr = 'ficha'; renderPanel(); scrollTo(0,0); toast('Guardado.'); };
+  if(a==='cnew'){ A.fk = v; A.scr = 'fnew'; renderPanel(); scrollTo(0,0); }
+  if(a==='cusave' && v==='aut'){ const n = num($('#caN').value), d = $('#caD').value || today(), h = $('#caH').value; if(!n){ toast('Escribí cuántas sesiones le autorizaron.'); $('#caN').focus(); return; } if(h && h<d){ toast('El vencimiento tiene que ser después.'); return; } add({k:'aut', date:d, n, next:h||''}); }
+  if(a==='cusave' && v==='ses'){ const k = (document.querySelector('.csV:checked')||{}).value || 'ses'; add({k, date:$('#csD').value || today(), amt:k==='ses' ? num($('#csM').value) : 0, paid:k==='ses' && $('#csP').checked}); }
+  if(a==='cpaid'){ const f = (S.fichas||[]).find(x => x.id===b.dataset.id); if(f){ f.paid = true; save(); renderPanel(); toast('Anotado como pagada.'); } }
+  if(a==='cwa'){ const q = cuenta(tu), fn = tu.name.split(' ')[0];
+    showMsg(tu, v==='pago' ? 'Recordatorio de pago' : 'Aviso de orden nueva', v==='pago' ? `Hola ${fn}! Te escribo para recordarte que ${q.deb.length===1?'quedó pendiente el pago de una sesión':'quedaron pendientes '+q.deb.length+' sesiones'}: ${money(q.debe)} en total. Cualquier cosa me avisás.`
+      : `Hola ${fn}! Te aviso que ${q.quedan===0?'ya usamos todas las sesiones que te autorizó tu obra social':'te queda'+(q.quedan===1?' 1 sesión autorizada':'n '+q.quedan+' sesiones autorizadas')+' por tu obra social'}. Para seguir sin cortes, pedí la orden nueva cuando puedas.`); A.scr = 'msg'; renderPanel(); scrollTo(0,0); }
 });
 
 // ===== Arranque =====
