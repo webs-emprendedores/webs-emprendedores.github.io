@@ -144,8 +144,8 @@ footer a{color:var(--mut)}
 #nov .ok2{margin:0 0 16px;color:#3d3d3d}
 #nov button{width:100%;min-height:52px;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
 </style>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
+<script>/*INSM*/(function(){var u=navigator.userAgent||"",I=/iPhone|iPad|iPod/.test(u)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),h=location.hash.split("&")[0],q=null;try{q=new URLSearchParams(location.search).get("app")}catch(e){}if(I&&q&&/^[\w-]+$/.test(q)&&h.length<2){history.replaceState(null,"",location.pathname+location.search+"#"+q);h="#"+q}if(I&&/^#[\w-]+$/.test(h)){if(q!==h.slice(1))history.replaceState(null,"",location.pathname+"?app="+h.slice(1)+location.hash);return}document.write('<link rel="manifest" href="manifest.json">')})();</script>
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
 .byw{margin:6px 0 0;font-size:15px}
 .byw a{color:var(--off);text-decoration:none}
@@ -200,14 +200,12 @@ footer a{color:var(--mut)}
   const say = m => { try{ toast(m); }catch(e){ alert(m); } };
   /* la app instalada abre en el panel donde se instaló */
   try{ if(SA() && location.hash.length <= 1){ const h = localStorage.getItem(HK); if(h && /^#[\w-]+$/.test(h)) location.replace(location.pathname + location.search + h); } }catch(e){}
-  function ios(){ if(!IOS) return; const m = document.querySelector('link[rel=manifest]'); if(m && location.hash.length > 1) m.remove(); }
-  ios();
   const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
   const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
   function pasos(){
     if(INAPP) return ['Primero abrila en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede instalar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Instalar la app</b>.'], true];
-    if(IOS && OTRO) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Deslizá hacia abajo y tocá <b>Agregar a inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Si no te aparece esa opción, abrí este link en Safari y repetí los pasos.'], true];
-    if(IOS) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', abajo en el medio de la pantalla.', 'Deslizá hacia abajo y tocá <b>Agregar a inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>, arriba a la derecha. Te queda el ícono junto a tus otras aplicaciones.'], false];
+    if(IOS && OTRO) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Si no te aparece esa opción, abrí este link en Safari y repetí los pasos.'], true];
+    if(IOS) return ['Instalarla en tu iPhone', ['', 'Tocá el botón de menú que está junto a la dirección (las tres rayitas o los tres puntitos).', 'Tocá <b>Compartir</b> ' + SH + '.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
     if(AND) return ['Instalarla en tu celular', ['', 'Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
     return ['Instalarla en tu computadora', ['', 'Abrí este link en Chrome o en Edge.', 'Tocá el ícono de instalar que aparece a la derecha de la dirección.', 'Si lo que querés es tenerla en el celular, abrí este mismo link desde el celular y tocá <b>Instalar la app</b>.'], true]; }
   function open(){ if(el('insD')) return; const p = pasos(), d = document.createElement('div'); d.id = 'insD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','insT');
@@ -215,14 +213,15 @@ footer a{color:var(--mut)}
     document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-ins]'); if(!t) return; if(t.dataset.ins==='x'){ d.remove(); return; }
       try{ navigator.clipboard.writeText(location.href).then(() => say('Link copiado.'), () => say('No se pudo copiar. Copialo desde la barra de direcciones.')); }catch(err){ say('No se pudo copiar. Copialo desde la barra de direcciones.'); } }); d.querySelector('[data-ins]').focus(); }
   async function go(){ try{ const h = location.hash.split('&')[0]; if(h.length > 1) localStorage.setItem(HK, h); }catch(e){}
+    if(IOS && !INAPP && document.querySelector('link[rel=manifest]') && /^#[\w-]+$/.test(location.hash.split('&')[0])){ try{ sessionStorage.setItem('ins_open', '1'); }catch(e){} location.reload(); return; }   /* iPhone: el manifest se decide al cargar */
     if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); const r = await e.userChoice; if(r && r.outcome==='accepted'){ paint(); return; } }catch(err){} DP = e; return; } open(); }
   function paint(){ const o = el('insL'); if(o) o.remove(); const p = panel(); if(!inPanel() || SA()) return;
     const l = document.createElement('button'); l.id = 'insL'; l.type = 'button'; l.textContent = IOS || AND ? 'Instalar la app en este celular' : 'Instalar la app'; l.onclick = go;
     const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling); }
   addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
   addEventListener('appinstalled', () => { DP = null; const o = el('insL'); if(o) o.remove(); say('Listo: la app quedó instalada.'); });
-  addEventListener('hashchange', () => { ios(); setTimeout(paint, 60); });
-  addEventListener('load', () => [0, 400, 1500].forEach(ms => setTimeout(paint, ms)));
+  addEventListener('hashchange', () => setTimeout(paint, 60));
+  addEventListener('load', () => { [0, 400, 1500].forEach(ms => setTimeout(paint, ms)); try{ if(sessionStorage.getItem('ins_open')){ sessionStorage.removeItem('ins_open'); setTimeout(open, 600); } }catch(e){} });
   document.addEventListener('click', () => setTimeout(() => { const c = el('cobL'), l = el('insL'); if(!!l !== (inPanel() && !SA()) || (l && c && c.nextSibling !== l)) paint(); }, 120));
 })(); /*INS fin*/
 
