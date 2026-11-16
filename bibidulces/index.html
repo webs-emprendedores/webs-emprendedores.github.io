@@ -444,7 +444,7 @@ window.addEventListener('hashchange', route);
 renderSite(); route(); pullPub();
 try{ if(location.hash!=='#panel' && !sessionStorage.getItem(KEY+'_v')){ sessionStorage.setItem(KEY+'_v','1'); hit(''); } }catch(e){}
 
-/*NOV v1*/ const NOV = null;   /* lo completa novedades.py al publicar una actualización */
+/*NOV v1*/ const NOV = {"v": "2026-11-16", "items": ["Ahora podés pagar tu app desde acá: abajo de todo en tu panel, Tu plan y pagos.", "Unos días antes de cada vencimiento te avisamos acá mismo."], "safe": "Tus pedidos y tus datos no se tocaron."};   /* lo completa novedades.py al publicar una actualización */
 function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov')) return; let k = 'nov_'+location.pathname; try{ if(localStorage.getItem(k)===NOV.v) return; }catch(e){}
   const d = document.createElement('div'); d.id = 'nov'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','novT');
   const e = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
