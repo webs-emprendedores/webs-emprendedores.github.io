@@ -36,15 +36,16 @@ button{cursor:pointer}
 /* hoja de agenda */
 .sheet{background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .sheet>h2{font-size:23px;padding:18px 16px 4px}
-.sheet>.sub{padding:0 16px 14px;color:var(--mut);font-size:17px}
+.sheet>.sub{padding:0 16px 14px;color:var(--mut);font-size:15px;font-weight:400;line-height:1.4}
 .seg{display:flex;margin:0 16px 14px;border:2px solid var(--ink);border-radius:8px;overflow:hidden}
 .seg button{flex:1;min-height:46px;border:0;background:#fff;font-weight:700}
 .seg button.on{background:var(--ink);color:#fff}
-.days{display:flex;gap:0;overflow-x:auto;border-top:1px solid var(--line);scrollbar-width:none}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border-top:1px solid var(--line)}
+.wk{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;border-top:1px solid var(--line)}.wk span{text-align:center;font-size:16px;color:var(--mut)}.wk button{min-height:48px;border:0;background:none;font-size:30px;line-height:1;color:var(--pet);cursor:pointer}.wk button:disabled{color:var(--off);cursor:default}
 .days::-webkit-scrollbar{display:none}
-.days button{flex:none;width:66px;min-height:74px;padding:8px 0 6px;border:0;border-right:1px solid var(--line);border-bottom:4px solid transparent;background:#fff;text-align:center;line-height:1.1}
-.days button b{display:block;font:600 25px Literata,Georgia,serif;margin-top:3px}
-.days button span{font-size:16px;color:var(--mut)}
+.days button{min-width:0;min-height:74px;padding:8px 0 6px;border:0;border-right:1px solid var(--line);border-bottom:4px solid transparent;background:#fff;text-align:center;line-height:1.1}
+.days button b{display:block;font:600 22px Literata,Georgia,serif;margin-top:3px}
+.days button span{font-size:15px;color:var(--mut)}.days button:last-child{border-right:0}
 .days button.on{background:var(--ambbg);border-bottom-color:var(--amb)}
 .days button:disabled{cursor:default;color:var(--off);background:#F7F9F9}
 .days button:disabled span,.days button:disabled b{color:var(--off)}
@@ -117,7 +118,8 @@ footer a{color:var(--mut)}
 .quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .note{margin:0 0 16px;padding:12px 14px;border-left:4px solid var(--amb);background:var(--ambbg)}
 .note b{display:block}
-.hint{font-size:16px;color:var(--mut);margin:-6px 0 16px}
+.hint.priv{margin:10px 0 0}
+.hint{font-size:15px;font-weight:400;line-height:1.4;color:var(--mut);margin:-6px 0 16px}
 .req{padding:14px 16px;border-top:1px solid var(--line)}
 .req:first-of-type{border-top:0}
 .hrow{display:grid;grid-template-columns:1fr 92px 92px;gap:8px;align-items:center;padding:8px 16px;border-top:1px solid var(--line)}
@@ -358,6 +360,10 @@ function dayTimes(date){ const set = new Set(slots(date)); turnosOn(date).forEac
 const isBlocked = (date,time,s) => (s||S).cfg.blockedSlots.includes(date+'|'+time);
 function freeSlots(date, s){ const now = new Date(), lim = now.getHours()*60+now.getMinutes()+120, td = today(); return slots(date,s).filter(t => !occ(date,t,0,s) && !isBlocked(date,t,s) && (date>td || (date===td && mins(t)>lim))); }
 const nextDays = n => Array.from({length:n}, (_,i) => iso(addDays(new Date(), i)));
+/* la agenda se ve de a 7 dias que entran en la pantalla; off = cuantas semanas desde hoy */
+const weekDays = off => { const o = []; for(let i=0;i<7;i++) o.push(iso(addDays(new Date(), (off||0)*7+i))); return o; };
+function weekNav(act, off, min, max){ const ds = weekDays(off), a = day(ds[0]), b = day(ds[6]), txt = a.getMonth()===b.getMonth() ? a.getDate()+' al '+b.getDate()+' de '+MES[b.getMonth()] : a.getDate()+' de '+MES[a.getMonth()].slice(0,3)+' al '+b.getDate()+' de '+MES[b.getMonth()].slice(0,3);
+  return `<div class="wk"><button data-a="${act}" data-v="-1" ${off<=min?'disabled':''} aria-label="Días anteriores">&#8249;</button><span>${txt}</span><button data-a="${act}" data-v="1" ${off>=max?'disabled':''} aria-label="Más días">&#8250;</button></div>`; }
 
 // ===== Página pública =====
 let P = {kind:'nuevo', mode:null, date:null, time:null, step:'pick', last:null, motivo:'', f:{}};
@@ -397,11 +403,11 @@ function siteReq(){ const c = S.cfg, f = P.f;
   if(OP.length) h += `<label id="lA">Cuándo podés</label><p class="pick" style="margin:2px 0 6px">${esc(c.short)} atiende: ${esc(agendaTxt(c))}</p><p class="mut" style="margin-bottom:4px">Marcá todo lo que te quede bien.</p>${OP.map(o => `<label class="chk"><input type="checkbox" data-fc="${o.k}" ${f[o.k]?'checked':''}> ${esc(o.l)}</label>`).join('')}`;
   if(c.ask.motivo) h += `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>`;
   h += q2Field(f);
-  return h + `<button class="btn w gap" data-a="sendreq">Pedir turno</button></div></section>`; }
+  return h + `<button class="btn w gap" data-a="sendreq">Pedir turno</button><p class="hint priv">Tus datos los ve solo ${esc(S.cfg.short)} y se usan para darte el turno.</p></div></section>`; }
 function msgReq(r, motivo){ return `Hola ${S.cfg.short}! Quiero pedir un turno.\nNombre: ${r.name}${r.age?'\nEdad: '+r.age:''}\nCobertura: ${r.cov==='Particular'?'particular':r.cov}\nPuedo: ${r.avail||'a convenir'}${motivo?'\nMotivo: '+motivo:''}${q2Txt(r.pain)?'\n'+q2Txt(r.pain):''}\nMi WhatsApp: ${r.phone}`; }
 function renderSite(){
   const c = S.cfg, f = P.f, nuevo = P.kind==='nuevo'; if(!P.mode || !c.modes.includes(P.mode)) P.mode = c.modes[0];
-  const ds = nextDays(14); if(!P.date || !freeSlots(P.date).length) P.date = ds.find(d => freeSlots(d).length) || null;
+  const ds = weekDays(P.wk||0); if(!P.date || !ds.includes(P.date) || !freeSlots(P.date).length) P.date = ds.find(d => freeSlots(d).length) || null;
   let h = `<header class="top">${c.photo?`<img class="pho" src="${esc(c.photo)}" alt="${esc(c.name)}" width="76" height="76">`:`<div class="mono" aria-hidden="true">${esc(c.mono)}</div>`}<div><h1>${c.title?esc(c.title)+' ':''}${esc(c.name)}</h1><p>${esc(c.role)}${c.lic?'. '+esc(c.lic):''}</p></div></header><p class="lead">${esc(c.lead)}</p>${(c.tags||[]).length?`<ul class="tags">${c.tags.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`:''}`;
   if(P.step==='done' && P.last && P.last.req){ const t = P.last;
     h += `<section class="sheet"><div class="done"><h2>Turno pedido</h2><p class="gap">${c.call ? `${esc(c.short)} te llama para una primera charla y después te da el turno.` : `${esc(c.short)} te escribe por WhatsApp para darte el turno.`}</p>
@@ -417,8 +423,8 @@ function renderSite(){
     h += `<section class="sheet"><h2>Elegí día y horario</h2><p class="sub">${nuevo ? `Elegí el horario que te queda bien. ${esc(c.short)} te lo confirma por WhatsApp.` : `Turnos de ${c.dur} minutos. Mirá los libres y pedí el tuyo.`}</p>
       <div class="seg" role="group" aria-label="Tipo de consulta">${[['nuevo','Primera consulta'],['paciente','Ya soy paciente']].map(([k,l]) => `<button data-a="kind" data-v="${k}" class="${k===P.kind?'on':''}" aria-pressed="${k===P.kind}">${l}</button>`).join('')}</div>`;
     if(c.modes.length>1) h += `<div class="seg" role="group" aria-label="Modalidad">${c.modes.map(m => `<button data-a="mode" data-v="${esc(m)}" class="${m===P.mode?'on':''}" aria-pressed="${m===P.mode}">${esc(m)}</button>`).join('')}</div>`;
-    h += `<div class="days">${ds.map(d => { const dd = day(d), n = freeSlots(d).length; return `<button data-a="day" data-v="${d}" class="${d===P.date?'on':''}" ${n?'':'disabled'} aria-label="${esc(longDate(d))}${n?'':', sin turnos'}"><span>${WD3[dd.getDay()]}</span><b>${dd.getDate()}</b></button>`; }).join('')}</div>`;
-    if(!P.date) h += `<p class="empty">No quedan turnos libres en los próximos días. Escribile a ${esc(c.short)}.</p>`;
+    h += `${weekNav('pwk', P.wk||0, 0, 3)}<div class="days">${ds.map(d => { const dd = day(d), n = freeSlots(d).length; return `<button data-a="day" data-v="${d}" class="${d===P.date?'on':''}" ${n?'':'disabled'} aria-label="${esc(longDate(d))}${n?'':', sin turnos'}"><span>${WD3[dd.getDay()]}</span><b>${dd.getDate()}</b></button>`; }).join('')}</div>`;
+    if(!P.date) h += `<p class="empty">${(P.wk||0)<3 ? 'No quedan turnos libres en estos días. Probá con la flecha de la derecha.' : 'No quedan turnos libres en estos días. Escribile a '+esc(c.short)+'.'}</p>`;
     else { h += `<div class="daytitle">${esc(cap(longDate(P.date)))}</div>`;
       slots(P.date).forEach(t => { const free = freeSlots(P.date).includes(t);
         h += free ? `<div class="row ${P.time===t?'sel':''}"><span class="t">${t}</span><span class="s">Libre</span><button class="btn sm ${P.time===t?'':'o'}" data-a="time" data-v="${t}">${P.time===t?'Elegido':'Elegir'}</button></div>`
@@ -430,7 +436,7 @@ function renderSite(){
       h += `<label for="fP">Tu WhatsApp</label><input id="fP" data-f="phone" type="tel" autocomplete="tel" placeholder="Ej.: 341 555 1234" value="${esc(f.phone||'')}">`;
       if(nuevo){ h += covField(f)
           + `<label for="fM">Motivo de consulta, en pocas palabras</label><textarea id="fM" data-f="motivo" rows="3">${esc(f.motivo||'')}</textarea>` + q2Field(f); }
-      h += `<button class="btn w gap" data-a="send">${nuevo?'Enviar mi consulta':'Pedir este turno'}</button><p class="mut gap">${esc(c.cancel)}</p></div>`; }
+      h += `<button class="btn w gap" data-a="send">${nuevo?'Enviar mi consulta':'Pedir este turno'}</button><p class="hint priv">Tus datos los ve solo ${esc(c.short)} y se usan para darte el turno.</p>${c.cancel?`<p class="hint" style="margin:8px 0 0">${esc(c.cancel)}</p>`:''}</div>`; }
     h += `</section>`;
   }
   const donde = c.modes.length>1 ? (P.mode==='Online' ? 'Por videollamada.' : c.place) : (c.modes[0]==='Online' ? 'Por videollamada.' : c.place);
@@ -472,16 +478,18 @@ function viewHome(){ const td = today(), pend = listPend(), hoy = turnosOn(td);
     <button class="btn w" style="margin-top:22px" data-a="wnew">Anotar un turno</button><p class="hint" style="margin:8px 0 0">Para cuando arreglás el horario con alguien por teléfono o WhatsApp.</p>
     <div class="quick" style="margin:22px 0 0"><button class="btn o" data-a="go" data-v="day">Ver otros días</button><button class="btn o" data-a="go" data-v="set">Ajustes</button></div>`;
   return h; }
-function viewDay(){ const sl = dayTimes(A.date);
-  let h = back('home') + `<div class="ptop" style="padding-top:12px"><h1>Tus días</h1></div><section class="sheet"><div class="days" style="border-top:0">${nextDays(14).map(d => { const dd = day(d); return `<button data-a="pday" data-v="${d}" class="${d===A.date?'on':''}" aria-label="${esc(longDate(d))}"><span>${d===today()?'hoy':WD3[dd.getDay()]}</span><b>${dd.getDate()}</b></button>`; }).join('')}</div><div class="daytitle">${esc(cap(longDate(A.date)))}</div>`;
-  if(S.cfg.blocked.includes(A.date)) h += `<p class="empty">Día bloqueado: no das turnos.</p><div class="form"><button class="btn o w" data-a="unblockday">Volver a atender este día</button></div>`;
+function viewDay(){ if(!weekDays(A.wk||0).includes(A.date)) A.wk = Math.floor(Math.round((day(A.date) - day(today())) / 86400000) / 7);   /* la semana sigue al día elegido */
+  const sl = dayTimes(A.date), past = A.date < today();
+  let h = back('home') + `<div class="ptop" style="padding-top:12px"><h1>Tus días</h1></div><section class="sheet">${weekNav('pwkd', A.wk||0, -26, 52).replace('class="wk"','class="wk" style="border-top:0"')}<div class="days">${weekDays(A.wk||0).map(d => { const dd = day(d); return `<button data-a="pday" data-v="${d}" class="${d===A.date?'on':''}" aria-label="${esc(longDate(d))}"><span>${d===today()?'hoy':WD3[dd.getDay()]}</span><b>${dd.getDate()}</b></button>`; }).join('')}</div><div class="daytitle">${esc(cap(longDate(A.date)))}</div>`;
+  if(past){ const ts = turnosOn(A.date); h += ts.length ? ts.map(t => rowT(t, A.date)).join('') : `<p class="empty">Ese día no tuviste turnos.</p>`; }
+  else if(S.cfg.blocked.includes(A.date)) h += `<p class="empty">Día bloqueado: no das turnos.</p><div class="form"><button class="btn o w" data-a="unblockday">Volver a atender este día</button></div>`;
   else if(!sl.length) h += `<p class="empty">Este día no atendés. Lo cambiás en Ajustes, Mis horarios.</p>`;
   else { sl.forEach(t => { const tu = turnoAt(A.date,t), key = A.date+'|'+t, cv = tu ? null : covAt(A.date,t);
       h += tu ? rowT(tu, A.date) : cv ? `<div class="row off"><span class="t">${t}</span><span class="s">Sigue ${esc(cv.name.split(' ')[0])}, hasta las ${endOf(cv)}</span><span></span></div>` : isBlocked(A.date,t) ? `<div class="row off"><span class="t">${t}</span><span class="s">Bloqueado</span><button class="btn o sm" data-a="unblock" data-v="${key}">Liberar</button></div>` : `<div class="row"><span class="t">${t}</span><span class="s">Libre</span><button class="btn sm" data-a="wnew" data-v="${key}">Anotar</button></div>`; });
     h += `<div class="form"><button class="btn o w" data-a="blockday">No atiendo este día</button></div>`; }
   return h + `</section>`; }
 function viewTurno(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); } const fn = esc(tu.name.split(' ')[0]);
-  return back(A.from==='day'?'day':'home') + `<div class="ptop" style="padding-top:12px"><h1>${esc(tu.name)}</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(cap(longDate(A.tdate)))}, ${tu.time} a ${endOf(tu)}</p><p class="mut">${tagOf(tu)}</p><label for="tD">Cuánto dura este turno</label><div class="durrow"><select id="tD">${durOpts(durOf(tu))}</select><button class="btn o" data-a="tdur" data-id="${tu.id}">Guardar</button></div></div><div class="acts" style="background:none;box-shadow:none">`
+  return back(A.from==='day'?'day':'home') + `<div class="ptop" style="padding-top:12px"><h1>${esc(tu.name)}</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(cap(longDate(A.tdate)))}, ${tu.time} a ${endOf(tu)}</p><p class="mut">${tagOf(tu)}</p><label for="tD">Cuánto dura este turno</label><div class="durrow"><select id="tD">${durOpts(durOf(tu))}</select><button class="btn o" data-a="tdur" data-id="${tu.id}">Guardar</button></div><p class="hint" id="durW" data-d="${A.tdate}" data-t="${tu.time}" style="margin:6px 0 0">${overTxt(A.tdate, tu.time, durOf(tu))}</p></div><div class="acts" style="background:none;box-shadow:none">`
     + (tu.status==='consulta' ? `<a class="btn" href="tel:+${waNum(tu.phone)}">Llamar a ${fn}</a><button class="btn o" data-a="conf" data-id="${tu.id}">Lo tomo: confirmarle por WhatsApp</button><button class="btn del" data-a="rej" data-id="${tu.id}">No puedo tomarlo: avisarle</button>`
       : `${tu.status==='pedido'?`<button class="btn" data-a="conf" data-id="${tu.id}">Confirmarle por WhatsApp</button>`:''}<button class="btn o" data-a="rem" data-id="${tu.id}">Recordarle por WhatsApp</button>${calBtn(tu, A.tdate)}${tu.weekly?`<button class="btn del" data-a="cask" data-v="skip">Cancelar solo este día</button><button class="btn del" data-a="del" data-id="${tu.id}">Terminar el turno fijo</button>`:`<button class="btn del" data-a="cask" data-v="del">Cancelar el turno</button>`}`) + `</div></section>` + fichaBtn(tu); }
 function viewCancel(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.scr = 'home'; return viewHome(); }
@@ -492,19 +500,20 @@ function viewCancel(){ const tu = S.turnos.find(x => x.id===A.tid); if(!tu){ A.s
 function viewNew(){ const w = A.w, c = S.cfg;
   return back(w.time?'day':'home') + `<div class="ptop" style="padding-top:12px"><h1>Anotar un turno</h1></div><section class="sheet"><div class="form" style="border:0">${w.time?`<p class="pick" style="margin-top:0">${esc(cap(longDate(w.date)))}, ${w.time}</p>`:''}
     <label for="nN" ${w.time?'':'style="margin-top:0"'}>Nombre</label><input id="nN" type="text" value="${esc(w.name||'')}"><label for="nP">WhatsApp</label><input id="nP" type="tel" value="${esc(w.phone||'')}">
-    <label for="nC">Obra social o particular</label><select id="nC">${[...new Set(['Particular'].concat(c.os.filter(o => o.on).map(o => o.n), []))].map(o => `<option ${o===w.cov?'selected':''}>${esc(o)}</option>`).join('')}</select>
+    <label for="nC">Obra social o particular</label><select id="nC">${(() => { const l = [...new Set(['Particular'].concat(c.os.filter(o => o.on).map(o => o.n)))], otra = !!w.cov && !l.includes(w.cov); return l.map(o => `<option ${o===w.cov?'selected':''}>${esc(o)}</option>`).join('') + `<option value="__otra" ${otra?'selected':''}>Otra obra social</option></select><input id="nO" type="text" aria-label="Cuál obra social" placeholder="Cuál" style="margin-top:8px" value="${otra?esc(w.cov):''}" ${otra?'':'hidden'}>`; })()}
     <button class="btn w gap" data-a="wnext">${w.time?'Seguir':'Seguir: elegir día y hora'}</button></div></section>`; }
-function viewPick(){ const w = A.w, td = today(), ds = nextDays(14); if(!w.date || !freeOrAll(w.date).length) w.date = ds.find(d => freeOrAll(d).length) || '';
-  let h = back(w.req?'home':'new') + `<div class="ptop" style="padding-top:12px"><h1>Turno para ${esc(w.name)}</h1></div>${w.avail||q2Txt(w.pain)?`<p class="note">${[q2Txt(w.pain), w.avail?`Dijo que puede ${esc(w.avail)}.`:''].filter(Boolean).join(' ')}</p>`:''}<section class="sheet"><h2>Elegí el día y la hora</h2><p class="sub">Abajo de cada día ves cuántos horarios libres te quedan.</p>
-    <div class="days">${ds.map(d => { const dd = day(d), n = freeOrAll(d).length, at = slots(d).length; return `<button data-a="wday" data-v="${d}" class="${d===w.date?'on':''}" ${n?'':'disabled'} aria-label="${esc(longDate(d))}, ${n?n+' libres':at?'completo':'no atendés'}"><span>${d===td?'hoy':WD3[dd.getDay()]}</span><b>${dd.getDate()}</b><small>${n?n+(n===1?' libre':' libres'):at?'lleno':'no'}</small></button>`; }).join('')}</div>`;
-  if(!w.date) h += `<p class="empty">No te quedan horarios libres en los próximos días.</p>`;
+function viewPick(){ const w = A.w, td = today(), ds = weekDays(w.wk||0); if(!w.date || !ds.includes(w.date) || !freeOrAll(w.date).length) w.date = ds.find(d => freeOrAll(d).length) || '';
+  let h = back(w.req?'home':'new') + `<div class="ptop" style="padding-top:12px"><h1>Turno para ${esc(w.name)}</h1></div>${w.avail||q2Txt(w.pain)?`<p class="note">${[q2Txt(w.pain), w.avail?`Dijo que puede ${esc(w.avail)}.`:''].filter(Boolean).join(' ')}</p>`:''}<section class="sheet"><h2>Elegí el día y la hora</h2><p class="sub">El número de abajo es la cantidad de horarios libres.</p>
+    ${weekNav('pwkw', w.wk||0, 0, 26)}<div class="days">${ds.map(d => { const dd = day(d), n = freeOrAll(d).length, at = slots(d).length; return `<button data-a="wday" data-v="${d}" class="${d===w.date?'on':''}" ${n?'':'disabled'} aria-label="${esc(longDate(d))}, ${n?n+' libres':at?'completo':'no atendés'}"><span>${d===td?'hoy':WD3[dd.getDay()]}</span><b>${dd.getDate()}</b><small>${n?n:at?'0':'&ndash;'}</small></button>`; }).join('')}</div>`;
+  if(!w.date) h += `<p class="empty">No te quedan horarios libres en estos días. Probá con la flecha de la derecha.</p>`;
   else { h += `<div class="daytitle">${esc(cap(longDate(w.date)))}</div>`; const fr = freeOrAll(w.date); dayTimes(w.date).forEach(t => { const tu = turnoAt(w.date,t), cv = tu ? null : covAt(w.date,t); if(!tu && !cv && !isBlocked(w.date,t) && !fr.includes(t)) return;
       h += tu ? `<div class="row off"><span class="t">${t}</span><span class="s">${esc(tu.name)}${durOf(tu)!==S.cfg.dur?', hasta las '+endOf(tu):''}</span><span></span></div>` : cv ? `<div class="row off"><span class="t">${t}</span><span class="s">Sigue ${esc(cv.name.split(' ')[0])}</span><span></span></div>` : isBlocked(w.date,t) ? `<div class="row off"><span class="t">${t}</span><span class="s">Bloqueado</span><span></span></div>` : `<div class="row"><span class="t">${t}</span><span class="s">Libre</span><button class="btn sm" data-a="wtime" data-v="${t}">Elegir</button></div>`; }); }
   return h + `</section>`; }
+function overTxt(date, time, dur){ const c = S.cfg.days[day(date).getDay()], a = mins(time), r = ranges(c).find(x => a >= x[0] && a < x[1]); return r && a + dur > r[1] ? 'Con esa duración termina a las '+hhmm(a + dur)+'. Tu horario es hasta las '+hhmm(r[1])+'.' : ''; }
 const durOpts = sel => [...new Set(DURS.concat([S.cfg.dur, sel]))].sort((a,b) => a-b).map(v => `<option value="${v}" ${v===sel?'selected':''}>${durTxt(v)}${v===S.cfg.dur?' (lo habitual)':''}</option>`).join('');
 function viewConfirm(){ const w = A.w;
   return back(w.req || !w.fromDay ? 'pick' : 'new') + `<div class="ptop" style="padding-top:12px"><h1>Revisá y guardá</h1></div><section class="sheet"><div class="form" style="border:0"><p class="big">${esc(w.name)}</p><p class="big" style="margin-top:6px">${esc(cap(longDate(w.date)))}, ${w.time}</p>
-    <label for="nD">Cuánto dura este turno</label><select id="nD">${durOpts(S.cfg.dur)}</select><p class="hint" style="margin:6px 0 0">Si es algo más largo, cambialo acá y la agenda te guarda ese tiempo.</p>
+    <label for="nD">Cuánto dura este turno</label><select id="nD">${durOpts(S.cfg.dur)}</select><p class="hint" id="durW" data-d="${w.date}" data-t="${w.time}" style="margin:6px 0 0">${overTxt(w.date, w.time, S.cfg.dur)}</p>
     <label class="chk" style="margin-top:18px"><input id="nW" type="checkbox"> Turno fijo: repetir todas las semanas</label><button class="btn w gap" data-a="wsave">Guardar turno</button></div></section>`; }
 function viewMsg(){ const m = A.msg; if(!m){ A.scr = 'home'; return viewHome(); }
   return `<div class="ptop"><h1>${esc(m.title)}</h1></div><p class="note">Ya está escrito. Tocá “Abrir WhatsApp” y enviáselo.${m.demo?' <b style="margin-top:6px">Es una persona de ejemplo</b>Su número no existe, así que WhatsApp no lo va a encontrar.':''}</p><div class="bubble" style="margin:0 0 18px">${esc(m.text)}</div><a class="btn w" target="_blank" rel="noopener" href="${esc(m.href)}">Abrir WhatsApp</a><button class="btn o w gap" data-a="msgx">Listo, volver a mi agenda</button>`; }
@@ -573,6 +582,7 @@ document.addEventListener('click', e => {
   // página
   if(a==='mode'){ P.mode = v; renderSite(); }
   if(a==='day'){ P.date = v; P.time = null; renderSite(); }
+  if(a==='pwk'){ P.wk = Math.max(0, Math.min(3, (P.wk||0) + Number(v))); P.date = null; P.time = null; renderSite(); }
   if(a==='time'){ P.time = v; renderSite(); const d = $('#datos'); if(d) d.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth', block:'start'}); }
   if(a==='kind'){ P.kind = v; renderSite(); }
   if(a==='send'){ const f = P.f, nuevo = P.kind==='nuevo', name = (f.name||'').trim(), phone = (f.phone||'').trim();
@@ -603,10 +613,12 @@ document.addEventListener('click', e => {
   if(a==='pin'){ login($('#pin').value.trim(), b); }
   if(a==='go'){ A.scr = v; A.mo = null; if(v==='home'){ A.w = null; A.msg = null; } renderPanel(); scrollTo(0,0); }
   if(a==='pday'){ A.date = v; renderPanel(); }
+  if(a==='pwkd'){ A.wk = Math.max(-26, Math.min(52, (A.wk||0) + Number(v))); A.date = weekDays(A.wk)[0]; renderPanel(); }
+  if(a==='pwkw'){ A.w.wk = Math.max(0, Math.min(26, (A.w.wk||0) + Number(v))); A.w.date = ''; renderPanel(); }
   if(a==='tdur'){ const t = S.turnos.find(x => x.id===b.dataset.id); if(!t) return; const d = Number($('#tD').value) || c.dur, o = occ(A.tdate, t.time, d, S, t.id); if(o){ toast('Con esa duración se pisa con el turno de las '+o.time+'. Elegí una más corta.'); return; } t.dur = d; save(); renderPanel(); renderSite(); toast('Duración guardada.'); }
   if(a==='tsee'){ A.tid = b.dataset.id; A.tdate = v; A.from = A.scr; A.scr = 'turno'; renderPanel(); scrollTo(0,0); }
   if(a==='wnew'){ const p = (v||'').split('|'); A.w = {name:'', phone:'', cov:'Particular', date:p[0]||'', time:p[1]||'', fromDay:!!p[1]}; A.scr = 'new'; renderPanel(); scrollTo(0,0); }
-  if(a==='wnext'){ const name = $('#nN').value.trim(); if(name.length<2){ toast('Falta el nombre.'); $('#nN').focus(); return; } Object.assign(A.w, {name, phone:$('#nP').value.trim(), cov:$('#nC').value}); A.scr = A.w.time ? 'confirm' : 'pick'; renderPanel(); scrollTo(0,0); }
+  if(a==='wnext'){ const name = $('#nN').value.trim(); if(name.length<2){ toast('Falta el nombre.'); $('#nN').focus(); return; } const cv = $('#nC').value==='__otra' ? $('#nO').value.trim() : $('#nC').value; if(!cv){ toast('Escribí cuál es la obra social.'); $('#nO').focus(); return; } Object.assign(A.w, {name, phone:$('#nP').value.trim(), cov:cv}); A.scr = A.w.time ? 'confirm' : 'pick'; renderPanel(); scrollTo(0,0); }
   if(a==='reqturn'){ const r = S.reqs.find(x => x.id===b.dataset.id); if(r){ A.w = {name:r.name, phone:r.phone, cov:r.cov, avail:r.avail, pain:r.pain, age:r.age, motivo:r.motivo, req:r.id, date:'', time:''}; A.scr = 'pick'; renderPanel(); scrollTo(0,0); } }
   if(a==='wday'){ A.w.date = v; renderPanel(); }
   if(a==='wtime'){ A.w.time = v; A.scr = 'confirm'; renderPanel(); scrollTo(0,0); }
@@ -647,7 +659,7 @@ document.addEventListener('click', e => {
   if(a==='reset'){ S = seed(); save(); A.date = today(); A.scr = 'home'; renderPanel(); renderSite(); toast('Datos de ejemplo restaurados.'); }
   if(a==='out'){ A.pin = ''; A.ok = false; S.turnos = []; S.reqs = []; loadSlots(); A.scr = 'home'; renderPanel(); scrollTo(0,0); }
 });
-document.addEventListener('change', e => { const t = e.target; if(!t || !t.classList) return; if(t.classList.contains('hOn2')) t.closest('.hrow').classList.toggle('on', t.checked); if(t.classList.contains('hOn')){ const r = document.querySelector('.hrow.h2[data-d="'+t.dataset.d+'"]'); if(r) r.classList.toggle('hid', !t.checked); } });
+document.addEventListener('change', e => { const t = e.target; if(!t || !t.classList) return; if(t.id==='nC'){ const o = document.getElementById('nO'); if(o){ o.hidden = t.value!=='__otra'; if(!o.hidden) o.focus(); } } if(t.id==='nD' || t.id==='tD'){ const w = document.getElementById('durW'); if(w) w.textContent = overTxt(w.dataset.d, w.dataset.t, Number(t.value)); } if(t.classList.contains('hOn2')) t.closest('.hrow').classList.toggle('on', t.checked); if(t.classList.contains('hOn')){ const r = document.querySelector('.hrow.h2[data-d="'+t.dataset.d+'"]'); if(r) r.classList.toggle('hid', !t.checked); } });
 document.addEventListener('change', e => { const fc = e.target.dataset && e.target.dataset.fc; if(fc) P.f[fc] = e.target.checked;
   if(e.target.classList && e.target.classList.contains('moS')){ A.mo = {q2:$('#moQ') ? $('#moQ').value : S.cfg.q2, sp:e.target.value==='1', call:!!($('#moC') ? $('#moC').checked : S.cfg.call), modes:[...document.querySelectorAll('.mM:checked')].map(i => i.value)}; renderPanel(); } });
 document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.f; if(!k) return; P.f[k] = e.target.value; if(k==='cov'){ renderSite(); const el = $('#fC'); if(el) el.focus(); } });
