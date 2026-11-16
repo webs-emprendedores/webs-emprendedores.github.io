@@ -116,6 +116,7 @@ body.admin #site{display:none} body.admin #panel{display:block}
 <style>/*COB v1*/
 #cobB{margin:0;padding:14px 16px;background:#fff3cd;color:#3d2f00;font-size:17px;line-height:1.4;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 #cobB.p{background:#fde8e6;color:#5c1410}
+#cobS{margin:0;padding:8px 16px;background:#f4f4f2;color:#4a4a4a;font-size:14px;line-height:1.3;text-align:center}
 #cobB b{font-weight:700}#cobB span{flex:1 1 200px}
 #cobB button{min-height:48px;padding:0 16px;border:0;border-radius:10px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;cursor:pointer}
 #cobL{display:block;width:calc(100% - 32px);max-width:560px;margin:24px auto 40px;min-height:52px;border:2px solid #4a4a4a;border-radius:12px;background:#fff;color:#1d1d1d;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
@@ -129,6 +130,18 @@ body.admin #site{display:none} body.admin #panel{display:block}
 #cobD button small{display:block;font-weight:400;font-size:15px;opacity:.9}
 #cobD button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
 #cobD button:disabled{opacity:.6}
+</style>
+<style>/*INS v1*/
+#insL{display:block;width:calc(100% - 32px);max-width:560px;margin:16px auto 40px;min-height:52px;border:2px solid #4a4a4a;border-radius:12px;background:#fff;color:#1d1d1d;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
+#cobL + #insL{margin-top:-24px}
+#insD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
+#insD .ib{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
+#insD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
+#insD ol{margin:0 0 6px;padding:0 0 0 24px}#insD li{margin:0 0 12px;color:#2b2b2b}
+#insD svg{width:22px;height:22px;vertical-align:-5px;margin:0 2px}
+#insD p{margin:0 0 12px;color:#4a4a4a;font-size:16px}
+#insD button{display:block;width:100%;min-height:56px;margin:10px 0 0;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
+#insD button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
 </style>
 </head>
 <body>
@@ -207,12 +220,46 @@ body.admin #site{display:none} body.admin #panel{display:block}
 <div id="toast"></div>
 
 <script>
+/*INS v1*/ (function(){ let DP = null; const el = id => document.getElementById(id), ua = navigator.userAgent || '';
+  const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
+  const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const HK = 'ins_h_' + location.pathname, vis = e => !!e && !e.hidden && e.getClientRects().length > 0, panel = () => [el('app'), el('panel')].find(vis), inPanel = () => !!panel();   /* también en la pantalla de la clave */
+  const say = m => { try{ toast(m); }catch(e){ alert(m); } };
+  /* la app instalada abre en el panel donde se instaló */
+  try{ if(SA() && location.hash.length <= 1){ const h = localStorage.getItem(HK); if(h && /^#[\w-]+$/.test(h)) location.replace(location.pathname + location.search + h); } }catch(e){}
+  function ios(){ if(!IOS) return; const m = document.querySelector('link[rel=manifest]'); if(m && location.hash.length > 1) m.remove(); }
+  ios();
+  const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
+  const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
+  function pasos(){
+    if(INAPP) return ['Primero abrila en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede instalar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Instalar la app</b>.'], true];
+    if(IOS && OTRO) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Deslizá hacia abajo y tocá <b>Agregar a inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Si no te aparece esa opción, abrí este link en Safari y repetí los pasos.'], true];
+    if(IOS) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', abajo en el medio de la pantalla.', 'Deslizá hacia abajo y tocá <b>Agregar a inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>, arriba a la derecha. Te queda el ícono junto a tus otras aplicaciones.'], false];
+    if(AND) return ['Instalarla en tu celular', ['', 'Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
+    return ['Instalarla en tu computadora', ['', 'Abrí este link en Chrome o en Edge.', 'Tocá el ícono de instalar que aparece a la derecha de la dirección.', 'Si lo que querés es tenerla en el celular, abrí este mismo link desde el celular y tocá <b>Instalar la app</b>.'], true]; }
+  function open(){ if(el('insD')) return; const p = pasos(), d = document.createElement('div'); d.id = 'insD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','insT');
+    d.innerHTML = '<div class="ib"><h2 id="insT">' + p[0] + '</h2>' + (p[1][0] ? '<p>' + p[1][0] + '</p>' : '') + '<ol>' + p[1].slice(1).map(x => '<li>' + x + '</li>').join('') + '</ol>' + (p[2] ? '<button type="button" data-ins="c">Copiar el link</button>' : '') + '<button type="button" class="o" data-ins="x">Cerrar</button></div>';
+    document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-ins]'); if(!t) return; if(t.dataset.ins==='x'){ d.remove(); return; }
+      try{ navigator.clipboard.writeText(location.href).then(() => say('Link copiado.'), () => say('No se pudo copiar. Copialo desde la barra de direcciones.')); }catch(err){ say('No se pudo copiar. Copialo desde la barra de direcciones.'); } }); d.querySelector('[data-ins]').focus(); }
+  async function go(){ try{ const h = location.hash.split('&')[0]; if(h.length > 1) localStorage.setItem(HK, h); }catch(e){}
+    if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); const r = await e.userChoice; if(r && r.outcome==='accepted'){ paint(); return; } }catch(err){} DP = e; return; } open(); }
+  function paint(){ const o = el('insL'); if(o) o.remove(); const p = panel(); if(!inPanel() || SA()) return;
+    const l = document.createElement('button'); l.id = 'insL'; l.type = 'button'; l.textContent = IOS || AND ? 'Instalar la app en este celular' : 'Instalar la app'; l.onclick = go;
+    const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling); }
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
+  addEventListener('appinstalled', () => { DP = null; const o = el('insL'); if(o) o.remove(); say('Listo: la app quedó instalada.'); });
+  addEventListener('hashchange', () => { ios(); setTimeout(paint, 60); });
+  addEventListener('load', () => [0, 400, 1500].forEach(ms => setTimeout(paint, ms)));
+  document.addEventListener('click', () => setTimeout(() => { const c = el('cobL'), l = el('insL'); if(!!l !== (inPanel() && !SA()) || (l && c && c.nextSibling !== l)) paint(); }, 120));
+})(); /*INS fin*/
+
 /*COB v1*/ (function(){ const TIPO = 'pedidos', F = window.fetch.bind(window); let G = null, PUB = null, PAGO = '';
   { const m = location.hash.match(/&pago=(ok|error|pendiente)/); if(m){ PAGO = m[1]; location.hash = location.hash.replace(/&pago=\w+/, ''); } }
   const el = id => document.getElementById(id), money = n => '$' + Number(n).toLocaleString('es-AR'), dm = s => { const p = String(s).split('-'); return Number(p[2]) + '/' + Number(p[1]); };
   const say = m => { try{ toast(m); }catch(e){ alert(m); } };
   const panel = () => el('app') || el('panel'), inPanel = () => { const p = panel(); return !!p && !p.hidden && p.getClientRects().length > 0; };
-  const PLUSN = {ficha:'Ficha de tus pacientes'};
+  const PLUSN = {ficha:'Gestión de pacientes'};
   window.fetch = async function(u, o){ const r = await F(u, o); let q = null; try{ q = JSON.parse(o && o.body); }catch(e){}
     if(q && q.a && r.ok){ try{ const j = await r.clone().json();
       if((q.a==='all' || q.a==='payCheck') && j.ok && j.bill){ const first = !G; G = {bill:j.bill, pin:q.pin, c:q.c, url:u}; try{ BILL = j.bill; }catch(e){} [0, 300, 1200].forEach(ms => setTimeout(paint, ms)); if(first) setTimeout(back, 350); }   /* el panel puede mostrarse un instante después de la respuesta */
@@ -225,8 +272,9 @@ body.admin #site{display:none} body.admin #panel{display:block}
     if(b.estado==='por_vencer') return ['', d<=0 ? '<b>Tu mensualidad vence hoy.</b>' : '<b>Tu mensualidad vence el ' + dm(b.pagado_hasta) + '.</b>'];
     if(b.estado==='vencido') return ['', '<b>Tu mensualidad venció el ' + dm(b.pagado_hasta) + '.</b> Pagala para que tu app no se pause.'];
     return null; }
-  function paint(){ ['cobB','cobL'].forEach(i => { const e = el(i); if(e) e.remove(); }); if(!G || !G.bill.plan || !inPanel()) return; const p = panel(), m = msg(G.bill);
+  function paint(){ ['cobB','cobS','cobL'].forEach(i => { const e = el(i); if(e) e.remove(); }); if(!G || !G.bill.plan || !inPanel()) return; const p = panel(), m = msg(G.bill);
     if(m){ const b = document.createElement('div'); b.id = 'cobB'; b.className = m[0]; b.setAttribute('role','status'); b.innerHTML = '<span>' + m[1] + '</span><button type="button">Ver cómo pagar</button>'; p.parentNode.insertBefore(b, p); b.querySelector('button').onclick = open; }
+    else if(G.bill.estado==='prueba' && G.bill.dias > 0){ const s = document.createElement('p'); s.id = 'cobS'; s.textContent = 'Te quedan ' + G.bill.dias + ' días de prueba.'; p.parentNode.insertBefore(s, p); }   /* Dardo 16/11: días de prueba que quedan, en letra chica */
     const l = document.createElement('button'); l.id = 'cobL'; l.type = 'button'; l.textContent = 'Tu plan y pagos'; l.onclick = open; p.parentNode.insertBefore(l, p.nextSibling);
     if(G.bill.estado==='pausa'){ let seen = false; try{ seen = sessionStorage.getItem('cob_p')==='1'; sessionStorage.setItem('cob_p','1'); }catch(e){} if(!seen) open(); } }
   function open(){ if(!G || el('cobD')) return; const b = G.bill, pr = b.precios || {}, bt = [];
@@ -236,6 +284,7 @@ body.admin #site{display:none} body.admin #panel{display:block}
       else { if(pr.cuota) bt.push(['cuota', 'Pagar la cuota ' + ((b.cuotas||0)+1) + ': ' + money(pr.cuota), '']); if(pr.mes) bt.push(['mes', 'Pagar un mes: ' + money(pr.mes), '']); if(pr.seis) bt.push(['seis', 'Pagar 6 meses adelantados: ' + money(pr.seis), '']); } }
     const pl = (b.plus||[]).map(k => PLUSN[k] || k), d = document.createElement('div'); d.id = 'cobD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','cobT');
     d.innerHTML = '<div class="cb"><h2 id="cobT">' + (b.estado==='pausa' ? 'Tu app está en pausa' : 'Tu plan y pagos') + '</h2>' + (st ? '<p>' + st + '</p>' : '') + (pl.length ? '<p class="mu">Plus activados: ' + pl.join(', ') + '.</p>' : '')
+      + (bt.length && !b.pagado_hasta && b.prueba_hasta && b.estado!=='pausa' ? '<p>Si pagás ahora no perdés días: lo que pagás empieza a contar cuando termina la prueba.</p>' : '')
       + (bt.length ? '<p class="mu">Se paga con Mercado Pago y queda registrado solo.</p>' : '<p class="mu">Para pagar, escribinos a @webs.emprendedores por Instagram.</p>')
       + bt.map(x => '<button type="button" data-cob="' + x[0] + '">' + x[1] + (x[2] ? '<small>' + x[2] + '</small>' : '') + '</button>').join('') + '<button type="button" class="o" data-cob="x">Cerrar</button></div>';
     document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-cob]'); if(!t) return; if(t.dataset.cob==='x'){ d.remove(); return; } pay(t.dataset.cob, t); }); d.querySelector('[data-cob]').focus(); }
@@ -452,7 +501,7 @@ window.addEventListener('hashchange', route);
 renderSite(); route(); pullPub();
 try{ if(location.hash!=='#panel' && !sessionStorage.getItem(KEY+'_v')){ sessionStorage.setItem(KEY+'_v','1'); hit(''); } }catch(e){}
 
-/*NOV v1*/ const NOV = {"v": "2026-11-16", "items": ["Ahora podés pagar tu app desde acá: abajo de todo en tu panel, Tu plan y pagos.", "Unos días antes de cada vencimiento te avisamos acá mismo."], "safe": "Tus pedidos y tus datos no se tocaron."};   /* lo completa novedades.py al publicar una actualización */
+/*NOV v1*/ const NOV = {"v": "2026-11-16b", "items": ["Ahora podés pagar tu app desde acá: abajo de todo en tu panel, Tu plan y pagos.", "Unos días antes de cada vencimiento te avisamos acá mismo.", "Abajo de tu panel hay un botón para instalar la app en tu celular."], "safe": "Tus pedidos y tus datos no se tocaron."};   /* lo completa novedades.py al publicar una actualización */
 function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov')) return; let k = 'nov_'+location.pathname; try{ if(localStorage.getItem(k)===NOV.v) return; }catch(e){}
   const d = document.createElement('div'); d.id = 'nov'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','novT');
   const e = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
