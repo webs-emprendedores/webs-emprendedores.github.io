@@ -143,7 +143,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv *{box-sizing:border-box}
 #tv .vw,#tvS .vw{max-width:620px;margin:0 auto;padding:0 16px}
 #tv .vtop{display:flex;align-items:center;gap:12px;padding:14px 16px 6px;max-width:620px;margin:0 auto}
-#tv .vtop img{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:none}
+#tv .vtop img{width:52px;height:52px;border-radius:50%;object-fit:contain;background:#fff;flex:none}
 #tv .vtop b{font-family:var(--fn);font-size:24px;font-weight:600;line-height:1.1}
 #tv .vintro{margin:4px 0 14px;color:var(--m);font-size:16px;max-width:52ch}
 #tv h1{font-family:var(--fd);font-size:30px;line-height:1.08;margin:6px 0 4px;font-weight:700;letter-spacing:-.01em}
@@ -708,15 +708,16 @@ function render(){
   if(tal.length) cats.push('Talleres');
   if(T.cat && !cats.includes(T.cat)) T.cat = '';
   const vis = T.cat==='Talleres' ? [] : ps.filter(p => !T.cat || (p.cat||'Otros')===T.cat);
-  tv.innerHTML = `<div class="vtop">${B.logo?`<img src="${E(B.logo)}" alt="">`:''}<b>${E(B.name)}</b></div><div class="vw">
+  put(`<div class="vtop">${B.logo?`<img src="${E(B.logo)}" alt="">`:''}<b>${E(B.name)}</b></div><div class="vw">
     ${B.h1?`<h1>${E(B.h1)}</h1>`:''}${B.lead?`<p class="vintro">${E(B.lead)}</p>`:''}
     ${cats.length > 1 ? `<nav class="vcats" aria-label="Categorías"><button type="button" data-c=""${!T.cat?' class="von"':''}>Todo</button>${cats.map(c => `<button type="button" data-c="${E(c)}"${T.cat===c?' class="von"':''}>${E(c)}</button>`).join('')}</nav>` : ''}
     <div class="vgrid">${vis.map(p => `<button type="button" class="vcard" data-p="${E(p.id)}">${ph(p)}<span class="vct"><span class="vn">${E(p.name)}</span><span class="vp">${precioTxt(p)}</span></span></button>`).join('')}
     ${(!T.cat || T.cat==='Talleres') ? tal.map(t => `<button type="button" class="vcard" data-tl="${E(t.id)}">${ph({name:t.name})}<span class="vct"><span class="vn">Taller: ${E(t.name)}</span><span class="vp">${fecha(t.date)}${t.price?` · <b>${M(t.price)}</b>`:''}</span></span></button>`).join('') : ''}</div>
     ${!ps.length && !tal.length ? '<p class="vempty">Estamos cargando los productos. Volvé en un rato.</p>' : ''}
     ${(!T.cat && C.rubro==='tortas') ? `<button type="button" class="vcard vpers" data-pers="1">${ph(pers && pers.img ? pers : (B.hero ? {name:'', img:B.hero} : {name:'+'}))}<span class="vct"><span class="vn">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="vp">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span></span></button>` : ''}
-    ${foot()}</div>`;
+    ${foot()}</div>`);
 }
+function put(h){ if(tv._h !== h){ tv.innerHTML = h; tv._h = h; } }   /* no redibujar si no cambió nada (las fotos no vuelven a cargar) */
 function foot(){ const wa = WAN();
   return `<div class="vfoot">${wa?`<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>`:''}${B.ig?`<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>`:''}<br><a class="vacc" href="${E(B.acc)}">${E(B.accT)}</a></div>`; }
 
@@ -729,14 +730,14 @@ function vLines(){ const out = []; menu().forEach(d => d.items.forEach(p => { if
 const opP = (p, op) => { const e = (V(p).ext||[]).find(x => x.n===op); return e ? (Number(e.p)||0) : 0; };
 const vTotal = L => L.reduce((s,l) => s + l.n*((Number(l.p.price)||0) + opP(l.p, l.op)), 0);
 function renderViandas(){ const md = menu();
-  tv.innerHTML = `<div class="vtop">${B.logo?`<img src="${E(B.logo)}" alt="">`:''}<b>${E(B.name)}</b></div><div class="vw">
+  put(`<div class="vtop">${B.logo?`<img src="${E(B.logo)}" alt="">`:''}<b>${E(B.name)}</b></div><div class="vw">
     ${B.h1?`<h1>${E(B.h1)}</h1>`:''}<p class="vintro">${md.some(d => d.open) ? 'Elegí tus viandas de la semana y cuántas querés de cada una.' : 'El menú de esta semana ya cerró. En breve sale el nuevo.'}</p>
     ${md.length ? md.map(d => `<div class="vday"><b>${d.day}</b><span>${pd(d.date).getDate()} de ${MES[pd(d.date).getMonth()]}${d.open?'':' · ya cerró'}</span></div>` + d.items.map(p => { const n = Q[p.id]||0, ex = V(p).ext||[];
       return `<div class="vrow${d.open?'':' voff'}">${ph(p)}<div><div class="vn">${E(p.name)}</div>${p.desc?`<div class="vd">${E(p.desc)}</div>`:''}${p.price?`<div class="vp">${M(p.price)}</div>`:''}
         ${d.open ? `<div class="vst"><button type="button" data-st="-1" data-id="${E(p.id)}" aria-label="Quitar una">−</button><b>${n}</b><button type="button" data-st="1" data-id="${E(p.id)}" aria-label="Agregar una">+</button></div>` : ''}</div>
         ${d.open && n && ex.length ? `<div class="vx"><select data-op="${E(p.id)}" aria-label="Opción para ${E(p.name)}"><option value="">Sin cambios</option>${ex.map(e => `<option${QO[p.id]===e.n?' selected':''}>${E(e.n)}</option>`).join('')}</select></div>` : ''}</div>`; }).join('')).join('')
       : '<p class="vempty">Estamos armando el menú de la semana.</p>'}
-    ${foot()}</div>`;
+    ${foot()}</div>`);
   bar(); }
 
 /* ---- Hoja de pedido (pasos) ---- */
@@ -913,6 +914,7 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
 
 
 
