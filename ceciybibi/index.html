@@ -1299,17 +1299,12 @@ window.api = async function(body){
 let OPN = '';
 function lst(t){ return String(t||'').split('\n').map(s => s.trim()).filter(Boolean).map(s => { const m = s.match(/^(.*?)[\s:=$-]*\$?\s*([\d.]+)\s*$/); return m && m[1] ? {n:m[1].trim(), p:Number(m[2].replace(/\./g,''))} : {n:s, p:0}; }); }
 const lstT = a => (a||[]).map(x => x.n + (Number(x.p) ? ' ' + x.p : '')).join('\n');
-function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || DIAS.includes(p.cat)), x = X();
-  const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
-  const fe = formaEnc(), lg = logoEnc();
+function encHtml(){ const fe = formaEnc(), lg = logoEnc();
   return `<div class="venc"><h3>Encabezado de tu página</h3><div class="vlogo">${lg ? `<img src="${E(lg)}" alt="Tu logo">` : '<span class="vnf vnl" style="width:64px;height:64px;border-radius:50%">Sin logo</span>'}<label class="vsub">${lg ? 'Cambiar logo' : 'Subir logo'}<input type="file" accept="image/*" hidden data-tvlogo="1"></label></div>
     ${[['logo-nombre', 'Logo y nombre'], ['nombre', 'Solo el nombre'], ['logo', 'Solo el logo (si tu logo ya trae el nombre)']].map(([v, l]) => `<label class="vck"><input type="radio" name="tvenc" value="${v}"${fe===v ? ' checked' : ''}${v!=='nombre' && !lg ? ' disabled' : ''}> ${l}</label>`).join('')}
-    ${lg ? '' : '<div class="vok" style="margin:2px 0 6px">Para mostrar el logo, primero subilo.</div>'}<button type="button" class="vsv" data-tvenc="1">Guardar encabezado</button></div>
-    <h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
-    + ps.map(p => { const v = V(p), o = OPN===p.id;
-      return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">Categoría: ${E(grupo(p))}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
-        <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
-        ${o ? `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre ? '' : `<label>Categoría en tu página</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu página aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">
+    ${lg ? '' : '<div class="vok" style="margin:2px 0 6px">Para mostrar el logo, primero subilo.</div>'}<button type="button" class="vsv" data-tvenc="1">Guardar encabezado</button></div>`; }
+function opcHtml(p){ const v = V(p), x = X();
+  return `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre || window.PNL ? '' : `<label>Categoría en tu página</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu página aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `${window.PNL ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">`}
           <label>Tamaños y precios (uno por renglón)</label><textarea data-f="sz" placeholder="Para 10 personas 38000">${E(lstT(v.sz))}</textarea>
           ${(v.sz||[]).length ? '' : `<label class="vck"><input type="checkbox" data-f="per"${v.per?' checked':''}> Preguntar para cuántas personas</label>`}
           <label class="vck"><input type="checkbox" data-f="qty"${v.qty?' checked':''}> Preguntar cantidad</label>
@@ -1317,8 +1312,20 @@ function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || 
           ${relList().length?`<label>Rellenos que elige</label><select data-f="rel"><option value="0"${!v.rel?' selected':''}>Ninguno</option><option value="1"${v.rel==1?' selected':''}>Uno</option><option value="2"${v.rel==2?' selected':''}>Hasta dos</option></select>`:''}
           ${(x.cob||[]).length?`<label class="vck"><input type="checkbox" data-f="cob"${v.cob?' checked':''}> Elige cobertura</label>`:''}`}
           <label>${C.rubro==='viandas' ? 'Opciones del plato' : 'Extras'} (uno por renglón, con precio si suman)</label><textarea data-f="ext" placeholder="${C.rubro==='viandas'?'Sin sal':'Velas 1500'}">${E(lstT(v.ext))}</textarea>
-          <button type="button" class="vsv" data-tvs="${E(p.id)}">Guardar opciones</button></div>` : ''}</div>`; }).join(''); }
-function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return; const host = C.tab ? q(C.tab) : null, anc = C.before ? q(C.before) : null;
+          <button type="button" class="vsv" data-tvs="${E(p.id)}">Guardar opciones</button></div>`; }
+function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || DIAS.includes(p.cat)), x = X();
+  const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
+  const fe = formaEnc(), lg = logoEnc();
+  return encHtml()
+    + `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
+    + ps.map(p => { const v = V(p), o = OPN===p.id;
+      return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">Categoría: ${E(grupo(p))}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
+        <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
+        ${o ? opcHtml(p) : ''}</div>`; }).join(''); }
+function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return;
+  if(window.PNL){ const c = q('#tvpc'), m = window.PNL.tv; if(!c || !m) return; const p = (S.products||[]).find(x => x.id===m.id);   /* PANEL NUEVO: el panel arma las pantallas y la tienda pone el encabezado o las opciones de un producto */
+    c.innerHTML = m.modo==='enc' ? encHtml() : (p ? opcHtml(p) : ''); return; }
+  const host = C.tab ? q(C.tab) : null, anc = C.before ? q(C.before) : null;
   if(host && host.querySelector('[data-a="psave"],[data-a="esave"],#eName,#pName')) return;
   let c = q('#tvpc'); if(!c){ c = D.createElement('div'); c.id = 'tvpc'; c.className = 'tvp'; }
   if(host){ if(c.parentNode !== host || host.firstElementChild !== c) host.insertBefore(c, host.firstChild); }
@@ -1327,6 +1334,7 @@ function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return; const host 
 /* NOMBRES SUGERIDOS: lista fija del rubro en el campo de nombre del producto (no cambia lo que ya está escrito) */
 (function(){ const dl = D.createElement('datalist'); dl.id = 'tvNombres'; dl.innerHTML = (C.nombres||[]).map(n => `<option value="${E(n)}">`).join(''); D.body.appendChild(dl);
   D.addEventListener('focusin', e => { const i = e.target; if(i && i.matches && C.nom && i.matches(C.nom) && i.getAttribute('list') !== 'tvNombres'){ i.setAttribute('list', 'tvNombres'); i.setAttribute('autocomplete', 'off'); } }); })();
+window.tvMount = () => { try{ mount(); }catch(e){ console.error('TV', e); } }; window.tvInfo = p => ({grupo: grupo(p), desde: desde(p), pers: isPers(p)});
 const RP = window[C.fn]; if(typeof RP==='function') window[C.fn] = function(){ const r = RP.apply(this, arguments); try{ mount(); }catch(e){} return r; };
 D.addEventListener('click', async e => { const b = e.target.closest('#tvpc button'); if(!b) return;
   if(b.dataset.tvo){ OPN = OPN===b.dataset.tvo ? '' : b.dataset.tvo; mount(); return; }
@@ -1337,6 +1345,7 @@ D.addEventListener('click', async e => { const b = e.target.closest('#tvpc butto
   if(b.dataset.tvs){ const id = b.dataset.tvs, ed = q('#tvpc [data-tve="' + CSS.escape(id) + '"]'), g = k => ed.querySelector('[data-f="' + k + '"]');
     const v = {ext: lst(g('ext').value)};
     if(g('grp')){ const gr = g('grp').value.replace(/\s+/g, ' ').trim(); if(gr) v.grp = gr; }
+    else { const pv = ((S.settings.extra||{}).var||{})[id]; if(pv && pv.grp) v.grp = pv.grp; }   /* panel nuevo: la categoría está en la pantalla del producto; las opciones no la borran */
     if(C.rubro!=='viandas'){ v.sz = lst(g('sz').value).filter(x => x.n); v.per = g('per') ? (g('per').checked ? 1 : 0) : 0; v.qty = g('qty').checked ? 1 : 0; v.biz = g('biz') && g('biz').checked ? 1 : 0; v.rel = g('rel') ? Number(g('rel').value) : 0; v.cob = g('cob') && g('cob').checked ? 1 : 0; }
     const pr = g('pr'), pp = (S.products||[]).find(x => x.id===id);
     if(pr && pp && String(Number(pr.value)||'') !== String(Number(pp.price)||'')){ pp.price = Number(pr.value) || null; try{ const rp = await api({a:'saveProducts', pin:pinOk, products:S.products}); if(!rp || !rp.ok){ if(typeof toast==='function') toast((rp && rp.msg) || 'No se pudo guardar el precio'); } }catch(err){} }
@@ -1360,6 +1369,12 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
+
+
+
+
+
 
 
 

@@ -435,6 +435,97 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 .tvp .ved .vck input{width:20px;height:20px}
 .tvp .ved .vsv{margin-top:12px;width:100%;min-height:48px;border:0;border-radius:12px;background:var(--p,var(--r,#333));color:#fff;font-weight:800;font-size:16px;cursor:pointer}
 </style>
+<style>/*PNL v1*/
+body.pnl{--pa:#e9b8a4;--pas:#121110;--pt:#f4eee6;--pf:#121110;--pc:#1f1c1a;--prj:#ff9b8f;--pok:#8fd6a3;--pas15:#3d332f;--pl:#4e4a47;--pm:#c5c0b9}
+body.pnl.admin{background:var(--pf)}
+body.pnl #panel{background:var(--pf);color:var(--pt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:18px;line-height:1.4;padding-bottom:calc(68px + 24px + env(safe-area-inset-bottom))}
+body.pnl #panel>.in{max-width:600px;margin:0 auto;padding:0 16px}
+body.pnl #panel h3,body.pnl #panel .pH{font-size:22px;line-height:1.2;font-weight:700;margin:4px 0 12px;color:var(--pt);font-family:inherit}
+body.pnl #panel p:not(#cobS):not(#cobB){font-size:18px;margin:0 0 8px}
+body.pnl #panel label{display:block;font-size:16px;font-weight:600;margin:16px 0 6px;color:var(--pt)}
+body.pnl #panel input:not([type=checkbox]):not([type=radio]):not([type=file]),body.pnl #panel select,body.pnl #panel textarea{display:block;width:100%;box-sizing:border-box;min-height:52px;font:inherit;font-size:18px;color:var(--pt);background:var(--pc);border:1.5px solid var(--pl);border-radius:12px;padding:10px 14px}
+body.pnl #panel textarea{min-height:120px}
+body.pnl #panel input:focus-visible,body.pnl #panel select:focus-visible,body.pnl #panel textarea:focus-visible,body.pnl #panel button:focus-visible,body.pnl #panel a:focus-visible{outline:3px solid var(--pa);outline-offset:2px}
+.pnlTop{position:sticky;top:0;z-index:30;min-height:64px;display:flex;align-items:center;gap:10px;padding:0 16px;background:var(--pc);border-bottom:1px solid var(--pl);color:var(--pt)}
+.pnlMarca{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.pnlMarca img{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none}
+.pnlMarca b{font-size:20px;line-height:1.1;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pnlVer{flex:none;min-height:48px;display:inline-flex;align-items:center;padding:0 12px;border:1.5px solid var(--pt);border-radius:12px;color:var(--pt)!important;font-weight:600;font-size:16px;text-decoration:none;white-space:nowrap}
+body.pnl #loginBox{background:var(--pc);border:1px solid var(--pl);border-radius:16px;padding:20px 16px}
+body.pnl #app .tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;margin:0;height:calc(68px + env(safe-area-inset-bottom));padding:4px 6px env(safe-area-inset-bottom);box-sizing:border-box;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--pc);border-top:1px solid var(--pl)}
+body.pnl #app .tabs button{min-height:0;height:60px;border:0;border-radius:14px;background:transparent;color:var(--pt);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:600 15px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 2px;cursor:pointer}
+body.pnl #app .tabs button svg{width:24px;height:24px;flex:none}
+body.pnl #app .tabs button.on{background:var(--pas15);color:var(--pt);font-weight:700}
+body.pnl #panel .pv{padding-top:16px}
+.pMain,body.pnl #pinBtn,body.pnl #tvpc .vsv{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;margin:16px 0 0;border:0;border-radius:14px;background:var(--pa)!important;color:var(--pas)!important;font:700 18px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer;text-decoration:none;padding:0 16px;box-sizing:border-box}
+.pSec{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 10px;border:1.5px solid var(--pt);border-radius:12px;background:transparent;color:var(--pt)!important;font:600 16px/1.15 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer;text-decoration:none;box-sizing:border-box;text-align:center}
+.pDel{display:inline-flex;align-items:center;min-height:48px;margin-top:12px;padding:0 4px;border:0;background:none;color:var(--prj)!important;font:600 17px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.pBack{display:inline-flex;align-items:center;min-height:48px;margin:0 0 4px -4px;padding:0 4px;border:0;background:none;color:var(--pt);font:600 17px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer}
+.pHelp{font-size:16px!important;color:var(--pm);margin:10px 0 0!important}
+.pSum{font-size:18px!important;font-weight:600;margin:0 0 4px!important}
+.pCard{background:var(--pc);border:1px solid var(--pl);border-radius:16px;padding:16px;margin-top:12px}
+.pSeg{display:grid;grid-template-columns:1fr 1fr;margin-top:16px;border:1.5px solid var(--pt);border-radius:12px;overflow:hidden}
+.pSeg button{min-height:48px;border:0;background:transparent;color:var(--pt);font:600 17px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer}
+.pSeg button.on{background:var(--pt);color:var(--pf)}
+body.pnl #panel .pDay{font-size:18px;font-weight:700;margin:24px 0 0}
+.pDay::first-letter{text-transform:uppercase}
+.pRowT{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:6px 10px}
+.pRowT b{font-size:19px;line-height:1.25}
+.pTag{flex:none;display:inline-block;border-radius:6px;padding:4px 10px;font-size:16px;font-weight:700;line-height:1.25;border:1.5px solid currentColor}
+.pTag.falta{color:var(--prj)} .pTag.ok{color:var(--pok)} .pTag.sin{color:var(--pm)}
+.pMeta{font-size:17px!important;color:var(--pt)}
+.pAcc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pAcc>*{flex:1 1 auto;white-space:nowrap;padding:0 10px}
+.pMenu{margin-top:4px;background:var(--pc);border:1px solid var(--pl);border-radius:16px;overflow:hidden}
+.pRow{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:64px;padding:0 16px;border:0;border-top:1px solid var(--pl);background:transparent;color:var(--pt);font:600 18px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left;cursor:pointer;box-sizing:border-box;text-decoration:none}
+.pRow:first-child{border-top:0} .pRow span:last-child{font-size:24px;line-height:1} .pRow.pSalir{color:var(--prj)}
+.pRow.pSolo{border:1px solid var(--pl);border-radius:16px;margin-top:16px;background:var(--pc)}
+.pSw{display:flex!important;align-items:center;justify-content:space-between;gap:12px;min-height:56px;margin:16px 0 0!important;padding:0 16px;background:var(--pc);border:1px solid var(--pl);border-radius:14px;font-size:18px!important;cursor:pointer}
+.pSw input{appearance:none;-webkit-appearance:none;flex:none;width:52px;height:32px;border-radius:999px;background:var(--pl);position:relative;cursor:pointer;margin:0;transition:background .15s}
+.pSw input::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:var(--pc);transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.pSw input:checked{background:var(--pa)} .pSw input:checked::after{left:23px}
+.pFoto{display:flex;align-items:center;gap:14px;margin-top:8px}
+.pFoto img,.pFoto .pPh{width:96px;height:96px;border-radius:14px;object-fit:cover;flex:none;background:var(--pas15);display:flex;align-items:center;justify-content:center}
+.pFoto label{margin:0!important}
+body.pnl #panel label.pSec{display:inline-flex;margin:0;font-size:16px}
+.pTwo{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+@media (max-width:359px){.pTwo{grid-template-columns:1fr}.pnlMarca{gap:8px}.pnlMarca b{font-size:17px}.pnlVer{padding:0 8px}}
+.pList{margin-top:12px;background:var(--pc);border:1px solid var(--pl);border-radius:16px;overflow:hidden}
+body.pnl #tvpc.pList{padding:0}
+body.pnl #tvpc .pPend{margin:0;padding:14px 16px;border-bottom:1px solid var(--pl);font-size:16px!important}
+.pRowP{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:8px 16px;border:0;border-top:1px solid var(--pl);background:transparent;color:var(--pt);text-align:left;cursor:pointer;font:inherit;box-sizing:border-box}
+.pRowP:first-of-type{border-top:0}
+.pRowP img,.pRowP .vnf,.pRowP .vnx{width:56px;height:56px;border-radius:12px;object-fit:cover;flex:none;display:flex;align-items:center;justify-content:center;background:var(--pas15);color:var(--pt)}
+.pRowP .pTx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.pRowP .vnm{font-size:18px;font-weight:700;line-height:1.2}
+.pRowP .pPr{font-size:16px;color:var(--pm)}
+.pRowP .vwn{font-size:16px;font-weight:600;color:var(--prj)}
+.pRowP .pEd{flex:none;font-size:17px;font-weight:600;white-space:nowrap}
+.pIns{display:flex;align-items:center;gap:10px;min-height:56px;border-top:1px solid var(--pl);padding:8px 0}
+.pIns .pTx{flex:1;min-width:0}
+.pChips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+body.pnl #panel .res{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--pl);font-size:18px}
+body.pnl #panel .res b{font-size:20px;color:var(--pt)}
+body.pnl #panel .mut{font-size:16px;color:var(--pm)}
+body.pnl #panel .cal{gap:4px}
+body.pnl #panel .cal button{aspect-ratio:auto;min-height:48px;border-radius:12px;font-size:17px}
+body.pnl #panel .cal button em{font-size:16px;min-width:22px;height:22px;line-height:22px;border-radius:11px;top:-8px;right:-2px}
+body.pnl #panel .cal span{font-size:16px}
+body.pnl #panel .calh b{font-size:22px}
+body.pnl #panel .calh button{color:var(--pt);background:var(--pc);border-color:var(--pl)}
+body.pnl #tvpc{background:var(--pc);border:1px solid var(--pl);border-radius:16px;padding:16px;margin-top:12px}
+body.pnl #tvpc h3{font-size:22px}
+body.pnl #tvpc .vok,body.pnl #tvpc .vwn,body.pnl #tvpc .vck,body.pnl #tvpc label,body.pnl #tvpc .pm,body.pnl #tvpc .vsub,body.pnl #tvpc .vnl{font-size:16px!important}
+body.pnl #tvpc .vck{display:flex!important;align-items:center;gap:10px;min-height:48px;margin:4px 0!important;font-weight:500!important}
+body.pnl #tvpc .vck input{width:22px;height:22px;flex:none}
+body.pnl #tvpc .vsub{display:inline-flex!important;align-items:center;min-height:48px;padding:0 14px;border:1.5px solid var(--pt);border-radius:12px;color:var(--pt);cursor:pointer}
+body.pnl #tvpc .vlogo{display:flex;align-items:center;gap:14px}
+body.pnl #tvpc .vlogo img{width:64px;height:64px;border-radius:50%;object-fit:cover}
+body.pnl #tvpc .ved{border:0;padding:0;margin:0;background:none}
+body.pnl #app:not([hidden]) ~ #insL{display:none!important}   /* Instalar la app: en el panel, solo en Más (en la pantalla de la clave sigue igual) */
+body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));font-size:17px}
+@media (prefers-reduced-motion:reduce){.pSw input,.pSw input::after{transition:none}}
+</style>
 </head>
 <body>
 <div id="site"><main id="tv" aria-live="polite"></main><div id="tvS" hidden role="dialog" aria-modal="true" aria-labelledby="tvST"></div><div id="tvB" hidden></div>
@@ -499,7 +590,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 </div>
 
 <div id="panel">
-  <header class="in top"><div class="brand"><img src="img/icon-192.png" alt="">Mi panel</div><a href="#" style="color:var(--pd);font-weight:600">Ver la página</a></header>
+  <header class="pnlTop"><span class="pnlMarca" id="pnlMarca"></span><a class="pnlVer" href="#">Ver mi página ↗</a></header>
   <div class="in">
     <div id="loginBox" class="card" style="margin-top:20px"><h3>Entrar</h3><label for="pin">Clave</label><input id="pin" type="password" inputmode="numeric" autocomplete="off"><button class="btn" id="pinBtn" style="margin-top:14px">Entrar</button></div>
     <div id="app" hidden>
@@ -1187,17 +1278,12 @@ window.api = async function(body){
 let OPN = '';
 function lst(t){ return String(t||'').split('\n').map(s => s.trim()).filter(Boolean).map(s => { const m = s.match(/^(.*?)[\s:=$-]*\$?\s*([\d.]+)\s*$/); return m && m[1] ? {n:m[1].trim(), p:Number(m[2].replace(/\./g,''))} : {n:s, p:0}; }); }
 const lstT = a => (a||[]).map(x => x.n + (Number(x.p) ? ' ' + x.p : '')).join('\n');
-function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || DIAS.includes(p.cat)), x = X();
-  const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
-  const fe = formaEnc(), lg = logoEnc();
+function encHtml(){ const fe = formaEnc(), lg = logoEnc();
   return `<div class="venc"><h3>Encabezado de tu página</h3><div class="vlogo">${lg ? `<img src="${E(lg)}" alt="Tu logo">` : '<span class="vnf vnl" style="width:64px;height:64px;border-radius:50%">Sin logo</span>'}<label class="vsub">${lg ? 'Cambiar logo' : 'Subir logo'}<input type="file" accept="image/*" hidden data-tvlogo="1"></label></div>
     ${[['logo-nombre', 'Logo y nombre'], ['nombre', 'Solo el nombre'], ['logo', 'Solo el logo (si tu logo ya trae el nombre)']].map(([v, l]) => `<label class="vck"><input type="radio" name="tvenc" value="${v}"${fe===v ? ' checked' : ''}${v!=='nombre' && !lg ? ' disabled' : ''}> ${l}</label>`).join('')}
-    ${lg ? '' : '<div class="vok" style="margin:2px 0 6px">Para mostrar el logo, primero subilo.</div>'}<button type="button" class="vsv" data-tvenc="1">Guardar encabezado</button></div>
-    <h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
-    + ps.map(p => { const v = V(p), o = OPN===p.id;
-      return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">Categoría: ${E(grupo(p))}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
-        <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
-        ${o ? `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre ? '' : `<label>Categoría en tu página</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu página aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">
+    ${lg ? '' : '<div class="vok" style="margin:2px 0 6px">Para mostrar el logo, primero subilo.</div>'}<button type="button" class="vsv" data-tvenc="1">Guardar encabezado</button></div>`; }
+function opcHtml(p){ const v = V(p), x = X();
+  return `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre || window.PNL ? '' : `<label>Categoría en tu página</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu página aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `${window.PNL ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">`}
           <label>Tamaños y precios (uno por renglón)</label><textarea data-f="sz" placeholder="Para 10 personas 38000">${E(lstT(v.sz))}</textarea>
           ${(v.sz||[]).length ? '' : `<label class="vck"><input type="checkbox" data-f="per"${v.per?' checked':''}> Preguntar para cuántas personas</label>`}
           <label class="vck"><input type="checkbox" data-f="qty"${v.qty?' checked':''}> Preguntar cantidad</label>
@@ -1205,8 +1291,20 @@ function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || 
           ${relList().length?`<label>Rellenos que elige</label><select data-f="rel"><option value="0"${!v.rel?' selected':''}>Ninguno</option><option value="1"${v.rel==1?' selected':''}>Uno</option><option value="2"${v.rel==2?' selected':''}>Hasta dos</option></select>`:''}
           ${(x.cob||[]).length?`<label class="vck"><input type="checkbox" data-f="cob"${v.cob?' checked':''}> Elige cobertura</label>`:''}`}
           <label>${C.rubro==='viandas' ? 'Opciones del plato' : 'Extras'} (uno por renglón, con precio si suman)</label><textarea data-f="ext" placeholder="${C.rubro==='viandas'?'Sin sal':'Velas 1500'}">${E(lstT(v.ext))}</textarea>
-          <button type="button" class="vsv" data-tvs="${E(p.id)}">Guardar opciones</button></div>` : ''}</div>`; }).join(''); }
-function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return; const host = C.tab ? q(C.tab) : null, anc = C.before ? q(C.before) : null;
+          <button type="button" class="vsv" data-tvs="${E(p.id)}">Guardar opciones</button></div>`; }
+function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || DIAS.includes(p.cat)), x = X();
+  const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
+  const fe = formaEnc(), lg = logoEnc();
+  return encHtml()
+    + `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
+    + ps.map(p => { const v = V(p), o = OPN===p.id;
+      return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">Categoría: ${E(grupo(p))}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
+        <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
+        ${o ? opcHtml(p) : ''}</div>`; }).join(''); }
+function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return;
+  if(window.PNL){ const c = q('#tvpc'), m = window.PNL.tv; if(!c || !m) return; const p = (S.products||[]).find(x => x.id===m.id);   /* PANEL NUEVO: el panel arma las pantallas y la tienda pone el encabezado o las opciones de un producto */
+    c.innerHTML = m.modo==='enc' ? encHtml() : (p ? opcHtml(p) : ''); return; }
+  const host = C.tab ? q(C.tab) : null, anc = C.before ? q(C.before) : null;
   if(host && host.querySelector('[data-a="psave"],[data-a="esave"],#eName,#pName')) return;
   let c = q('#tvpc'); if(!c){ c = D.createElement('div'); c.id = 'tvpc'; c.className = 'tvp'; }
   if(host){ if(c.parentNode !== host || host.firstElementChild !== c) host.insertBefore(c, host.firstChild); }
@@ -1215,6 +1313,7 @@ function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return; const host 
 /* NOMBRES SUGERIDOS: lista fija del rubro en el campo de nombre del producto (no cambia lo que ya está escrito) */
 (function(){ const dl = D.createElement('datalist'); dl.id = 'tvNombres'; dl.innerHTML = (C.nombres||[]).map(n => `<option value="${E(n)}">`).join(''); D.body.appendChild(dl);
   D.addEventListener('focusin', e => { const i = e.target; if(i && i.matches && C.nom && i.matches(C.nom) && i.getAttribute('list') !== 'tvNombres'){ i.setAttribute('list', 'tvNombres'); i.setAttribute('autocomplete', 'off'); } }); })();
+window.tvMount = () => { try{ mount(); }catch(e){ console.error('TV', e); } }; window.tvInfo = p => ({grupo: grupo(p), desde: desde(p), pers: isPers(p)});
 const RP = window[C.fn]; if(typeof RP==='function') window[C.fn] = function(){ const r = RP.apply(this, arguments); try{ mount(); }catch(e){} return r; };
 D.addEventListener('click', async e => { const b = e.target.closest('#tvpc button'); if(!b) return;
   if(b.dataset.tvo){ OPN = OPN===b.dataset.tvo ? '' : b.dataset.tvo; mount(); return; }
@@ -1225,6 +1324,7 @@ D.addEventListener('click', async e => { const b = e.target.closest('#tvpc butto
   if(b.dataset.tvs){ const id = b.dataset.tvs, ed = q('#tvpc [data-tve="' + CSS.escape(id) + '"]'), g = k => ed.querySelector('[data-f="' + k + '"]');
     const v = {ext: lst(g('ext').value)};
     if(g('grp')){ const gr = g('grp').value.replace(/\s+/g, ' ').trim(); if(gr) v.grp = gr; }
+    else { const pv = ((S.settings.extra||{}).var||{})[id]; if(pv && pv.grp) v.grp = pv.grp; }   /* panel nuevo: la categoría está en la pantalla del producto; las opciones no la borran */
     if(C.rubro!=='viandas'){ v.sz = lst(g('sz').value).filter(x => x.n); v.per = g('per') ? (g('per').checked ? 1 : 0) : 0; v.qty = g('qty').checked ? 1 : 0; v.biz = g('biz') && g('biz').checked ? 1 : 0; v.rel = g('rel') ? Number(g('rel').value) : 0; v.cob = g('cob') && g('cob').checked ? 1 : 0; }
     const pr = g('pr'), pp = (S.products||[]).find(x => x.id===id);
     if(pr && pp && String(Number(pr.value)||'') !== String(Number(pp.price)||'')){ pp.price = Number(pr.value) || null; try{ const rp = await api({a:'saveProducts', pin:pinOk, products:S.products}); if(!rp || !rp.ok){ if(typeof toast==='function') toast((rp && rp.msg) || 'No se pudo guardar el precio'); } }catch(err){} }
@@ -1247,7 +1347,153 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   }catch(err){ if(typeof toast==='function') toast('Sin conexión: no se subió. Probá de nuevo.'); }
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
+<script>/*PNL v1*/ (function(){
+const P = {"agenda": false, "sab3": ["Coberturas", "cob"], "calc": "Por ejemplo: Torta de 1 kg"}, D = document, q = s => D.querySelector(s);
+if(typeof renderPanel!=='function' || !q('#app .tabs')) return;
+window.PNL = {tv: null, sub: '', dia: ''}; const N = window.PNL;
+D.body.classList.add('pnl');
+const IC = {ped:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6v3H9zM9 11h6M9 15h4"/>', tal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  car:'<path d="M5 5.5A1.5 1.5 0 0 1 6.5 4H18v14H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H18M9 8h6M9 11.5h4"/>', mas:'<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>'};
+D.querySelectorAll('#app .tabs button').forEach(b => { const l = b.textContent.trim(); b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (IC[b.dataset.t]||'') + '</svg><span>' + l + '</span>'; });
+const CAM = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+const back = (v, l) => `<button type="button" class="pBack" data-a="${v ? 'pnl' : 'cancel'}"${v ? ` data-v="${v}"` : ''}>← ${l || 'Volver'}</button>`;
+const main = (a, l, ex) => `<button type="button" class="pMain" data-a="${a}"${ex||''}>${l}</button>`;
+function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEnc ? window.tvEnc() : {nombre: ''};
+  m.innerHTML = (e.logo ? `<img src="${esc(e.logo)}" alt="">` : '') + `<b>${esc(e.nombre || '')}</b>`; }
+/* el toast dura 2 segundos y queda arriba de la barra */
+let tT; window.toast = function(m){ const t = q('#toast'); if(!t) return; t.textContent = m; t.classList.add('show'); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2000); };
+
+window.renderPanel = function(){ D.querySelectorAll('#app .tabs button').forEach(b => { const on = b.dataset.t===tab; b.classList.toggle('on', on); b.setAttribute('aria-current', on ? 'page' : 'false'); });
+  D.querySelectorAll('#app .pv').forEach(v => v.classList.toggle('on', v.id==='pv-'+tab)); marca(); N.tv = null;
+  ({ped:renderPed, tal:renderTal, car:renderCar, mas:renderMas})[tab](); };
+q('#app .tabs').addEventListener('click', () => { N.sub = ''; N.dia = ''; }, true);
+
+/* ---------- PEDIDOS ---------- */
+const tagOf = o => !o.total ? '<span class="pTag sin">Sin precio</span>' : o.paid >= o.total ? '<span class="pTag ok">Pagado</span>' : `<span class="pTag falta">Falta cobrar ${money(o.total - o.paid)}</span>`;
+window.renderPed = function(){ const v = q('#pv-ped');
+  if(edit && edit.k==='o'){ const o = edit.o;
+    v.innerHTML = back() + `<h3>${edit.isNew ? 'Cargar un pedido' : 'Cambiar el pedido'}</h3><label for="oProdI">Qué pidió</label><input id="oProdI" value="${esc(o.product)}" list="pl"><datalist id="pl">${S.products.map(p => `<option value="${esc(p.name)}">`).join('')}</datalist>
+    <div class="pTwo"><div><label for="oDate">Para qué día</label><input id="oDate" type="date" value="${esc(o.date)}"></div><div><label for="oPers">Personas</label><input id="oPers" type="number" inputmode="numeric" value="${esc(o.people)}"></div></div>
+    <label for="oFill">Sabor, relleno y detalle</label><textarea id="oFill">${esc(o.fill)}</textarea><label for="oName">Cliente</label><input id="oName" value="${esc(o.name)}"><label for="oPhone">WhatsApp</label><input id="oPhone" type="tel" value="${esc(o.phone)}">
+    <label for="oDel">Entrega</label><select id="oDel"><option${o.delivery==='Retiro'?' selected':''}>Retiro</option><option${o.delivery==='Envío'?' selected':''}>Envío</option></select><label for="oNotes">Notas</label><input id="oNotes" value="${esc(o.notes)}">
+    <div class="pTwo"><div><label for="oTot">Precio total</label><input id="oTot" type="number" inputmode="numeric" value="${o.total||''}"></div><div><label for="oPaid">Ya pagó</label><input id="oPaid" type="number" inputmode="numeric" value="${o.paid||''}"></div></div>
+    ${main('osave', 'Guardar')}${edit.isNew ? '' : `<button type="button" class="pDel" data-a="pnlodel" data-id="${esc(o.id)}">Borrar el pedido</button>`}`; return; }
+  const hoy = iso(today), all = S.orders.filter(o => !isTal(o)), prox = all.filter(o => !o.done && o.date >= hoy);
+  const list = all.filter(o => old ? (o.done || o.date < hoy) : (!o.done && o.date >= hoy)).sort((a,b) => a.date < b.date ? -1 : 1); if(old) list.reverse();
+  const deben = prox.reduce((s,o) => s + (o.total > o.paid ? o.total - o.paid : 0), 0);
+  const sum = `<p class="pSum">${prox.length ? (prox.length===1 ? '1 pedido por entregar' : prox.length + ' pedidos por entregar') + (deben ? ', falta cobrar ' + money(deben) : '') : 'No tenés pedidos por entregar'}</p>`;
+  const seg = `<div class="pSeg" role="group"><button type="button" data-a="old" data-v="0" class="${old?'':'on'}" aria-pressed="${!old}">Próximos</button><button type="button" data-a="old" data-v="1" class="${old?'on':''}" aria-pressed="${old}">Anteriores</button></div>`;
+  let h = '', dia = '';
+  list.forEach(o => { if(o.date!==dia){ dia = o.date; h += `<p class="pDay">${dia===hoy ? 'Hoy, ' : ''}${dlong(dia)}</p>`; }
+    const w = waLink(o.phone);
+    h += `<div class="pCard"><div class="pRowT"><b>${esc(o.product)}${o.people ? ' para ' + esc(o.people) : ''}</b>${tagOf(o)}</div>${o.fill ? `<p class="pMeta" style="margin-top:6px">${esc(o.fill)}</p>` : ''}${o.notes ? `<p class="mut">${esc(o.notes)}</p>` : ''}
+      <p class="pMeta" style="margin-top:6px">${esc(o.name)}${o.delivery ? ', ' + esc(o.delivery).toLowerCase() : ''}</p>
+      <div class="pAcc">${w ? `<a class="pSec" target="_blank" rel="noopener" href="${w}">WhatsApp</a>` : ''}<button type="button" class="pSec" data-a="odone" data-id="${esc(o.id)}">${o.done ? 'Volver a pendiente' : 'Entregado ✓'}</button><button type="button" class="pSec" data-a="oedit" data-id="${esc(o.id)}">Cambiar ›</button></div></div>`; });
+  v.innerHTML = list.length ? sum + main('onew', '+ Cargar un pedido') + seg + h
+    : sum + seg + `<div class="pCard" style="margin-top:16px"><p>${old ? 'No hay pedidos anteriores.' : 'No hay pedidos por entregar. Los que hagan desde tu página aparecen acá solos.'}</p>${main('onew', '+ Cargar un pedido')}</div>`; };
+
+/* ---------- TALLERES o AGENDA ---------- */
+window.renderTal = P.agenda ? function(){ const v = q('#pv-tal'), s = S.settings;
+  if(N.dia){ const d = N.dia, os = S.orders.filter(o => o.date===d && !isTal(o) && !o.done), full = (s.blocked||[]).includes(d);
+    v.innerHTML = back('dia0') + `<h3 class="pDay" style="font-size:22px;margin-top:4px">${dlong(d)}</h3><label class="pSw"><span>Día completo</span><input type="checkbox" id="pnlFull"${full ? ' checked' : ''}></label><p class="pHelp">Completo: nadie puede pedir para este día.</p>`
+      + (os.length ? os.map(o => `<div class="pCard"><div class="pRowT"><b>${esc(o.product)}${o.people ? ' para ' + esc(o.people) : ''}</b>${tagOf(o)}</div><p class="pMeta" style="margin-top:6px">${esc(o.name)}</p></div>`).join('') : '<div class="pCard"><p>No hay pedidos para este día.</p></div>'); return; }
+  v.innerHTML = `<p class="pHelp" style="margin-top:0!important">Tocá un día para ver sus pedidos o marcarlo completo. El número es la cantidad de pedidos.</p><div id="pnlCal">${calHtml('panel')}</div>
+    <div class="pCard"><h3>Pedidos por día</h3><p class="pHelp" style="margin-top:0!important">Al llegar a esta cantidad el día se completa solo. Vacío: sin límite.</p><label for="sMax">Cantidad de pedidos por día</label><input id="sMax" type="number" inputmode="numeric" value="${s.maxPerDay >= 9999 ? '' : esc(s.maxPerDay)}">${main('maxsave', 'Guardar')}</div>`; }
+: function(){ const v = q('#pv-tal'), x = X();
+  if(edit && edit.k==='t'){ const t = edit.t;
+    v.innerHTML = back() + `<h3>${edit.isNew ? 'Agregar taller' : 'Cambiar el taller'}</h3><label for="tName">Nombre del taller</label><input id="tName" value="${esc(t.name)}" placeholder="Por ejemplo: Decoración con manga">
+      <div class="pTwo"><div><label for="tDate">Fecha</label><input id="tDate" type="date" value="${esc(t.date)}"></div><div><label for="tTime">Hora</label><input id="tTime" value="${esc(t.time)}" placeholder="16 h"></div></div>
+      <div class="pTwo"><div><label for="tCup">Cupos</label><input id="tCup" type="number" inputmode="numeric" value="${esc(t.cupos)}"></div><div><label for="tPrice">Precio</label><input id="tPrice" type="number" inputmode="numeric" value="${esc(t.price)}"></div></div><label for="tDesc">Qué incluye</label><textarea id="tDesc">${esc(t.desc)}</textarea>
+      ${main('tsave', 'Guardar')}${edit.isNew ? '' : '<button type="button" class="pDel" data-a="tdel">Quitar el taller</button>'}`; return; }
+  const ts = (x.talleres||[]).slice().sort((a,b) => a.date < b.date ? -1 : 1);
+  v.innerHTML = ts.length ? main('tnew', '+ Agregar taller') + '<p class="pHelp">La gente se anota desde tu página y acá ves quién se anotó.</p>' + ts.map(t => { const ins = S.orders.filter(o => o.product===TAL+t.name && o.date===t.date), n = ins.reduce((s,o) => s + (Number(o.people)||1), 0);
+      return `<p class="pDay">${dlong(t.date)}${t.time ? ', ' + esc(t.time) : ''}</p><div class="pCard"><div class="pRowT"><b>${esc(t.name)}</b><span class="pTag sin">${n} de ${esc(t.cupos)}</span></div><p class="pMeta" style="margin-top:6px">${t.price ? money(t.price) : 'Sin precio'}</p>`
+        + ins.map(o => `<div class="pIns"><div class="pTx"><b>${esc(o.name)}</b><br><span class="mut">${esc(o.phone)}</span></div><button type="button" class="pSec" data-a="tpay" data-id="${esc(o.id)}">${o.paid > 0 ? 'Pagó ✓' : 'Debe'}</button><button type="button" class="pDel" style="margin:0" data-a="odel" data-id="${esc(o.id)}">Quitar</button></div>`).join('')
+        + `<div class="pAcc"><button type="button" class="pSec" data-a="tedit" data-id="${esc(t.id)}">Cambiar ›</button></div></div>`; }).join('')
+    : `<div class="pCard"><p>Todavía no cargaste ningún taller. Cargá la fecha y los cupos, y la gente se anota desde tu página.</p>${main('tnew', '+ Agregar taller')}</div>`; };
+
+/* ---------- CARTA ---------- */
+const info = p => window.tvInfo ? window.tvInfo(p) : {grupo: p.cat, desde: p.price, pers: false};
+window.renderCar = function(){ const v = q('#pv-car'), x = X();
+  if(edit && edit.k==='p'){ const p = edit.p;
+    if(N.sub==='opc' && !edit.isNew){ N.tv = {modo: 'opc', id: p.id}; v.innerHTML = back('opc0') + `<h3>Opciones de ${esc(p.name)}</h3><p class="pHelp" style="margin:0 0 4px!important">Lo que tu cliente puede elegir en este producto.</p><div id="tvpc"></div>`; if(window.tvMount) window.tvMount(); return; }
+    const g = edit.grp != null ? edit.grp : ((((x.var||{})[p.id]||{}).grp) || p.cat || ''), cats = [...new Set(S.products.map(r => info(r).grupo).filter(Boolean))];
+    v.innerHTML = back() + `<h3>${edit.isNew ? 'Agregar producto' : 'Editar producto'}</h3>
+      <label>Foto</label><div class="pFoto">${p.img ? `<img src="${esc(p.img)}" alt="">` : `<span class="pPh">${CAM}</span>`}<label class="pSec">${p.img ? 'Cambiar foto' : 'Subir foto'}<input type="file" id="pFile" accept="image/*" hidden></label></div>
+      <label for="pName">Nombre</label><input id="pName" value="${esc(p.name)}"><label for="pPrice">Precio desde ($)</label><input id="pPrice" type="number" inputmode="numeric" value="${p.price||''}" placeholder="Vacío: a confirmar">
+      <label for="pGrp">Categoría en tu página</label><input id="pGrp" list="pnlCats" maxlength="30" value="${esc(g)}" placeholder="Por ejemplo: Cookies"><datalist id="pnlCats">${cats.map(c => `<option value="${esc(c)}">`).join('')}</datalist>
+      <label for="pDesc">Descripción corta</label><input id="pDesc" value="${esc(p.desc)}"><label for="pCat">Tipo</label><select id="pCat"><option value="${CAKES}"${p.cat===CAKES?' selected':''}>Torta para armar (elige relleno)</option><option value="Otros"${p.cat!==CAKES?' selected':''}>Otro producto</option></select>
+      <label class="pSw"><span>Se muestra en tu página</span><input type="checkbox" id="pVis"${p.visible ? ' checked' : ''}></label>
+      ${edit.isNew ? '<p class="pHelp">Las opciones se cargan después de guardar el producto.</p>' : '<button type="button" class="pRow pSolo" data-a="pnl" data-v="opc"><span>Opciones</span><span>›</span></button>'}
+      ${main('psave', 'Guardar')}${edit.isNew ? '' : '<button type="button" class="pDel" data-a="pdel">Borrar el producto</button>'}`; return; }
+  if(N.sub==='sab'){ const s3 = P.sab3; v.innerHTML = back('sab0') + `<h3>Sabores para armar la torta</h3><p class="pHelp" style="margin:0!important">Uno por renglón.</p><label for="xBiz">Bizcochuelos</label><textarea id="xBiz">${esc((x.biz||[]).join('\n'))}</textarea><label for="xRel">Rellenos</label><textarea id="xRel">${esc((x.rel||[]).join('\n'))}</textarea><label for="xCob">${s3[0]}</label><textarea id="xCob">${esc((x[s3[1]]||[]).join('\n'))}</textarea>${main('xsave', 'Guardar')}`; return; }
+  const ps = S.products, falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = ps.filter(p => p.visible!==false && !info(p).desde).length;
+  const pend = falta || sinP ? `<p class="pPend">${falta ? `<b style="color:var(--prj)">${falta===1 ? 'Te falta 1 foto.' : 'Te faltan ' + falta + ' fotos.'}</b> ` : ''}${sinP ? `<b style="color:var(--prj)">${sinP===1 ? '1 producto no tiene' : sinP + ' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>` : '';
+  const rows = ps.map(p => { const i = info(p), w = [], vis = p.visible!==false;
+    if(!p.img && vis) w.push('Subí la foto'); if(vis && !i.desde) w.push('Cargá un precio "Desde"'); if(!vis) w.push('No se muestra en tu página');
+    return `<button type="button" class="pRowP vpr" data-a="pedit" data-id="${esc(p.id)}">${p.img ? `<img src="${esc(p.img)}" alt="">` : vis ? `<span class="vnf" role="img" aria-label="Falta foto">${CAM}</span>` : `<span class="vnx">${CAM}</span>`}<span class="pTx"><span class="vnm">${esc(p.name)}</span><span class="pPr">${i.desde ? 'Desde ' + money(i.desde) : 'Sin precio'}</span>${w.map(t => `<span class="vwn">${t}</span>`).join('')}</span><span class="pEd">Editar ›</span></button>`; }).join('');
+  v.innerHTML = (ps.length ? main('pnew', '+ Agregar producto') + '<p class="pHelp">Lo que cambies acá se ve al instante en tu página.</p>' + `<div id="tvpc" class="pList">${pend}${rows}</div>`
+      : `<div class="pCard"><p>Todavía no cargaste productos.</p>${main('pnew', '+ Agregar producto')}</div><div id="tvpc" hidden></div>`)
+    + ((x.biz||[]).length || (x.rel||[]).length ? '<button type="button" class="pRow pSolo" data-a="pnl" data-v="sab"><span>Sabores para armar la torta</span><span>›</span></button>' : ''); };
+
+/* ---------- MÁS ---------- */
+const MENU = [['cobrar', 'Cuánto cobrar'], ['entrega', 'Pedidos y entrega'], ['sena', 'Seña y alias'], ['enc', 'Encabezado de tu página'], ['visitas', 'Visitas'], ['instalar', 'Instalar como app'], ['clave', 'Cambiar la clave']];
+window.renderMas = function(){ const v = q('#pv-mas'), s = S.settings, x = X(), f = (k,l,ph,t) => `<label>${l}<input data-c="${k}" ${t?'':'type="number" inputmode="decimal"'} value="${esc(C[k])}" placeholder="${ph||''}" style="margin-top:6px"></label>`;
+  const sb = N.sub, tit = sb ? `${back('mas0')}<h3>${(MENU.find(m => m[0]===sb)||['',''])[1]}</h3>` : '';
+  if(sb==='cobrar'){ v.innerHTML = tit + f('name', 'Producto', P.calc, 1) + f('ing', 'Ingredientes ($)') + f('pack', 'Caja, base y decoración ($)') + `<div class="pTwo"><div>${f('hours', 'Horas de trabajo')}</div><div>${f('rate', 'Valor de tu hora ($)')}</div></div>` + f('gas', 'Gas, luz y envío ($)') + f('margin', 'Ganancia que querés (%)')
+      + `<div id="cOut" style="margin-top:14px"></div>${main('csave', 'Guardar este cálculo')}` + (S.costs.filter(r => r[0]).length ? '<p class="pDay">Cálculos guardados</p>' : '') + S.costs.filter(r => r[0]).map((r,i) => `<div class="pIns"><div class="pTx"><b>${esc(r[0])}</b><br><span class="mut">Sugerido ${money(r[7])}</span></div><button type="button" class="pSec" data-a="cload" data-i="${i}">Ver</button><button type="button" class="pDel" style="margin:0" data-a="cdel" data-i="${i}">Borrar</button></div>`).join('');
+    calcOut(); return; }
+  if(sb==='entrega'){ v.innerHTML = tit + `<label for="sWa">Tu WhatsApp para recibir pedidos</label><input id="sWa" type="tel" value="${esc(x.wa||'')}" placeholder="Con característica, sin 0 ni 15"><label for="sLead">Días de anticipación mínima</label><input id="sLead" type="number" inputmode="numeric" value="${esc(x.lead)}"><label for="sPick">Dónde se retira</label><input id="sPick" value="${esc(x.pickup)}" placeholder="Zona o dirección"><label for="sEnv">Hacés envíos</label><select id="sEnv"><option value="1"${x.envio?' selected':''}>Sí, se coordinan por WhatsApp</option><option value="0"${x.envio?'':' selected'}>No, solo retiro</option></select>`
+      + (P.agenda ? '' : `<label for="sBlk">Días que no tomás pedidos</label><div class="pTwo"><input id="sBlk" type="date"><button type="button" class="pSec" data-a="badd" style="min-height:52px;width:100%">Agregar el día</button></div><div class="pChips">${(s.blocked||[]).filter(d => d >= iso(today)).sort().map(d => `<button type="button" class="pSec" data-a="bdel" data-d="${d}" aria-label="Quitar ${dshort(d)}">${dshort(d)} ✕</button>`).join('')}</div>`)
+      + main('pnlent', 'Guardar'); return; }
+  if(sb==='sena'){ v.innerHTML = tit + `<label for="sSena">Seña (%)</label><input id="sSena" type="number" inputmode="numeric" value="${esc(s.senaPct)}"><label for="sAlias">Alias</label><input id="sAlias" value="${esc(s.alias)}"><label for="sAliasN">A nombre de</label><input id="sAliasN" value="${esc(s.aliasName)}">` + main('pnlsena', 'Guardar'); return; }
+  if(sb==='enc'){ N.tv = {modo: 'enc'}; v.innerHTML = tit + '<div id="tvpc"></div>'; if(window.tvMount) window.tvMount(); const h = q('#tvpc .venc h3'); if(h) h.remove(); return; }
+  if(sb==='visitas'){ v.innerHTML = tit + '<div class="pCard"><p><b id="vN">…</b> visitas a tu página.</p><p><b id="vP">…</b> pedidos hechos desde ahí.</p></div>';
+    const g = HIT.replace('/hit/','/get/'), put = (id,t) => { const e = q(id); if(e) e.textContent = t; }; fetch(g).then(r => r.json()).then(j => put('#vN', j.value||0)).catch(() => put('#vN', 0)); fetch(g+'-pedidos').then(r => r.json()).then(j => put('#vP', j.value||0)).catch(() => put('#vP', 0)); return; }
+  if(sb==='instalar'){ const l = D.getElementById('insL'); v.innerHTML = tit + (l ? '<p>Te queda el ícono en el celular y entrás directo a tu panel, sin buscar el link.</p>' + main('pnlins', 'Instalar la app') : '<div class="pCard"><p>Ya la tenés instalada en este celular.</p></div>'); return; }
+  if(sb==='clave'){ v.innerHTML = tit + `<p class="pHelp" style="margin:0!important">De 4 a 8 números.</p><label for="npin">Clave nueva</label><input id="npin" type="password" inputmode="numeric"><label for="npin2">Repetir la clave nueva</label><input id="npin2" type="password" inputmode="numeric">` + main('pinsave', 'Cambiar la clave'); return; }
+  v.innerHTML = '<div class="pMenu">' + MENU.map(m => `<button type="button" class="pRow" data-a="pnl" data-v="${m[0]}"><span>${m[1]}</span><span>›</span></button>`).join('') + '<button type="button" class="pRow pSalir" data-a="out"><span>Salir del panel</span><span></span></button></div>'; };
+
+/* ---------- acciones del panel nuevo (las de siempre las sigue haciendo el panel de base) ---------- */
+const up = () => { try{ window.scrollTo(0, 0); }catch(e){} };
+q('#app').addEventListener('click', e => { const b = e.target.closest('[data-a="psave"]'); if(!b || !edit || edit.k!=='p') return;   /* la categoría se guarda con el producto */
+  const g = q('#pGrp'), n = q('#pName'); if(!g || !n || !n.value.trim()) return; const val = g.value.replace(/\s+/g, ' ').trim(), x = X(); x.var = x.var || {}; const cur = x.var[edit.p.id] || {};
+  if((cur.grp || '') === val) return; const nv = Object.assign({}, cur); if(val) nv.grp = val; else delete nv.grp; x.var[edit.p.id] = nv;
+  setTimeout(() => { saveSettings(); try{ renderSite(); }catch(err){} }, 0); }, true);
+q('#app').addEventListener('click', async e => { const b = e.target.closest('[data-a]'); if(!b) return; const a = b.dataset.a, x = X();
+  if(a==='pnl'){ const v = b.dataset.v;
+    if(v==='dia0'){ N.dia = ''; renderTal(); } else if(v==='opc0'){ N.sub = ''; N.tv = null; renderCar(); } else if(v==='sab0'){ N.sub = ''; renderCar(); } else if(v==='mas0'){ N.sub = ''; N.tv = null; renderMas(); }
+    else if(v==='opc'){ const p = edit.p; Object.assign(p, {name: q('#pName').value, desc: q('#pDesc').value, price: Number(q('#pPrice').value)||null, cat: q('#pCat').value, visible: q('#pVis').checked}); edit.grp = q('#pGrp').value; N.sub = 'opc'; renderCar(); }
+    else if(v==='sab'){ N.sub = 'sab'; renderCar(); } else { N.sub = v; renderMas(); } up(); return; }
+  if(a==='old'){ up(); }
+  if(a==='pnlodel'){ if(!sure(b, 'd'+b.dataset.id)) return; S.orders = S.orders.filter(o => o.id!==b.dataset.id); send({a:'delOrder', id:b.dataset.id}, 'Borrado'); edit = null; renderPanel(); up(); }
+  if(a==='pnlent'){ x.wa = q('#sWa').value.replace(/\D/g,''); if(x.wa && !x.wa.startsWith('54')) x.wa = '549'+x.wa.replace(/^0/,''); x.lead = Number(q('#sLead').value)||0; x.pickup = q('#sPick').value.trim(); x.envio = q('#sEnv').value==='1'; saveSettings('Guardado ✓'); renderSite(); renderMas(); }
+  if(a==='pnlsena'){ S.settings.senaPct = Number(q('#sSena').value)||0; S.settings.alias = q('#sAlias').value.trim(); S.settings.aliasName = q('#sAliasN').value.trim(); saveSettings('Guardado ✓'); renderSite(); renderMas(); }
+  if(a==='pnlins'){ const l = D.getElementById('insL'); if(l) l.click(); }
+  if(a==='psave' || a==='pdel' || a==='osave' || a==='tsave' || a==='tdel'){ N.sub = ''; N.tv = null; }
+});
+q('#app').addEventListener('click', e => { const c = e.target.closest('#pnlCal [data-cal]'), d = e.target.closest('#pnlCal [data-day]');
+  if(c){ calM += Number(c.dataset.cal); renderTal(); return; } if(d && !d.disabled){ N.dia = d.dataset.day; renderTal(); up(); } });
+q('#app').addEventListener('change', e => { if(e.target.id!=='pnlFull') return; const d = N.dia, bl = S.settings.blocked||[]; S.settings.blocked = e.target.checked ? [...new Set(bl.concat([d]))] : bl.filter(v => v!==d); saveSettings(e.target.checked ? 'Día completo ✓' : 'Día liberado ✓'); try{ renderSite(); }catch(err){} });
+try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
+marca();
+})();</script>
 </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
