@@ -7,6 +7,7 @@
 
 
 
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Capas y Sabores · Tortas y postres en San Luis</title>
@@ -420,7 +421,6 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="pop"] .pCat{position:relative;padding:40px 0 40px 20px;background:var(--fondo)}
 #tv[data-familia="pop"] .pCat.pAlt{background:var(--fondo-2)}
 #tv[data-familia="pop"] .pCatT{color:var(--tinta);font:400 28px/1.05 'Archivo Black',var(--fd);text-transform:uppercase;margin:0 20px 20px 0;display:flex;align-items:baseline;gap:12px}
-#tv[data-familia="pop"] .pCatT span{font-size:44px;color:var(--tinta);-webkit-text-stroke:0;opacity:1}
 #tv[data-familia="pop"] .pConf{position:absolute;right:14px;top:12px;width:72px;height:40px}
 #tv[data-familia="pop"] .pCarr{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 40px 14px 0;scrollbar-width:none}
 #tv[data-familia="pop"] .pCarr::-webkit-scrollbar{display:none}
@@ -446,6 +446,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="casera"] .cSello{position:relative;display:inline-block;width:112px;height:112px}
 #tv[data-familia="casera"] .cSello svg{position:absolute;inset:0;width:112px;height:112px}
 #tv[data-familia="casera"] .cSello img{position:absolute;left:14px;top:14px;width:84px;height:84px;border-radius:50%;object-fit:contain;background:var(--fondo)}
+#tv[data-familia="casera"] .cSelloN{position:absolute;left:14px;top:14px;width:84px;height:84px;display:flex;align-items:center;justify-content:center;text-align:center;font:600 16px/1.1 'Fraunces',Georgia,serif;color:var(--tinta);overflow-wrap:anywhere}
 #tv[data-familia="casera"] .cAro{position:absolute;left:-24px;top:-24px;width:160px;height:160px}
 #tv[data-familia="casera"] .cHola{font:600 28px/1.15 'Caveat',cursive;margin:14px 0 2px;color:var(--tinta)}
 #tv[data-familia="casera"] .cTit{font:600 30px/1.15 'Fraunces',Georgia,serif;margin:0 0 10px;color:var(--tinta)}
@@ -476,6 +477,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="casera"] .cVst button{width:48px;height:48px;border-radius:999px;border:2px solid var(--tinta);background:var(--acento);color:var(--sobre-acento);font-size:24px;line-height:1}
 #tv[data-familia="casera"] .cVst b{min-width:24px;text-align:center;font-size:19px}
 #tv[data-familia="casera"] .cRow select{margin-top:10px;max-width:100%;font-size:17px}
+#tv[data-familia="casera"] .cCerr{margin:24px 0 0;font-size:15px}
 #tv[data-familia="casera"] .cPie{background:var(--fondo-2);padding:28px 20px 40px;text-align:center;font-size:17px}
 #tv[data-familia="casera"] .cPie a{display:inline-block;margin:6px;padding:12px 22px;border-radius:999px;border:2px solid var(--tinta);background:var(--acento);color:var(--sobre-acento);font-weight:700;text-decoration:none}
 /*FAM editorial*/
@@ -496,7 +498,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="editorial"] .eIdxZ{display:block;height:24px}
 #tv[data-familia="editorial"] .eIdx{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 24px;padding:16px 0;border-top:1px solid color-mix(in srgb,var(--tinta) 20%,transparent);border-bottom:1px solid color-mix(in srgb,var(--tinta) 20%,transparent)}
 #tv[data-familia="editorial"] .eIdx button{border:0;background:none;color:var(--tinta);font:600 15px/1.2 'Work Sans',var(--fb);letter-spacing:.14em;text-transform:uppercase;padding:10px 0;cursor:pointer}
-#tv[data-familia="editorial"] .eIdx button span{margin-right:6px;opacity:.7}
+#tv[data-familia="editorial"] .eIdx button+button::before{content:'·';display:inline-block;margin:0 14px 0 -4px}
 #tv[data-familia="editorial"] .eSep{display:flex;justify-content:center;height:40px;margin:16px 0 0}
 #tv[data-familia="editorial"] .eSep svg{width:64px;height:40px}
 #tv[data-familia="editorial"] .eCat{padding:40px 0 16px;scroll-margin-top:12px}
@@ -510,10 +512,9 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="editorial"] .eAlt img{aspect-ratio:3/4}
 #tv[data-familia="editorial"] .eAlt .eTx{padding:0}
 #tv[data-familia="editorial"] .eAlt.eSolo{grid-template-columns:1fr}
-#tv[data-familia="editorial"] .eNum{display:block;font:600 15px/1.2 'Work Sans',var(--fb);letter-spacing:.14em;text-transform:uppercase}
-#tv[data-familia="editorial"] .eN{display:block;font:600 22px/1.2 'Playfair Display',Georgia,serif;margin:6px 0 4px}
-#tv[data-familia="editorial"] .eD{display:block;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#tv[data-familia="editorial"] .ePr{display:block;margin-top:8px;font:600 15px/1.2 'Work Sans',var(--fb);letter-spacing:.14em;text-transform:uppercase}
+#tv[data-familia="editorial"] .eN{display:block;font:600 22px/1.2 'Playfair Display',Georgia,serif;margin:0 0 4px}
+#tv[data-familia="editorial"] .eD{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px}
+#tv[data-familia="editorial"] .ePr{display:block;margin-top:8px;font:450 17px/1.4 'Work Sans',var(--fb)}
 #tv[data-familia="editorial"] .eFull:focus-visible,#tv[data-familia="editorial"] .eAlt:focus-visible,#tv[data-familia="editorial"] .eIdx button:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
 #tv[data-familia="editorial"] .ePie{margin-top:40px;padding:32px 24px 48px;border-top:1px solid var(--tinta);text-align:center}
 #tv[data-familia="editorial"] .ePie a{display:inline-block;margin:6px;padding:14px 20px;border:1.5px solid var(--tinta);border-radius:2px;color:var(--tinta);font:600 15px/1 'Work Sans',var(--fb);letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
@@ -1311,7 +1312,7 @@ renderSite(); route();
 if(API){ if(logged){ pullAll().then(r=>{ if(r.ok){ renderSite(); route(); } }).catch(()=>{}); } else pullPub(); }
 </script>
 <script>/*TV v1*/ (function(){
-const C = {"rubro": "tortas", "familia": "casera", "colores": {"tinta": "#4a2c25", "fondo": "#fff8f3", "fondo-2": "#f8e4e6", "acento": "#f2b8c6", "acento-2": "#e9c9a0", "sobre-acento": "#4a2c25"}, "destacada": "img/hb.jpg", "panel": "#admin", "nom": "#plist input[data-k=\"name\"]", "before": "#plist", "fn": "renderPrices", "full": true, "rel2": false, "lead": 2, "slug": "capasysabores", "nombres": ["Torta de cumplea\u00f1os", "Torta personalizada", "Torta tem\u00e1tica", "Torta de dos pisos", "Minitorta", "Bento cake", "Chocotorta", "Cheesecake", "Cheesecake de frutos rojos", "Lemon pie", "Key lime pie", "Red velvet", "Toffee", "Brownie", "Brownie con merengue", "Tarta de frutillas", "Tarta de frutos rojos", "Tarta de durazno", "Tarta de manzana", "Pastafrola", "Tiramis\u00fa", "Marquise", "Torta Balcarce", "Rogel", "Selva negra", "Carrot cake", "Torta galesa", "Torta de ricota", "Bud\u00edn de lim\u00f3n", "Bud\u00edn de naranja", "Bud\u00edn marmolado", "Alfajores de maicena", "Alfajores de chocolate", "Cookies", "Box de cookies", "Cupcakes", "Macarons", "Cake pops", "Mesa dulce", "Postres en vasito", "Bombones", "Pavlova", "Trufas", "Scones", "Medialunas", "Flan casero", "Mousse de chocolate", "Torta matilda"]}, D = document, q = s => D.querySelector(s);
+const C = {"rubro": "tortas", "familia": "casera", "colores": {"tinta": "#4a2c25", "fondo": "#fff8f3", "fondo-2": "#f8e4e6", "acento": "#f2b8c6", "acento-2": "#e9c9a0", "sobre-acento": "#4a2c25"}, "destacada": "img/hb.jpg", "panel": "#admin", "logo": "img/logo.jpg", "nom": "#plist input[data-k=\"name\"]", "before": "#plist", "fn": "renderPrices", "full": true, "rel2": false, "lead": 2, "slug": "capasysabores", "nombres": ["Torta de cumplea\u00f1os", "Torta personalizada", "Torta tem\u00e1tica", "Torta de dos pisos", "Minitorta", "Bento cake", "Chocotorta", "Cheesecake", "Cheesecake de frutos rojos", "Lemon pie", "Key lime pie", "Red velvet", "Toffee", "Brownie", "Brownie con merengue", "Tarta de frutillas", "Tarta de frutos rojos", "Tarta de durazno", "Tarta de manzana", "Pastafrola", "Tiramis\u00fa", "Marquise", "Torta Balcarce", "Rogel", "Selva negra", "Carrot cake", "Torta galesa", "Torta de ricota", "Bud\u00edn de lim\u00f3n", "Bud\u00edn de naranja", "Bud\u00edn marmolado", "Alfajores de maicena", "Alfajores de chocolate", "Cookies", "Box de cookies", "Cupcakes", "Macarons", "Cake pops", "Mesa dulce", "Postres en vasito", "Bombones", "Pavlova", "Trufas", "Scones", "Medialunas", "Flan casero", "Mousse de chocolate", "Torta matilda"]}, D = document, q = s => D.querySelector(s);
 const E = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const M = n => '$' + Math.round(Number(n)||0).toLocaleString('es-AR');
 const site = q('#site'), tv = q('#tv'), SH = q('#tvS'), BAR = q('#tvB');
@@ -1325,7 +1326,8 @@ const norm = s => String(s||'').trim().toLowerCase();
 
 /* ---- Contenido de la propia página (no se pide nada nuevo al dueño) ---- */
 const B = (function(){ const h = site.querySelector('header'), cs = e => e ? getComputedStyle(e) : null;
-  const logo = (h && h.querySelector('img')) || site.querySelector('img'), br = h && (h.querySelector('.brand') || h);
+  /* logo: solo una imagen que sea logo (src, alt o clase con 'logo'); nunca la primera foto de la página (CONTENIDO 17/11 08:49). APPS[slug]['logo'] lo fija a mano */
+  const esLogo = e => /logo/i.test((e.getAttribute('src')||'') + ' ' + (e.alt||'') + ' ' + (e.className||'')), logo = C.logo !== undefined ? null : [...site.querySelectorAll('img')].find(esLogo), br = h && (h.querySelector('.brand') || h);
   const accs = [...site.querySelectorAll('a[href="#panel"],a[href="#admin"]')], acc = accs[accs.length-1];
   const h1 = site.querySelector('h1'), lead = h1 && h1.parentElement.querySelector('p');
   const hero = site.querySelector('.hero img, section img'), ig = site.querySelector('a[href*="instagram.com"]'), btn = site.querySelector('.btn') || site.querySelector('button');
@@ -1338,7 +1340,7 @@ const B = (function(){ const h = site.querySelector('header'), cs = e => e ? get
   const bc = cands[0] || null, bg = pv || (bc ? bc.backgroundColor : ''), col = '#fff';
   let who = (acc && acc.textContent || '').replace(/^\s*acceso\s*/i,'').trim();
   const fotos = [...new Set([...site.querySelectorAll('img')].map(i => i.getAttribute('src')).filter(s => s && !/^data:/.test(s)))];
-  return {name, fotos, hero: hero ? hero.getAttribute('src') : '', logo: logo ? logo.getAttribute('src') : '', h1: h1 ? h1.textContent.trim() : '', lead: lead ? lead.textContent.trim() : '',
+  return {name, fotos, hero: hero ? hero.getAttribute('src') : '', logo: C.logo !== undefined ? C.logo : logo ? logo.getAttribute('src') : '', h1: h1 ? h1.textContent.trim() : '', lead: lead ? lead.textContent.trim() : '',
     ig: ig ? ig.href : '', acc: acc ? acc.getAttribute('href') : '#panel', accT: acc ? acc.textContent.trim() : 'Acceso', who: who || name,
     fd, fb: f(D.body), fn: f(br), a: (bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)) ? bg : '', ai: col,
     b: cs(D.body).backgroundColor, i: cs(D.body).color};
@@ -1392,7 +1394,7 @@ function render(){
     ${foot()}</div>`);
 }
 /* FAMILIA A POP / FESTEJO: banda con texto repetido, logo en sticker, título en mayúscula con una palabra resaltada,
-   foto destacada con sombra dura; catálogo en bandas por categoría con número grande y carrusel (1 o 2 productos: columna). */
+   foto destacada con sombra dura; catálogo en bandas por categoría (sin números) y carrusel (1 o 2 productos: columna). */
 const confites = i => `<svg class="pConf" viewBox="0 0 72 40" aria-hidden="true"><circle cx="10" cy="12" r="6" fill="var(--acento)" stroke="var(--tinta)" stroke-width="2.5"/><path d="M30 30 l8-14 8 14z" fill="var(--acento-2)" stroke="var(--tinta)" stroke-width="2.5" stroke-linejoin="round"/><path d="M52 10 l5 6 5-6 5 6" fill="none" stroke="var(--tinta)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 function popCard(p, ancho){ const f = foto(p), n = desde(p), pr = n ? 'Desde ' + M(n) : 'A consultar';
   return `<button type="button" class="pCard" data-p="${E(p.id)}">${f ? `<span class="pFoto"><img src="${E(f)}" alt="${E(p.name)}"><span class="pPrecio">${pr}</span></span><span class="pN">${E(p.name)}</span>` : `<span class="pSinFoto"><span class="pN">${E(p.name)}</span>${p.desc ? `<span class="pD">${E(p.desc)}</span>` : ''}<span class="pPrecio pSolo">${pr}</span></span>`}</button>`; }
@@ -1407,7 +1409,7 @@ function renderPop(){
     ${B.logo ? `<span class="pSticker"><img src="${E(B.logo)}" alt="${E(B.name)}"></span>` : `<p class="pN">${E(B.name)}</p>`}
     <h1 class="pTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="pLead">${E(B.lead)}</p>` : ''}
     ${heroPop() ? `<div class="pHero"><div class="pZona" data-temporada="foto"></div><img src="${E(heroPop())}" alt="${E(B.name)}"></div>` : ''}</div>`;
-  const banda2 = (i, titulo, html, n) => `<div class="pSep" data-temporada="separador"></div><section class="pCat${i % 2 ? ' pAlt' : ''}">${confites(i)}<h2 class="pCatT"><span>${String(i+1).padStart(2,'0')}</span>${E(titulo)}</h2><div class="${n > 2 ? 'pCarr' : 'pCol'}">${html}</div></section>`;
+  const banda2 = (i, titulo, html, n) => `<div class="pSep" data-temporada="separador"></div><section class="pCat${i % 2 ? ' pAlt' : ''}">${confites(i)}<h2 class="pCatT">${E(titulo)}</h2><div class="${n > 2 ? 'pCarr' : 'pCol'}">${html}</div></section>`;
   cats.forEach((c, i) => { const its = ps.filter(p => (p.cat||'Otros')===c); h += banda2(i, c, its.map(p => popCard(p)).join(''), its.length); });
   let k = cats.length;
   if(tal.length) h += banda2(k++, 'Talleres', tal.map(x => `<button type="button" class="pCard" data-tl="${E(x.id)}"><span class="pSinFoto"><span class="pN">${E(x.name)}</span><span class="pD">${fecha(x.date)}${x.time ? ', ' + E(x.time) + ' h' : ''}</span><span class="pPrecio pSolo">${x.price ? M(x.price) : 'A consultar'}</span></span></button>`).join(''), tal.length);
@@ -1422,10 +1424,12 @@ function renderPop(){
 const sello = () => { let d = ''; for(let i = 0; i <= 18; i++){ const a = i/18*Math.PI*2, r = i % 2 ? 50 : 55; d += (i ? 'L' : 'M') + (56 + r*Math.cos(a)).toFixed(1) + ' ' + (56 + r*Math.sin(a)).toFixed(1); }
   let s = ''; for(let i = 0; i < 18; i++){ const a = (i+.5)/18*Math.PI*2; s += `<circle cx="${(56 + 50*Math.cos(a)).toFixed(1)}" cy="${(56 + 50*Math.sin(a)).toFixed(1)}" r="8.5"/>`; }
   return `<svg viewBox="0 0 112 112" aria-hidden="true"><g fill="var(--fondo-2)" stroke="var(--tinta)" stroke-width="2">${s}<circle cx="56" cy="56" r="50" stroke="none"/></g><circle cx="56" cy="56" r="44" fill="none" stroke="var(--tinta)" stroke-width="1.5" stroke-dasharray="4 4"/></svg>`; };
+/* el saludo ya dice el nombre: se saca del texto la oración que lo repite (Soy Maru., Somos Ceci y Bibi.) */
+const sinNombre = s => String(s||'').replace(new RegExp('(^|\\s)(Soy|Somos)\\s+' + B.who.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[^.!?]*[.!?]\\s*', 'i'), ' ').trim();
 const ciudadDe = () => ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
 function portadaCasera(){ const hf = heroPop();
-  return `<div class="cIn"><span class="cSello">${sello()}<span class="cAro" data-temporada="aro"></span>${B.logo ? `<img src="${E(B.logo)}" alt="${E(B.name)}">` : ''}</span>
-    <p class="cHola">Hola, ${/ y /.test(B.who) ? 'somos' : 'soy'} ${E(B.who)}</p><h1 class="cTit">${E(B.h1 || B.name)}</h1>${B.lead ? `<p class="cLead">${E(B.lead)}</p>` : ''}
+  return `<div class="cIn"><span class="cSello">${sello()}<span class="cAro" data-temporada="aro"></span>${B.logo ? `<img src="${E(B.logo)}" alt="${E(B.name)}">` : `<span class="cSelloN">${E(B.name)}</span>`}</span>
+    <p class="cHola">Hola, ${/ y /.test(B.who) ? 'somos' : 'soy'} ${E(B.who)}</p><h1 class="cTit">${E(B.h1 || B.name)}</h1>${sinNombre(B.lead) ? `<p class="cLead">${E(sinNombre(B.lead))}</p>` : ''}
     ${hf ? `<figure class="cPola"><span class="cCinta1" data-temporada="cinta"></span><span class="cCinta2" data-temporada="cinta"></span><img src="${E(hf)}" alt="${E(B.name)}"><figcaption>Hecho en casa${ciudadDe() ? ', en ' + E(ciudadDe()) : ''}</figcaption></figure>` : ''}</div>`; }
 const cinta = (titulo, extra) => `<h2 class="cBan"><span data-temporada="cinta-titulo"></span>${E(titulo)}${extra ? `<small>${extra}</small>` : ''}</h2>`;
 function cRow(p, attrs, precio){ const f = foto(p); return `<button type="button" class="cRow${f ? '' : ' cSolo'}" ${attrs}>${f ? `<img src="${E(f)}" alt="${E(p.name)}" loading="lazy">` : ''}<span><span class="cN">${E(p.name)}</span>${p.desc ? `<span class="cD">${E(p.desc)}</span>` : ''}<span class="cPr"><i></i>${precio}</span></span></button>`; }
@@ -1440,26 +1444,29 @@ function renderCasera(){ const ps = prods(), tal = talleres(), cats = [...new Se
   put(h + '</div>' + pieCasera()); }
 function renderVCasera(){ const md = menu();
   let h = portadaCasera() + `<div class="cCarta"><p class="cLead" style="margin-top:4px">${md.some(d => d.open) ? 'Elegí tus viandas de la semana y cuántas querés de cada una.' : 'El menú de esta semana ya cerró. En breve sale el nuevo.'}</p>`;
-  h += md.length ? md.map(d => `<section class="cCat">${cinta(d.day, pd(d.date).getDate() + ' de ' + MES[pd(d.date).getMonth()] + (d.open ? '' : ', ya cerró'))}` + d.items.map(p => { const n = Q[p.id]||0, ex = V(p).ext||[], f = foto(p);
+  /* días que ya cerraron: al final, en una línea chica; el menú arranca por el primer día abierto (CONTENIDO 17/11 08:49) */
+  const cerr = md.filter(d => !d.open), abiertos = md.filter(d => d.open), lista = abiertos.length ? abiertos : md, yc = n => n.length > 1 ? n.slice(0, -1).join(', ') + ' y ' + n[n.length-1].toLowerCase() : n[0];
+  h += md.length ? lista.map(d => `<section class="cCat">${cinta(d.day, pd(d.date).getDate() + ' de ' + MES[pd(d.date).getMonth()] + (d.open ? '' : ', ya cerró'))}` + d.items.map(p => { const n = Q[p.id]||0, ex = V(p).ext||[], f = foto(p);
       return `<div class="cRow vrow${d.open ? '' : ' voff'}${f ? '' : ' cSolo'}">${f ? `<img src="${E(f)}" alt="${E(p.name)}" loading="lazy">` : ''}<span><span class="cN">${E(p.name)}</span>${p.desc ? `<span class="cD">${E(p.desc)}</span>` : ''}${p.price ? `<span class="cPr"><i></i>${M(p.price)}</span>` : ''}
         ${d.open ? `<span class="cVst vst"><button type="button" data-st="-1" data-id="${E(p.id)}" aria-label="Quitar una">−</button><b>${n}</b><button type="button" data-st="1" data-id="${E(p.id)}" aria-label="Agregar una">+</button></span>` : ''}
         ${d.open && n && ex.length ? `<select data-op="${E(p.id)}" aria-label="Opción para ${E(p.name)}"><option value="">Sin cambios</option>${ex.map(e => `<option${QO[p.id]===e.n?' selected':''}>${E(e.n)}</option>`).join('')}</select>` : ''}</span></div>`; }).join('') + '</section>').join('')
     : '<p class="cLead">Estamos armando el menú de la semana.</p>';
+  if(abiertos.length && cerr.length) h += `<p class="cCerr">${E(yc(cerr.map(d => d.day)))} ya ${cerr.length > 1 ? 'cerraron' : 'cerró'}.</p>`;
   put(h + '</div>' + pieCasera()); bar(); }
 /* FAMILIA C EDITORIAL ARTESANAL: nombre espaciado entre filetes, título serif con una palabra en itálica, foto a sangre con epígrafe, índice numerado;
-   la primera de cada categoría a sangre y las demás en filas que alternan lado, con N.º; ornamento botánico. */
+   la primera de cada categoría a sangre y las demás en filas que alternan lado; ornamento botánico. Sin números decorativos (CONTENIDO 17/11 08:49). */
 const ramita = (w, h) => `<svg viewBox="0 0 64 40" width="${w}" height="${h}" aria-hidden="true" fill="none" stroke="var(--tinta)" stroke-width="1.2" stroke-linecap="round"><path d="M4 30 C20 26 38 18 60 8"/><path d="M18 26 c-2-6 2-10 6-11 c0 5-2 9-6 11z M30 21 c0-6 4-9 8-9 c-1 5-4 8-8 9z M42 15 c1-5 5-8 9-7 c-2 4-5 7-9 7z M24 24 c4 3 9 3 12 1 c-4-3-8-3-12-1z M37 18 c4 2 8 2 11 0 c-3-3-8-3-11 0z"/></svg>`;
-function eItem(p, i, attrs, precio){ const f = foto(p), num = 'N.º ' + String(i+1).padStart(2,'0'), tx = `<span class="eTx"><span class="eNum">${num}</span><span class="eN">${E(p.name)}</span>${p.desc ? `<span class="eD">${E(p.desc)}</span>` : ''}<span class="ePr">${precio}</span></span>`;
+function eItem(p, i, attrs, precio){ const f = foto(p), tx = `<span class="eTx"><span class="eN">${E(p.name)}</span>${p.desc ? `<span class="eD">${E(p.desc)}</span>` : ''}<span class="ePr">${precio}</span></span>`;
   if(i===0 && f) return `<button type="button" class="eFull" ${attrs}><img src="${E(f)}" alt="${E(p.name)}" loading="lazy">${tx}</button>`;
   return `<button type="button" class="eAlt${f ? (i % 2 ? '' : ' eDer') : ' eSolo'}" ${attrs}>${f ? `<img src="${E(f)}" alt="${E(p.name)}" loading="lazy">` : ''}${tx}</button>`; }
 function renderEditorial(){ const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => p.cat||'Otros'))], hf = heroPop(), ciudad = ciudadDe();
   const w = (B.h1 || B.name).trim().split(/\s+/), k = w.length > 2 ? w.reduce((m, x, i) => i && x.length > w[m].length ? i : m, 1) : -1;
-  const secs = cats.map(c => ({t:c, html: ps.filter(p => (p.cat||'Otros')===c).map((p, i) => eItem(p, i, `data-p="${E(p.id)}"`, desde(p) ? 'Desde ' + M(desde(p)) : 'A consultar')).join('')}));
-  if(tal.length) secs.push({t:'Talleres', html: tal.map((x, i) => eItem({name:x.name, desc:fecha(x.date) + (x.time ? ', ' + x.time + ' h' : '')}, i, `data-tl="${E(x.id)}"`, x.price ? M(x.price) : 'A consultar')).join('')});
-  if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', html: eItem({id:'_pers', name: pers ? pers.name : 'Torta personalizada', desc: (pers && pers.desc) || 'Contame tu idea y te paso el precio.', img: persFoto()}, 0, 'data-pers="1"', 'A consultar')}); }
+  const secs = cats.map(c => ({t:c, html: ps.filter(p => (p.cat||'Otros')===c).map((p, i) => eItem(p, i, `data-p="${E(p.id)}"`, desde(p) ? 'Desde ' + M(desde(p)) : 'Precio a consultar')).join('')}));
+  if(tal.length) secs.push({t:'Talleres', html: tal.map((x, i) => eItem({name:x.name, desc:fecha(x.date) + (x.time ? ', ' + x.time + ' h' : '')}, i, `data-tl="${E(x.id)}"`, x.price ? M(x.price) : 'Precio a consultar')).join('')});
+  if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', html: eItem({id:'_pers', name: pers ? pers.name : 'Torta personalizada', desc: (pers && pers.desc) || 'Contame tu idea y te paso el precio.', img: persFoto()}, 0, 'data-pers="1"', 'Precio a consultar')}); }
   let h = `<p class="eTop">${E(B.name)}</p><div class="eHead"><span class="eOrn" data-temporada="ornamento">${ramita(58, 58)}</span><h1 class="eTit">${w.map((x, i) => i===k ? `<em>${E(x)}</em>` : E(x)).join(' ')}</h1>${B.lead ? `<p class="eLead">${E(B.lead)}</p>` : ''}</div>
     ${hf ? `<figure class="eHero"><img src="${E(hf)}" alt="${E(B.name)}"><figcaption data-temporada="epigrafe">Hecha a mano${ciudad ? ' en ' + E(ciudad) : ''}.</figcaption></figure>` : ''}
-    <span class="eIdxZ" data-temporada="indice"></span>${secs.length > 1 ? `<nav class="eIdx" aria-label="Categorías">${secs.map((s, i) => `<button type="button" data-ir="${i}"><span>${String(i+1).padStart(2,'0')}</span>${E(s.t)}</button>`).join('')}</nav>` : ''}`;
+    <span class="eIdxZ" data-temporada="indice"></span>${secs.length > 1 ? `<nav class="eIdx" aria-label="Categorías">${secs.map((s, i) => `<button type="button" data-ir="${i}">${E(s.t)}</button>`).join('')}</nav>` : ''}`;
   secs.forEach((s, i) => { h += `${i ? `<div class="eSep" data-temporada="separador">${ramita(64, 40)}</div>` : ''}<section class="eCat" id="eCat${i}"><h2 class="eCatT">${E(s.t)}</h2>${s.html}</section>`; });
   if(!ps.length && !tal.length) h += '<p class="eLead" style="margin:24px">Estamos cargando los productos. Volvé en un rato.</p>';
   const wa = WAN(); put(h + `<footer class="ePie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`); }
@@ -1670,6 +1677,7 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
 
 
 
