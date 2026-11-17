@@ -510,7 +510,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 <style>/*PNL v1*/
 body.pnl{--pa:#b8251a;--pas:#ffffff;--pt:#2b2218;--pf:#fdf7eb;--pc:#ffffff;--prj:#b3261e;--pok:#1b6b34;--pas15:#f4dedd;--pl:#d0cecc;--pm:#5a534b}
 body.pnl.admin{background:var(--pf)}
-body.pnl #panel{background:var(--pf);color:var(--pt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:18px;line-height:1.4;padding-bottom:calc(68px + 24px + env(safe-area-inset-bottom))}
+body.pnl #panel{background:var(--pf);color:var(--pt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:18px;line-height:1.4;padding-bottom:calc(148px + env(safe-area-inset-bottom))}
 body.pnl #panel>.in{max-width:600px;margin:0 auto;padding:0 16px}
 body.pnl #panel h3,body.pnl #panel .pH{font-size:22px;line-height:1.2;font-weight:700;margin:4px 0 12px;color:var(--pt);font-family:inherit}
 body.pnl #panel p:not(#cobS):not(#cobB){font-size:18px;margin:0 0 8px}
@@ -596,7 +596,7 @@ body.pnl #tvpc .vlogo{display:flex;align-items:center;gap:14px}
 body.pnl #tvpc .vlogo img{width:64px;height:64px;border-radius:50%;object-fit:cover}
 body.pnl #tvpc .ved{border:0;padding:0;margin:0;background:none}
 body.pnl #app:not([hidden]) ~ #insL,body.pnl.pnlIn #insL{display:none!important}   /* Instalar la app: en el panel, solo en Más (en la pantalla de la clave sigue igual) */
-body.pnl #toast{top:auto!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:70;max-width:calc(100% - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
+body.pnl #toast{top:auto!important;bottom:calc(76px + env(safe-area-inset-bottom))!important;z-index:70;max-width:calc(100% - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
 body.pnl #toast.pOk{white-space:nowrap}
 
 @media (prefers-reduced-motion:reduce){.pSw input,.pSw input::after{transition:none}}
@@ -1646,6 +1646,8 @@ try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
 </body>
+
+
 
 
 
