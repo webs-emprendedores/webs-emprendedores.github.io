@@ -324,7 +324,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="pop"] .pSticker{display:inline-block;width:88px;height:88px;border-radius:50%;border:3px solid var(--tinta);background:var(--fondo);transform:rotate(-6deg);overflow:hidden;box-shadow:4px 4px 0 var(--tinta)}
 #tv[data-familia="pop"] .pSticker img{width:100%;height:100%;object-fit:cover;display:block}
 #tv[data-familia="pop"] .pTit{color:var(--tinta);font:400 36px/1.05 'Archivo Black',var(--fd);text-transform:uppercase;margin:18px 0 12px;letter-spacing:-.01em;overflow-wrap:anywhere}
-#tv[data-familia="pop"] .pTit mark{background:var(--acento);color:var(--sobre-acento);padding:0 8px;border-radius:999px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#tv[data-familia="pop"] .pTit mark{background:var(--acento);color:var(--sobre-acento);padding:0 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 #tv[data-familia="pop"] .pLead{color:var(--tinta);font-size:17px;margin:0 0 24px;max-width:36ch}
 #tv[data-familia="pop"] .pHero{position:relative;margin:0 0 6px}
 #tv[data-familia="pop"] .pHero img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center;border:3px solid var(--tinta);box-shadow:6px 6px 0 var(--tinta)}
@@ -355,25 +355,10 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="pop"] .pPie{background:var(--tinta);color:var(--fondo);padding:32px 20px 40px;font-size:16px}
 #tv[data-familia="pop"] .pPie a{color:var(--fondo);display:inline-flex;align-items:center;min-height:48px;margin:6px 8px 0 0;padding:0 20px;border:2px solid var(--fondo);border-radius:999px;font-weight:700;text-decoration:none}
 #tv[data-familia="pop"] .pPie .pAcc{font-weight:500}
-/* QUÉ SE TOCA (Dardo 17/11 09:17): pop en filas que alternan lado, foto redonda, botón Elegir */
-#tv[data-familia="pop"] .pFilas{display:grid;gap:18px;padding-right:20px}
-#tv[data-familia="pop"] .pRow{display:grid;grid-template-columns:min(168px,40vw) 1fr;gap:16px;align-items:center;width:100%;min-height:48px;padding:16px;border:2px solid var(--tinta);border-radius:16px;background:var(--fondo);color:var(--tinta);font:inherit;text-align:left;cursor:pointer}
-#tv[data-familia="pop"] .pAlt .pRow{background:var(--fondo)}
-#tv[data-familia="pop"] .pRow.pIzq{grid-template-columns:1fr min(168px,40vw)}
-#tv[data-familia="pop"] .pRow.pIzq .pRedonda{order:2}
-#tv[data-familia="pop"] .pRow.pSinF{grid-template-columns:1fr}
-#tv[data-familia="pop"] .pRedonda{width:100%;height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;object-position:center;border:3px solid var(--tinta);box-shadow:5px 5px 0 var(--tinta)}
-#tv[data-familia="pop"] .pRow .pTx{min-width:0}
-#tv[data-familia="pop"] .pRow .pN{margin:0;font:400 22px/1.1 'Archivo Black',var(--fd);text-transform:none;letter-spacing:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-#tv[data-familia="pop"] .pRow .pD{font-size:16px}
-#tv[data-familia="pop"] .pDato{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:4px;background:var(--acento-2);color:var(--tinta);font:700 15px/1.2 'Archivo',var(--fb)}
+/* QUÉ SE TOCA (Dardo 17/11 09:17): cada tarjeta del carrusel lleva el botón Elegir */
 #tv[data-familia="pop"] .vElegir{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:12px;padding:0 22px;border:2px solid var(--tinta);border-radius:999px;background:var(--acento);color:var(--sobre-acento);font:700 17px/1 'Archivo',var(--fb)}
-#tv[data-familia="pop"] .pRow:focus-visible{outline:3px solid var(--tinta);outline-offset:3px}
-#tv[data-familia="pop"] .pAccs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 8px;padding:8px 20px 28px}
-#tv[data-familia="pop"] .pAcc2{display:flex;flex-direction:column;align-items:center;gap:6px;width:76px;min-height:48px;padding:0;border:0;background:none;color:var(--tinta);font:inherit;cursor:pointer}
-#tv[data-familia="pop"] .pAccC{display:flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;border:3px solid var(--tinta);background:var(--acento-2);overflow:hidden;font:700 15px/1.1 'Archivo',var(--fb);text-align:center}
-#tv[data-familia="pop"] .pAccC img{width:100%;height:100%;object-fit:cover}
-#tv[data-familia="pop"] .pAccN{font:700 15px/1.2 'Figtree',var(--fb);text-decoration:underline;text-underline-offset:3px;text-align:center}
+#tv[data-familia="pop"] .pCard .vElegir{margin-top:10px}
+#tv .vVer{display:inline-flex;align-items:center;gap:4px;min-height:48px;padding:0 4px;border:0;background:none;color:inherit;font:inherit;font-size:17px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
 /*FAM casera*/
 #tv[data-familia="casera"]{--cost:color-mix(in srgb,var(--tinta) 35%,transparent);background-color:var(--fondo);background-image:linear-gradient(90deg,color-mix(in srgb,var(--tinta) 4%,transparent) 50%,transparent 50%),linear-gradient(color-mix(in srgb,var(--tinta) 4%,transparent) 50%,transparent 50%);background-size:28px 28px;color:var(--tinta);font-family:'Source Sans 3',var(--fb);font-weight:500;font-size:17px;line-height:1.55;padding-bottom:0}
 #tv[data-familia="casera"] .cIn{padding:32px 20px 32px;text-align:center;max-width:620px;margin:0 auto}
@@ -456,6 +441,40 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="editorial"] .ePie{margin-top:40px;padding:32px 24px 48px;border-top:1px solid var(--tinta);text-align:center}
 #tv[data-familia="editorial"] .ePie a{display:inline-flex;align-items:center;min-height:48px;margin:6px;padding:0 20px;border:1.5px solid var(--tinta);border-radius:2px;color:var(--tinta);font:600 15px/1 'Work Sans',var(--fb);letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 #tv[data-familia="editorial"] .ePie a:first-child{background:var(--tinta);color:var(--fondo)}
+/*FAM moderna*/
+#tv[data-familia="moderna"]{background:var(--fondo);color:var(--tinta);font-family:'Manrope',var(--fb);font-weight:500;font-size:17px;line-height:1.55;padding-bottom:0}
+#tv[data-familia="moderna"] .mIn{position:relative;padding:28px 20px 8px}
+#tv[data-familia="moderna"] .mMarca{display:flex;align-items:center;gap:12px;margin:0 0 28px;font:800 17px/1.2 'Manrope',var(--fb)}
+#tv[data-familia="moderna"] .mMarca img{width:48px;height:48px;border-radius:50%;object-fit:contain;background:var(--fondo-2)}
+#tv[data-familia="moderna"] .mTit{font:800 36px/1.08 'Manrope',var(--fb);letter-spacing:-.01em;margin:0 0 14px;max-width:14ch}
+#tv[data-familia="moderna"] .mTit mark{background:var(--acento);color:var(--sobre-acento);padding:0 12px;border-radius:999px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#tv[data-familia="moderna"] .mLead{margin:0 0 24px;max-width:34ch}
+#tv[data-familia="moderna"] .mHero{position:relative;margin:0 0 8px}
+#tv[data-familia="moderna"] .mHero img{display:block;width:100%;aspect-ratio:1;object-fit:cover;object-position:center;border-radius:28px}
+#tv[data-familia="moderna"] [data-temporada]{pointer-events:none}
+#tv[data-familia="moderna"] [data-temporada]:empty{display:none}
+#tv[data-familia="moderna"] .mAccs{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:12px 8px;padding:20px 20px 8px}
+#tv[data-familia="moderna"] .mAcc{display:flex;flex-direction:column;align-items:center;gap:6px;width:92px;min-height:48px;padding:0;border:0;background:none;color:var(--tinta);font:inherit;cursor:pointer}
+#tv[data-familia="moderna"] .mAccC{display:flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;border:3px solid var(--tinta);background:var(--fondo-2);overflow:hidden;font:800 15px/1.1 'Manrope',var(--fb);text-align:center}
+#tv[data-familia="moderna"] .mAccC img{width:100%;height:100%;object-fit:cover}
+#tv[data-familia="moderna"] .mAccN{max-width:100%;font:700 15px/1.2 'Manrope',var(--fb);text-decoration:underline;text-underline-offset:3px;text-align:center;overflow-wrap:anywhere}
+#tv[data-familia="moderna"] .mAccs .vVer{align-self:center}
+#tv[data-familia="moderna"] .mCat{padding:36px 20px 8px;scroll-margin-top:12px}
+#tv[data-familia="moderna"] .mCatT{font:800 28px/1.1 'Manrope',var(--fb);margin:0 0 18px}
+#tv[data-familia="moderna"] .mFilas{display:grid;gap:18px}
+#tv[data-familia="moderna"] .mRow{display:grid;grid-template-columns:min(168px,40vw) 1fr;gap:16px;align-items:center;width:100%;min-height:48px;padding:16px;border:2px solid var(--tinta);border-radius:24px;background:var(--fondo-2);color:var(--tinta);font:inherit;text-align:left;cursor:pointer}
+#tv[data-familia="moderna"] .mRow.mIzq{grid-template-columns:1fr min(168px,40vw)}
+#tv[data-familia="moderna"] .mRow.mIzq .mRedonda{order:2}
+#tv[data-familia="moderna"] .mRow.mSinF{grid-template-columns:1fr}
+#tv[data-familia="moderna"] .mRedonda{width:100%;height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;object-position:center;border:3px solid var(--tinta);box-shadow:5px 5px 0 var(--tinta)}
+#tv[data-familia="moderna"] .mTx{min-width:0}
+#tv[data-familia="moderna"] .mN{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font:800 22px/1.15 'Manrope',var(--fb);overflow-wrap:anywhere}
+#tv[data-familia="moderna"] .mD{display:block;font-size:16px;margin-top:4px}
+#tv[data-familia="moderna"] .mDato{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:4px;background:var(--acento-2);color:var(--tinta);font:700 15px/1.2 'Manrope',var(--fb)}
+#tv[data-familia="moderna"] .vElegir{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:12px;padding:0 22px;border:2px solid var(--acento);border-radius:999px;background:var(--acento);color:var(--sobre-acento);font:800 17px/1 'Manrope',var(--fb)}
+#tv[data-familia="moderna"] .mRow:focus-visible,#tv[data-familia="moderna"] .mAcc:focus-visible{outline:3px solid var(--acento);outline-offset:3px}
+#tv[data-familia="moderna"] .mPie{margin-top:40px;padding:32px 20px 48px;background:var(--fondo-2);text-align:center}
+#tv[data-familia="moderna"] .mPie a{display:inline-flex;align-items:center;min-height:48px;margin:6px;padding:0 22px;border:2px solid var(--tinta);border-radius:999px;color:var(--tinta);font-weight:800;text-decoration:none}
 /*TVP v1*/
 .tvp{border:2px solid var(--line,#ddd);border-radius:14px;padding:14px;margin:12px 0 16px;background:#fff}
 .tvp h3{margin:0 0 4px}
@@ -965,7 +984,11 @@ function dup(p){ const ps = (S.products||[]).filter(x => x.visible!==false && x.
 const precioTxt = p => { const n = desde(p); return n ? `Desde <b>${M(n)}</b>` : 'Te paso el precio'; };
 
 /* ---- Estado del pedido ---- */
-let T = {cat:'', p:null, tal:null, step:0, date:'', mo:0, o:{}, ent:'Retiro', dir:'', name:'', phone:'', notes:'', err:'', sending:false, done:false};
+/* LISTAS QUE SE PUEDEN LLENAR (Dardo 17/11 10:43): categorías y accesos, máximo MAXL a la vista; el resto, con Ver todas */
+const MAXL = 5;
+const lim = (arr, k) => T.ver[k] ? arr : arr.slice(0, MAXL);
+const verTodas = (arr, k) => arr.length > MAXL && !T.ver[k] ? `<button type="button" class="vVer" data-ver="${k}">Ver todas (${arr.length}) ↓</button>` : '';
+let T = {ver:{}, cat:'', p:null, tal:null, step:0, date:'', mo:0, o:{}, ent:'Retiro', dir:'', name:'', phone:'', notes:'', err:'', sending:false, done:false};
 let Q = {}, QO = {};   // viandas: cantidad y opción por plato
 
 function prods(){ return (S.products||[]).filter(p => p.visible!==false && p.name && !isPers(p) && (C.rubro!=='viandas' || DIAS.includes(p.cat))); }
@@ -977,13 +1000,14 @@ function render(){
   if(C.familia==='pop') return renderPop();
   if(C.familia==='casera') return renderCasera();
   if(C.familia==='editorial') return renderEditorial();
+  if(C.familia==='moderna') return renderModerna();
   const ps = prods(), cats = [...new Set(ps.map(p => p.cat||'Otros'))], tal = talleres(), pers = (S.products||[]).find(p => isPers(p) && p.visible!==false);
   if(tal.length) cats.push('Talleres');
   if(T.cat && !cats.includes(T.cat)) T.cat = '';
   const vis = T.cat==='Talleres' ? [] : ps.filter(p => !T.cat || (p.cat||'Otros')===T.cat);
   put(`<div class="vtop">${B.logo?`<img src="${E(B.logo)}" alt="">`:''}<b>${E(B.name)}</b></div><div class="vw">
     ${B.h1?`<h1>${E(B.h1)}</h1>`:''}${B.lead?`<p class="vintro">${E(B.lead)}</p>`:''}
-    ${cats.length > 1 ? `<nav class="vcats" aria-label="Categorías"><button type="button" data-c=""${!T.cat?' class="von"':''}>Todo</button>${cats.map(c => `<button type="button" data-c="${E(c)}"${T.cat===c?' class="von"':''}>${E(c)}</button>`).join('')}</nav>` : ''}
+    ${cats.length > 1 ? `<nav class="vcats" aria-label="Categorías"><button type="button" data-c=""${!T.cat?' class="von"':''}>Todo</button>${lim(cats, 'cats').concat(T.cat && !lim(cats, 'cats').includes(T.cat) ? [T.cat] : []).map(c => `<button type="button" data-c="${E(c)}"${T.cat===c?' class="von"':''}>${E(c)}</button>`).join('')}${verTodas(cats, 'cats')}</nav>` : ''}
     <div class="vgrid">${vis.map(p => `<button type="button" class="vcard" data-p="${E(p.id)}">${ph(p)}<span class="vct"><span class="vn">${E(p.name)}</span><span class="vp">${precioTxt(p)}</span></span></button>`).join('')}
     ${(!T.cat || T.cat==='Talleres') ? tal.map(t => `<button type="button" class="vcard" data-tl="${E(t.id)}">${ph({name:t.name})}<span class="vct"><span class="vn">Taller: ${E(t.name)}</span><span class="vp">${fecha(t.date)}${t.price?` · <b>${M(t.price)}</b>`:''}</span></span></button>`).join('') : ''}</div>
     ${!ps.length && !tal.length ? '<p class="vempty">Estamos cargando los productos. Volvé en un rato.</p>' : ''}
@@ -991,31 +1015,27 @@ function render(){
     ${foot()}</div>`);
 }
 /* FAMILIA A POP / FESTEJO: banda con texto repetido, logo en sticker, título en mayúscula con una palabra resaltada,
-   foto destacada con sombra dura; catálogo en bandas por categoría (sin números), con accesos redondos arriba y filas que alternan lado con foto redonda y botón Elegir (1 o 2 productos: columna). */
+   foto destacada con sombra dura; catálogo en bandas por categoría (sin números) y carrusel; cada tarjeta con botón Elegir (1 o 2 productos: columna). */
 const confites = i => `<svg class="pConf" viewBox="0 0 72 40" aria-hidden="true"><circle cx="10" cy="12" r="6" fill="var(--acento)" stroke="var(--tinta)" stroke-width="2.5"/><path d="M30 30 l8-14 8 14z" fill="var(--acento-2)" stroke="var(--tinta)" stroke-width="2.5" stroke-linejoin="round"/><path d="M52 10 l5 6 5-6 5 6" fill="none" stroke="var(--tinta)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-/* fila pop: tarjeta entera tocable con foto redonda (o solo texto), nombre, dato chico y botón Elegir; alterna lado */
-function popRow(i, attrs, nombre, desc, dato, f){ return `<button type="button" class="pRow${f ? (i % 2 ? ' pIzq' : '') : ' pSinF'}" ${attrs}>${f ? `<img class="pRedonda" src="${E(f)}" alt="${E(nombre)}" loading="lazy">` : ''}<span class="pTx"><span class="pN">${E(nombre)}</span>${desc ? `<span class="pD">${E(desc)}</span>` : ''}${dato ? `<span class="pDato">${dato}</span>` : ''}<span class="vElegir">Elegir</span></span></button>`; }
 function popCard(p, ancho){ const f = foto(p), n = desde(p), pr = n ? 'Desde ' + M(n) : 'A consultar';
-  return `<button type="button" class="pCard" data-p="${E(p.id)}">${f ? `<span class="pFoto"><img src="${E(f)}" alt="${E(p.name)}"><span class="pPrecio">${pr}</span></span><span class="pN">${E(p.name)}</span>` : `<span class="pSinFoto"><span class="pN">${E(p.name)}</span>${p.desc ? `<span class="pD">${E(p.desc)}</span>` : ''}<span class="pPrecio pSolo">${pr}</span></span>`}</button>`; }
+  return `<button type="button" class="pCard" data-p="${E(p.id)}">${f ? `<span class="pFoto"><img src="${E(f)}" alt="${E(p.name)}"><span class="pPrecio">${pr}</span></span><span class="pN">${E(p.name)}</span>` : `<span class="pSinFoto"><span class="pN">${E(p.name)}</span>${p.desc ? `<span class="pD">${E(p.desc)}</span>` : ''}<span class="pPrecio pSolo">${pr}</span></span>`}<span class="vElegir">Elegir</span></button>`; }
 function heroPop(){ const usadas = new Set((S.products||[]).map(p => p.img).filter(Boolean).concat(B.logo ? [B.logo] : []));
   return [C.destacada, B.hero].concat(B.fotos).find(s => s && !usadas.has(s) && !/icon-|logo/i.test(s)) || ''; }
 function renderPop(){
   const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => p.cat||'Otros'))];
   const ciudad = ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
-  const banda = cats.concat(tal.length ? ['Talleres'] : [], ciudad ? [ciudad] : []).join(' · ').toUpperCase() + ' · ';
+  const banda = cats.slice(0, MAXL).concat(tal.length ? ['Talleres'] : [], ciudad ? [ciudad] : []).join(' · ').toUpperCase() + ' · ';
   const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
   let h = `<div class="pBanda" aria-hidden="true"><span class="pBandaT" data-temporada="banda">${E(banda.repeat(8))}</span></div><div class="pIn">
     ${B.logo ? `<span class="pSticker"><img src="${E(B.logo)}" alt="${E(B.name)}"></span>` : `<p class="pN">${E(B.name)}</p>`}
     <h1 class="pTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="pLead">${E(B.lead)}</p>` : ''}
     ${heroPop() ? `<div class="pHero"><div class="pZona" data-temporada="foto"></div><img src="${E(heroPop())}" alt="${E(B.name)}"></div>` : ''}</div>`;
-  const banda2 = (i, titulo, html) => `<div class="pSep" data-temporada="separador"></div><section class="pCat${i % 2 ? ' pAlt' : ''}" id="tvCat${i}">${confites(i)}<h2 class="pCatT">${E(titulo)}</h2><div class="pFilas">${html}</div></section>`;
-  const secs = cats.map(c => ({t:c, its:ps.filter(p => (p.cat||'Otros')===c)}));
-  if(secs.length + (tal.length ? 1 : 0) > 1) h += `<nav class="pAccs" aria-label="Categorías">${secs.map((s, i) => { const f = foto(s.its[0]); return `<button type="button" class="pAcc2" data-ir="${i}"><span class="pAccC">${f ? `<img src="${E(f)}" alt="">` : E(s.t)}</span><span class="pAccN">${E(s.t)} ↓</span></button>`; }).join('')}${tal.length ? `<button type="button" class="pAcc2" data-ir="${secs.length}"><span class="pAccC">${E('Talleres')}</span><span class="pAccN">Talleres ↓</span></button>` : ''}</nav>`;
-  secs.forEach((s, i) => { h += banda2(i, s.t, s.its.map((p, j) => popRow(j, `data-p="${E(p.id)}"`, p.name, p.desc, desde(p) ? 'Desde ' + M(desde(p)) : 'Precio a consultar', foto(p))).join('')); });
+  const banda2 = (i, titulo, html, n) => `<div class="pSep" data-temporada="separador"></div><section class="pCat${i % 2 ? ' pAlt' : ''}">${confites(i)}<h2 class="pCatT">${E(titulo)}</h2><div class="${n > 2 ? 'pCarr' : 'pCol'}">${html}</div></section>`;
+  cats.forEach((c, i) => { const its = ps.filter(p => (p.cat||'Otros')===c); h += banda2(i, c, its.map(p => popCard(p)).join(''), its.length); });
   let k = cats.length;
-  if(tal.length) h += banda2(k++, 'Talleres', tal.map((x, j) => popRow(j, `data-tl="${E(x.id)}"`, x.name, fecha(x.date) + (x.time ? ', ' + x.time + ' h' : ''), x.price ? M(x.price) : 'Precio a consultar', '')).join(''));
+  if(tal.length) h += banda2(k++, 'Talleres', tal.map(x => `<button type="button" class="pCard" data-tl="${E(x.id)}"><span class="pSinFoto"><span class="pN">${E(x.name)}</span><span class="pD">${fecha(x.date)}${x.time ? ', ' + E(x.time) + ' h' : ''}</span><span class="pPrecio pSolo">${x.price ? M(x.price) : 'A consultar'}</span></span><span class="vElegir">Elegir</span></button>`).join(''), tal.length);
   if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false), f = persFoto();
-    h += banda2(k++, 'Personalizada', popRow(0, 'data-pers="1"', pers ? pers.name : 'Torta personalizada', (pers && pers.desc) || 'Contame tu idea y te paso el precio.', 'Precio a consultar', f)); }
+    h += banda2(k++, 'Personalizada', `<button type="button" class="pCard" data-pers="1">${f ? `<span class="pFoto"><img src="${E(f)}" alt=""><span class="pPrecio">A tu idea</span></span><span class="pN">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="pD">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span>` : `<span class="pSinFoto"><span class="pN">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="pD">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span></span>`}<span class="vElegir">Elegir</span></button>`, 1); }
   if(!ps.length && !tal.length) h += '<div class="pIn"><p class="pLead">Estamos cargando los productos. Volvé en un rato.</p></div>';
   const wa = WAN();
   h += `<footer class="pPie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`;
@@ -1025,7 +1045,7 @@ function renderPop(){
 const sello = () => { let d = ''; for(let i = 0; i <= 18; i++){ const a = i/18*Math.PI*2, r = i % 2 ? 50 : 55; d += (i ? 'L' : 'M') + (56 + r*Math.cos(a)).toFixed(1) + ' ' + (56 + r*Math.sin(a)).toFixed(1); }
   let s = ''; for(let i = 0; i < 18; i++){ const a = (i+.5)/18*Math.PI*2; s += `<circle cx="${(56 + 50*Math.cos(a)).toFixed(1)}" cy="${(56 + 50*Math.sin(a)).toFixed(1)}" r="8.5"/>`; }
   return `<svg viewBox="0 0 112 112" aria-hidden="true"><g fill="var(--fondo-2)" stroke="var(--tinta)" stroke-width="2">${s}<circle cx="56" cy="56" r="50" stroke="none"/></g><circle cx="56" cy="56" r="44" fill="none" stroke="var(--tinta)" stroke-width="1.5" stroke-dasharray="4 4"/></svg>`; };
-/* el saludo ya dice el nombre: se saca del texto la oración que lo repite (Soy Maru., Somos Ceci y Bibi.) */
+/* el saludo ya dice el nombre: se saca del texto la oración que lo repite (Soy Ana., Somos Ana y Eva.) */
 const sinNombre = s => String(s||'').replace(new RegExp('(^|\\s)(Soy|Somos)\\s+' + B.who.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[^.!?]*[.!?]\\s*', 'i'), ' ').trim();
 const ciudadDe = () => ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
 function portadaCasera(){ const hf = heroPop();
@@ -1067,10 +1087,26 @@ function renderEditorial(){ const ps = prods(), tal = talleres(), cats = [...new
   if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', html: eItem({id:'_pers', name: pers ? pers.name : 'Torta personalizada', desc: (pers && pers.desc) || 'Contame tu idea y te paso el precio.', img: persFoto()}, 0, 'data-pers="1"', 'Precio a consultar')}); }
   let h = `<p class="eTop">${E(B.name)}</p><div class="eHead"><span class="eOrn" data-temporada="ornamento">${ramita(58, 58)}</span><h1 class="eTit">${w.map((x, i) => i===k ? `<em>${E(x)}</em>` : E(x)).join(' ')}</h1>${B.lead ? `<p class="eLead">${E(B.lead)}</p>` : ''}</div>
     ${hf ? `<figure class="eHero"><img src="${E(hf)}" alt="${E(B.name)}"><figcaption data-temporada="epigrafe">Hecha a mano${ciudad ? ' en ' + E(ciudad) : ''}.</figcaption></figure>` : ''}
-    <span class="eIdxZ" data-temporada="indice"></span>${secs.length > 1 ? `<nav class="eIdx" aria-label="Categorías">${secs.map((s, i) => `<button type="button" data-ir="${i}"><u>${E(s.t)}</u> ↓</button>`).join('')}</nav>` : ''}`;
+    <span class="eIdxZ" data-temporada="indice"></span>${secs.length > 1 ? `<nav class="eIdx" aria-label="Categorías">${lim(secs, 'idx').map((s, i) => `<button type="button" data-ir="${i}"><u>${E(s.t)}</u> ↓</button>`).join('')}${verTodas(secs, 'idx')}</nav>` : ''}`;
   secs.forEach((s, i) => { h += `${i ? `<div class="eSep" data-temporada="separador">${ramita(64, 40)}</div>` : ''}<section class="eCat" id="tvCat${i}"><h2 class="eCatT">${E(s.t)}</h2>${s.html}</section>`; });
   if(!ps.length && !tal.length) h += '<p class="eLead" style="margin:24px">Estamos cargando los productos. Volvé en un rato.</p>';
   const wa = WAN(); put(h + `<footer class="ePie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`); }
+/* FAMILIA D MODERNA / GOURMET (Dardo 17/11 10:43; referencia Recipe App): pastelería de autor o minimalista. Marca chica arriba, título grande con
+   la última palabra en píldora, foto con esquinas redondeadas, accesos redondos a las categorías (máximo 5 a la vista), filas que alternan lado con foto
+   REDONDA de 168 px, borde 3 px y sombra dura, nombre en grotesca pesada, dato chico sobre fondo suave sin borde y botón Elegir. Fondo claro u oscuro según los colores. */
+function mRow(i, attrs, nombre, desc, dato, f){ return `<button type="button" class="mRow${f ? (i % 2 ? ' mIzq' : '') : ' mSinF'}" ${attrs}>${f ? `<img class="mRedonda" src="${E(f)}" alt="${E(nombre)}" loading="lazy">` : ''}<span class="mTx"><span class="mN">${E(nombre)}</span>${desc ? `<span class="mD">${E(desc)}</span>` : ''}${dato ? `<span class="mDato">${dato}</span>` : ''}<span class="vElegir">Elegir</span></span></button>`; }
+function renderModerna(){ const ps = prods(), tal = talleres(), hf = heroPop();
+  const secs = [...new Set(ps.map(p => p.cat||'Otros'))].map(c => ({t:c, html:'', its:ps.filter(p => (p.cat||'Otros')===c)}));
+  secs.forEach(s => s.html = s.its.map((p, j) => mRow(j, `data-p="${E(p.id)}"`, p.name, p.desc, desde(p) ? 'Desde ' + M(desde(p)) : 'Precio a consultar', foto(p))).join(''));
+  if(tal.length) secs.push({t:'Talleres', its:[], html: tal.map((x, j) => mRow(j, `data-tl="${E(x.id)}"`, x.name, fecha(x.date) + (x.time ? ', ' + x.time + ' h' : ''), x.price ? M(x.price) : 'Precio a consultar', '')).join('')});
+  if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', its:[], html: mRow(0, 'data-pers="1"', pers ? pers.name : 'Torta personalizada', (pers && pers.desc) || 'Contame tu idea y te paso el precio.', 'Precio a consultar', persFoto())}); }
+  const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
+  let h = `<div class="mIn"><p class="mMarca">${B.logo ? `<img src="${E(B.logo)}" alt="">` : ''}${E(B.name)}</p><h1 class="mTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="mLead">${E(B.lead)}</p>` : ''}
+    ${hf ? `<div class="mHero"><img src="${E(hf)}" alt="${E(B.name)}"></div>` : ''}<div data-temporada="foto"></div></div>`;
+  if(secs.length > 1) h += `<nav class="mAccs" aria-label="Categorías">${lim(secs, 'acc').map((s, i) => { const f = s.its[0] ? foto(s.its[0]) : ''; return `<button type="button" class="mAcc" data-ir="${i}"><span class="mAccC">${f ? `<img src="${E(f)}" alt="">` : E(s.t)}</span><span class="mAccN">${E(s.t)} ↓</span></button>`; }).join('')}${verTodas(secs, 'acc')}</nav>`;
+  secs.forEach((s, i) => { h += `<div data-temporada="separador"></div><section class="mCat" id="tvCat${i}"><h2 class="mCatT">${E(s.t)}</h2><div class="mFilas">${s.html}</div></section>`; });
+  if(!ps.length && !tal.length) h += '<div class="mIn"><p class="mLead">Estamos cargando los productos. Volvé en un rato.</p></div>';
+  const wa = WAN(); put(h + `<footer class="mPie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`); }
 function put(h){ if(tv._h !== h){ tv.innerHTML = h; tv._h = h; } }   /* no redibujar si no cambió nada (las fotos no vuelven a cargar) */
 function foot(){ const wa = WAN();
   return `<div class="vfoot">${wa?`<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>`:''}${B.ig?`<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>`:''}</div>`; }
@@ -1197,6 +1233,7 @@ async function send(){
 /* ---- Eventos ---- */
 tv.addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return;
   if(b.dataset.c !== undefined){ T.cat = b.dataset.c; render(); return; }
+  if(b.dataset.ver){ T.ver[b.dataset.ver] = true; render(); return; }
   if(b.dataset.ir){ const s = D.getElementById('tvCat' + b.dataset.ir); if(s) s.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); return; }
   if(b.dataset.p){ const p = (S.products||[]).find(x => x.id===b.dataset.p); if(p) open(p); return; }
   if(b.dataset.tl){ const t = talleres().find(x => x.id===b.dataset.tl); if(t){ if(!t.left){ alert('Ese taller ya no tiene lugar.'); return; } open(null, t); } return; }
@@ -1278,6 +1315,9 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
+
+
 
 
 
