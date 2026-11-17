@@ -767,7 +767,7 @@ function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length 
   b.addEventListener('click', () => { try{ localStorage.setItem(k, NOV.v); }catch(x){} d.remove(); }); } /*NOV fin*/
 </script>
 <script>/*TV v1*/ (function(){
-const C = {"rubro": "viandas", "tab": "#pv-men", "fn": "renderMen", "full": false, "slug": "ceciybibi"}, D = document, q = s => D.querySelector(s);
+const C = {"rubro": "viandas", "nom": "#eName", "tab": "#pv-men", "fn": "renderMen", "full": false, "slug": "ceciybibi", "nombres": ["Milanesa de carne con pur\u00e9", "Milanesa de pollo con ensalada", "Milanesa napolitana con papas", "Pastel de papa", "Tarta de jam\u00f3n y queso", "Tarta de verduras", "Tarta de calabaza", "Empanadas de carne", "Empanadas de jam\u00f3n y queso", "Empanadas de pollo", "Lasa\u00f1a de carne", "Lasa\u00f1a de verduras", "Canelones de verdura", "\u00d1oquis con salsa", "Ravioles con salsa", "Fideos con tuco", "Tallarines a la bolognesa", "Pollo al horno con papas", "Pollo con verduras", "Guiso de lentejas", "Guiso de arroz", "Arroz con pollo", "Carne al horno con papas", "Alb\u00f3ndigas con arroz", "Zapallitos rellenos", "Berenjenas a la napolitana", "Wok de verduras", "Tortilla de papas", "Hamburguesas caseras con pur\u00e9", "Pescado con ensalada", "Cazuela de pollo", "Locro", "Polenta con salsa", "Pizza casera", "Ensalada completa"]}, D = document, q = s => D.querySelector(s);
 const E = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const M = n => '$' + Math.round(Number(n)||0).toLocaleString('es-AR');
 const site = q('#site'), tv = q('#tv'), SH = q('#tvS'), BAR = q('#tvB');
@@ -1024,6 +1024,9 @@ function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return; const host 
   if(host){ if(c.parentNode !== host || host.firstElementChild !== c) host.insertBefore(c, host.firstChild); }
   else if(anc){ if(c.nextElementSibling !== anc) anc.parentNode.insertBefore(c, anc); } else return;
   c.innerHTML = card(); }
+/* NOMBRES SUGERIDOS: lista fija del rubro en el campo de nombre del producto (no cambia lo que ya está escrito) */
+(function(){ const dl = D.createElement('datalist'); dl.id = 'tvNombres'; dl.innerHTML = (C.nombres||[]).map(n => `<option value="${E(n)}">`).join(''); D.body.appendChild(dl);
+  D.addEventListener('focusin', e => { const i = e.target; if(i && i.matches && C.nom && i.matches(C.nom) && i.getAttribute('list') !== 'tvNombres'){ i.setAttribute('list', 'tvNombres'); i.setAttribute('autocomplete', 'off'); } }); })();
 const RP = window[C.fn]; if(typeof RP==='function') window[C.fn] = function(){ const r = RP.apply(this, arguments); try{ mount(); }catch(e){} return r; };
 D.addEventListener('click', async e => { const b = e.target.closest('#tvpc button'); if(!b) return;
   if(b.dataset.tvo){ OPN = OPN===b.dataset.tvo ? '' : b.dataset.tvo; mount(); return; }
@@ -1045,6 +1048,7 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
 
 
 

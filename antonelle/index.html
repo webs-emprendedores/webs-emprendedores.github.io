@@ -656,7 +656,7 @@ function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length 
   b.addEventListener('click', () => { try{ localStorage.setItem(k, NOV.v); }catch(x){} d.remove(); }); } /*NOV fin*/
 </script>
 <script>/*TV v1*/ (function(){
-const C = {"rubro": "tortas", "tab": "#pv-car", "fn": "renderCar", "full": false, "rel2": true, "lead": 3, "slug": "antonelle"}, D = document, q = s => D.querySelector(s);
+const C = {"rubro": "tortas", "nom": "#pName", "tab": "#pv-car", "fn": "renderCar", "full": false, "rel2": true, "lead": 3, "slug": "antonelle", "nombres": ["Torta de cumplea\u00f1os", "Torta personalizada", "Torta tem\u00e1tica", "Torta de dos pisos", "Minitorta", "Bento cake", "Chocotorta", "Cheesecake", "Cheesecake de frutos rojos", "Lemon pie", "Key lime pie", "Red velvet", "Toffee", "Brownie", "Brownie con merengue", "Tarta de frutillas", "Tarta de frutos rojos", "Tarta de durazno", "Tarta de manzana", "Pastafrola", "Tiramis\u00fa", "Marquise", "Torta Balcarce", "Rogel", "Selva negra", "Carrot cake", "Torta galesa", "Torta de ricota", "Bud\u00edn de lim\u00f3n", "Bud\u00edn de naranja", "Bud\u00edn marmolado", "Alfajores de maicena", "Alfajores de chocolate", "Cookies", "Box de cookies", "Cupcakes", "Macarons", "Cake pops", "Mesa dulce", "Postres en vasito", "Bombones", "Pavlova", "Trufas", "Scones", "Medialunas", "Flan casero", "Mousse de chocolate", "Torta matilda"]}, D = document, q = s => D.querySelector(s);
 const E = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const M = n => '$' + Math.round(Number(n)||0).toLocaleString('es-AR');
 const site = q('#site'), tv = q('#tv'), SH = q('#tvS'), BAR = q('#tvB');
@@ -913,6 +913,9 @@ function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return; const host 
   if(host){ if(c.parentNode !== host || host.firstElementChild !== c) host.insertBefore(c, host.firstChild); }
   else if(anc){ if(c.nextElementSibling !== anc) anc.parentNode.insertBefore(c, anc); } else return;
   c.innerHTML = card(); }
+/* NOMBRES SUGERIDOS: lista fija del rubro en el campo de nombre del producto (no cambia lo que ya está escrito) */
+(function(){ const dl = D.createElement('datalist'); dl.id = 'tvNombres'; dl.innerHTML = (C.nombres||[]).map(n => `<option value="${E(n)}">`).join(''); D.body.appendChild(dl);
+  D.addEventListener('focusin', e => { const i = e.target; if(i && i.matches && C.nom && i.matches(C.nom) && i.getAttribute('list') !== 'tvNombres'){ i.setAttribute('list', 'tvNombres'); i.setAttribute('autocomplete', 'off'); } }); })();
 const RP = window[C.fn]; if(typeof RP==='function') window[C.fn] = function(){ const r = RP.apply(this, arguments); try{ mount(); }catch(e){} return r; };
 D.addEventListener('click', async e => { const b = e.target.closest('#tvpc button'); if(!b) return;
   if(b.dataset.tvo){ OPN = OPN===b.dataset.tvo ? '' : b.dataset.tvo; mount(); return; }
@@ -934,6 +937,7 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
 
 
 
