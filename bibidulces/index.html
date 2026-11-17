@@ -279,6 +279,10 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 /* QUÉ SE TOCA (Dardo 17/11 09:17): cada tarjeta del carrusel lleva el botón Elegir */
 #tv[data-familia="pop"] .vElegir{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:12px;padding:0 22px;border:2px solid var(--tinta);border-radius:999px;background:var(--acento);color:var(--sobre-acento);font:700 17px/1 'Archivo',var(--fb)}
 #tv[data-familia="pop"] .pCard .vElegir{margin-top:10px}
+#tv[data-familia="casera"] .cMarcaN{margin:10px 0 0;font:600 20px/1.2 'Fraunces',Georgia,serif;color:var(--tinta)}
+#tv[data-familia="editorial"] .eLogo{display:flex;justify-content:center;padding:24px 0 0}
+#tv[data-familia="editorial"] .eLogo img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:1px solid var(--tinta)}
+#tv[data-familia="moderna"] .mMarca.mSolo img{width:64px;height:64px}
 #tv .vAccs{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:16px 8px;padding:24px 20px 8px}   /* revisión CONTENIDO 17/11 11:50: la última fila, si queda incompleta, va centrada */
 #tv .vAcc{display:flex;flex-direction:column;align-items:center;gap:8px;flex:0 0 auto;min-width:96px;max-width:150px;min-height:48px;padding:0;border:0;background:none;color:var(--tinta,inherit);font:inherit;cursor:pointer}
 #tv .vAccC{display:flex;align-items:center;justify-content:center;width:72px;height:72px;flex:none;border-radius:50%;border:3px solid var(--tinta,currentColor);background:var(--fondo-2,transparent);overflow:hidden;text-align:center}
@@ -402,6 +406,9 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="moderna"] .mPie{margin-top:40px;padding:32px 20px 48px;background:var(--fondo-2);text-align:center}
 #tv[data-familia="moderna"] .mPie a{display:inline-flex;align-items:center;min-height:48px;margin:6px;padding:0 22px;border:2px solid var(--tinta);border-radius:999px;color:var(--tinta);font-weight:800;text-decoration:none}
 /*TVP v1*/
+.tvp .venc{margin:0 0 18px;padding:0 0 14px;border-bottom:1px solid #ddd}
+.tvp .vlogo{display:flex;align-items:center;gap:12px;margin:6px 0 10px}
+.tvp .vlogo img{width:64px;height:64px;border-radius:50%;object-fit:cover}
 .tvp{border:2px solid var(--line,#ddd);border-radius:14px;padding:14px;margin:12px 0 16px;background:#fff}
 .tvp h3{margin:0 0 4px}
 .tvp .pm{font-size:15px;color:var(--mut,#666);margin:0 0 8px}
@@ -912,7 +919,7 @@ function render(){
 const confites = i => `<svg class="pConf" viewBox="0 0 72 40" aria-hidden="true"><circle cx="10" cy="12" r="6" fill="var(--acento)" stroke="var(--tinta)" stroke-width="2.5"/><path d="M30 30 l8-14 8 14z" fill="var(--acento-2)" stroke="var(--tinta)" stroke-width="2.5" stroke-linejoin="round"/><path d="M52 10 l5 6 5-6 5 6" fill="none" stroke="var(--tinta)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 function popCard(p, ancho){ const f = foto(p), n = desde(p), pr = n ? 'Desde ' + M(n) : 'A consultar';
   return `<button type="button" class="pCard" data-p="${E(p.id)}">${f ? `<span class="pFoto"><img src="${E(f)}" alt="${E(p.name)}"><span class="pPrecio">${pr}</span></span><span class="pN">${E(p.name)}</span>` : `<span class="pSinFoto"><span class="pN">${E(p.name)}</span>${p.desc ? `<span class="pD">${E(p.desc)}</span>` : ''}<span class="pPrecio pSolo">${pr}</span></span>`}<span class="vElegir">Elegir</span></button>`; }
-function heroPop(){ const usadas = new Set((S.products||[]).map(p => p.img).filter(Boolean).concat(B.logo ? [B.logo] : []));
+function heroPop(){ const usadas = new Set((S.products||[]).map(p => p.img).filter(Boolean).concat(logoEnc() ? [logoEnc()] : []));
   return [C.destacada, B.hero].concat(B.fotos).find(s => s && !usadas.has(s) && !/icon-|logo/i.test(s)) || ''; }
 function renderPop(){
   const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => grupo(p)))];
@@ -920,7 +927,7 @@ function renderPop(){
   const banda = cats.slice(0, MAXL).concat(tal.length ? ['Talleres'] : [], ciudad ? [ciudad] : []).join(' · ').toUpperCase() + ' · ';
   const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
   let h = `<div class="pBanda" aria-hidden="true"><span class="pBandaT" data-temporada="banda">${E(banda.repeat(8))}</span></div><div class="pIn">
-    ${B.logo ? `<span class="pSticker"><img src="${E(B.logo)}" alt="${E(B.name)}"></span>` : `<p class="pN">${E(B.name)}</p>`}
+    ${formaEnc()==='nombre' ? `<p class="pN">${E(B.name)}</p>` : `<span class="pSticker"><img src="${E(logoEnc())}" alt="${E(B.name)}"></span>${formaEnc()==='logo-nombre' ? `<p class="pN">${E(B.name)}</p>` : ''}`}
     <h1 class="pTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="pLead">${E(B.lead)}</p>` : ''}
     ${heroPop() ? `<div class="pHero"><div class="pZona" data-temporada="foto"></div><img src="${E(heroPop())}" alt="${E(B.name)}"></div>` : ''}</div>`;
   const secs = cats.map((c, i) => ({t:c, i, its:ps.filter(p => grupo(p)===c)})); if(tal.length) secs.push({t:'Talleres', i:cats.length, its:[]});
@@ -942,9 +949,17 @@ const sello = () => { let d = ''; for(let i = 0; i <= 18; i++){ const a = i/18*M
   return `<svg viewBox="0 0 112 112" aria-hidden="true"><g fill="var(--fondo-2)" stroke="var(--tinta)" stroke-width="2">${s}<circle cx="56" cy="56" r="50" stroke="none"/></g><circle cx="56" cy="56" r="44" fill="none" stroke="var(--tinta)" stroke-width="1.5" stroke-dasharray="4 4"/></svg>`; };
 /* el saludo ya dice el nombre: se saca del texto la oración que lo repite (Soy Ana., Somos Ana y Eva.) */
 const sinNombre = s => String(s||'').replace(new RegExp('(^|\\s)(Soy|Somos)\\s+' + B.who.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[^.!?]*[.!?]\\s*', 'i'), ' ').trim();
+/* ENCABEZADO EDITABLE (Dardo 17/11 14:31): el emprendedor sube su logo y elige la forma en el panel (settings.extra.enc = {forma, logo}).
+   Formas: 'logo-nombre', 'nombre' (sin logo; el círculo, donde la familia lo tiene, queda del color del fondo) y 'logo' (logos que ya traen el nombre).
+   Sin elección, cada app queda como estaba: con logo, la forma que ya mostraba su familia; sin logo, solo el nombre. */
+const ENC = () => (S.settings && S.settings.extra && S.settings.extra.enc) || {};
+const logoEnc = () => ENC().logo || B.logo || '';
+const FORMA0 = {pop:'logo', casera:'logo', editorial:'logo-nombre', moderna:'logo-nombre'};
+const formaEnc = () => { const f = ENC().forma || C.enc || (logoEnc() ? (FORMA0[C.familia] || 'logo-nombre') : 'nombre'); return f !== 'nombre' && !logoEnc() ? 'nombre' : f; };
+window.tvEnc = () => ({forma: formaEnc(), logo: logoEnc(), nombre: B.name});   /* para las pruebas (shot_encabezado.py) */
 const ciudadDe = () => ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
 function portadaCasera(){ const hf = heroPop();
-  return `<div class="cIn"><span class="cSello">${sello()}<span class="cAro" data-temporada="aro"></span>${B.logo ? `<img src="${E(B.logo)}" alt="${E(B.name)}">` : `<span class="cSelloN">${E(B.name)}</span>`}</span>
+  return `<div class="cIn"><span class="cSello">${sello()}<span class="cAro" data-temporada="aro"></span>${formaEnc()==='nombre' ? `<span class="cSelloN">${E(B.name)}</span>` : `<img src="${E(logoEnc())}" alt="${E(B.name)}">`}</span>${formaEnc()==='logo-nombre' ? `<p class="cMarcaN">${E(B.name)}</p>` : ''}
     <p class="cHola">Hola, ${/ y /.test(B.who) ? 'somos' : 'soy'} ${E(B.who)}</p><h1 class="cTit">${E(B.h1 || B.name)}</h1>${sinNombre(B.lead) ? `<p class="cLead">${E(sinNombre(B.lead))}</p>` : ''}
     ${hf ? `<figure class="cPola"><span class="cCinta1" data-temporada="cinta"></span><span class="cCinta2" data-temporada="cinta"></span><img src="${E(hf)}" alt="${E(B.name)}"><figcaption>Hecho en casa${ciudadDe() ? ', en ' + E(ciudadDe()) : ''}</figcaption></figure>` : ''}</div>`; }
 const cinta = (titulo, extra) => `<h2 class="cBan"><span data-temporada="cinta-titulo"></span>${E(titulo)}${extra ? `<small>${extra}</small>` : ''}</h2>`;
@@ -980,7 +995,7 @@ function renderEditorial(){ const ps = prods(), tal = talleres(), cats = [...new
   const secs = cats.map((c, i) => ({t:c, i, its:ps.filter(p => grupo(p)===c), html: ps.filter(p => grupo(p)===c).map((p, i) => eItem(p, i, `data-p="${E(p.id)}"`, desde(p) ? 'Desde ' + M(desde(p)) : 'Precio a consultar')).join('')}));
   if(tal.length) secs.push({t:'Talleres', i:secs.length, its:[], html: tal.map((x, i) => eItem({name:x.name, desc:fecha(x.date) + (x.time ? ', ' + x.time + ' h' : '')}, i, `data-tl="${E(x.id)}"`, x.price ? M(x.price) : 'Precio a consultar')).join('')});
   if(C.rubro==='tortas' && !C.sinPers){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', i:secs.length, pers:1, html: eItem({id:'_pers', name: pers ? pers.name : 'Torta personalizada', desc: (pers && pers.desc) || 'Contame tu idea y te paso el precio.', img: persFoto()}, 0, 'data-pers="1"', 'Precio a consultar')}); }
-  let h = `<p class="eTop">${E(B.name)}</p><div class="eHead"><span class="eOrn" data-temporada="ornamento">${ramita(58, 58)}</span><h1 class="eTit">${w.map((x, i) => i===k ? `<em>${E(x)}</em>` : E(x)).join(' ')}</h1>${B.lead ? `<p class="eLead">${E(B.lead)}</p>` : ''}</div>
+  let h = `${formaEnc()==='nombre' ? '' : `<div class="eLogo"><img src="${E(logoEnc())}" alt="${E(B.name)}"></div>`}${formaEnc()==='logo' ? '' : `<p class="eTop">${E(B.name)}</p>`}<div class="eHead"><span class="eOrn" data-temporada="ornamento">${ramita(58, 58)}</span><h1 class="eTit">${w.map((x, i) => i===k ? `<em>${E(x)}</em>` : E(x)).join(' ')}</h1>${B.lead ? `<p class="eLead">${E(B.lead)}</p>` : ''}</div>
     ${hf ? `<figure class="eHero"><img src="${E(hf)}" alt="${E(B.name)}"><figcaption data-temporada="epigrafe">Hecha a mano${ciudad ? ' en ' + E(ciudad) : ''}.</figcaption></figure>` : ''}
     <span class="eIdxZ" data-temporada="indice"></span>${accesos(secs)}`;
   secs.forEach((s, i) => { h += `${i ? `<div class="eSep" data-temporada="separador">${ramita(64, 40)}</div>` : ''}<section class="eCat" id="tvCat${i}"><h2 class="eCatT">${E(s.t)}</h2>${s.html}</section>`; });
@@ -996,7 +1011,7 @@ function renderModerna(){ const ps = prods(), tal = talleres(), hf = heroPop();
   if(tal.length) secs.push({t:'Talleres', i:secs.length, its:[], html: tal.map((x, j) => mRow(j, `data-tl="${E(x.id)}"`, x.name, fecha(x.date) + (x.time ? ', ' + x.time + ' h' : ''), x.price ? M(x.price) : 'Precio a consultar', '')).join('')});
   if(C.rubro==='tortas' && !C.sinPers){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', i:secs.length, pers:1, its:[], html: mRow(0, 'data-pers="1"', pers ? pers.name : 'Torta personalizada', (pers && pers.desc) || 'Contame tu idea y te paso el precio.', 'Precio a consultar', persFoto())}); }
   const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
-  let h = `<div class="mIn"><p class="mMarca">${B.logo ? `<img src="${E(B.logo)}" alt="">` : ''}${E(B.name)}</p><h1 class="mTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="mLead">${E(B.lead)}</p>` : ''}
+  let h = `<div class="mIn"><p class="mMarca${formaEnc()==='logo' ? ' mSolo' : ''}">${formaEnc()==='nombre' ? '' : `<img src="${E(logoEnc())}" alt="${formaEnc()==='logo' ? E(B.name) : ''}">`}${formaEnc()==='logo' ? '' : E(B.name)}</p><h1 class="mTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="mLead">${E(B.lead)}</p>` : ''}
     ${hf ? `<div class="mHero"><img src="${E(hf)}" alt="${E(B.name)}"></div>` : ''}<div data-temporada="foto"></div></div>`;
   h += accesos(secs);
   secs.forEach((s, i) => { h += `<div data-temporada="separador"></div><section class="mCat" id="tvCat${i}"><h2 class="mCatT">${E(s.t)}</h2><div class="mFilas">${s.html}</div></section>`; });
@@ -1167,7 +1182,11 @@ function lst(t){ return String(t||'').split('\n').map(s => s.trim()).filter(Bool
 const lstT = a => (a||[]).map(x => x.n + (Number(x.p) ? ' ' + x.p : '')).join('\n');
 function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || DIAS.includes(p.cat)), x = X();
   const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
-  return `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
+  const fe = formaEnc(), lg = logoEnc();
+  return `<div class="venc"><h3>Encabezado de tu página</h3><div class="vlogo">${lg ? `<img src="${E(lg)}" alt="Tu logo">` : '<span class="vnf vnl" style="width:64px;height:64px;border-radius:50%">Sin logo</span>'}<label class="vsub">${lg ? 'Cambiar logo' : 'Subir logo'}<input type="file" accept="image/*" hidden data-tvlogo="1"></label></div>
+    ${[['logo-nombre', 'Logo y nombre'], ['nombre', 'Solo el nombre'], ['logo', 'Solo el logo (si tu logo ya trae el nombre)']].map(([v, l]) => `<label class="vck"><input type="radio" name="tvenc" value="${v}"${fe===v ? ' checked' : ''}${v!=='nombre' && !lg ? ' disabled' : ''}> ${l}</label>`).join('')}
+    ${lg ? '' : '<div class="vok" style="margin:2px 0 6px">Para mostrar el logo, primero subilo.</div>'}<button type="button" class="vsv" data-tvenc="1">Guardar encabezado</button></div>
+    <h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
     + ps.map(p => { const v = V(p), o = OPN===p.id;
       return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">Categoría: ${E(grupo(p))}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
         <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
@@ -1192,6 +1211,10 @@ function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return; const host 
 const RP = window[C.fn]; if(typeof RP==='function') window[C.fn] = function(){ const r = RP.apply(this, arguments); try{ mount(); }catch(e){} return r; };
 D.addEventListener('click', async e => { const b = e.target.closest('#tvpc button'); if(!b) return;
   if(b.dataset.tvo){ OPN = OPN===b.dataset.tvo ? '' : b.dataset.tvo; mount(); return; }
+  if(b.dataset.tvenc){ const r0 = q('#tvpc input[name="tvenc"]:checked'); S.settings.extra = S.settings.extra || {}; S.settings.extra.enc = Object.assign({}, ENC(), {forma: r0 ? r0.value : formaEnc()});
+    b.disabled = true; b.textContent = 'Guardando…';
+    try{ const r = await api({a:'saveSettings', pin:pinOk, settings:S.settings}); if(typeof toast==='function') toast(r && r.ok ? 'Encabezado guardado' : ((r && r.msg) || 'No se pudo guardar')); }catch(err){ if(typeof toast==='function') toast('Sin conexión: no se guardó. Probá de nuevo.'); }
+    mount(); try{ render(); }catch(err){} return; }
   if(b.dataset.tvs){ const id = b.dataset.tvs, ed = q('#tvpc [data-tve="' + CSS.escape(id) + '"]'), g = k => ed.querySelector('[data-f="' + k + '"]');
     const v = {ext: lst(g('ext').value)};
     if(g('grp')){ const gr = g('grp').value.replace(/\s+/g, ' ').trim(); if(gr) v.grp = gr; }
@@ -1203,7 +1226,14 @@ D.addEventListener('click', async e => { const b = e.target.closest('#tvpc butto
     try{ const r = await api({a:'saveSettings', pin:pinOk, settings:S.settings}); if(r && r.ok){ OPN = ''; if(typeof toast==='function') toast('Opciones guardadas'); } else if(typeof toast==='function') toast((r && r.msg) || 'No se pudo guardar'); }
     catch(err){ if(typeof toast==='function') toast('Sin conexión: no se guardó. Probá de nuevo.'); }
     mount(); try{ render(); }catch(err){} } });
-D.addEventListener('change', async e => { const f = e.target.closest('#tvpc input[type=file]'); if(!f || !f.files[0]) return; const p = (S.products||[]).find(x => x.id===f.dataset.tvf); if(!p) return;
+D.addEventListener('change', async e => { const f = e.target.closest('#tvpc input[type=file]'); if(!f || !f.files[0]) return;
+  if(f.dataset.tvlogo){ try{ if(typeof toast==='function') toast('Subiendo logo…'); const r = await api({a:'photo', pin:pinOk, data: await shrink(f.files[0]), name:'logo.jpg'});
+      if(!r || !r.ok){ if(typeof toast==='function') toast((r && r.msg) || 'No se pudo subir'); return; }
+      S.settings.extra = S.settings.extra || {}; S.settings.extra.enc = Object.assign({}, ENC(), {logo: r.url}); if(!ENC().forma || ENC().forma==='nombre') S.settings.extra.enc.forma = 'logo-nombre';
+      const s = await api({a:'saveSettings', pin:pinOk, settings:S.settings}); if(typeof toast==='function') toast(s && s.ok ? 'Logo actualizado' : ((s && s.msg) || 'No se pudo guardar'));
+    }catch(err){ if(typeof toast==='function') toast('Sin conexión: no se subió. Probá de nuevo.'); }
+    mount(); try{ render(); }catch(err){} return; }
+  const p = (S.products||[]).find(x => x.id===f.dataset.tvf); if(!p) return;
   try{ if(typeof toast==='function') toast('Subiendo foto…'); const r = await api({a:'photo', pin:pinOk, data: await shrink(f.files[0]), name:p.name + '.jpg'});
     if(!r || !r.ok){ if(typeof toast==='function') toast((r && r.msg) || 'No se pudo subir'); return; }
     p.img = r.url; const s = await api({a:'saveProducts', pin:pinOk, products:S.products}); if(typeof toast==='function') toast(s && s.ok ? 'Foto actualizada' : ((s && s.msg) || 'No se pudo guardar'));
@@ -1211,6 +1241,9 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
+
+
 
 
 
