@@ -358,13 +358,14 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 /* QUÉ SE TOCA (Dardo 17/11 09:17): cada tarjeta del carrusel lleva el botón Elegir */
 #tv[data-familia="pop"] .vElegir{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:12px;padding:0 22px;border:2px solid var(--tinta);border-radius:999px;background:var(--acento);color:var(--sobre-acento);font:700 17px/1 'Archivo',var(--fb)}
 #tv[data-familia="pop"] .pCard .vElegir{margin-top:10px}
-#tv .vAccs{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:16px 8px;align-items:start;padding:24px 20px 8px}
-#tv .vAcc{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;min-height:48px;padding:0;border:0;background:none;color:var(--tinta,inherit);font:inherit;cursor:pointer}
+#tv .vAccs{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:16px 8px;padding:24px 20px 8px}   /* revisión CONTENIDO 17/11 11:50: la última fila, si queda incompleta, va centrada */
+#tv .vAcc{display:flex;flex-direction:column;align-items:center;gap:8px;flex:0 0 auto;min-width:96px;max-width:150px;min-height:48px;padding:0;border:0;background:none;color:var(--tinta,inherit);font:inherit;cursor:pointer}
 #tv .vAccC{display:flex;align-items:center;justify-content:center;width:72px;height:72px;flex:none;border-radius:50%;border:3px solid var(--tinta,currentColor);background:var(--fondo-2,transparent);overflow:hidden;text-align:center}
-#tv .vAccC span{padding:0 6px;font-size:15px;font-weight:700;line-height:1.1;overflow-wrap:normal;word-break:normal;hyphens:none}
+#tv .vAccC .vAccI{width:48px;height:auto}
+#tv[data-familia="moderna"] .vAccR{background:var(--acento)}
 #tv .vAccC img{width:100%;height:100%;object-fit:cover}
 #tv .vAccN{max-width:100%;font-size:15px;font-weight:700;line-height:1.25;text-align:center;text-decoration:underline;text-underline-offset:3px;overflow-wrap:normal;word-break:normal;hyphens:none}
-#tv .vAccs .vVer{grid-column:1/-1;justify-self:center}
+#tv .vAccs .vVer{flex:0 0 100%;justify-content:center}
 #tv .vAcc:focus-visible{outline:3px solid var(--tinta,currentColor);outline-offset:3px}
 #tv[data-familia="editorial"] .vAccC{border-width:1px}
 #tv[data-familia="editorial"] .vAccN{font-weight:500}
@@ -455,8 +456,8 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="moderna"] .mIn{position:relative;padding:28px 20px 8px}
 #tv[data-familia="moderna"] .mMarca{display:flex;align-items:center;gap:12px;margin:0 0 28px;font:800 17px/1.2 'Manrope',var(--fb)}
 #tv[data-familia="moderna"] .mMarca img{width:48px;height:48px;border-radius:50%;object-fit:contain;background:var(--fondo-2)}
-#tv[data-familia="moderna"] .mTit{font:800 36px/1.08 'Manrope',var(--fb);letter-spacing:-.01em;margin:0 0 14px;max-width:14ch}
-#tv[data-familia="moderna"] .mTit mark{background:var(--acento);color:var(--sobre-acento);padding:0 12px;border-radius:999px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#tv[data-familia="moderna"] .mTit{font:800 36px/1.16 'Manrope',var(--fb);letter-spacing:-.01em;margin:0 0 14px;max-width:14ch}
+#tv[data-familia="moderna"] .mTit mark{display:inline-block;margin-top:6px;padding:0 12px;line-height:1.12;border-radius:999px;background:var(--acento);color:var(--sobre-acento)}   /* revisión CONTENIDO 17/11 11:50: la píldora no toca el renglón de arriba */
 #tv[data-familia="moderna"] .mLead{margin:0 0 24px;max-width:34ch}
 #tv[data-familia="moderna"] .mHero{position:relative;margin:0 0 8px}
 #tv[data-familia="moderna"] .mHero img{display:block;width:100%;aspect-ratio:1;object-fit:cover;object-position:center;border-radius:28px}
@@ -994,9 +995,10 @@ const precioTxt = p => { const n = desde(p); return n ? `Desde <b>${M(n)}</b>` :
 const MAXL = 5;
 const lim = (arr, k) => T.ver[k] ? arr : arr.slice(0, MAXL);
 /* ACCESOS A CATEGORÍAS (Dardo 17/11 11:13): círculos con la foto del primer producto (o el nombre) y el nombre subrayado con ↓; llevan a su grupo.
-   Máximo 5 y Ver todas. La flecha va pegada a la última palabra (&nbsp;) y las palabras nunca se cortan: si no entran, bajan enteras. */
+   Máximo 5 y Ver todas. Las palabras nunca se cortan: si no entran, bajan enteras. Sin foto, el círculo lleva el recurso de la familia y el nombre va solo abajo (CONTENIDO 17/11 11:50). */
+const recursoAcc = () => C.familia==='editorial' ? ramita(44, 28) : C.familia==='pop' ? confites(0).replace('class="pConf"', 'class="vAccI"') : C.familia==='casera' ? sello().replace('<svg ', '<svg class="vAccI" ') : '';
 function accesos(secs){ const L = secs.filter(s => !s.pers); if(L.length < 2) return '';
-  return `<nav class="vAccs" aria-label="Categorías">${lim(L, 'acc').map(s => { const f = s.its && s.its[0] ? foto(s.its[0]) : ''; return `<button type="button" class="vAcc" data-ir="${s.i}"><span class="vAccC">${f ? `<img src="${E(f)}" alt="">` : `<span>${E(s.t)}</span>`}</span><span class="vAccN">${E(s.t)}&nbsp;↓</span></button>`; }).join('')}${verTodas(L, 'acc')}</nav>`; }
+  return `<nav class="vAccs" aria-label="Categorías">${lim(L, 'acc').map(s => { const f = s.its && s.its[0] ? foto(s.its[0]) : ''; return `<button type="button" class="vAcc" data-ir="${s.i}"><span class="vAccC${f ? '' : ' vAccR'}">${f ? `<img src="${E(f)}" alt="">` : recursoAcc()}</span><span class="vAccN">${E(s.t)} ↓</span></button>`; }).join('')}${verTodas(L, 'acc')}</nav>`; }
 const verTodas = (arr, k) => arr.length > MAXL && !T.ver[k] ? `<button type="button" class="vVer" data-ver="${k}">Ver todas (${arr.length}) ↓</button>` : '';
 let T = {ver:{}, cat:'', p:null, tal:null, step:0, date:'', mo:0, o:{}, ent:'Retiro', dir:'', name:'', phone:'', notes:'', err:'', sending:false, done:false};
 let Q = {}, QO = {};   // viandas: cantidad y opción por plato
@@ -1328,6 +1330,8 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
+
 
 
 
