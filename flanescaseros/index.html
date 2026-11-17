@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<script>/*DEMO v1*/(function(){ var D = {"ok": true, "busy": {}, "taken": {}, "products": [{"id": "f1", "cat": "Flanes", "name": "Flan casero", "desc": "Entero, con su caramelo.", "price": null, "visible": true, "img": "img/flan.jpg"}, {"id": "f2", "cat": "Flanes", "name": "Flan individual", "desc": "En vasito, con dulce de leche.", "price": null, "visible": true, "img": "img/flan_individual.jpg"}, {"id": "f3", "cat": "Postres", "name": "Postre en vaso", "desc": "Con crema y chocolate rallado.", "price": null, "visible": true, "img": "img/vaso.jpg"}, {"id": "f4", "cat": "Postres", "name": "Postre en bandeja", "desc": "Para compartir.", "price": null, "visible": true, "img": "img/bandeja.jpg"}, {"id": "f5", "cat": "Postres", "name": "Postre con brownie y frutilla", "desc": "Capas de crema, dulce de leche y brownie.", "price": null, "visible": true, "img": "img/caja.jpg"}], "settings": {"maxPerDay": 9999, "blocked": [], "extra": {"kind": "tortas", "lead": 1, "talleres": [], "envio": true, "pickup": ""}}}, of = window.fetch; if(window.NO_DEMO) return;   /* hasta el alta en el servidor: servidor de mentira, nada sale de la página */
-  window.fetch = function(u, o){ if(String(u).indexOf('script.google.com') < 0) return of.apply(this, arguments);
-    var q = {}; try{ q = JSON.parse((o && o.body) || '{}'); }catch(e){} var a = q.a || 'pub', r = {ok:true};
-    if(a === 'pub') r = D; else if(a === 'all') r = q.pin === '1234' ? {ok:true, products:D.products, orders:[], settings:D.settings, calc:{rows:[]}} : {ok:false, msg:'Clave incorrecta'};
-    else if(a === 'saveProducts') D.products = q.products; else if(a === 'saveSettings') D.settings = q.settings; else if(a === 'order') r = {ok:true, id:'D' + Date.now()};
-    return Promise.resolve(new Response(JSON.stringify(r), {headers:{'Content-Type':'application/json'}})); }; })();</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Flanes Caseros · Flanes y postres caseros</title>
