@@ -596,10 +596,8 @@ body.pnl #tvpc .vlogo{display:flex;align-items:center;gap:14px}
 body.pnl #tvpc .vlogo img{width:64px;height:64px;border-radius:50%;object-fit:cover}
 body.pnl #tvpc .ved{border:0;padding:0;margin:0;background:none}
 body.pnl #app:not([hidden]) ~ #insL,body.pnl.pnlIn #insL{display:none!important}   /* Instalar la app: en el panel, solo en Más (en la pantalla de la clave sigue igual) */
-body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));font-size:17px;max-width:calc(100% - 32px)}
+body.pnl #toast{top:auto!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:70;max-width:calc(100% - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
 body.pnl #toast.pOk{white-space:nowrap}
-body.pnl #toast.pTop{top:calc(72px + env(safe-area-inset-top));bottom:auto!important}
-body.pnl #toast.pBar{bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:70}
 
 @media (prefers-reduced-motion:reduce){.pSw input,.pSw input::after{transition:none}}
 </style>
@@ -1547,10 +1545,10 @@ function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEn
 (function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
   const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
   window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
-  window.pnlPlace = () => { const t = document.getElementById('toast'); if(!t) return; t.classList.toggle('pOk', t.textContent==='Guardado ✓'); t.style.transition = 'none';   /* se mide donde queda de verdad (sin la animación de entrada) */   /* va donde no tape ningún botón: arriba de la barra, si no debajo de la barra de arriba, si no sobre las pestañas */
-    const tapa = () => { const a = t.getBoundingClientRect(); return [...document.querySelectorAll('#panel button, #panel a, #panel input, #panel select')].filter(b => { if(!b.offsetParent || b.closest('.tabs,.pT')) return false; const q = b.getBoundingClientRect(); return q.width && a.left < q.right && q.left < a.right && a.top < q.bottom && q.top < a.bottom; }).length; };
-    let best = null; for(const c of ['', 'pTop', 'pBar']){ t.classList.remove('pTop', 'pBar'); if(c) t.classList.add(c); const n = tapa(); if(!best || n < best[1]) best = [c, n]; if(!n) break; }
-    t.classList.remove('pTop', 'pBar'); if(best[0]) t.classList.add(best[0]); void last; }; })();
+  window.pnlPlace = () => { const t = document.getElementById('toast'); if(t) t.classList.toggle('pOk', t.textContent==='Guardado ✓'); };   /* siempre abajo, centrado sobre la barra de pestañas (CONTENIDO 18:00) */
+  window.pnlHide = () => { const t = document.getElementById('toast'); if(t) t.classList.remove('show', 'on'); };   /* todo aviso se borra al cambiar de pantalla o de pestaña */
+  document.addEventListener('click', e => { if(e.target && e.target.closest && e.target.closest('.tabs button, .pT button, .pBack, .back, .pRow, .pRowP, [data-a="pnl"], [data-a="go"], [data-a="cancel"], [data-a="ecancel"], [data-a="mcancel"], [data-a="oedit"], [data-a="pedit"], [data-a="eopen"], [data-a="tsee"]')) pnlHide(); }, true);
+  addEventListener('hashchange', () => pnlHide()); })();
 let tT; window.toast = function(m){ const t = q('#toast'); if(!t) return; t.textContent = pnlNorm(m); t.classList.add('show'); pnlPlace(); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2000); };
 const up = () => { try{ window.scrollTo(0, 0); }catch(e){} };
 function visitas(el, conPed){ el.innerHTML = '<div class="pCard"><p><b id="vN">…</b> visitas a tu página.</p>' + (conPed ? '<p><b id="vP">…</b> pedidos hechos desde ahí.</p>' : '') + '</div>';
@@ -1648,6 +1646,8 @@ try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
 </body>
+
+
 
 
 

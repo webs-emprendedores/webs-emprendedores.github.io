@@ -229,10 +229,8 @@ body.pnl #panel label.chk{min-height:48px;display:flex;align-items:center;gap:10
 body.pnl #panel .hrow label.chk,body.pnl #panel .ptag{font-size:16px}
 body.pnl.pnlIn #insL{display:none!important}
 body.pnl.pnlIn #cobL{margin-bottom:calc(68px + 40px + env(safe-area-inset-bottom))}
-body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));max-width:calc(100% - 32px)}
+body.pnl #toast{top:auto!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:70;max-width:calc(100% - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
 body.pnl #toast.pOk{white-space:nowrap}
-body.pnl #toast.pTop{top:calc(72px + env(safe-area-inset-top));bottom:auto!important}
-body.pnl #toast.pBar{bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:70}
 body.pnl #panel .durrow{display:block} body.pnl #panel .durrow select{width:100%} body.pnl #panel .durrow .btn{width:100%;margin-top:10px}   /* CONTENIDO 17/11 17:10: el select cortaba el texto */
 body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, también antes de entrar (CONTENIDO 17/11 17:10); #avisos de LD sigue con su botón */
 </style>
@@ -1010,10 +1008,10 @@ const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;',
 (function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
   const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
   window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
-  window.pnlPlace = () => { const t = document.getElementById('toast'); if(!t) return; t.classList.toggle('pOk', t.textContent==='Guardado ✓'); t.style.transition = 'none';   /* se mide donde queda de verdad (sin la animación de entrada) */   /* va donde no tape ningún botón: arriba de la barra, si no debajo de la barra de arriba, si no sobre las pestañas */
-    const tapa = () => { const a = t.getBoundingClientRect(); return [...document.querySelectorAll('#panel button, #panel a, #panel input, #panel select')].filter(b => { if(!b.offsetParent || b.closest('.tabs,.pT')) return false; const q = b.getBoundingClientRect(); return q.width && a.left < q.right && q.left < a.right && a.top < q.bottom && q.top < a.bottom; }).length; };
-    let best = null; for(const c of ['', 'pTop', 'pBar']){ t.classList.remove('pTop', 'pBar'); if(c) t.classList.add(c); const n = tapa(); if(!best || n < best[1]) best = [c, n]; if(!n) break; }
-    t.classList.remove('pTop', 'pBar'); if(best[0]) t.classList.add(best[0]); void last; }; })();
+  window.pnlPlace = () => { const t = document.getElementById('toast'); if(t) t.classList.toggle('pOk', t.textContent==='Guardado ✓'); };   /* siempre abajo, centrado sobre la barra de pestañas (CONTENIDO 18:00) */
+  window.pnlHide = () => { const t = document.getElementById('toast'); if(t) t.classList.remove('show', 'on'); };   /* todo aviso se borra al cambiar de pantalla o de pestaña */
+  document.addEventListener('click', e => { if(e.target && e.target.closest && e.target.closest('.tabs button, .pT button, .pBack, .back, .pRow, .pRowP, [data-a="pnl"], [data-a="go"], [data-a="cancel"], [data-a="ecancel"], [data-a="mcancel"], [data-a="oedit"], [data-a="pedit"], [data-a="eopen"], [data-a="tsee"]')) pnlHide(); }, true);
+  addEventListener('hashchange', () => pnlHide()); })();
 const T0 = window.toast; if(typeof T0==='function') window.toast = function(m){ T0(pnlNorm(m)); pnlPlace(); };
 const R0 = window.renderPanel;
 window.renderPanel = function(){ R0.apply(this, arguments); try{ deco(); }catch(e){ console.error('TPNL', e); } };
