@@ -318,6 +318,10 @@ const RW = Object.assign({}, RW0, RUBRO==='odo' ? {ses:'consulta', Ses:'Consulta
 /* SERVICIOS v1 (Dardo 17/11): rubro 'est' = manicura y estética. Sin obras sociales, edad, matrícula, honorarios ni Plus de pacientes (el Plus es solo de profesionales).
    Cada app habla solo de su rubro: rwT pasa a palabras del rubro lo que quede escrito para profesionales. En psi y odo no cambia nada. */
 const EST = RUBRO==='est';
+/* rwDom: cambia SOLO el texto que se lee (y placeholder, aria-label, alt, title), nunca los valores internos (data-v, value):
+   si los tocara, "Ya vine antes" (data-v="paciente") dejaba de quedar marcado (error visto por Dardo 17/11 03:51) */
+function rwDom(el){ if(!EST || !el) return; const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n; while((n = w.nextNode())){ const v = rwT(n.nodeValue); if(v !== n.nodeValue) n.nodeValue = v; }
+  el.querySelectorAll('[placeholder],[aria-label],[alt],[title]').forEach(e => ['placeholder','aria-label','alt','title'].forEach(a => { const v = e.getAttribute(a); if(v){ const x = rwT(v); if(x !== v) e.setAttribute(a, x); } })); }
 const rwT = s => !EST ? s : String(s).replace(/El motivo de consulta/g,'Lo que te cuenta').replace(/motivo de consulta/g,'comentario').replace(/tu consulta/g,'tu pedido').replace(/Primera consulta/g,'Primera vez').replace(/ del paciente/g,'').replace(/pacientes/g,'clientas').replace(/paciente/g,'clienta');
 const DEFAULT = {
   name:'Daniela Paz', short:'Daniela', role:'Psicóloga', mono:'DP',
@@ -506,7 +510,7 @@ function renderSite(){
   if(c.cancel) rows.push(['Si tenés que cancelar', c.cancel]);
   h += (rows.length ? `<section class="info"><h2>Antes de venir</h2><dl>${rows.map(r => `<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl></section>` : '') + `
     <footer><span>${esc(c.name)}, ${esc(c.role.toLowerCase())}</span></footer><p class="byw"><a href="https://www.instagram.com/webs.emprendedores/" target="_blank" rel="noopener">Hecha por @webs.emprendedores</a></p>`;
-  $('#site').innerHTML = rwT(h);
+  $('#site').innerHTML = h; rwDom($('#site'));
 }
 function msgPedido(t, motivo){ const cu = `${cap(longDate(t.date))}, ${t.time}${modeTxt(t)}`;
   if(t.kind==='consulta' && EST) return `Hola ${S.cfg.short}! Quiero pedir un turno. Es la primera vez que voy.\nNombre: ${t.name}${svLine(t)}${motivo?'\nComentario: '+motivo:''}\nHorario que me queda bien: ${cu}\nMi WhatsApp: ${t.phone}`;
@@ -527,7 +531,7 @@ function renderPanel0(){ if(A.ok) setTimeout(novShow, 0);
   const V = {plus:viewPlus, ficha:viewFicha, fnew:viewFichaNew, home:viewHome, day:viewDay, turno:viewTurno, cancel:viewCancel, new:viewNew, pick:viewPick, confirm:viewConfirm, msg:viewMsg, set:viewSet};
   if(['ho','co','ma','mo','sv','se'].includes(A.scr)) el.innerHTML = back('set','Volver a Ajustes') + '<div style="height:14px"></div>' + ({ho:viewHoras, co:viewCobros, ma:viewMas, mo:viewModo, sv:viewServ, se:viewSena})[A.scr]();
   else el.innerHTML = (V[A.scr]||viewHome)();
-  if(EST) el.innerHTML = rwT(el.innerHTML);
+  rwDom(el);
 }
 function viewHome(){ const td = today(), pend = listPend(), hoy = turnosOn(td);
   let h = `<div class="ptop"><h1>Tu agenda</h1></div>`;
