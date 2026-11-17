@@ -35,6 +35,7 @@ button{cursor:pointer}
 /* LINKS v1 (17/11, prometido a Lucre): Instagram y dirección en la primera pantalla; solo si la profesional los cargó */
 .lk{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:-8px 0 22px}
 .lk .btn.ig{gap:8px;min-height:48px}
+.lead:empty+.lk{margin-top:18px}   /* LD y consultorios: sin presentación, no se pega a la línea de la cabecera */
 .lk .ig svg,.lk .map svg{flex:none;width:22px;height:22px}
 .lk .map{display:inline-flex;gap:8px;align-items:flex-start;color:var(--ink);font-size:17px;line-height:1.35;text-decoration:underline;text-underline-offset:3px;min-height:48px;padding-top:10px;overflow-wrap:anywhere}
 .lk .map svg{color:var(--pet);margin-top:-1px}
