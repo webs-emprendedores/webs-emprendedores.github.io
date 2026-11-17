@@ -300,6 +300,12 @@ body.pnl #toast{top:auto!important;bottom:calc(76px + env(safe-area-inset-bottom
 body.pnl #toast.pOk{white-space:nowrap}
 body.pnl #panel .durrow{display:block} body.pnl #panel .durrow select{width:100%} body.pnl #panel .durrow .btn{width:100%;margin-top:10px}   /* CONTENIDO 17/11 17:10: el select cortaba el texto */
 body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, también antes de entrar (CONTENIDO 17/11 17:10); #avisos de LD sigue con su botón */
+</style>
+<style>/*LNK v1*/
+#panel .pLnk{margin:12px 0;padding:16px;background:var(--pc,#fff);border:1px solid var(--pl,#ddd);border-radius:16px;color:var(--pt,inherit)}
+#panel .pLnk b{display:block;font-size:18px;line-height:1.25;margin:0 0 6px}
+#panel .pLnk p{margin:0 0 12px;font-size:16px;line-height:1.35;overflow-wrap:anywhere;color:var(--pt,inherit)}
+#panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font:600 17px/1.2 inherit;font-family:inherit;cursor:pointer}
 .mcb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:22px 0 6px;text-align:center}
 .mcb span{font:500 16px/1 Jost,system-ui,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:var(--mut)}
 .mcb b{font:500 34px/1.1 "Playfair Display",Georgia,serif;color:var(--ink)}
@@ -354,6 +360,39 @@ body.cEsp #panel .pT{display:none}
 <div id="toast" role="status"></div>
 
 <script>
+/*INS v1*/ (function(){ let DP = null; const el = id => document.getElementById(id), ua = navigator.userAgent || '';
+  const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
+  const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const HK = 'ins_h_' + location.pathname, vis = e => !!e && !e.hidden && e.getClientRects().length > 0, panel = () => [el('app'), el('panel')].find(vis), inPanel = () => !!panel();   /* también en la pantalla de la clave */
+  const say = m => { try{ toast(m); }catch(e){ alert(m); } };
+  /* la app instalada abre en el panel donde se instaló */
+  try{ if(SA() && location.hash.length <= 1){ const h = localStorage.getItem(HK); if(h && /^#[\w-]+$/.test(h)) location.replace(location.pathname + location.search + h); } }catch(e){}
+  const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
+  const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
+  function pasos(){
+    if(INAPP) return ['Primero abrila en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede instalar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Instalar la app</b>.'], true];
+    if(IOS && OTRO) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Si no te aparece esa opción, abrí este link en Safari y repetí los pasos.'], true];
+    if(IOS) return ['Instalarla en tu iPhone', ['', 'Tocá el botón de menú que está junto a la dirección (las tres rayitas o los tres puntitos).', 'Tocá <b>Compartir</b> ' + SH + '.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
+    if(AND) return ['Instalarla en tu celular', ['', 'Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
+    return ['Instalarla en tu computadora', ['', 'Abrí este link en Chrome o en Edge.', 'Tocá el ícono de instalar que aparece a la derecha de la dirección.', 'Si lo que querés es tenerla en el celular, abrí este mismo link desde el celular y tocá <b>Instalar la app</b>.'], true]; }
+  function open(){ if(el('insD')) return; const p = pasos(), d = document.createElement('div'); d.id = 'insD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','insT');
+    d.innerHTML = '<div class="ib"><h2 id="insT">' + p[0] + '</h2>' + (p[1][0] ? '<p>' + p[1][0] + '</p>' : '') + '<ol>' + p[1].slice(1).map(x => '<li>' + x + '</li>').join('') + '</ol>' + (p[2] ? '<button type="button" data-ins="c">Copiar el link</button>' : '') + '<button type="button" class="o" data-ins="x">Cerrar</button></div>';
+    document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-ins]'); if(!t) return; if(t.dataset.ins==='x'){ d.remove(); return; }
+      try{ navigator.clipboard.writeText(location.href).then(() => say('Link copiado.'), () => say('No se pudo copiar. Copialo desde la barra de direcciones.')); }catch(err){ say('No se pudo copiar. Copialo desde la barra de direcciones.'); } }); d.querySelector('[data-ins]').focus(); }
+  async function go(){ try{ const h = location.hash.split('&')[0]; if(h.length > 1) localStorage.setItem(HK, h); }catch(e){}
+    if(IOS && !INAPP && document.querySelector('link[rel=manifest]') && /^#[\w-]+$/.test(location.hash.split('&')[0])){ try{ sessionStorage.setItem('ins_open', '1'); }catch(e){} location.reload(); return; }   /* iPhone: el manifest se decide al cargar */
+    if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); const r = await e.userChoice; if(r && r.outcome==='accepted'){ paint(); return; } }catch(err){} DP = e; return; } open(); }
+  function paint(){ const o = el('insL'); if(o) o.remove(); const p = panel(); if(!inPanel() || SA()) return;
+    const l = document.createElement('button'); l.id = 'insL'; l.type = 'button'; l.textContent = IOS || AND ? 'Instalar la app en este celular' : 'Instalar la app'; l.onclick = go;
+    const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling); }
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
+  addEventListener('appinstalled', () => { DP = null; const o = el('insL'); if(o) o.remove(); say('Listo: la app quedó instalada.'); });
+  addEventListener('hashchange', () => setTimeout(paint, 60));
+  addEventListener('load', () => { [0, 400, 1500].forEach(ms => setTimeout(paint, ms)); try{ if(sessionStorage.getItem('ins_open')){ sessionStorage.removeItem('ins_open'); setTimeout(open, 600); } }catch(e){} });
+  document.addEventListener('click', () => setTimeout(() => { const c = el('cobL'), l = el('insL'); if(!!l !== (inPanel() && !SA()) || (l && c && c.nextSibling !== l)) paint(); }, 120));
+})(); /*INS fin*/
+
 /*COB v1*/ (function(){ const TIPO = 'turnos', F = window.fetch.bind(window); let G = null, PUB = null, PAGO = '';
   { const m = location.hash.match(/&pago=(ok|error|pendiente)/); if(m){ PAGO = m[1]; location.hash = location.hash.replace(/&pago=\w+/, ''); } }
   const el = id => document.getElementById(id), money = n => '$' + Number(n).toLocaleString('es-AR'), dm = s => { const p = String(s).split('-'); return Number(p[2]) + '/' + Number(p[1]); };
@@ -1206,7 +1245,12 @@ function route(){ const h = location.hash.slice(1); OWN = PROS.findIndex(x => x.
 addEventListener('hashchange', route); route();
 
 /*NOV v1*/ const NOV = {"v": "2026-11-16c", "items": ["En Ajustes, Mis horarios, podés poner horario de mañana y de tarde para cada día.", "Al anotar un turno elegís cuánto dura. Si es más largo, la agenda te guarda ese tiempo.", "La agenda se ve por semana: con las flechas vas a los días siguientes o a los anteriores."], "safe": "Tus turnos y tus datos no se tocaron."};   /* lo completa novedades.py al publicar una actualización */
-function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov')) return; let k = 'nov_'+location.pathname; try{ if(localStorage.getItem(k)===NOV.v) return; }catch(e){}
+/* SOLO A QUIEN YA LA USABA (regla Dardo 17/11 19:48): nunca en las demos ni en la primera entrada de un cliente nuevo.
+   La primera vez que se entra al panel en este aparato queda la marca de uso y la versión actual como vista; el cartel sale recién
+   con una actualización posterior. También cuenta como uso haber visto un cartel anterior. */
+function novDemo(){ try{ if(typeof DEMO!=='undefined' && DEMO) return true; }catch(e){} try{ if(typeof MUESTRA!=='undefined' && MUESTRA) return true; }catch(e){} return /\/muestra-[^/]*\//.test(location.pathname); }
+function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov') || novDemo()) return; let k = 'nov_'+location.pathname, u = 'novu_'+location.pathname;
+  try{ const visto = localStorage.getItem(k), uso = localStorage.getItem(u); if(!uso) localStorage.setItem(u, '1'); if(visto===NOV.v) return; if(!uso && !visto){ localStorage.setItem(k, NOV.v); return; } }catch(e){ return; }
   const d = document.createElement('div'); d.id = 'nov'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','novT');
   const e = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   d.innerHTML = '<div class="nb"><h2 id="novT">Actualizamos tu app</h2><ul>' + NOV.items.map(x => '<li>'+e(x)+'</li>').join('') + '</ul><p class="ok2">' + e(NOV.safe) + '</p><button type="button" id="novOk">Entendido</button></div>';
@@ -1237,7 +1281,7 @@ function tono(){ if(D.body.style.getPropertyValue('--pas15')) return; const cs =
 function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) return;
   D.body.classList.toggle('pnlIn', !!A.ok); D.body.classList.toggle('tLogin', !A.ok && location.hash!=='#avisos'); tono();
   el.querySelectorAll('.quick').forEach(x => { if(x.querySelector('[data-a="go"][data-v="day"]') && x.querySelector('[data-a="go"][data-v="set"]')) x.remove(); });   /* Ver otros días y Ajustes ya están en las pestañas */
-  el.insertAdjacentHTML('afterbegin', `<header class="pnlTop"><span class="pnlMarca">${c.photo ? `<img src="${H(c.photo)}" alt="">` : ''}<b>${H(((c.title ? c.title + ' ' : '') + (c.name || '')).trim())}</b></span><a class="pnlVer" href="#">Ver mi página ↗</a></header>`);
+  el.insertAdjacentHTML('afterbegin', `<header class="pnlTop"><span class="pnlMarca">${c.photo ? `<img src="${H(c.photo)}" alt="">` : ''}<b>${H(((c.title ? c.title + ' ' : '') + (c.name || '')).trim())}</b></span></header>`);
   if(!A.ok) return;
   if(A.scr==='sv') el.querySelectorAll('.back').forEach(b => b.remove());   /* Servicios es una pestaña: sin Volver a Ajustes */
   if(A.scr==='turno'){ const lt = el.querySelector('[data-a="conf"]'), ll = el.querySelector('a.btn[href^="tel:"]');   /* por resolver: la principal es Lo tomo; Llamar con borde */
@@ -1252,6 +1296,19 @@ function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) r
 D.addEventListener('click', e => { const b = e.target.closest('#panel [data-a="pnlins"]'); if(!b) return; const l = D.getElementById('insL'); if(l) l.click(); });
 try{ if(!q('#panel').hidden && location.hash!=='#avisos' && !q('#panel .pnlTop')) deco(); }catch(e){}   /* sin volver a dibujar: en LD #avisos es otra pantalla (salió de un error: se pisaba con la elección de profesional) */
 })();</script>
+<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu link para que te pidan turno';
+const url = () => location.href.split('#')[0].split('?')[0];
+function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
+  /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
+  let m = [...P.querySelectorAll('.pMenu')].find(x => x.offsetParent && (x.closest('#pv-mas') || (typeof A!=='undefined' && A.scr==='set')));
+  if(!m && typeof A!=='undefined' && A.ok && A.scr==='set') m = P.querySelector('.opt');   /* turnos sin panel nuevo (plantilla y demos): arriba de Ajustes */
+  if(!m || m.parentNode.querySelector(':scope > .pLnk')) return;
+  m.insertAdjacentHTML('beforebegin', '<div class="pLnk"><b>' + TXT + '</b><p data-lnk-url>' + url().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) + '</p><button type="button" data-lnk>Copiar</button></div>'); }
+new MutationObserver(put).observe(D.body, {childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class']});
+D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-lnk]'); if(!b) return;
+  const say = m => { try{ toast(m); }catch(x){} };
+  try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
+put(); })();</script>
 <script>/*CONS v1*/
 (function(){ const D = document, q = s => D.querySelector(s), H = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let CI = null, CIK = '', BUSY = false, CS = '', CX = null;   /* CI = respuesta de consInfo de esta profesional; CS = pantalla propia (lista, agregar, listo, sacar, voto) */
@@ -1307,40 +1364,7 @@ D.addEventListener('click', e => { if(e.target.closest('#panel .pT button, #pane
 addEventListener('hashchange', () => { CI = null; CS = ''; });
 })();
 </script>
-<script>
-/*INS v1*/ (function(){ let DP = null; const el = id => document.getElementById(id), ua = navigator.userAgent || '';
-  const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
-  const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
-  const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-  const HK = 'ins_h_' + location.pathname, vis = e => !!e && !e.hidden && e.getClientRects().length > 0, panel = () => [el('app'), el('panel')].find(vis), inPanel = () => !!panel();   /* también en la pantalla de la clave */
-  const say = m => { try{ toast(m); }catch(e){ alert(m); } };
-  /* la app instalada abre en el panel donde se instaló */
-  try{ if(SA() && location.hash.length <= 1){ const h = localStorage.getItem(HK); if(h && /^#[\w-]+$/.test(h)) location.replace(location.pathname + location.search + h); } }catch(e){}
-  const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
-  const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
-  function pasos(){
-    if(INAPP) return ['Primero abrila en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede instalar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Instalar la app</b>.'], true];
-    if(IOS && OTRO) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Si no te aparece esa opción, abrí este link en Safari y repetí los pasos.'], true];
-    if(IOS) return ['Instalarla en tu iPhone', ['', 'Tocá el botón de menú que está junto a la dirección (las tres rayitas o los tres puntitos).', 'Tocá <b>Compartir</b> ' + SH + '.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
-    if(AND) return ['Instalarla en tu celular', ['', 'Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
-    return ['Instalarla en tu computadora', ['', 'Abrí este link en Chrome o en Edge.', 'Tocá el ícono de instalar que aparece a la derecha de la dirección.', 'Si lo que querés es tenerla en el celular, abrí este mismo link desde el celular y tocá <b>Instalar la app</b>.'], true]; }
-  function open(){ if(el('insD')) return; const p = pasos(), d = document.createElement('div'); d.id = 'insD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','insT');
-    d.innerHTML = '<div class="ib"><h2 id="insT">' + p[0] + '</h2>' + (p[1][0] ? '<p>' + p[1][0] + '</p>' : '') + '<ol>' + p[1].slice(1).map(x => '<li>' + x + '</li>').join('') + '</ol>' + (p[2] ? '<button type="button" data-ins="c">Copiar el link</button>' : '') + '<button type="button" class="o" data-ins="x">Cerrar</button></div>';
-    document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-ins]'); if(!t) return; if(t.dataset.ins==='x'){ d.remove(); return; }
-      try{ navigator.clipboard.writeText(location.href).then(() => say('Link copiado.'), () => say('No se pudo copiar. Copialo desde la barra de direcciones.')); }catch(err){ say('No se pudo copiar. Copialo desde la barra de direcciones.'); } }); d.querySelector('[data-ins]').focus(); }
-  async function go(){ try{ const h = location.hash.split('&')[0]; if(h.length > 1) localStorage.setItem(HK, h); }catch(e){}
-    if(IOS && !INAPP && document.querySelector('link[rel=manifest]') && /^#[\w-]+$/.test(location.hash.split('&')[0])){ try{ sessionStorage.setItem('ins_open', '1'); }catch(e){} location.reload(); return; }   /* iPhone: el manifest se decide al cargar */
-    if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); const r = await e.userChoice; if(r && r.outcome==='accepted'){ paint(); return; } }catch(err){} DP = e; return; } open(); }
-  function paint(){ const o = el('insL'); if(o) o.remove(); const p = panel(); if(!inPanel() || SA()) return;
-    const l = document.createElement('button'); l.id = 'insL'; l.type = 'button'; l.textContent = IOS || AND ? 'Instalar la app en este celular' : 'Instalar la app'; l.onclick = go;
-    const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling); }
-  addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
-  addEventListener('appinstalled', () => { DP = null; const o = el('insL'); if(o) o.remove(); say('Listo: la app quedó instalada.'); });
-  addEventListener('hashchange', () => setTimeout(paint, 60));
-  addEventListener('load', () => { [0, 400, 1500].forEach(ms => setTimeout(paint, ms)); try{ if(sessionStorage.getItem('ins_open')){ sessionStorage.removeItem('ins_open'); setTimeout(open, 600); } }catch(e){} });
-  document.addEventListener('click', () => setTimeout(() => { const c = el('cobL'), l = el('insL'); if(!!l !== (inPanel() && !SA()) || (l && c && c.nextSibling !== l)) paint(); }, 120));
-})(); /*INS fin*/
-/*NTF v1*/ (function(){
+<script>/*NTF v1*/ (function(){
 const NTF = {api: 'https://miwebsapp.netlify.app/api/push', key: 'BImwbVkkD9IqBkXNmvQvsf1xzS-lX6eTDIoZK0iQ5D3mJnFDzM3AU_Id5VnpuDU5KY9rQqIsjbV8k2yWByOVoww'}; window.NTF = NTF;
 if(typeof renderSite!=='function') return;
 const D = document, q = s => D.querySelector(s), ua = navigator.userAgent || '';
@@ -1374,6 +1398,10 @@ D.addEventListener('click', e => { const b = e.target.closest && e.target.closes
 try{ bloque(); }catch(e){}
 })();</script>
 </body>
+
+
+
+
 
 
 </html>

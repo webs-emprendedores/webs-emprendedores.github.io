@@ -314,6 +314,12 @@ body.pnl #toast.pOk{white-space:nowrap}
 body.pnl #panel .durrow{display:block} body.pnl #panel .durrow select{width:100%} body.pnl #panel .durrow .btn{width:100%;margin-top:10px}   /* CONTENIDO 17/11 17:10: el select cortaba el texto */
 body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, también antes de entrar (CONTENIDO 17/11 17:10); #avisos de LD sigue con su botón */
 </style>
+<style>/*LNK v1*/
+#panel .pLnk{margin:12px 0;padding:16px;background:var(--pc,#fff);border:1px solid var(--pl,#ddd);border-radius:16px;color:var(--pt,inherit)}
+#panel .pLnk b{display:block;font-size:18px;line-height:1.25;margin:0 0 6px}
+#panel .pLnk p{margin:0 0 12px;font-size:16px;line-height:1.35;overflow-wrap:anywhere;color:var(--pt,inherit)}
+#panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font:600 17px/1.2 inherit;font-family:inherit;cursor:pointer}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -1155,7 +1161,12 @@ function route(){ const h = location.hash.slice(1); OWN = PROS.findIndex(x => x.
 addEventListener('hashchange', route); route();
 
 /*NOV v1*/ const NOV = {"v": "2026-11-16c", "items": ["En Ajustes, Mis horarios, podés poner horario de mañana y de tarde para cada día.", "Al anotar un turno elegís cuánto dura. Si es más largo, la agenda te guarda ese tiempo.", "La agenda se ve por semana: con las flechas vas a los días siguientes o a los anteriores."], "safe": "Tus turnos y tus datos no se tocaron."};   /* lo completa novedades.py al publicar una actualización */
-function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov')) return; let k = 'nov_'+location.pathname; try{ if(localStorage.getItem(k)===NOV.v) return; }catch(e){}
+/* SOLO A QUIEN YA LA USABA (regla Dardo 17/11 19:48): nunca en las demos ni en la primera entrada de un cliente nuevo.
+   La primera vez que se entra al panel en este aparato queda la marca de uso y la versión actual como vista; el cartel sale recién
+   con una actualización posterior. También cuenta como uso haber visto un cartel anterior. */
+function novDemo(){ try{ if(typeof DEMO!=='undefined' && DEMO) return true; }catch(e){} try{ if(typeof MUESTRA!=='undefined' && MUESTRA) return true; }catch(e){} return /\/muestra-[^/]*\//.test(location.pathname); }
+function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov') || novDemo()) return; let k = 'nov_'+location.pathname, u = 'novu_'+location.pathname;
+  try{ const visto = localStorage.getItem(k), uso = localStorage.getItem(u); if(!uso) localStorage.setItem(u, '1'); if(visto===NOV.v) return; if(!uso && !visto){ localStorage.setItem(k, NOV.v); return; } }catch(e){ return; }
   const d = document.createElement('div'); d.id = 'nov'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','novT');
   const e = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   d.innerHTML = '<div class="nb"><h2 id="novT">Actualizamos tu app</h2><ul>' + NOV.items.map(x => '<li>'+e(x)+'</li>').join('') + '</ul><p class="ok2">' + e(NOV.safe) + '</p><button type="button" id="novOk">Entendido</button></div>';
@@ -1186,7 +1197,7 @@ function tono(){ if(D.body.style.getPropertyValue('--pas15')) return; const cs =
 function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) return;
   D.body.classList.toggle('pnlIn', !!A.ok); D.body.classList.toggle('tLogin', !A.ok && location.hash!=='#avisos'); tono();
   el.querySelectorAll('.quick').forEach(x => { if(x.querySelector('[data-a="go"][data-v="day"]') && x.querySelector('[data-a="go"][data-v="set"]')) x.remove(); });   /* Ver otros días y Ajustes ya están en las pestañas */
-  el.insertAdjacentHTML('afterbegin', `<header class="pnlTop"><span class="pnlMarca">${c.photo ? `<img src="${H(c.photo)}" alt="">` : ''}<b>${H(((c.title ? c.title + ' ' : '') + (c.name || '')).trim())}</b></span><a class="pnlVer" href="#">Ver mi página ↗</a></header>`);
+  el.insertAdjacentHTML('afterbegin', `<header class="pnlTop"><span class="pnlMarca">${c.photo ? `<img src="${H(c.photo)}" alt="">` : ''}<b>${H(((c.title ? c.title + ' ' : '') + (c.name || '')).trim())}</b></span></header>`);
   if(!A.ok) return;
   if(A.scr==='sv') el.querySelectorAll('.back').forEach(b => b.remove());   /* Servicios es una pestaña: sin Volver a Ajustes */
   if(A.scr==='turno'){ const lt = el.querySelector('[data-a="conf"]'), ll = el.querySelector('a.btn[href^="tel:"]');   /* por resolver: la principal es Lo tomo; Llamar con borde */
@@ -1201,6 +1212,23 @@ function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) r
 D.addEventListener('click', e => { const b = e.target.closest('#panel [data-a="pnlins"]'); if(!b) return; const l = D.getElementById('insL'); if(l) l.click(); });
 try{ if(!q('#panel').hidden && location.hash!=='#avisos' && !q('#panel .pnlTop')) deco(); }catch(e){}   /* sin volver a dibujar: en LD #avisos es otra pantalla (salió de un error: se pisaba con la elección de profesional) */
 })();</script>
+<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu link para que te pidan turno';
+const url = () => location.href.split('#')[0].split('?')[0];
+function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
+  /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
+  let m = [...P.querySelectorAll('.pMenu')].find(x => x.offsetParent && (x.closest('#pv-mas') || (typeof A!=='undefined' && A.scr==='set')));
+  if(!m && typeof A!=='undefined' && A.ok && A.scr==='set') m = P.querySelector('.opt');   /* turnos sin panel nuevo (plantilla y demos): arriba de Ajustes */
+  if(!m || m.parentNode.querySelector(':scope > .pLnk')) return;
+  m.insertAdjacentHTML('beforebegin', '<div class="pLnk"><b>' + TXT + '</b><p data-lnk-url>' + url().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) + '</p><button type="button" data-lnk>Copiar</button></div>'); }
+new MutationObserver(put).observe(D.body, {childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class']});
+D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-lnk]'); if(!b) return;
+  const say = m => { try{ toast(m); }catch(x){} };
+  try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
+put(); })();</script>
 </body>
+
+
+
+
 
 </html>

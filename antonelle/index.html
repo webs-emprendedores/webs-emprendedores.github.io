@@ -537,6 +537,12 @@ body.pnl #toast.pOk{white-space:nowrap}
 
 @media (prefers-reduced-motion:reduce){.pSw input,.pSw input::after{transition:none}}
 </style>
+<style>/*LNK v1*/
+#panel .pLnk{margin:12px 0;padding:16px;background:var(--pc,#fff);border:1px solid var(--pl,#ddd);border-radius:16px;color:var(--pt,inherit)}
+#panel .pLnk b{display:block;font-size:18px;line-height:1.25;margin:0 0 6px}
+#panel .pLnk p{margin:0 0 12px;font-size:16px;line-height:1.35;overflow-wrap:anywhere;color:var(--pt,inherit)}
+#panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font:600 17px/1.2 inherit;font-family:inherit;cursor:pointer}
+</style>
 </head>
 <body>
 <div id="site"><main id="tv" aria-live="polite"></main><div id="tvS" hidden role="dialog" aria-modal="true" aria-labelledby="tvST"></div><div id="tvB" hidden></div>
@@ -602,7 +608,7 @@ body.pnl #toast.pOk{white-space:nowrap}
 </div>
 
 <div id="panel">
-  <header class="pnlTop"><span class="pnlMarca" id="pnlMarca"></span><a class="pnlVer" href="#">Ver mi página ↗</a></header>
+  <header class="pnlTop"><span class="pnlMarca" id="pnlMarca"></span></header>
   <div class="in">
     <div id="loginBox" class="card" style="margin-top:20px"><h3>Entrar</h3><label for="pin">Clave</label><input id="pin" type="password" inputmode="numeric" autocomplete="off"><button class="btn" id="pinBtn" style="margin-top:14px">Entrar</button></div>
     <div id="app" hidden>
@@ -915,7 +921,12 @@ renderSite(); route(); pullPub();
 try{ if(location.hash!=='#panel' && !sessionStorage.getItem(KEY+'_v')){ sessionStorage.setItem(KEY+'_v','1'); hit(''); } }catch(e){}
 
 /*NOV v1*/ const NOV = {"v": "2026-11-16b", "items": ["Ahora podés pagar tu app desde acá: abajo de todo en tu panel, Tu plan y pagos.", "Unos días antes de cada vencimiento te avisamos acá mismo.", "Abajo de tu panel hay un botón para instalar la app en tu celular."], "safe": "Tus pedidos y tus datos no se tocaron."};   /* lo completa novedades.py al publicar una actualización */
-function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov')) return; let k = 'nov_'+location.pathname; try{ if(localStorage.getItem(k)===NOV.v) return; }catch(e){}
+/* SOLO A QUIEN YA LA USABA (regla Dardo 17/11 19:48): nunca en las demos ni en la primera entrada de un cliente nuevo.
+   La primera vez que se entra al panel en este aparato queda la marca de uso y la versión actual como vista; el cartel sale recién
+   con una actualización posterior. También cuenta como uso haber visto un cartel anterior. */
+function novDemo(){ try{ if(typeof DEMO!=='undefined' && DEMO) return true; }catch(e){} try{ if(typeof MUESTRA!=='undefined' && MUESTRA) return true; }catch(e){} return /\/muestra-[^/]*\//.test(location.pathname); }
+function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov') || novDemo()) return; let k = 'nov_'+location.pathname, u = 'novu_'+location.pathname;
+  try{ const visto = localStorage.getItem(k), uso = localStorage.getItem(u); if(!uso) localStorage.setItem(u, '1'); if(visto===NOV.v) return; if(!uso && !visto){ localStorage.setItem(k, NOV.v); return; } }catch(e){ return; }
   const d = document.createElement('div'); d.id = 'nov'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','novT');
   const e = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   d.innerHTML = '<div class="nb"><h2 id="novT">Actualizamos tu app</h2><ul>' + NOV.items.map(x => '<li>'+e(x)+'</li>').join('') + '</ul><p class="ok2">' + e(NOV.safe) + '</p><button type="button" id="novOk">Entendido</button></div>';
@@ -1490,7 +1501,26 @@ q('#app').addEventListener('change', e => { if(e.target.id!=='pnlFull') return; 
 try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
+<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu link para que te hagan pedidos';
+const url = () => location.href.split('#')[0].split('?')[0];
+function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
+  /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
+  let m = [...P.querySelectorAll('.pMenu')].find(x => x.offsetParent && (x.closest('#pv-mas') || (typeof A!=='undefined' && A.scr==='set')));
+  if(!m && typeof A!=='undefined' && A.ok && A.scr==='set') m = P.querySelector('.opt');   /* turnos sin panel nuevo (plantilla y demos): arriba de Ajustes */
+  if(!m || m.parentNode.querySelector(':scope > .pLnk')) return;
+  m.insertAdjacentHTML('beforebegin', '<div class="pLnk"><b>' + TXT + '</b><p data-lnk-url>' + url().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) + '</p><button type="button" data-lnk>Copiar</button></div>'); }
+new MutationObserver(put).observe(D.body, {childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class']});
+D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-lnk]'); if(!b) return;
+  const say = m => { try{ toast(m); }catch(x){} };
+  try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
+put(); })();</script>
 </body>
+
+
+
+
+
+
 
 
 
