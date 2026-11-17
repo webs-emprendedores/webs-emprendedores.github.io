@@ -32,6 +32,12 @@ button{cursor:pointer}
 .top h1{font-size:30px}
 .top p{color:var(--mut);font-size:17px;margin-top:2px}
 .lead{margin:10px 0 22px;font-size:19px}
+/* LINKS v1 (17/11, prometido a Lucre): Instagram y dirección en la primera pantalla; solo si la profesional los cargó */
+.lk{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:-8px 0 22px}
+.lk .btn.ig{gap:8px;min-height:48px}
+.lk .ig svg,.lk .map svg{flex:none;width:22px;height:22px}
+.lk .map{display:inline-flex;gap:8px;align-items:flex-start;color:var(--ink);font-size:17px;line-height:1.35;text-decoration:underline;text-underline-offset:3px;min-height:48px;padding-top:10px;overflow-wrap:anywhere}
+.lk .map svg{color:var(--pet);margin-top:-1px}
 
 /* hoja de agenda */
 .sheet{background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden}
@@ -317,6 +323,7 @@ function rwDom(el){ if(!EST || !el) return; const w = document.createTreeWalker(
   el.querySelectorAll('[placeholder],[aria-label],[alt],[title]').forEach(e => ['placeholder','aria-label','alt','title'].forEach(a => { const v = e.getAttribute(a); if(v){ const x = rwT(v); if(x !== v) e.setAttribute(a, x); } })); }
 const rwT = s => !EST ? s : String(s).replace(/El motivo de consulta/g,'Lo que te cuenta').replace(/motivo de consulta/g,'comentario').replace(/tu consulta/g,'tu pedido').replace(/Primera consulta/g,'Primera vez').replace(/ del paciente/g,'').replace(/pacientes/g,'clientas').replace(/paciente/g,'clienta');
 const DEFAULT = {
+  ig:'', addr:'',   /* LINKS v1: los carga cada profesional en Ajustes > Tus datos; vacíos = no se muestra nada (nunca inventar) */
   name:'Daniela Paz', short:'Daniela', role:'Psicóloga', mono:'DP',
   lead:'Atiendo a adultos, en consultorio en Rosario y por videollamada.',
   wa:'', modes:['Presencial','Online'], place:'Zona centro, Rosario. La dirección exacta te llega al confirmar.',
@@ -361,6 +368,14 @@ let toastT; function toast(m){ const t = $('#toast'); t.textContent = m; t.class
 function waNum(p){ let n = String(p||'').replace(/\D/g,'').replace(/^00/,''); if(!n) return ''; if(n.startsWith('549') && n.length>=12) return n; if(n.startsWith('54') && n.length>10) n = n.slice(2); n = n.replace(/^0/,'');
   if(n.length===12){ for(const i of [2,3,4]){ if(n.substr(i,2)==='15'){ n = n.slice(0,i) + n.slice(i+2); break; } } } return '549'+n; }
 const waOk = p => /^549\d{10}$/.test(waNum(p)), waShow = w => String(w||'').replace(/^549/,'');
+/* LINKS v1: Instagram (acepta @usuario, usuario o el link) y dirección que abre Google Maps */
+const igUser = s => String(s||'').trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/^@/,'').split(/[\/?#]/)[0];
+const igOk = s => /^[A-Za-z0-9._]{1,30}$/.test(igUser(s));
+const mapsUrl = a => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(a);
+const IGI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>';
+const PINI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+function linksTop(c){ const u = igOk(c.ig) ? igUser(c.ig) : '', a = String(c.addr||'').trim(); if(!u && !a) return '';
+  return `<div class="lk">${u ? `<a class="btn o sm ig" target="_blank" rel="noopener" href="https://www.instagram.com/${encodeURIComponent(u)}/">${IGI}<span>Instagram</span></a>` : ''}${a ? `<a class="map" target="_blank" rel="noopener" href="${esc(mapsUrl(a))}">${PINI}<span>${esc(a)}</span></a>` : ''}</div>`; }
 const waLink = (p,txt) => 'https://wa.me/'+waNum(p)+'?text='+encodeURIComponent(txt);
 const modeTxt = t => S.cfg.modes.length>1 && t.mode ? ` (${t.mode.toLowerCase()})` : '';
 
@@ -458,7 +473,7 @@ function msgReq(r, motivo){ return `Hola ${S.cfg.short}! Quiero pedir un turno.\
 function renderSite(){
   const c = S.cfg, f = P.f, nuevo = P.kind==='nuevo'; if(!P.mode || !c.modes.includes(P.mode)) P.mode = c.modes[0];
   const ds = weekDays(P.wk||0), SV = servOn(), sv = pServ(), L = pLen(); if(!sv) P.sv = null; if(!P.date || !ds.includes(P.date) || !freeSlots(P.date,S,L).length) P.date = ds.find(d => freeSlots(d,S,L).length) || null;
-  let h = `<header class="top">${c.photo?`<img class="pho" src="${esc(c.photo)}" alt="${esc(c.name)}" width="76" height="76">`:`<div class="mono" aria-hidden="true">${esc(c.mono)}</div>`}<div><h1>${c.title?esc(c.title)+' ':''}${esc(c.name)}</h1><p>${esc(c.role)}${c.lic?'. '+esc(licTxt(c.lic)):''}</p></div></header><p class="lead">${esc(c.lead)}</p>${(c.tags||[]).length?`<ul class="tags">${c.tags.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`:''}`;
+  let h = `<header class="top">${c.photo?`<img class="pho" src="${esc(c.photo)}" alt="${esc(c.name)}" width="76" height="76">`:`<div class="mono" aria-hidden="true">${esc(c.mono)}</div>`}<div><h1>${c.title?esc(c.title)+' ':''}${esc(c.name)}</h1><p>${esc(c.role)}${c.lic?'. '+esc(licTxt(c.lic)):''}</p></div></header><p class="lead">${esc(c.lead)}</p>${linksTop(c)}${(c.tags||[]).length?`<ul class="tags">${c.tags.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`:''}`;
   if(P.step==='done' && P.last && P.last.req){ const t = P.last;
     h += `<section class="sheet"><div class="done"><h2>Turno pedido</h2><p class="gap">${c.call ? `${esc(c.short)} te llama para una primera charla y después te da el turno.` : `${esc(c.short)} te escribe por WhatsApp para darte el turno.`}</p>
       ${DEMO ? `<p class="gap mut">En la app real, acá se abre WhatsApp con este mensaje ya escrito para ${esc(c.short)}:</p><div class="bubble">${esc(msgReq(t, P.motivo))}</div>` : ''}
@@ -614,8 +629,11 @@ function viewMas(){ const c = S.cfg;
     ${EST?'':`<label for="mT">Título</label><input id="mT" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Lic.">`}<p class="mut" style="margin-top:6px">Tu nombre en la página: <b>${esc(c.name)}</b>. Para cambiarlo, escribinos.</p><label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
     ${EST?'':`<label for="mL">Tu matrícula</label><input id="mL" type="text" value="${esc(c.lic)}" placeholder="Ej.: M.P. 1234">`}
     <label for="mW">Tu WhatsApp (ahí te llegan los pedidos de turno)</label><input id="mW" type="tel" value="${esc(waShow(c.wa))}" placeholder="Ej.: 341 555 1234"><p class="mut" style="margin-top:6px">Con la característica, sin 0 ni 15. Podés copiarlo como figura en WhatsApp: la app lo acomoda sola.</p>
-    <label for="mD">Cómo te presentás (lo primero que se lee)</label><textarea id="mD" rows="2">${esc(c.lead)}</textarea><label for="mG">${RW.tags}</label><input id="mG" type="text" value="${esc((c.tags||[]).join(', '))}" placeholder="${RW.tagej}"><label for="mP">Dónde atendés</label><textarea id="mP" rows="2">${esc(c.place)}</textarea><label for="mC">Aviso de cancelación</label><textarea id="mC" rows="2">${esc(c.cancel)}</textarea>
+    <label for="mD">Cómo te presentás (lo primero que se lee)</label><textarea id="mD" rows="2">${esc(c.lead)}</textarea><label for="mG">${RW.tags}</label><input id="mG" type="text" value="${esc((c.tags||[]).join(', '))}" placeholder="${RW.tagej}"><label for="mP">Dónde atendés</label><textarea id="mP" rows="2">${esc(c.place)}</textarea>${LKF(c)}<label for="mC">Aviso de cancelación</label><textarea id="mC" rows="2">${esc(c.cancel)}</textarea>
     <button class="btn w gap" data-a="msave">Guardar</button></div></section>`; }
+/* LINKS v1: campos Instagram y Dirección (también los usa LD) */
+const LKF = c => `<label for="mI">Tu Instagram</label><input id="mI" type="text" autocomplete="off" autocapitalize="none" value="${esc(c.ig ? '@'+igUser(c.ig) : '')}" placeholder="Ej.: @tunombre"><label for="mA">Dirección (se abre en Google Maps)</label><input id="mA" type="text" value="${esc(c.addr||'')}" placeholder="Ej.: San Martín 450, Rosario"><p class="mut" style="margin-top:6px">Si los dejás vacíos, no aparecen en tu página.</p>`;
+function lkRead(c){ const i = $('#mI') ? $('#mI').value.trim() : ''; if(i && !igOk(i)){ toast('Revisá tu Instagram: va tu usuario, por ejemplo @tunombre.'); $('#mI').focus(); return false; } c.ig = i ? igUser(i) : ''; c.addr = $('#mA') ? $('#mA').value.trim() : ''; return true; }
 function viewModo(){ const c = S.cfg, sp = A.mo ? A.mo.sp : c.selfPick, ca = A.mo ? A.mo.call : c.call, md = A.mo ? A.mo.modes : c.modes;
   return `<section class="sheet"><h2>Cómo das los turnos</h2><p class="sub">Tildá lo que va con tu forma de trabajar. Podés cambiarlo cuando quieras.</p>
     <div class="form"><h3>Quién elige el horario</h3>
@@ -740,7 +758,7 @@ document.addEventListener('click', e => {
   if(a==='hsave'){ let bad = 0; const nd = {}; document.querySelectorAll('.hOn').forEach(i => { const d = i.dataset.d, f = document.querySelector('.hF[data-d="'+d+'"]').value, t = document.querySelector('.hT[data-d="'+d+'"]').value; const q = cl => document.querySelector('.'+cl+'[data-d="'+d+'"]'), o2 = i.checked && q('hOn2').checked, f2 = q('hF2').value, t2 = q('hT2').value; if(i.checked && mins(t)<=mins(f)) bad = 1; if(o2 && (mins(t2)<=mins(f2) || mins(f2)<mins(t))) bad = bad || 2; nd[d] = {on:i.checked, from:f, to:t, on2:o2, from2:f2, to2:t2}; });
     if(bad){ toast(bad===2 ? 'Revisá la tarde: tiene que empezar después de que termina la mañana y cerrar después de abrir.' : 'Revisá: la hora de cierre tiene que ser después de la de inicio.'); return; } Object.assign(c.days, nd); c.step = Number($('#hS').value); c.dur = Number($('#hD').value); save(); renderPanel(); renderSite(); toast('Horarios guardados.'); }
   if(a==='mosave'){ const ms = [...document.querySelectorAll('.mM:checked')].map(i => i.value); if(!ms.length){ toast('Marcá al menos una forma de atender.'); return; } const s = document.querySelector('.moS:checked'); c.selfPick = !!s && s.value==='1'; c.call = !c.selfPick && !!($('#moC') && $('#moC').checked); c.modes = ms; c.q2 = $('#moQ').value.trim().replace(/^¿/,''); A.mo = null; save(); renderPanel(); renderSite(); toast('Guardado.'); }
-  if(a==='msave'){ const w0 = $('#mW').value.trim(); if(w0 && !waOk(w0)){ toast('Revisá tu WhatsApp: va con la característica, sin 0 ni 15.'); $('#mW').focus(); return; } c.title = $('#mT') ? $('#mT').value.trim() : c.title; c.lead = $('#mD').value.trim(); c.tags = $('#mG').value.split(',').map(x => x.trim()).filter(Boolean); /* el nombre no se cambia desde el panel (regla 15/11): lo cambiamos nosotros */ c.lic = $('#mL') ? $('#mL').value.trim() : c.lic; c.role = $('#mR').value.trim() || c.role; c.wa = w0 ? waNum(w0) : ''; c.place = $('#mP').value.trim(); c.cancel = $('#mC').value.trim(); save(); renderPanel(); renderSite(); toast('Guardado.'); }
+  if(a==='msave'){ const w0 = $('#mW').value.trim(); if(w0 && !waOk(w0)){ toast('Revisá tu WhatsApp: va con la característica, sin 0 ni 15.'); $('#mW').focus(); return; } if(!lkRead(c)) return; c.title = $('#mT') ? $('#mT').value.trim() : c.title; c.lead = $('#mD').value.trim(); c.tags = $('#mG').value.split(',').map(x => x.trim()).filter(Boolean); /* el nombre no se cambia desde el panel (regla 15/11): lo cambiamos nosotros */ c.lic = $('#mL') ? $('#mL').value.trim() : c.lic; c.role = $('#mR').value.trim() || c.role; c.wa = w0 ? waNum(w0) : ''; c.place = $('#mP').value.trim(); c.cancel = $('#mC').value.trim(); save(); renderPanel(); renderSite(); toast('Guardado.'); }
   if(a==='osadd'){ readCobros(); const n = $('#oNew').value.trim(); if(!n){ toast('Escribí el nombre de la obra social.'); return; } c.os.push({n, on:true, cop:false, plus:0}); save(); renderPanel(); renderSite(); }
   if(a==='osdel'){ readCobros(); c.os.splice(Number(v),1); save(); renderPanel(); renderSite(); }
   if(a==='csave'){ readCobros(); const sc = c.os.find(o => o.on && o.cop && !o.plus); if(sc){ toast('Poné el monto del copago de '+sc.n+'.'); return; } save(); renderPanel(); renderSite(); toast('Honorarios guardados.'); }
