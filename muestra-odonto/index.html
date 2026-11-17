@@ -163,6 +163,9 @@ footer a{color:var(--mut)}
 #cobD button small{display:block;font-weight:400;font-size:15px;opacity:.9}
 #cobD button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
 #cobD button:disabled{opacity:.6}
+#cobP a.cobAc{display:block;margin-top:18px;font-size:15px;color:#2b2b2b;opacity:1;text-align:center;background:none;min-height:0;font-weight:600;text-decoration:underline}
+#cobB .bt2{display:flex;gap:8px;flex-wrap:wrap}#cobB button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
+html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none!important}
 </style>
 <meta name="apple-mobile-web-app-title" content="Sofía Ríos">
 <style>/*INS v1*/
@@ -225,33 +228,53 @@ footer a{color:var(--mut)}
   const say = m => { try{ toast(m); }catch(e){ alert(m); } };
   const panel = () => el('app') || el('panel'), inPanel = () => { const p = panel(); return !!p && !p.hidden && p.getClientRects().length > 0; };
   const PLUSN = {ficha:'Gestión de pacientes'};
-  window.fetch = async function(u, o){ const r = await F(u, o); let q = null; try{ q = JSON.parse(o && o.body); }catch(e){}
+  const LEE = ['all','pub','payLink','payCheck','export','setPin','order'];   /* en pausa el panel no escribe nada (order lo frena el servidor) */
+  const pausa = () => !!(G && G.bill && G.bill.estado==='pausa');
+  window.fetch = async function(u, o){ let q = null; try{ q = JSON.parse(o && o.body); }catch(e){}
+    if(q && q.a && q.pin && pausa() && !LEE.includes(q.a)){ setTimeout(() => { say('Tu app está en pausa: para cargar o cambiar algo, pagá y se reactiva.'); try{ pullAll().then(() => { try{ renderPanel(); }catch(e){} }); }catch(e){} }, 0);
+      return new Response(JSON.stringify({ok:false, pausa:true, msg:'Tu app está en pausa: para cargar o cambiar algo, pagá y se reactiva.'}), {status:200, headers:{'Content-Type':'application/json'}}); }
+    const r = await F(u, o);
     if(q && q.a && r.ok){ try{ const j = await r.clone().json();
-      if((q.a==='all' || q.a==='payCheck') && j.ok && j.bill){ const first = !G; G = {bill:j.bill, pin:q.pin, c:q.c, url:u}; try{ BILL = j.bill; }catch(e){} [0, 300, 1200].forEach(ms => setTimeout(paint, ms)); if(first) setTimeout(back, 350); }   /* el panel puede mostrarse un instante después de la respuesta */
+      if((q.a==='all' || q.a==='payCheck') && j.ok && j.bill){ const first = !G; G = {bill:j.bill, pin:q.pin, c:q.c, url:u, data: q.a==='all' ? j : (G && G.data) || null}; try{ BILL = j.bill; }catch(e){} [0, 300, 1200].forEach(ms => setTimeout(paint, ms)); if(first) setTimeout(back, 350); }   /* el panel puede mostrarse un instante después de la respuesta */
       if(q.a==='pub' && j.ok){ const x = (j.settings && j.settings.extra) || {}; let w = x.wa || (x.cfg && x.cfg.wa) || ''; if(!w){ try{ w = WA; }catch(e){} } PUB = {pausa:!!j.pausa, wa:String(w||'').replace(/\D/g,'')}; setTimeout(pub, 0); }
       if(q.a==='order' && j.pausa){ PUB = Object.assign({wa:''}, PUB, {pausa:true}); setTimeout(pub, 0); }
     }catch(e){} } return r; };
   function msg(b){ const d = b.dias;
-    if(b.estado==='pausa') return ['p', '<b>Tu app está en pausa.</b> Tus datos no se tocaron.'];
+    if(b.estado==='pausa'){ const u = ultima(); return ['p', '<b>Tu app está en pausa.</b> No entran ' + TIPO + ' nuevos y no se puede cargar nada. ' + (u ? 'Ves lo agendado hasta el ' + dm(u) + '; después, para entrar, hay que pagar.' : '')]; }
     if(b.estado==='prueba_vence') return ['', d<=0 ? '<b>Tu prueba vence hoy.</b>' : '<b>Tu prueba vence mañana.</b>'];
     if(b.estado==='por_vencer') return ['', d<=0 ? '<b>Tu mensualidad vence hoy.</b>' : '<b>Tu mensualidad vence el ' + dm(b.pagado_hasta) + '.</b>'];
     if(b.estado==='vencido') return ['', '<b>Tu mensualidad venció el ' + dm(b.pagado_hasta) + '.</b> Pagala para que tu app no se pause.'];
     return null; }
   function paint(){ ['cobB','cobS','cobL'].forEach(i => { const e = el(i); if(e) e.remove(); }); if(!G || !G.bill.plan || !inPanel()) return; const p = panel(), m = msg(G.bill);
-    if(m){ const b = document.createElement('div'); b.id = 'cobB'; b.className = m[0]; b.setAttribute('role','status'); b.innerHTML = '<span>' + m[1] + '</span><button type="button">Ver cómo pagar</button>'; p.parentNode.insertBefore(b, p); b.querySelector('button').onclick = open; }
+    document.documentElement.classList.toggle('cobSin', sinAcceso());
+    if(sinAcceso()){ if(!el('cobD')) open(); return; }
+    if(m){ const b = document.createElement('div'); b.id = 'cobB'; b.className = m[0]; b.setAttribute('role','status'); const pz = G.bill.estado==='pausa';
+      b.innerHTML = '<span>' + m[1] + '</span><span class="bt2"><button type="button" data-k="pay">' + (pz ? 'Pagar y reactivar' : 'Ver cómo pagar') + '</button>' + (pz ? '<button type="button" class="o" data-k="dl">Descargar mis datos</button>' : '') + '</span>';
+      p.parentNode.insertBefore(b, p); b.querySelector('[data-k="pay"]').onclick = open; const dl = b.querySelector('[data-k="dl"]'); if(dl) dl.onclick = baja; }
     else if(G.bill.estado==='prueba' && G.bill.dias > 0){ const s = document.createElement('p'); s.id = 'cobS'; s.textContent = 'Te quedan ' + G.bill.dias + ' días de prueba.'; p.parentNode.insertBefore(s, p); }   /* Dardo 16/11: días de prueba que quedan, en letra chica */
     const l = document.createElement('button'); l.id = 'cobL'; l.type = 'button'; l.textContent = 'Tu plan y pagos'; l.onclick = open; p.parentNode.insertBefore(l, p.nextSibling);
     if(G.bill.estado==='pausa'){ let seen = false; try{ seen = sessionStorage.getItem('cob_p')==='1'; sessionStorage.setItem('cob_p','1'); }catch(e){} if(!seen) open(); } }
+  const hoy = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+  function ultima(){ if(!G) return ''; if(G.bill.ultima) return G.bill.ultima; const o = (G.data && G.data.orders) || []; return o.map(x => String(x.date||'').slice(0,10)).filter(x => /^\d{4}-\d\d-\d\d$/.test(x)).sort().pop() || ''; }
+  const sinAcceso = () => pausa() && (G.bill.acceso === false || !ultima() || ultima() < hoy());   /* pasó la última fecha agendada: solo la pantalla de pausa */
+  async function baja(){ let d = G && G.data;
+    if(!d || !d.orders){ try{ d = await (await F(G.url, {method:'POST', body:JSON.stringify({a:'export', c:G.c, pin:G.pin})})).json(); }catch(e){ d = null; } }
+    if(!d || !d.ok){ say('No se pudieron bajar los datos. Probá de nuevo en un rato.'); return; }
+    const cell = v => { v = v==null ? '' : typeof v==='object' ? JSON.stringify(v) : String(v); return /[;"\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; };
+    const tabla = (t, rows) => { rows = rows || []; const k = [...new Set(rows.flatMap(r => Object.keys(r)))]; return t + '\n' + k.join(';') + '\n' + rows.map(r => k.map(x => cell(r[x])).join(';')).join('\n'); };
+    const csv = '\ufeff' + tabla(TIPO==='turnos' ? 'Turnos' : 'Pedidos', d.orders) + '\n\n' + tabla('Productos', d.products);
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'})); a.download = (G.c || 'mis-datos') + '-' + hoy() + '.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
   function open(){ if(!G || el('cobD')) return; const b = G.bill, pr = b.precios || {}, bt = [];
     let st = b.pagado_hasta ? 'Pagado hasta el ' + dm(b.pagado_hasta) + '.' : b.prueba_hasta ? 'Prueba gratis hasta el ' + dm(b.prueba_hasta) + '.' : '';
-    if(b.estado==='pausa') st = 'Tus ' + TIPO + ' y tus datos no se tocaron. Al pagar, vuelve a funcionar enseguida.';
+    if(b.estado==='pausa') st = sinAcceso() ? 'Ya no hay ' + TIPO + ' agendados por delante. Tus datos están guardados: al pagar, vuelve todo enseguida.' : 'Tus ' + TIPO + ' y tus datos no se tocaron. Al pagar, vuelve a funcionar enseguida.';
     if(b.mp){ if(pr.mes) bt.push(['mes', 'Pagar un mes: ' + money(pr.mes), '']); if(pr.seis) bt.push(['seis', 'Pagar 6 meses adelantados: ' + money(pr.seis), b.seis_pagas ? 'Pagás ' + b.seis_pagas + ' meses y usás 6' : '']); }   /* PRECIOS UNIFICADOS (Dardo 16/11 17:50): solo mes y 6 meses; lo viejo que mande el servidor no se ofrece */
     const pl = TIPO==='pedidos' ? [] : (b.plus||[]).map(k => PLUSN[k] || k),   /* el Plus es solo para profesionales */ d = document.createElement('div'); d.id = 'cobD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','cobT');
     d.innerHTML = '<div class="cb"><h2 id="cobT">' + (b.estado==='pausa' ? 'Tu app está en pausa' : 'Tu plan y pagos') + '</h2>' + (st ? '<p>' + st + '</p>' : '') + (pl.length ? '<p class="mu">Plus activados: ' + pl.join(', ') + '.</p>' : '')
       + (bt.length && !b.pagado_hasta && b.prueba_hasta && b.estado!=='pausa' ? '<p>Si pagás ahora no perdés días: lo que pagás empieza a contar cuando termina la prueba.</p>' : '')
       + (bt.length ? '<p class="mu">Se paga con Mercado Pago y queda registrado solo.</p>' : '<p class="mu">Para pagar, escribinos a @webs.emprendedores por Instagram.</p>')
-      + bt.map(x => '<button type="button" data-cob="' + x[0] + '">' + x[1] + (x[2] ? '<small>' + x[2] + '</small>' : '') + '</button>').join('') + '<button type="button" class="o" data-cob="x">Cerrar</button></div>';
-    document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-cob]'); if(!t) return; if(t.dataset.cob==='x'){ d.remove(); return; } pay(t.dataset.cob, t); }); d.querySelector('[data-cob]').focus(); }
+      + bt.map(x => '<button type="button" data-cob="' + x[0] + '">' + (b.estado==='pausa' ? 'Pagar y reactivar: ' + x[1].replace(/^Pagar /, '') : x[1]) + (x[2] ? '<small>' + x[2] + '</small>' : '') + '</button>').join('')
+      + (b.estado==='pausa' ? '<button type="button" class="o" data-cob="dl">Descargar mis datos</button>' : '') + (sinAcceso() ? '' : '<button type="button" class="o" data-cob="x">Cerrar</button>') + '</div>';
+    document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-cob]'); if(!t) return; if(t.dataset.cob==='x'){ d.remove(); return; } if(t.dataset.cob==='dl'){ baja(); return; } pay(t.dataset.cob, t); }); d.querySelector('[data-cob]').focus(); }
   async function pay(item, btn){ btn.disabled = true;
     try{ const r = await (await F(G.url, {method:'POST', body:JSON.stringify({a:'payLink', c:G.c, pin:G.pin, item, back:location.origin + location.pathname + (location.hash.split('&')[0] || '#panel')})})).json();
       if(r.ok && r.url){ location.href = r.url; return; } say(r.msg || 'No se pudo armar el pago. Probá de nuevo en un rato.'); }catch(e){ say('No hay conexión. Probá de nuevo.'); } btn.disabled = false; }
@@ -262,7 +285,8 @@ footer a{color:var(--mut)}
     try{ renderPanel(); }catch(e){} paint(); say(ok ? 'Listo: tu pago quedó registrado.' : 'Estamos esperando la confirmación del pago. Puede tardar unos minutos.'); }
   function pub(){ const e = el('cobP'), show = PUB && PUB.pausa && location.hash.length <= 1; if(!show){ if(e) e.remove(); return; } if(e) return;
     const d = document.createElement('div'); d.id = 'cobP'; d.setAttribute('role','dialog'); d.setAttribute('aria-labelledby','cobPT');
-    d.innerHTML = '<div class="cb"><h2 id="cobPT">Por ahora no estoy tomando ' + TIPO + ' por acá.</h2><p>Escribime por WhatsApp.</p>' + (PUB.wa ? '<a href="https://wa.me/' + PUB.wa + '" target="_blank" rel="noopener">Escribir por WhatsApp</a>' : '') + '</div>'; document.body.appendChild(d); }
+    const ac = [...document.querySelectorAll('#site a[href="#panel"], #site a[href="#admin"]')].pop();   /* el dueño tiene que poder entrar a pagar */
+    d.innerHTML = '<div class="cb"><h2 id="cobPT">Esta página no está disponible por el momento.</h2>' + (ac ? '<a class="cobAc" href="' + ac.getAttribute('href') + '">' + ac.textContent.trim() + '</a>' : '') + '</div>'; document.body.appendChild(d); }
   addEventListener('hashchange', () => setTimeout(() => { paint(); pub(); }, 50));
   document.addEventListener('click', e => { if(e.target.closest && e.target.closest('[data-a="out"]')){ G = null; setTimeout(paint, 50); } else if(G) setTimeout(() => { if(!!el('cobL') !== inPanel()) paint(); }, 80); });
 })(); /*COB fin*/

@@ -272,6 +272,9 @@ body.admin #panel{display:block}
 #cobD button small{display:block;font-weight:400;font-size:15px;opacity:.9}
 #cobD button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
 #cobD button:disabled{opacity:.6}
+#cobP a.cobAc{display:block;margin-top:18px;font-size:15px;color:#2b2b2b;opacity:1;text-align:center;background:none;min-height:0;font-weight:600;text-decoration:underline}
+#cobB .bt2{display:flex;gap:8px;flex-wrap:wrap}#cobB button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
+html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none!important}
 </style>
 <meta name="apple-mobile-web-app-title" content="Capas y Sabores">
 <style>/*INS v1*/
@@ -290,11 +293,128 @@ body.admin #panel{display:block}
 .cmP{margin:10px 0 0;font-size:15px;font-weight:400;line-height:1.4;color:var(--mut)}
 @media (max-width:340px){.cal{gap:3px}.cal button{min-height:0}}   /* el calendario de días entra entero en celulares chicos (Antonelle se salía a 320 de ancho) */
 </style>
+<style>/*TV v1*/
+#site>:not(#tv):not(#tvS):not(#tvB){display:none!important}
+#tv{--a:#6b4fb5;--ai:#fff;--i:#2a2220;--b:#fbf8f4;--s:#fff;--m:#6d625c;--l:rgba(0,0,0,.12);--fd:inherit;--fb:inherit;--fn:inherit;
+  background:var(--b);color:var(--i);font-family:var(--fb);font-size:17px;line-height:1.45;min-height:100vh;padding-bottom:40px}
+#tv *{box-sizing:border-box}
+#tv .vw{max-width:620px;margin:0 auto;padding:0 16px}
+#tv .vtop{display:flex;align-items:center;gap:12px;padding:14px 16px 6px;max-width:620px;margin:0 auto}
+#tv .vtop img{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:none}
+#tv .vtop b{font-family:var(--fn);font-size:24px;font-weight:600;line-height:1.1}
+#tv .vintro{margin:4px 0 14px;color:var(--m);font-size:16px;max-width:52ch}
+#tv h1{font-family:var(--fd);font-size:30px;line-height:1.08;margin:6px 0 4px;font-weight:700;letter-spacing:-.01em}
+#tv .vcats{position:sticky;top:0;z-index:5;background:var(--b);display:flex;gap:8px;overflow-x:auto;padding:10px 16px;margin:0 -16px 12px;scrollbar-width:none}
+#tv .vcats::-webkit-scrollbar{display:none}
+#tv .vcats button{flex:none;border:1.5px solid var(--l);background:var(--s);color:var(--i);border-radius:999px;padding:9px 16px;font:600 15px/1 var(--fb);cursor:pointer;min-height:42px}
+#tv .vcats button.von{background:var(--i);border-color:var(--i);color:var(--b)}
+#tv .vgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#tv .vcard{display:block;width:100%;text-align:left;background:var(--s);border:0;border-radius:16px;padding:0;overflow:hidden;cursor:pointer;color:inherit;font:inherit;box-shadow:0 1px 0 var(--l)}
+#tv .vph{display:block;aspect-ratio:4/5;width:100%;object-fit:cover;background:color-mix(in srgb,var(--a) 14%,var(--s))}
+#tv .vph.vno{display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:44px;color:var(--a)}
+#tv .vct{padding:10px 12px 14px}
+#tv .vct .vn,#tv .vct .vp{display:block}
+#tv .vct .vn{font-weight:700;font-size:16px;line-height:1.25;overflow-wrap:anywhere}
+#tv .vct .vp{margin-top:4px;font-size:15px;color:var(--m)}
+#tv .vct .vp b{color:var(--i);font-weight:700}
+#tv .vpers{display:grid;grid-template-columns:112px minmax(0,1fr);gap:0;margin-top:18px;border:2px dashed color-mix(in srgb,var(--a) 55%,transparent);background:var(--s)}
+#tv .vpers .vph{aspect-ratio:auto;height:100%;min-height:128px}
+#tv .vpers .vct{padding:14px 16px;align-self:center}
+#tv .vpers .vn{font-family:var(--fd);font-size:21px}
+#tv .vday{margin:18px 0 8px;display:flex;align-items:baseline;gap:10px}
+#tv .vday b{font-family:var(--fd);font-size:22px}
+#tv .vday span{color:var(--m);font-size:15px}
+#tv .vrow{display:grid;grid-template-columns:92px 1fr;gap:12px;background:var(--s);border-radius:16px;padding:10px;margin-bottom:10px;align-items:center}
+#tv .vrow .vph{aspect-ratio:1;border-radius:12px}
+#tv .vrow.voff{opacity:.55}
+#tv .vrow .vn{font-weight:700;font-size:17px;line-height:1.25}
+#tv .vrow .vd{color:var(--m);font-size:15px}
+#tv .vrow .vp{font-weight:700;margin-top:2px}
+#tv .vrow .vx{grid-column:1/-1}
+#tv .vst{display:inline-flex;align-items:center;gap:4px;margin-top:8px;border:1.5px solid var(--l);border-radius:999px}
+#tv .vst button{width:44px;height:44px;border:0;background:none;font:700 22px/1 var(--fb);color:var(--i);cursor:pointer}
+#tv .vst b{min-width:22px;text-align:center}
+#tv .vfoot{margin-top:34px;padding-top:16px;border-top:1px solid var(--l);color:var(--m);font-size:15px}
+#tv .vfoot a{color:var(--i);display:inline-block;padding:10px 14px 10px 0}
+#tv .vacc{font-size:14px;opacity:.85}
+#tv .vempty{background:var(--s);border-radius:16px;padding:18px;color:var(--m)}
+#tvS{position:fixed;inset:0;z-index:60;background:var(--b);overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:120px}
+#tvS[hidden]{display:none}
+#tvS .vsh{position:sticky;top:0;z-index:2;background:var(--b);border-bottom:1px solid var(--l)}
+#tvS .vsh .vw{display:flex;align-items:center;gap:8px;padding-top:8px;padding-bottom:8px}
+#tvS .vbk{border:0;background:none;font:600 16px var(--fb);color:var(--i);padding:12px 12px 12px 0;cursor:pointer;min-height:48px}
+#tvS .vsh .vt{font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tvS .vsteps{display:flex;gap:6px;padding-bottom:10px}
+#tvS .vsteps i{flex:1;height:5px;border-radius:2px;background:var(--l)}
+#tvS .vsteps i.von{background:var(--a)}
+#tvS h2{font-family:var(--fd);font-size:26px;line-height:1.15;margin:18px 0 6px}
+#tvS .vhint{color:var(--m);font-size:15px;margin:0 0 12px}
+#tvS .vhero{display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:center;margin-top:14px}
+#tvS .vhero .vph{aspect-ratio:1;border-radius:12px;width:76px}
+#tvS label.vf{display:block;font-weight:700;font-size:16px;margin:16px 0 6px}
+#tvS select,#tvS input[type=text],#tvS input[type=tel],#tvS input[type=number],#tvS textarea{width:100%;font:17px var(--fb);color:var(--i);background:var(--s);border:1.5px solid var(--l);border-radius:12px;padding:13px 14px;min-height:52px}
+#tvS textarea{min-height:84px}
+#tvS select:focus,#tvS input:focus,#tvS textarea:focus,#tv button:focus-visible,#tvS button:focus-visible{outline:3px solid color-mix(in srgb,var(--a) 45%,transparent);outline-offset:2px}
+#tvS .vck{display:flex;gap:12px;align-items:center;background:var(--s);border:1.5px solid var(--l);border-radius:12px;padding:12px 14px;margin-top:8px;font-size:16px;cursor:pointer}
+#tvS .vck input{width:22px;height:22px;accent-color:var(--a);flex:none}
+#tvS .vck span{flex:1}
+#tvS .vseg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#tvS .vseg button{min-height:50px;border:1.5px solid var(--l);background:var(--s);border-radius:12px;font:600 16px var(--fb);color:var(--i);cursor:pointer}
+#tvS .vseg button.von{border-color:var(--a);box-shadow:inset 0 0 0 1.5px var(--a)}
+#tvS .vmh{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px}
+#tvS .vmh b{font-size:18px}
+#tvS .vmh button{width:48px;height:48px;border:1.5px solid var(--l);border-radius:50%;background:var(--s);font-size:20px;cursor:pointer;color:var(--i)}
+#tvS .vmh button:disabled{opacity:.3}
+#tvS .vcal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
+#tvS .vcal small{color:var(--m);font-size:13px;padding:4px 0}
+#tvS .vcal button{aspect-ratio:1;min-height:40px;border:1.5px solid var(--l);background:var(--s);border-radius:10px;font:600 16px var(--fb);color:var(--i);cursor:pointer;padding:0}
+#tvS .vcal button:disabled{background:none;border-color:transparent;color:color-mix(in srgb,var(--m) 55%,transparent);text-decoration:line-through;cursor:default}
+#tvS .vcal button.vpast:disabled{text-decoration:none;opacity:.45}
+#tvS .vcal button.von{background:var(--a);border-color:var(--a);color:var(--ai)}
+#tvS .vsum{background:var(--s);border-radius:16px;padding:6px 16px;margin-top:16px}
+#tvS .vsum div{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--l);font-size:16px}
+#tvS .vsum div:last-child{border:0}
+#tvS .vsum span:first-child{color:var(--m)}
+#tvS .vsum span:last-child{text-align:right;font-weight:600}
+#tvS .vsum .vtt span{color:var(--i);font-weight:800;font-size:18px}
+#tvS .verr{color:#b3261e;font-weight:600;margin:12px 0 0;font-size:16px}
+#tvS .cmP{margin:10px 0 0;font-size:14px;color:var(--m)}
+#tvS .vdone{text-align:left;padding-top:30px}
+#tvS .vdone a{display:inline-block;margin-top:14px;color:var(--a);font-weight:700;padding:10px 0}
+#tvB{position:fixed;left:0;right:0;bottom:0;z-index:61;background:var(--s);border-top:1px solid var(--l);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+#tvB[hidden]{display:none}
+#tvB .vw{display:flex;align-items:center;gap:14px;padding:0}
+#tvB .ve{flex:1;min-width:0;font-size:14px;color:var(--m);line-height:1.2}
+#tvB .ve b{display:block;font-size:19px;color:var(--i)}
+#tvB .vgo{flex:none;min-width:170px;min-height:54px;border:0;border-radius:14px;background:var(--a);color:var(--ai);font:800 17px var(--fb);padding:0 22px;cursor:pointer}
+#tvB .vgo:disabled{opacity:.6}
+@media (max-width:360px){#tv .vgrid{gap:10px}#tv h1{font-size:26px}#tvB .vgo{min-width:140px;padding:0 14px}#tvS .vcal{gap:3px}}
+@media (prefers-reduced-motion:no-preference){#tvS{animation:tvIn .18s ease-out}@keyframes tvIn{from{transform:translateY(14px);opacity:.4}to{transform:none;opacity:1}}}
+/*TVP v1*/
+.tvp{border:2px solid var(--line,#ddd);border-radius:14px;padding:14px;margin:12px 0 16px;background:#fff}
+.tvp h3{margin:0 0 4px}
+.tvp .pm{font-size:15px;color:var(--mut,#666);margin:0 0 8px}
+.tvp .vpr{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line,#eee)}
+.tvp .vpr img,.tvp .vpr .vnf{width:52px;height:52px;border-radius:10px;object-fit:cover}
+.tvp .vpr .vnf{display:flex;align-items:center;justify-content:center;background:#fbe3e1;color:#b3261e;font-size:12px;font-weight:700;text-align:center;line-height:1.1}
+.tvp .vpr .vnm{font-weight:700;font-size:16px;line-height:1.2}
+.tvp .vpr .vwn{color:#b3261e;font-size:14px;font-weight:600}
+.tvp .vpr .vok{color:var(--mut,#666);font-size:14px}
+.tvp .vbt{display:flex;flex-direction:column;gap:6px}
+.tvp .vbt button,.tvp .vbt label{border:1.5px solid currentColor;background:#fff;border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;cursor:pointer;text-align:center;min-height:40px;color:inherit}
+.tvp .ved{grid-column:1/-1;background:#faf8f6;border-radius:12px;padding:12px;margin-top:4px}
+.tvp .ved label{display:block;font-weight:700;font-size:15px;margin:10px 0 4px}
+.tvp .ved textarea,.tvp .ved select{width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box}
+.tvp .ved textarea{min-height:80px}
+.tvp .ved .vck{display:flex;gap:10px;align-items:center;font-weight:600;margin-top:10px}
+.tvp .ved .vck input{width:20px;height:20px}
+.tvp .ved .vsv{margin-top:12px;width:100%;min-height:48px;border:0;border-radius:12px;background:var(--p,var(--r,#333));color:#fff;font-weight:800;font-size:16px;cursor:pointer}
+</style>
 </head>
 <body>
 
 <!-- ================= SITIO PÚBLICO ================= -->
-<div id="site">
+<div id="site"><main id="tv" aria-live="polite"></main><div id="tvS" hidden role="dialog" aria-modal="true" aria-labelledby="tvST"></div><div id="tvB" hidden></div>
 
 <header class="top">
   <div class="wrap nav">
@@ -636,33 +756,53 @@ body.admin #panel{display:block}
   const say = m => { try{ toast(m); }catch(e){ alert(m); } };
   const panel = () => el('app') || el('panel'), inPanel = () => { const p = panel(); return !!p && !p.hidden && p.getClientRects().length > 0; };
   const PLUSN = {ficha:'Gestión de pacientes'};
-  window.fetch = async function(u, o){ const r = await F(u, o); let q = null; try{ q = JSON.parse(o && o.body); }catch(e){}
+  const LEE = ['all','pub','payLink','payCheck','export','setPin','order'];   /* en pausa el panel no escribe nada (order lo frena el servidor) */
+  const pausa = () => !!(G && G.bill && G.bill.estado==='pausa');
+  window.fetch = async function(u, o){ let q = null; try{ q = JSON.parse(o && o.body); }catch(e){}
+    if(q && q.a && q.pin && pausa() && !LEE.includes(q.a)){ setTimeout(() => { say('Tu app está en pausa: para cargar o cambiar algo, pagá y se reactiva.'); try{ pullAll().then(() => { try{ renderPanel(); }catch(e){} }); }catch(e){} }, 0);
+      return new Response(JSON.stringify({ok:false, pausa:true, msg:'Tu app está en pausa: para cargar o cambiar algo, pagá y se reactiva.'}), {status:200, headers:{'Content-Type':'application/json'}}); }
+    const r = await F(u, o);
     if(q && q.a && r.ok){ try{ const j = await r.clone().json();
-      if((q.a==='all' || q.a==='payCheck') && j.ok && j.bill){ const first = !G; G = {bill:j.bill, pin:q.pin, c:q.c, url:u}; try{ BILL = j.bill; }catch(e){} [0, 300, 1200].forEach(ms => setTimeout(paint, ms)); if(first) setTimeout(back, 350); }   /* el panel puede mostrarse un instante después de la respuesta */
+      if((q.a==='all' || q.a==='payCheck') && j.ok && j.bill){ const first = !G; G = {bill:j.bill, pin:q.pin, c:q.c, url:u, data: q.a==='all' ? j : (G && G.data) || null}; try{ BILL = j.bill; }catch(e){} [0, 300, 1200].forEach(ms => setTimeout(paint, ms)); if(first) setTimeout(back, 350); }   /* el panel puede mostrarse un instante después de la respuesta */
       if(q.a==='pub' && j.ok){ const x = (j.settings && j.settings.extra) || {}; let w = x.wa || (x.cfg && x.cfg.wa) || ''; if(!w){ try{ w = WA; }catch(e){} } PUB = {pausa:!!j.pausa, wa:String(w||'').replace(/\D/g,'')}; setTimeout(pub, 0); }
       if(q.a==='order' && j.pausa){ PUB = Object.assign({wa:''}, PUB, {pausa:true}); setTimeout(pub, 0); }
     }catch(e){} } return r; };
   function msg(b){ const d = b.dias;
-    if(b.estado==='pausa') return ['p', '<b>Tu app está en pausa.</b> Tus datos no se tocaron.'];
+    if(b.estado==='pausa'){ const u = ultima(); return ['p', '<b>Tu app está en pausa.</b> No entran ' + TIPO + ' nuevos y no se puede cargar nada. ' + (u ? 'Ves lo agendado hasta el ' + dm(u) + '; después, para entrar, hay que pagar.' : '')]; }
     if(b.estado==='prueba_vence') return ['', d<=0 ? '<b>Tu prueba vence hoy.</b>' : '<b>Tu prueba vence mañana.</b>'];
     if(b.estado==='por_vencer') return ['', d<=0 ? '<b>Tu mensualidad vence hoy.</b>' : '<b>Tu mensualidad vence el ' + dm(b.pagado_hasta) + '.</b>'];
     if(b.estado==='vencido') return ['', '<b>Tu mensualidad venció el ' + dm(b.pagado_hasta) + '.</b> Pagala para que tu app no se pause.'];
     return null; }
   function paint(){ ['cobB','cobS','cobL'].forEach(i => { const e = el(i); if(e) e.remove(); }); if(!G || !G.bill.plan || !inPanel()) return; const p = panel(), m = msg(G.bill);
-    if(m){ const b = document.createElement('div'); b.id = 'cobB'; b.className = m[0]; b.setAttribute('role','status'); b.innerHTML = '<span>' + m[1] + '</span><button type="button">Ver cómo pagar</button>'; p.parentNode.insertBefore(b, p); b.querySelector('button').onclick = open; }
+    document.documentElement.classList.toggle('cobSin', sinAcceso());
+    if(sinAcceso()){ if(!el('cobD')) open(); return; }
+    if(m){ const b = document.createElement('div'); b.id = 'cobB'; b.className = m[0]; b.setAttribute('role','status'); const pz = G.bill.estado==='pausa';
+      b.innerHTML = '<span>' + m[1] + '</span><span class="bt2"><button type="button" data-k="pay">' + (pz ? 'Pagar y reactivar' : 'Ver cómo pagar') + '</button>' + (pz ? '<button type="button" class="o" data-k="dl">Descargar mis datos</button>' : '') + '</span>';
+      p.parentNode.insertBefore(b, p); b.querySelector('[data-k="pay"]').onclick = open; const dl = b.querySelector('[data-k="dl"]'); if(dl) dl.onclick = baja; }
     else if(G.bill.estado==='prueba' && G.bill.dias > 0){ const s = document.createElement('p'); s.id = 'cobS'; s.textContent = 'Te quedan ' + G.bill.dias + ' días de prueba.'; p.parentNode.insertBefore(s, p); }   /* Dardo 16/11: días de prueba que quedan, en letra chica */
     const l = document.createElement('button'); l.id = 'cobL'; l.type = 'button'; l.textContent = 'Tu plan y pagos'; l.onclick = open; p.parentNode.insertBefore(l, p.nextSibling);
     if(G.bill.estado==='pausa'){ let seen = false; try{ seen = sessionStorage.getItem('cob_p')==='1'; sessionStorage.setItem('cob_p','1'); }catch(e){} if(!seen) open(); } }
+  const hoy = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+  function ultima(){ if(!G) return ''; if(G.bill.ultima) return G.bill.ultima; const o = (G.data && G.data.orders) || []; return o.map(x => String(x.date||'').slice(0,10)).filter(x => /^\d{4}-\d\d-\d\d$/.test(x)).sort().pop() || ''; }
+  const sinAcceso = () => pausa() && (G.bill.acceso === false || !ultima() || ultima() < hoy());   /* pasó la última fecha agendada: solo la pantalla de pausa */
+  async function baja(){ let d = G && G.data;
+    if(!d || !d.orders){ try{ d = await (await F(G.url, {method:'POST', body:JSON.stringify({a:'export', c:G.c, pin:G.pin})})).json(); }catch(e){ d = null; } }
+    if(!d || !d.ok){ say('No se pudieron bajar los datos. Probá de nuevo en un rato.'); return; }
+    const cell = v => { v = v==null ? '' : typeof v==='object' ? JSON.stringify(v) : String(v); return /[;"\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; };
+    const tabla = (t, rows) => { rows = rows || []; const k = [...new Set(rows.flatMap(r => Object.keys(r)))]; return t + '\n' + k.join(';') + '\n' + rows.map(r => k.map(x => cell(r[x])).join(';')).join('\n'); };
+    const csv = '\ufeff' + tabla(TIPO==='turnos' ? 'Turnos' : 'Pedidos', d.orders) + '\n\n' + tabla('Productos', d.products);
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'})); a.download = (G.c || 'mis-datos') + '-' + hoy() + '.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
   function open(){ if(!G || el('cobD')) return; const b = G.bill, pr = b.precios || {}, bt = [];
     let st = b.pagado_hasta ? 'Pagado hasta el ' + dm(b.pagado_hasta) + '.' : b.prueba_hasta ? 'Prueba gratis hasta el ' + dm(b.prueba_hasta) + '.' : '';
-    if(b.estado==='pausa') st = 'Tus ' + TIPO + ' y tus datos no se tocaron. Al pagar, vuelve a funcionar enseguida.';
+    if(b.estado==='pausa') st = sinAcceso() ? 'Ya no hay ' + TIPO + ' agendados por delante. Tus datos están guardados: al pagar, vuelve todo enseguida.' : 'Tus ' + TIPO + ' y tus datos no se tocaron. Al pagar, vuelve a funcionar enseguida.';
     if(b.mp){ if(pr.mes) bt.push(['mes', 'Pagar un mes: ' + money(pr.mes), '']); if(pr.seis) bt.push(['seis', 'Pagar 6 meses adelantados: ' + money(pr.seis), b.seis_pagas ? 'Pagás ' + b.seis_pagas + ' meses y usás 6' : '']); }   /* PRECIOS UNIFICADOS (Dardo 16/11 17:50): solo mes y 6 meses; lo viejo que mande el servidor no se ofrece */
     const pl = TIPO==='pedidos' ? [] : (b.plus||[]).map(k => PLUSN[k] || k),   /* el Plus es solo para profesionales */ d = document.createElement('div'); d.id = 'cobD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','cobT');
     d.innerHTML = '<div class="cb"><h2 id="cobT">' + (b.estado==='pausa' ? 'Tu app está en pausa' : 'Tu plan y pagos') + '</h2>' + (st ? '<p>' + st + '</p>' : '') + (pl.length ? '<p class="mu">Plus activados: ' + pl.join(', ') + '.</p>' : '')
       + (bt.length && !b.pagado_hasta && b.prueba_hasta && b.estado!=='pausa' ? '<p>Si pagás ahora no perdés días: lo que pagás empieza a contar cuando termina la prueba.</p>' : '')
       + (bt.length ? '<p class="mu">Se paga con Mercado Pago y queda registrado solo.</p>' : '<p class="mu">Para pagar, escribinos a @webs.emprendedores por Instagram.</p>')
-      + bt.map(x => '<button type="button" data-cob="' + x[0] + '">' + x[1] + (x[2] ? '<small>' + x[2] + '</small>' : '') + '</button>').join('') + '<button type="button" class="o" data-cob="x">Cerrar</button></div>';
-    document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-cob]'); if(!t) return; if(t.dataset.cob==='x'){ d.remove(); return; } pay(t.dataset.cob, t); }); d.querySelector('[data-cob]').focus(); }
+      + bt.map(x => '<button type="button" data-cob="' + x[0] + '">' + (b.estado==='pausa' ? 'Pagar y reactivar: ' + x[1].replace(/^Pagar /, '') : x[1]) + (x[2] ? '<small>' + x[2] + '</small>' : '') + '</button>').join('')
+      + (b.estado==='pausa' ? '<button type="button" class="o" data-cob="dl">Descargar mis datos</button>' : '') + (sinAcceso() ? '' : '<button type="button" class="o" data-cob="x">Cerrar</button>') + '</div>';
+    document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-cob]'); if(!t) return; if(t.dataset.cob==='x'){ d.remove(); return; } if(t.dataset.cob==='dl'){ baja(); return; } pay(t.dataset.cob, t); }); d.querySelector('[data-cob]').focus(); }
   async function pay(item, btn){ btn.disabled = true;
     try{ const r = await (await F(G.url, {method:'POST', body:JSON.stringify({a:'payLink', c:G.c, pin:G.pin, item, back:location.origin + location.pathname + (location.hash.split('&')[0] || '#panel')})})).json();
       if(r.ok && r.url){ location.href = r.url; return; } say(r.msg || 'No se pudo armar el pago. Probá de nuevo en un rato.'); }catch(e){ say('No hay conexión. Probá de nuevo.'); } btn.disabled = false; }
@@ -673,7 +813,8 @@ body.admin #panel{display:block}
     try{ renderPanel(); }catch(e){} paint(); say(ok ? 'Listo: tu pago quedó registrado.' : 'Estamos esperando la confirmación del pago. Puede tardar unos minutos.'); }
   function pub(){ const e = el('cobP'), show = PUB && PUB.pausa && location.hash.length <= 1; if(!show){ if(e) e.remove(); return; } if(e) return;
     const d = document.createElement('div'); d.id = 'cobP'; d.setAttribute('role','dialog'); d.setAttribute('aria-labelledby','cobPT');
-    d.innerHTML = '<div class="cb"><h2 id="cobPT">Por ahora no estoy tomando ' + TIPO + ' por acá.</h2><p>Escribime por WhatsApp.</p>' + (PUB.wa ? '<a href="https://wa.me/' + PUB.wa + '" target="_blank" rel="noopener">Escribir por WhatsApp</a>' : '') + '</div>'; document.body.appendChild(d); }
+    const ac = [...document.querySelectorAll('#site a[href="#panel"], #site a[href="#admin"]')].pop();   /* el dueño tiene que poder entrar a pagar */
+    d.innerHTML = '<div class="cb"><h2 id="cobPT">Esta página no está disponible por el momento.</h2>' + (ac ? '<a class="cobAc" href="' + ac.getAttribute('href') + '">' + ac.textContent.trim() + '</a>' : '') + '</div>'; document.body.appendChild(d); }
   addEventListener('hashchange', () => setTimeout(() => { paint(); pub(); }, 50));
   document.addEventListener('click', e => { if(e.target.closest && e.target.closest('[data-a="out"]')){ G = null; setTimeout(paint, 50); } else if(G) setTimeout(() => { if(!!el('cobL') !== inPanel()) paint(); }, 80); });
 })(); /*COB fin*/
@@ -1041,5 +1182,276 @@ window.addEventListener('resize', fitBrand); if(document.fonts) document.fonts.r
 renderSite(); route();
 if(API){ if(logged){ pullAll().then(r=>{ if(r.ok){ renderSite(); route(); } }).catch(()=>{}); } else pullPub(); }
 </script>
+<script>/*TV v1*/ (function(){
+const C = {"rubro": "tortas", "before": "#plist", "fn": "renderPrices", "full": true, "rel2": false, "lead": 2, "slug": "capasysabores"}, D = document, q = s => D.querySelector(s);
+const E = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const M = n => '$' + Math.round(Number(n)||0).toLocaleString('es-AR');
+const site = q('#site'), tv = q('#tv'), SH = q('#tvS'), BAR = q('#tvB');
+const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DIAS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const iso = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+const pd = s => { const a = String(s).split('-').map(Number); return new Date(a[0], a[1]-1, a[2]); };
+const hoy = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+const fecha = s => { const d = pd(s); return DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MES[d.getMonth()]; };
+const norm = s => String(s||'').trim().toLowerCase();
+
+/* ---- Contenido de la propia página (no se pide nada nuevo al dueño) ---- */
+const B = (function(){ const h = site.querySelector('header'), cs = e => e ? getComputedStyle(e) : null;
+  const logo = (h && h.querySelector('img')) || site.querySelector('img'), br = h && (h.querySelector('.brand') || h);
+  const accs = [...site.querySelectorAll('a[href="#panel"],a[href="#admin"]')], acc = accs[accs.length-1];
+  const h1 = site.querySelector('h1'), lead = h1 && h1.parentElement.querySelector('p');
+  const hero = site.querySelector('.hero img, section img'), ig = site.querySelector('a[href*="instagram.com"]'), btn = site.querySelector('.btn') || site.querySelector('button');
+  let name = D.title.split(/[·|]/)[0].trim(); if(!name) name = ((br && br.textContent) || '').replace(/\s+/g,' ').trim();
+  const f = el => { const s = cs(el); return s ? s.fontFamily : ''; }, script = s => /sacramento|dancing|knewave|cursive|script/i.test(s);
+  const h2 = site.querySelector('h2'); let fd = f(h2) || f(h1); if(script(fd)) fd = f(h1); if(script(fd)) fd = f(D.body);
+  const sat = c => { const m = String(c||'').match(/\d+(\.\d+)?/g); if(!m || (m[3] !== undefined && Number(m[3]) < .9)) return -1; const [r,g,b] = m.slice(0,3).map(Number), mx = Math.max(r,g,b), mn = Math.min(r,g,b); return mx < 30 || mn > 225 ? -1 : (mx - mn) / mx; };
+  const cands = [...site.querySelectorAll('.btn, button, a')].map(e => cs(e)).filter(s => sat(s.backgroundColor) > .25);
+  const rs = getComputedStyle(D.documentElement), pv = ['--p','--r','--accent','--rose'].map(k => rs.getPropertyValue(k).trim()).find(v => v && sat((() => { const d = D.createElement('i'); d.style.color = v; D.body.appendChild(d); const c = getComputedStyle(d).color; d.remove(); return c; })()) > .25);
+  const bc = cands[0] || null, bg = pv || (bc ? bc.backgroundColor : ''), col = '#fff';
+  let who = (acc && acc.textContent || '').replace(/^\s*acceso\s*/i,'').trim();
+  return {name, hero: hero ? hero.getAttribute('src') : '', logo: logo ? logo.getAttribute('src') : '', h1: h1 ? h1.textContent.trim() : '', lead: lead ? lead.textContent.trim() : '',
+    ig: ig ? ig.href : '', acc: acc ? acc.getAttribute('href') : '#panel', accT: acc ? acc.textContent.trim() : 'Acceso', who: who || name,
+    fd, fb: f(D.body), fn: f(br), a: (bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)) ? bg : '', ai: col,
+    b: cs(D.body).backgroundColor, i: cs(D.body).color};
+})();
+['a','ai','b','i'].forEach(k => { if(B[k]) tv.style.setProperty('--'+k, B[k]); });
+tv.style.setProperty('--fd', B.fd); tv.style.setProperty('--fb', B.fb); tv.style.setProperty('--fn', B.fn || B.fd);
+[SH, BAR].forEach(el => { ['--a','--ai','--b','--i','--fd','--fb','--s','--m','--l'].forEach(k => { const v = getComputedStyle(tv).getPropertyValue(k); if(v) el.style.setProperty(k, v); }); });
+
+const X = () => (S.settings && S.settings.extra) || {};
+const WAN = () => String(X().wa || (typeof WA !== 'undefined' ? WA : '') || '').replace(/\D/g,'');
+const isPers = p => /personaliz/i.test(p.name||'');
+const torta = p => /torta/i.test(p.cat||'');
+const relList = () => { const r = X().rel; if(r && r.length) return r; const s = q('#rFill'); return s && s.tagName==='SELECT' ? [...s.options].map(o => o.value || o.textContent).filter(v => v && !/eleg|otro/i.test(v)) : []; };
+function V(p){ const v = ((X().var)||{})[p.id] || {}, t = torta(p) || isPers(p), x = X();
+  const d = {sz:[], biz: t && (x.biz||[]).length ? 1 : 0, rel: t && relList().length ? (C.rel2 ? 2 : 1) : 0, cob: t && (x.cob||[]).length ? 1 : 0,
+    per: t ? 1 : 0, qty: t ? 0 : 1, sab: t && !relList().length && !(x.biz||[]).length ? 1 : 0, ext: t && (x.cajas||[]).length ? x.cajas.map(n => ({n, p:0})) : [], idea: isPers(p) ? 1 : 0};
+  return Object.assign(d, v); }
+const desde = p => { const v = V(p), ps = (v.sz||[]).map(s => Number(s.p)||0).filter(Boolean); return ps.length ? Math.min(...ps) : (Number(p.price)||0); };
+const ph = (p, cls) => p && p.img ? `<img class="vph ${cls||''}" src="${E(p.img)}" alt="${E(p.name)}" loading="lazy">` : `<span class="vph vno ${cls||''}" aria-hidden="true">${E(((p&&p.name)||B.name||'?').trim().charAt(0).toUpperCase())}</span>`;
+const precioTxt = p => { const n = desde(p); return n ? `Desde <b>${M(n)}</b>` : 'Te paso el precio'; };
+
+/* ---- Estado del pedido ---- */
+let T = {cat:'', p:null, tal:null, step:0, date:'', mo:0, o:{}, ent:'Retiro', dir:'', name:'', phone:'', notes:'', err:'', sending:false, done:false};
+let Q = {}, QO = {};   // viandas: cantidad y opción por plato
+
+function prods(){ return (S.products||[]).filter(p => p.visible!==false && p.name && !isPers(p) && (C.rubro!=='viandas' || DIAS.includes(p.cat))); }
+function talleres(){ const t = X().talleres || [], tk = S.taken || {}; return t.filter(x => x.date >= iso(hoy())).map(x => Object.assign({}, x, {left: Math.max(0, (Number(x.cupos)||0) - (Number(tk[x.id])||0))})); }
+
+/* ---- Página ---- */
+function render(){
+  if(C.rubro==='viandas') return renderViandas();
+  const ps = prods(), cats = [...new Set(ps.map(p => p.cat||'Otros'))], tal = talleres(), pers = (S.products||[]).find(p => isPers(p) && p.visible!==false);
+  if(tal.length) cats.push('Talleres');
+  if(T.cat && !cats.includes(T.cat)) T.cat = '';
+  const vis = T.cat==='Talleres' ? [] : ps.filter(p => !T.cat || (p.cat||'Otros')===T.cat);
+  tv.innerHTML = `<div class="vtop">${B.logo?`<img src="${E(B.logo)}" alt="">`:''}<b>${E(B.name)}</b></div><div class="vw">
+    ${B.h1?`<h1>${E(B.h1)}</h1>`:''}${B.lead?`<p class="vintro">${E(B.lead)}</p>`:''}
+    ${cats.length > 1 ? `<nav class="vcats" aria-label="Categorías"><button type="button" data-c=""${!T.cat?' class="von"':''}>Todo</button>${cats.map(c => `<button type="button" data-c="${E(c)}"${T.cat===c?' class="von"':''}>${E(c)}</button>`).join('')}</nav>` : ''}
+    <div class="vgrid">${vis.map(p => `<button type="button" class="vcard" data-p="${E(p.id)}">${ph(p)}<span class="vct"><span class="vn">${E(p.name)}</span><span class="vp">${precioTxt(p)}</span></span></button>`).join('')}
+    ${(!T.cat || T.cat==='Talleres') ? tal.map(t => `<button type="button" class="vcard" data-tl="${E(t.id)}">${ph({name:t.name})}<span class="vct"><span class="vn">Taller: ${E(t.name)}</span><span class="vp">${fecha(t.date)}${t.price?` · <b>${M(t.price)}</b>`:''}</span></span></button>`).join('') : ''}</div>
+    ${!ps.length && !tal.length ? '<p class="vempty">Estamos cargando los productos. Volvé en un rato.</p>' : ''}
+    ${(!T.cat && C.rubro==='tortas') ? `<button type="button" class="vcard vpers" data-pers="1">${ph(pers && pers.img ? pers : (B.hero ? {name:'', img:B.hero} : {name:'+'}))}<span class="vct"><span class="vn">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="vp">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span></span></button>` : ''}
+    ${foot()}</div>`;
+}
+function foot(){ const wa = WAN();
+  return `<div class="vfoot">${wa?`<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>`:''}${B.ig?`<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>`:''}<br><a class="vacc" href="${E(B.acc)}">${E(B.accT)}</a></div>`; }
+
+/* viandas: el menú de la semana por día; la fecha es el día del plato */
+function menu(){ const x = X(), wk = x.week; if(!wk) return [];
+  const cut = x.cutoff==null ? 1 : Number(x.cutoff), h = hoy();
+  return DIAS.slice(1).concat('Domingo').map((d,i) => { const dt = new Date(pd(wk)); dt.setDate(dt.getDate()+i); const ds = iso(dt);
+    return {day:d, date:ds, open: Math.round((dt - h)/86400000) >= cut, items: prods().filter(p => p.cat===d)}; }).filter(x => x.items.length); }
+function vLines(){ const out = []; menu().forEach(d => d.items.forEach(p => { if(Q[p.id] > 0 && d.open) out.push({d, p, n:Q[p.id], op:QO[p.id]||''}); })); return out; }
+const opP = (p, op) => { const e = (V(p).ext||[]).find(x => x.n===op); return e ? (Number(e.p)||0) : 0; };
+const vTotal = L => L.reduce((s,l) => s + l.n*((Number(l.p.price)||0) + opP(l.p, l.op)), 0);
+function renderViandas(){ const md = menu();
+  tv.innerHTML = `<div class="vtop">${B.logo?`<img src="${E(B.logo)}" alt="">`:''}<b>${E(B.name)}</b></div><div class="vw">
+    ${B.h1?`<h1>${E(B.h1)}</h1>`:''}<p class="vintro">${md.some(d => d.open) ? 'Elegí tus viandas de la semana y cuántas querés de cada una.' : 'El menú de esta semana ya cerró. En breve sale el nuevo.'}</p>
+    ${md.length ? md.map(d => `<div class="vday"><b>${d.day}</b><span>${pd(d.date).getDate()} de ${MES[pd(d.date).getMonth()]}${d.open?'':' · ya cerró'}</span></div>` + d.items.map(p => { const n = Q[p.id]||0, ex = V(p).ext||[];
+      return `<div class="vrow${d.open?'':' voff'}">${ph(p)}<div><div class="vn">${E(p.name)}</div>${p.desc?`<div class="vd">${E(p.desc)}</div>`:''}${p.price?`<div class="vp">${M(p.price)}</div>`:''}
+        ${d.open ? `<div class="vst"><button type="button" data-st="-1" data-id="${E(p.id)}" aria-label="Quitar una">−</button><b>${n}</b><button type="button" data-st="1" data-id="${E(p.id)}" aria-label="Agregar una">+</button></div>` : ''}</div>
+        ${d.open && n && ex.length ? `<div class="vx"><select data-op="${E(p.id)}" aria-label="Opción para ${E(p.name)}"><option value="">Sin cambios</option>${ex.map(e => `<option${QO[p.id]===e.n?' selected':''}>${E(e.n)}</option>`).join('')}</select></div>` : ''}</div>`; }).join('')).join('')
+      : '<p class="vempty">Estamos armando el menú de la semana.</p>'}
+    ${foot()}</div>`;
+  bar(); }
+
+/* ---- Hoja de pedido (pasos) ---- */
+function steps(){ if(C.rubro==='viandas') return ['datos']; if(T.tal) return ['datos']; return ['fecha','pers','datos']; }
+function open(p, tal){ T = Object.assign(T, {p, tal, step:0, date: tal ? tal.date : '', mo:0, o:{qty:1, rel:[]}, err:'', done:false});
+  const v = p ? V(p) : null; if(v){ if((v.sz||[]).length) T.o.sz = v.sz[0].n; const x = X(); if(v.biz) T.o.biz = (x.biz||[])[0]||''; if(v.cob) T.o.cob = (x.cob||[])[0]||''; T.o.rel = v.rel ? [relList()[0]||''] : []; T.o.ext = []; }
+  SH.hidden = false; D.documentElement.style.overflow = 'hidden'; sheet(); SH.scrollTop = 0; }
+function close(){ SH.hidden = true; D.documentElement.style.overflow = ''; T.p = null; T.tal = null; render(); bar(); }
+function est(){ if(C.rubro==='viandas'){ return vTotal(vLines()); }
+  if(T.tal) return Number(T.tal.price)||0; const p = T.p, v = V(p); let b = 0;
+  if((v.sz||[]).length){ const s = v.sz.find(x => x.n===T.o.sz); b = s ? Number(s.p)||0 : 0; } else b = Number(p.price)||0;
+  if(!b) return 0; const ex = (T.o.ext||[]).reduce((s,n) => s + ((v.ext||[]).find(x => x.n===n)||{p:0}).p*1, 0);
+  return (b + ex) * (v.qty ? Math.max(1, Number(T.o.qty)||1) : 1); }
+function avail(ds){ const st = S.settings||{}, lead = Number(X().lead!=null ? X().lead : C.lead)||0, h = hoy(), d = pd(ds);
+  if(Math.round((d - h)/86400000) < lead) return false; if((st.blocked||[]).includes(ds)) return false;
+  const busy = (S.busy||{})[ds]||0, mx = Number(st.maxPerDay)||9999; return busy < mx; }
+function cal(){ const h = hoy(), base = new Date(h.getFullYear(), h.getMonth() + T.mo, 1), last = new Date(base.getFullYear(), base.getMonth()+1, 0).getDate();
+  let g = ['L','M','M','J','V','S','D'].map(x => `<small aria-hidden="true">${x}</small>`).join('') + '<span></span>'.repeat((base.getDay()+6)%7);
+  for(let i = 1; i <= last; i++){ const ds = iso(new Date(base.getFullYear(), base.getMonth(), i)), ok = avail(ds), past = ds < iso(h);
+    g += `<button type="button" data-d="${ds}"${ok?'':' disabled'}${T.date===ds?' class="von"':past?' class="vpast"':''} aria-label="${fecha(ds)}${ok?'':', sin lugar'}">${i}</button>`; }
+  return `<div class="vmh"><button type="button" data-mo="-1" aria-label="Mes anterior"${T.mo<=0?' disabled':''}>‹</button><b>${MES[base.getMonth()].replace(/^./, c => c.toUpperCase())} ${base.getFullYear()}</b><button type="button" data-mo="1" aria-label="Mes siguiente"${T.mo>=3?' disabled':''}>›</button></div><div class="vcal">${g}</div>`; }
+function sel(name, list, val, label, opt){ return `<label class="vf" for="tv_${name}">${label}</label><select id="tv_${name}" data-o="${name}">${opt?'<option value="">Ninguno</option>':''}${list.map(x => `<option${x===val?' selected':''}>${E(x)}</option>`).join('')}</select>`; }
+function persHtml(){ const p = T.p, v = V(p), x = X(), o = T.o; let h = '';
+  if((v.sz||[]).length) h += `<label class="vf" for="tv_sz">Tamaño</label><select id="tv_sz" data-o="sz">${v.sz.map(s => `<option value="${E(s.n)}"${o.sz===s.n?' selected':''}>${E(s.n)}${Number(s.p)?' · '+M(s.p):''}</option>`).join('')}</select>`;
+  else if(v.per) h += `<label class="vf" for="tv_per">Para cuántas personas</label><input id="tv_per" type="number" inputmode="numeric" min="1" data-o="per" value="${E(o.per||'')}" placeholder="Por ejemplo: 15">`;
+  if(v.qty) h += `<label class="vf" for="tv_qty">Cantidad</label><input id="tv_qty" type="number" inputmode="numeric" min="1" data-o="qty" value="${E(o.qty||1)}">`;
+  if(v.biz) h += sel('biz', x.biz||[], o.biz, 'Bizcochuelo');
+  if(v.rel){ const r = relList(); h += sel('rel0', r, o.rel[0], v.rel > 1 ? 'Relleno' : 'Relleno'); if(v.rel > 1) h += sel('rel1', r, o.rel[1], 'Segundo relleno (si querés)', true); }
+  if(v.sab) h += `<label class="vf" for="tv_sab">Sabor y relleno</label><input id="tv_sab" type="text" data-o="sab" value="${E(o.sab||'')}" placeholder="Por ejemplo: vainilla con dulce de leche">`;
+  if(v.cob) h += sel('cob', x.cob||[], o.cob, 'Cobertura');
+  if((v.ext||[]).length) h += `<label class="vf">Extras</label>` + v.ext.map(e => `<label class="vck"><input type="checkbox" data-ext="${E(e.n)}"${(o.ext||[]).includes(e.n)?' checked':''}><span>${E(e.n)}</span>${Number(e.p)?`<b>+ ${M(e.p)}</b>`:''}</label>`).join('');
+  if(v.idea || v.per) h += `<label class="vf" for="tv_idea">${v.idea ? 'Contame tu idea' : 'Temática o idea (si tenés)'}</label><input id="tv_idea" type="text" data-o="idea" value="${E(o.idea||'')}" placeholder="Por ejemplo: cumple de 15, en lila">`;
+  if(v.idea) h += `<label class="vck"><input type="checkbox" data-o="ref"${o.ref?' checked':''}><span>Tengo una foto de referencia (te la mando por WhatsApp)</span></label>`;
+  return h || '<p class="vhint">Este producto no lleva opciones. Seguí al último paso.</p>'; }
+function lines(){ const out = [];
+  if(C.rubro==='viandas'){ vLines().forEach(l => out.push([l.d.day + ' ' + pd(l.d.date).getDate() + '/' + (pd(l.d.date).getMonth()+1), l.n + ' × ' + l.p.name + (l.op ? ' (' + l.op + ')' : '')])); return out; }
+  if(T.tal){ out.push(['Taller', T.tal.name]); out.push(['Fecha', fecha(T.tal.date) + (T.tal.time ? ', ' + T.tal.time + ' h' : '')]); return out; }
+  const v = V(T.p), o = T.o; out.push(['Producto', T.p.name]); if(T.date) out.push(['Fecha', fecha(T.date)]);
+  if(o.sz) out.push(['Tamaño', o.sz]); if(o.per) out.push(['Personas', o.per]); if(v.qty && Number(o.qty) > 1) out.push(['Cantidad', o.qty]);
+  if(o.sab) out.push(['Sabor y relleno', o.sab]); if(o.biz) out.push(['Bizcochuelo', o.biz]); const r = (o.rel||[]).filter(Boolean); if(r.length) out.push(['Relleno', r.join(' y ')]);
+  if(o.cob) out.push(['Cobertura', o.cob]); if((o.ext||[]).length) out.push(['Extras', o.ext.join(', ')]); if(o.idea) out.push(['Idea', o.idea]); if(o.ref) out.push(['Foto de referencia', 'Sí']);
+  return out; }
+function datosHtml(){ const x = X();
+  return `<h2 id="tvST">Revisá y enviá tu pedido</h2><div class="vsum">${lines().map(l => `<div><span>${E(l[0])}</span><span>${E(l[1])}</span></div>`).join('')}
+    <div class="vtt"><span>${est() ? (C.rubro==='viandas' || T.tal ? 'Total' : 'Precio estimado') : 'Precio'}</span><span>${est() ? M(est()) : 'Te lo paso por WhatsApp'}</span></div></div>
+    <label class="vf" for="tv_name">Tu nombre</label><input id="tv_name" type="text" autocomplete="name" data-k="name" value="${E(T.name)}">
+    <label class="vf" for="tv_phone">Tu WhatsApp</label><input id="tv_phone" type="tel" inputmode="tel" autocomplete="tel" data-k="phone" value="${E(T.phone)}" placeholder="Con característica">
+    ${T.tal ? '' : `<label class="vf">Entrega</label><div class="vseg"><button type="button" data-ent="Retiro"${T.ent==='Retiro'?' class="von"':''}>La retiro</button>${x.envio!==false?`<button type="button" data-ent="Envío"${T.ent==='Envío'?' class="von"':''}>Envío</button>`:''}</div>
+    ${T.ent==='Retiro' && x.pickup ? `<p class="vhint" style="margin-top:8px">Retirás por ${E(x.pickup)}.</p>` : ''}${T.ent==='Envío' ? `<label class="vf" for="tv_dir">Dirección para el envío</label><input id="tv_dir" type="text" autocomplete="street-address" data-k="dir" value="${E(T.dir)}">` : ''}`}
+    <label class="vf" for="tv_notes">Algo más (opcional)</label><textarea id="tv_notes" data-k="notes">${E(T.notes)}</textarea>
+    ${T.err ? `<p class="verr" role="alert">${E(T.err)}</p>` : ''}<p class="cmP">Tus datos los ve solo ${E(B.who)} y se usan para tu pedido.</p>`; }
+function sheet(){ const st = steps(), k = st[T.step], title = C.rubro==='viandas' ? 'Tus viandas' : T.tal ? 'Taller: ' + T.tal.name : T.p.name;
+  let body = '';
+  if(T.done) body = `<div class="vdone"><h2 id="tvST">Pedido enviado</h2><p>${WAN() ? 'Te llevamos a WhatsApp para que se lo mandes a ' + E(B.who) + ' y te confirme.' : E(B.who) + ' ya lo tiene y te escribe para confirmarlo.'}</p>${WAN() ? `<a href="${E(waUrl())}" rel="noopener">Abrir WhatsApp</a>` : B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Ir a Instagram</a>` : ''}</div>`;
+  else if(k==='fecha') body = `<div class="vhero">${ph(T.p)}<div><b>${E(T.p.name)}</b><div class="vhint" style="margin:2px 0 0">${precioTxt(T.p)}</div></div></div><h2 id="tvST">Para qué día</h2><p class="vhint">Los días tachados ya no tienen lugar.</p>${cal()}${T.err?`<p class="verr" role="alert">${E(T.err)}</p>`:''}`;
+  else if(k==='pers') body = `<h2 id="tvST">Armá tu ${E(T.p.name.toLowerCase())}</h2>${T.p.desc?`<p class="vhint">${E(T.p.desc)}</p>`:''}${persHtml()}${T.err?`<p class="verr" role="alert">${E(T.err)}</p>`:''}`;
+  else body = datosHtml();
+  SH.innerHTML = `<div class="vsh"><div class="vw"><button type="button" class="vbk" data-back="1">‹ ${T.step && !T.done ? 'Atrás' : 'Volver'}</button><span class="vt">${E(title)}</span></div>${st.length > 1 && !T.done ? `<div class="vw vsteps" aria-label="Paso ${T.step+1} de ${st.length}">${st.map((x,i) => `<i${i<=T.step?' class="von"':''}></i>`).join('')}</div>` : ''}</div><div class="vw">${body}</div>`;
+  bar(); }
+function bar(){ const sh = !SH.hidden;
+  if(C.rubro==='viandas' && !sh){ const L = vLines(), n = L.reduce((s,l) => s+l.n, 0); BAR.hidden = !n || location.hash.length > 1;
+    if(n) BAR.innerHTML = `<div class="vw"><div class="ve">${n} ${n===1?'vianda':'viandas'}<b>${M(vTotal(L))}</b></div><button type="button" class="vgo" data-go="1">Seguir</button></div>`; return; }
+  if(!sh || T.done){ BAR.hidden = true; return; }
+  const st = steps(), last = T.step === st.length-1, e = est();
+  BAR.hidden = false; BAR.innerHTML = `<div class="vw"><div class="ve">${C.rubro==='viandas'||T.tal?'Total':e?'Estimado':'Precio'}<b>${e ? M(e) : 'Por WhatsApp'}</b></div><button type="button" class="vgo" data-go="1"${T.sending?' disabled':''}>${last ? (T.sending ? 'Enviando…' : 'Enviar pedido') : 'Seguir'}</button></div>`; }
+function waUrl(){ const wa = WAN(); if(!wa) return ''; const L = lines();
+  const msg = 'Hola ' + B.who + '! Te hice un pedido desde tu página:\n' + L.map(l => '• ' + l[0] + ': ' + l[1]).join('\n') + (est() ? '\n• ' + (C.rubro==='viandas'||T.tal ? 'Total' : 'Precio estimado') + ': ' + M(est()) : '')
+    + (T.tal ? '' : '\n• Entrega: ' + (T.ent==='Envío' ? 'envío a ' + T.dir : 'la retiro')) + (T.notes ? '\n• ' + T.notes : '') + '\n\nA nombre de: ' + T.name + ' (' + T.phone + ')';
+  return 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg); }
+function next(){ const st = steps(), k = st[T.step]; T.err = '';
+  if(k==='fecha' && !T.date) T.err = 'Elegí un día del calendario.';
+  if(k==='pers'){ const v = V(T.p); if(v.per && !(v.sz||[]).length && !(Number(T.o.per) > 0)) T.err = 'Decime para cuántas personas es.'; if(v.idea && !String(T.o.idea||'').trim()) T.err = 'Contame en una línea qué idea tenés.'; }
+  if(T.err){ sheet(); return; }
+  if(T.step < st.length-1){ T.step++; sheet(); SH.scrollTop = 0; return; }
+  send(); }
+async function send(){
+  if(!T.name.trim()) T.err = 'Escribí tu nombre.'; else if(T.phone.replace(/\D/g,'').length < 8) T.err = 'Escribí tu WhatsApp con característica.'; else if(T.ent==='Envío' && !T.tal && !T.dir.trim()) T.err = 'Escribí la dirección para el envío.';
+  if(C.rubro==='viandas' && !vLines().length) T.err = 'Elegí al menos una vianda.';
+  if(T.err){ sheet(); return; }
+  const delivery = T.tal ? '' : (T.ent==='Envío' ? 'Envío: ' + T.dir.trim() : 'Retiro'), name = T.name.trim(), phone = T.phone.trim(), e = est();
+  let body;
+  if(C.rubro==='viandas') body = {a:'order', orders: vLines().map(l => ({date:l.d.date, product:l.p.name, people:l.n, fill:l.d.day, delivery, name, phone, notes:[l.op, T.notes.trim()].filter(Boolean).join(' · ')}))};
+  else if(T.tal) body = {a:'order', order:{date:T.tal.date, product:'Taller: ' + T.tal.name, people:1, fill:'', delivery:'', name, phone, notes:T.notes.trim()}};
+  else { const o = T.o, r = (o.rel||[]).filter(Boolean);
+    const fill = [o.sab, o.biz && 'Bizcochuelo ' + o.biz, r.length && 'Relleno ' + r.join(' y '), o.cob && 'Cobertura ' + o.cob].filter(Boolean).join('. ');
+    const notes = [o.sz && 'Tamaño: ' + o.sz, V(T.p).qty && Number(o.qty) > 1 && 'Cantidad: ' + o.qty, (o.ext||[]).length && 'Extras: ' + o.ext.join(', '), o.idea && 'Idea: ' + o.idea, o.ref && 'Tiene foto de referencia', e && 'Precio estimado ' + M(e), T.notes.trim()].filter(Boolean).join(' · ');
+    const ord = {date:T.date, product:T.p.name, people:Number(o.per)||'', fill, delivery, name, phone, notes};
+    if(C.full) Object.assign(ord, {id:'o' + Date.now(), created:iso(new Date()), pay:'sin', total:e||0, paid:0, done:false});
+    body = {a:'order', order:ord}; }
+  T.sending = true; bar();
+  let r = null; try{ r = await api(body); }catch(err){ r = {ok:false, msg:'Sin conexión. Revisá internet y probá de nuevo.'}; }
+  T.sending = false;
+  if(!r || !r.ok){ T.err = (r && r.msg) || 'No se pudo enviar. Probá de nuevo.'; sheet(); if(typeof pullPub==='function') pullPub(); return; }
+  try{ hit('-pedidos'); }catch(err){}
+  if(T.date && !T.tal){ S.busy = S.busy || {}; S.busy[T.date] = (S.busy[T.date]||0) + 1; }
+  const u = waUrl(); T.done = true; sheet();
+  if(C.rubro==='viandas'){ Q = {}; QO = {}; }
+  if(u) setTimeout(() => { location.href = u; }, 700); }
+
+/* ---- Eventos ---- */
+tv.addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.c !== undefined){ T.cat = b.dataset.c; render(); return; }
+  if(b.dataset.p){ const p = (S.products||[]).find(x => x.id===b.dataset.p); if(p) open(p); return; }
+  if(b.dataset.tl){ const t = talleres().find(x => x.id===b.dataset.tl); if(t){ if(!t.left){ alert('Ese taller ya no tiene lugar.'); return; } open(null, t); } return; }
+  if(b.dataset.pers){ const p = (S.products||[]).find(x => isPers(x) && x.visible!==false) || {id:'_pers', name:'Torta personalizada', cat:'Tortas', desc:'', price:0, img:''}; open(p); return; }
+  if(b.dataset.st){ const id = b.dataset.id; Q[id] = Math.max(0, Math.min(30, (Q[id]||0) + Number(b.dataset.st))); if(!Q[id]){ delete Q[id]; delete QO[id]; } render(); } });
+tv.addEventListener('change', e => { const s = e.target.closest('[data-op]'); if(s){ QO[s.dataset.op] = s.value; bar(); } });
+SH.addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.back){ if(T.step && !T.done){ T.step--; T.err = ''; sheet(); } else close(); return; }
+  if(b.dataset.d){ T.date = b.dataset.d; T.err = ''; sheet(); return; }
+  if(b.dataset.mo){ T.mo = Math.max(0, Math.min(3, T.mo + Number(b.dataset.mo))); sheet(); return; }
+  if(b.dataset.ent){ T.ent = b.dataset.ent; sheet(); return; } });
+SH.addEventListener('input', e => { const t = e.target;
+  if(t.dataset.k){ T[t.dataset.k] = t.value; return; }
+  if(t.dataset.o){ const k = t.dataset.o; if(k==='rel0') T.o.rel[0] = t.value; else if(k==='rel1') T.o.rel[1] = t.value; else if(k==='ref') T.o.ref = t.checked; else T.o[k] = t.value; bar(); }
+  if(t.dataset.ext !== undefined){ const n = t.dataset.ext; T.o.ext = (T.o.ext||[]).filter(x => x!==n); if(t.checked) T.o.ext.push(n); bar(); } });
+BAR.addEventListener('click', e => { if(!e.target.closest('[data-go]')) return; if(C.rubro==='viandas' && SH.hidden){ T = Object.assign(T, {step:0, err:'', done:false, p:null, tal:null}); SH.hidden = false; D.documentElement.style.overflow = 'hidden'; sheet(); return; } next(); });
+D.addEventListener('keydown', e => { if(e.key==='Escape' && !SH.hidden) close(); });
+window.addEventListener('hashchange', () => { if(location.hash.length > 1 && !SH.hidden) close(); bar(); });
+
+/* la portada vieja sigue funcionando escondida: cada vez que se redibuja, se redibuja la tienda */
+const RS = window.renderSite; if(typeof RS==='function') window.renderSite = function(){ try{ RS.apply(this, arguments); }catch(e){} try{ if(SH.hidden) render(); }catch(e){ console.error('TV', e); } };
+try{ render(); }catch(e){ console.error('TV', e); }
+
+/* ---- PANEL: foto obligatoria y opciones por producto (TVP v1) ---- */
+const KI = new Set(), KN = new Set(); const know = ps => (ps||[]).forEach(p => { KI.add(p.id); KN.add(norm(p.name)); });
+know(S.products);
+const A0 = window.api;
+window.api = async function(body){
+  if(body && body.a==='saveProducts'){ const bad = (body.products||[]).filter(p => !p.img && p.visible!==false && !KI.has(p.id) && !KN.has(norm(p.name)));
+    if(bad.length) return {ok:false, msg:'Subí la foto de ' + (bad[0].name || 'el producto') + ' antes de guardarlo: cada producto necesita su foto.'}; }
+  const r = await A0.apply(this, arguments);
+  try{ if(r && r.ok && r.products) know(r.products); if(r && r.ok && body && body.a==='saveProducts') know(body.products); }catch(e){}
+  return r; };
+let OPN = '';
+function lst(t){ return String(t||'').split('\n').map(s => s.trim()).filter(Boolean).map(s => { const m = s.match(/^(.*?)[\s:=$-]*\$?\s*([\d.]+)\s*$/); return m && m[1] ? {n:m[1].trim(), p:Number(m[2].replace(/\./g,''))} : {n:s, p:0}; }); }
+const lstT = a => (a||[]).map(x => x.n + (Number(x.p) ? ' ' + x.p : '')).join('\n');
+function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || DIAS.includes(p.cat)), x = X();
+  const falta = ps.filter(p => !p.img && p.visible!==false).length;
+  return `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}</p>`
+    + ps.map(p => { const v = V(p), o = OPN===p.id;
+      return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">${E(p.cat||'')}</div>`:'<div class="vwn">Subí la foto</div>'}</div>
+        <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
+        ${o ? `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' ? '' : `<label>Tamaños y precios (uno por renglón)</label><textarea data-f="sz" placeholder="Para 10 personas 38000">${E(lstT(v.sz))}</textarea>
+          ${(v.sz||[]).length ? '' : `<label class="vck"><input type="checkbox" data-f="per"${v.per?' checked':''}> Preguntar para cuántas personas</label>`}
+          <label class="vck"><input type="checkbox" data-f="qty"${v.qty?' checked':''}> Preguntar cantidad</label>
+          ${(x.biz||[]).length?`<label class="vck"><input type="checkbox" data-f="biz"${v.biz?' checked':''}> Elige bizcochuelo</label>`:''}
+          ${relList().length?`<label>Rellenos que elige</label><select data-f="rel"><option value="0"${!v.rel?' selected':''}>Ninguno</option><option value="1"${v.rel==1?' selected':''}>Uno</option><option value="2"${v.rel==2?' selected':''}>Hasta dos</option></select>`:''}
+          ${(x.cob||[]).length?`<label class="vck"><input type="checkbox" data-f="cob"${v.cob?' checked':''}> Elige cobertura</label>`:''}`}
+          <label>${C.rubro==='viandas' ? 'Opciones del plato' : 'Extras'} (uno por renglón, con precio si suman)</label><textarea data-f="ext" placeholder="${C.rubro==='viandas'?'Sin sal':'Velas 1500'}">${E(lstT(v.ext))}</textarea>
+          <button type="button" class="vsv" data-tvs="${E(p.id)}">Guardar opciones</button></div>` : ''}</div>`; }).join(''); }
+function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return; const host = C.tab ? q(C.tab) : null, anc = C.before ? q(C.before) : null;
+  if(host && host.querySelector('[data-a="psave"],[data-a="esave"],#eName,#pName')) return;
+  let c = q('#tvpc'); if(!c){ c = D.createElement('div'); c.id = 'tvpc'; c.className = 'tvp'; }
+  if(host){ if(c.parentNode !== host || host.firstElementChild !== c) host.insertBefore(c, host.firstChild); }
+  else if(anc){ if(c.nextElementSibling !== anc) anc.parentNode.insertBefore(c, anc); } else return;
+  c.innerHTML = card(); }
+const RP = window[C.fn]; if(typeof RP==='function') window[C.fn] = function(){ const r = RP.apply(this, arguments); try{ mount(); }catch(e){} return r; };
+D.addEventListener('click', async e => { const b = e.target.closest('#tvpc button'); if(!b) return;
+  if(b.dataset.tvo){ OPN = OPN===b.dataset.tvo ? '' : b.dataset.tvo; mount(); return; }
+  if(b.dataset.tvs){ const id = b.dataset.tvs, ed = q('#tvpc [data-tve="' + CSS.escape(id) + '"]'), g = k => ed.querySelector('[data-f="' + k + '"]');
+    const v = {ext: lst(g('ext').value)};
+    if(C.rubro!=='viandas'){ v.sz = lst(g('sz').value).filter(x => x.n); v.per = g('per') ? (g('per').checked ? 1 : 0) : 0; v.qty = g('qty').checked ? 1 : 0; v.biz = g('biz') && g('biz').checked ? 1 : 0; v.rel = g('rel') ? Number(g('rel').value) : 0; v.cob = g('cob') && g('cob').checked ? 1 : 0; }
+    S.settings.extra = S.settings.extra || {}; S.settings.extra.var = Object.assign({}, S.settings.extra.var || {}, {[id]: v});
+    b.disabled = true; b.textContent = 'Guardando…';
+    try{ const r = await api({a:'saveSettings', pin:pinOk, settings:S.settings}); if(r && r.ok){ OPN = ''; if(typeof toast==='function') toast('Opciones guardadas'); } else if(typeof toast==='function') toast((r && r.msg) || 'No se pudo guardar'); }
+    catch(err){ if(typeof toast==='function') toast('Sin conexión: no se guardó. Probá de nuevo.'); }
+    mount(); try{ render(); }catch(err){} } });
+D.addEventListener('change', async e => { const f = e.target.closest('#tvpc input[type=file]'); if(!f || !f.files[0]) return; const p = (S.products||[]).find(x => x.id===f.dataset.tvf); if(!p) return;
+  try{ if(typeof toast==='function') toast('Subiendo foto…'); const r = await api({a:'photo', pin:pinOk, data: await shrink(f.files[0]), name:p.name + '.jpg'});
+    if(!r || !r.ok){ if(typeof toast==='function') toast((r && r.msg) || 'No se pudo subir'); return; }
+    p.img = r.url; const s = await api({a:'saveProducts', pin:pinOk, products:S.products}); if(typeof toast==='function') toast(s && s.ok ? 'Foto actualizada' : ((s && s.msg) || 'No se pudo guardar'));
+  }catch(err){ if(typeof toast==='function') toast('Sin conexión: no se subió. Probá de nuevo.'); }
+  mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
+})();</script>
 </body>
+
+
+
+
 </html>
