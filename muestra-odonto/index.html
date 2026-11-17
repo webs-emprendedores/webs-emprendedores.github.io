@@ -222,7 +222,12 @@ body.pnl #panel label.chk{min-height:48px;display:flex;align-items:center;gap:10
 body.pnl #panel .hrow label.chk,body.pnl #panel .ptag{font-size:16px}
 body.pnl.pnlIn #insL{display:none!important}
 body.pnl.pnlIn #cobL{margin-bottom:calc(68px + 40px + env(safe-area-inset-bottom))}
-body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom))}
+body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));max-width:calc(100% - 32px)}
+body.pnl #toast.pOk{white-space:nowrap}
+body.pnl #toast.pTop{top:calc(72px + env(safe-area-inset-top));bottom:auto!important}
+body.pnl #toast.pBar{bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:70}
+body.pnl #panel .durrow{display:block} body.pnl #panel .durrow select{width:100%} body.pnl #panel .durrow .btn{width:100%;margin-top:10px}   /* CONTENIDO 17/11 17:10: el select cortaba el texto */
+body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, también antes de entrar (CONTENIDO 17/11 17:10); #avisos de LD sigue con su botón */
 </style>
 </head>
 <body>
@@ -884,15 +889,28 @@ const IC = {home:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 1
 const TAB = [['home', 'Agenda'], ['day', 'Días'], ['sv', 'Servicios'], ['set', 'Más']];
 const GRUPO = s => s==='day' ? 'day' : s==='sv' ? 'sv' : ['set','ho','co','ma','mo','se','plus','cuenta','cnew'].includes(s) ? 'set' : 'home';
 const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+/* AVISOS DE GUARDADO (CONTENIDO 17/11 17:10): uno solo, "Guardado ✓", en una línea, arriba de la barra y sin tapar el botón que se tocó */
+(function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
+  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
+  window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
+  window.pnlPlace = () => { const t = document.getElementById('toast'); if(!t) return; t.classList.toggle('pOk', t.textContent==='Guardado ✓'); t.style.transition = 'none';   /* se mide donde queda de verdad (sin la animación de entrada) */   /* va donde no tape ningún botón: arriba de la barra, si no debajo de la barra de arriba, si no sobre las pestañas */
+    const tapa = () => { const a = t.getBoundingClientRect(); return [...document.querySelectorAll('#panel button, #panel a, #panel input, #panel select')].filter(b => { if(!b.offsetParent || b.closest('.tabs,.pT')) return false; const q = b.getBoundingClientRect(); return q.width && a.left < q.right && q.left < a.right && a.top < q.bottom && q.top < a.bottom; }).length; };
+    let best = null; for(const c of ['', 'pTop', 'pBar']){ t.classList.remove('pTop', 'pBar'); if(c) t.classList.add(c); const n = tapa(); if(!best || n < best[1]) best = [c, n]; if(!n) break; }
+    t.classList.remove('pTop', 'pBar'); if(best[0]) t.classList.add(best[0]); void last; }; })();
+const T0 = window.toast; if(typeof T0==='function') window.toast = function(m){ T0(pnlNorm(m)); pnlPlace(); };
 const R0 = window.renderPanel;
 window.renderPanel = function(){ R0.apply(this, arguments); try{ deco(); }catch(e){ console.error('TPNL', e); } };
 function tono(){ if(D.body.style.getPropertyValue('--pas15')) return; const cs = getComputedStyle(D.body), hx = v => { let s = String(v).trim().replace('#',''); if(/^[0-9a-f]{3}$/i.test(s)) s = s.split('').map(c => c + c).join(''); return /^[0-9a-f]{6}$/i.test(s) ? [0,2,4].map(i => parseInt(s.slice(i,i+2),16)) : null; };   /* también #fff */
   const a = hx(cs.getPropertyValue('--pet')), b = hx(cs.getPropertyValue('--paper')); if(a && b){ D.body.style.setProperty('--pas15', 'rgb(' + a.map((x,i) => Math.round(x*.14 + b[i]*.86)).join(',') + ')'); } }   /* color sólido: los controles de contraste no leen color-mix */
 function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) return;
-  D.body.classList.toggle('pnlIn', !!A.ok); tono();
+  D.body.classList.toggle('pnlIn', !!A.ok); D.body.classList.toggle('tLogin', !A.ok && location.hash!=='#avisos'); tono();
   el.querySelectorAll('.quick').forEach(x => { if(x.querySelector('[data-a="go"][data-v="day"]') && x.querySelector('[data-a="go"][data-v="set"]')) x.remove(); });   /* Ver otros días y Ajustes ya están en las pestañas */
   el.insertAdjacentHTML('afterbegin', `<header class="pnlTop"><span class="pnlMarca">${c.photo ? `<img src="${H(c.photo)}" alt="">` : ''}<b>${H(((c.title ? c.title + ' ' : '') + (c.name || '')).trim())}</b></span><a class="pnlVer" href="#">Ver mi página ↗</a></header>`);
   if(!A.ok) return;
+  if(A.scr==='sv') el.querySelectorAll('.back').forEach(b => b.remove());   /* Servicios es una pestaña: sin Volver a Ajustes */
+  if(A.scr==='turno'){ const lt = el.querySelector('[data-a="conf"]'), ll = el.querySelector('a.btn[href^="tel:"]');   /* por resolver: la principal es Lo tomo; Llamar con borde */
+    if(lt && ll && lt.classList.contains('o')){ lt.classList.remove('o'); ll.classList.add('o'); }
+    const rj = el.querySelector('[data-a="rej"]'); if(rj && !/›\s*$/.test(rj.textContent)) rj.textContent = rj.textContent.trim() + ' ›'; }
   const g = GRUPO(A.scr);
   el.insertAdjacentHTML('beforeend', '<nav class="pT" aria-label="Secciones del panel">' + TAB.map(([v,l]) => `<button type="button" data-a="go" data-v="${v}" class="${g===v ? 'on' : ''}" aria-current="${g===v ? 'page' : 'false'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[v]}</svg><span>${l}</span></button>`).join('') + '</nav>');
   if(A.scr==='set'){   /* Más: las filas de Ajustes en un solo bloque, Instalar la app acá, y Cerrar con clave como fila roja */

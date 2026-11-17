@@ -486,7 +486,8 @@ body.pnl #panel label.pSec{display:inline-flex;margin:0;font-size:16px}
 .pList{margin-top:12px;background:var(--pc);border:1px solid var(--pl);border-radius:16px;overflow:hidden}
 body.pnl #tvpc.pList{padding:0}
 body.pnl #tvpc .pPend{margin:0;padding:14px 16px;border-bottom:1px solid var(--pl);font-size:16px!important}
-.pRowP{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:8px 16px;border:0;border-top:1px solid var(--pl);background:transparent;color:var(--pt);text-align:left;cursor:pointer;font:inherit;box-sizing:border-box}
+.pRowP{display:grid;grid-template-columns:56px minmax(0,1fr) auto;column-gap:12px;row-gap:6px;align-items:center;width:100%;min-height:72px;padding:8px 16px;border:0;border-top:1px solid var(--pl);background:transparent;color:var(--pt);text-align:left;cursor:pointer;font:inherit;box-sizing:border-box}
+.pRowP .pWarn{grid-column:1/-1;display:flex;flex-direction:column;gap:2px}   /* avisos debajo del nombre, a todo el ancho (CONTENIDO 17/11 17:10) */
 .pRowP:first-of-type{border-top:0}
 .pRowP img,.pRowP .vnf,.pRowP .vnx{width:56px;height:56px;border-radius:12px;object-fit:cover;flex:none;display:flex;align-items:center;justify-content:center;background:var(--pas15);color:var(--pt)}
 .pRowP .pTx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
@@ -516,7 +517,11 @@ body.pnl #tvpc .vlogo{display:flex;align-items:center;gap:14px}
 body.pnl #tvpc .vlogo img{width:64px;height:64px;border-radius:50%;object-fit:cover}
 body.pnl #tvpc .ved{border:0;padding:0;margin:0;background:none}
 body.pnl #app:not([hidden]) ~ #insL,body.pnl.pnlIn #insL{display:none!important}   /* Instalar la app: en el panel, solo en Más (en la pantalla de la clave sigue igual) */
-body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));font-size:17px}
+body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));font-size:17px;max-width:calc(100% - 32px)}
+body.pnl #toast.pOk{white-space:nowrap}
+body.pnl #toast.pTop{top:calc(72px + env(safe-area-inset-top));bottom:auto!important}
+body.pnl #toast.pBar{bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:70}
+
 @media (prefers-reduced-motion:reduce){.pSw input,.pSw input::after{transition:none}}
 </style>
 </head>
@@ -1295,7 +1300,7 @@ function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || 
         <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
         ${o ? opcHtml(p) : ''}</div>`; }).join(''); }
 function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return;
-  if(window.PNL){ const c = q('#tvpc'), m = window.PNL.tv; if(!c || !m) return; const p = (S.products||[]).find(x => x.id===m.id);   /* PANEL NUEVO: el panel arma las pantallas y la tienda pone el encabezado o las opciones de un producto */
+  if(window.PNL){ const cs = [...D.querySelectorAll('#tvpc')], c = cs.find(e => e.closest('.pv.on')) || cs.find(e => e.getClientRects().length) || cs[0], m = window.PNL.tv;   /* la pantalla que se ve: otra pestaña puede tener su lista con el mismo id (salió de un error en Ceci: Encabezado vacío) */ if(!c || !m) return; const p = (S.products||[]).find(x => x.id===m.id);   /* PANEL NUEVO: el panel arma las pantallas y la tienda pone el encabezado o las opciones de un producto */
     c.innerHTML = m.modo==='enc' ? encHtml() : (p ? opcHtml(p) : ''); return; }
   const host = C.tab ? q(C.tab) : null, anc = C.before ? q(C.before) : null;
   if(host && host.querySelector('[data-a="psave"],[data-a="esave"],#eName,#pName')) return;
@@ -1354,7 +1359,15 @@ const main = (a, l, ex) => `<button type="button" class="pMain" data-a="${a}"${e
 function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEnc ? window.tvEnc() : {nombre: ''};
   m.innerHTML = (e.logo ? `<img src="${esc(e.logo)}" alt="">` : '') + `<b>${esc(e.nombre || '')}</b>`; }
 /* el toast dura 2 segundos y queda arriba de la barra */
-let tT; window.toast = function(m){ const t = q('#toast'); if(!t) return; t.textContent = m; t.classList.add('show'); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2000); };
+/* AVISOS DE GUARDADO (CONTENIDO 17/11 17:10): uno solo, "Guardado ✓", en una línea, arriba de la barra y sin tapar el botón que se tocó */
+(function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
+  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
+  window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
+  window.pnlPlace = () => { const t = document.getElementById('toast'); if(!t) return; t.classList.toggle('pOk', t.textContent==='Guardado ✓'); t.style.transition = 'none';   /* se mide donde queda de verdad (sin la animación de entrada) */   /* va donde no tape ningún botón: arriba de la barra, si no debajo de la barra de arriba, si no sobre las pestañas */
+    const tapa = () => { const a = t.getBoundingClientRect(); return [...document.querySelectorAll('#panel button, #panel a, #panel input, #panel select')].filter(b => { if(!b.offsetParent || b.closest('.tabs,.pT')) return false; const q = b.getBoundingClientRect(); return q.width && a.left < q.right && q.left < a.right && a.top < q.bottom && q.top < a.bottom; }).length; };
+    let best = null; for(const c of ['', 'pTop', 'pBar']){ t.classList.remove('pTop', 'pBar'); if(c) t.classList.add(c); const n = tapa(); if(!best || n < best[1]) best = [c, n]; if(!n) break; }
+    t.classList.remove('pTop', 'pBar'); if(best[0]) t.classList.add(best[0]); void last; }; })();
+let tT; window.toast = function(m){ const t = q('#toast'); if(!t) return; t.textContent = pnlNorm(m); t.classList.add('show'); pnlPlace(); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2000); };
 
 window.renderPanel = function(){ D.querySelectorAll('#app .tabs button').forEach(b => { const on = b.dataset.t===tab; b.classList.toggle('on', on); b.setAttribute('aria-current', on ? 'page' : 'false'); });
   D.querySelectorAll('#app .pv').forEach(v => v.classList.toggle('on', v.id==='pv-'+tab)); marca(); N.tv = null;
@@ -1424,7 +1437,7 @@ window.renderCar = function(){ const v = q('#pv-car'), x = X();
   const pend = falta || sinP ? `<p class="pPend">${falta ? `<b style="color:var(--prj)">${falta===1 ? 'Te falta 1 foto.' : 'Te faltan ' + falta + ' fotos.'}</b> ` : ''}${sinP ? `<b style="color:var(--prj)">${sinP===1 ? '1 producto no tiene' : sinP + ' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>` : '';
   const rows = ps.map(p => { const i = info(p), w = [], vis = p.visible!==false;
     if(!p.img && vis) w.push('Subí la foto'); if(vis && !i.desde) w.push('Cargá un precio "Desde"'); if(!vis) w.push('No se muestra en tu página');
-    return `<button type="button" class="pRowP vpr" data-a="pedit" data-id="${esc(p.id)}">${p.img ? `<img src="${esc(p.img)}" alt="">` : vis ? `<span class="vnf" role="img" aria-label="Falta foto">${CAM}</span>` : `<span class="vnx">${CAM}</span>`}<span class="pTx"><span class="vnm">${esc(p.name)}</span><span class="pPr">${i.desde ? 'Desde ' + money(i.desde) : 'Sin precio'}</span>${w.map(t => `<span class="vwn">${t}</span>`).join('')}</span><span class="pEd">Editar ›</span></button>`; }).join('');
+    return `<button type="button" class="pRowP vpr" data-a="pedit" data-id="${esc(p.id)}">${p.img ? `<img src="${esc(p.img)}" alt="">` : vis ? `<span class="vnf" role="img" aria-label="Falta foto">${CAM}</span>` : `<span class="vnx">${CAM}</span>`}<span class="pTx"><span class="vnm">${esc(p.name)}</span><span class="pPr">${i.desde ? 'Desde ' + money(i.desde) : 'Sin precio'}</span></span><span class="pEd">Editar ›</span>${w.length ? `<span class="pWarn">${w.map(t => `<span class="vwn">${t}</span>`).join('')}</span>` : ''}</button>`; }).join('');
   v.innerHTML = (ps.length ? main('pnew', '+ Agregar producto') + '<p class="pHelp">Lo que cambies acá se ve al instante en tu página.</p>' + `<div id="tvpc" class="pList">${pend}${rows}</div>`
       : `<div class="pCard"><p>Todavía no cargaste productos.</p>${main('pnew', '+ Agregar producto')}</div><div id="tvpc" hidden></div>`)
     + ((x.biz||[]).length || (x.rel||[]).length ? '<button type="button" class="pRow pSolo" data-a="pnl" data-v="sab"><span>Sabores para armar la torta</span><span>›</span></button>' : ''); };
@@ -1472,6 +1485,14 @@ try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
 </body>
+
+
+
+
+
+
+
+
 
 
 

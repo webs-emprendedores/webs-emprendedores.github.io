@@ -565,7 +565,8 @@ body.pnl #panel label.pSec{display:inline-flex;margin:0;font-size:16px}
 .pList{margin-top:12px;background:var(--pc);border:1px solid var(--pl);border-radius:16px;overflow:hidden}
 body.pnl #tvpc.pList{padding:0}
 body.pnl #tvpc .pPend{margin:0;padding:14px 16px;border-bottom:1px solid var(--pl);font-size:16px!important}
-.pRowP{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:8px 16px;border:0;border-top:1px solid var(--pl);background:transparent;color:var(--pt);text-align:left;cursor:pointer;font:inherit;box-sizing:border-box}
+.pRowP{display:grid;grid-template-columns:56px minmax(0,1fr) auto;column-gap:12px;row-gap:6px;align-items:center;width:100%;min-height:72px;padding:8px 16px;border:0;border-top:1px solid var(--pl);background:transparent;color:var(--pt);text-align:left;cursor:pointer;font:inherit;box-sizing:border-box}
+.pRowP .pWarn{grid-column:1/-1;display:flex;flex-direction:column;gap:2px}   /* avisos debajo del nombre, a todo el ancho (CONTENIDO 17/11 17:10) */
 .pRowP:first-of-type{border-top:0}
 .pRowP img,.pRowP .vnf,.pRowP .vnx{width:56px;height:56px;border-radius:12px;object-fit:cover;flex:none;display:flex;align-items:center;justify-content:center;background:var(--pas15);color:var(--pt)}
 .pRowP .pTx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
@@ -595,7 +596,11 @@ body.pnl #tvpc .vlogo{display:flex;align-items:center;gap:14px}
 body.pnl #tvpc .vlogo img{width:64px;height:64px;border-radius:50%;object-fit:cover}
 body.pnl #tvpc .ved{border:0;padding:0;margin:0;background:none}
 body.pnl #app:not([hidden]) ~ #insL,body.pnl.pnlIn #insL{display:none!important}   /* Instalar la app: en el panel, solo en Más (en la pantalla de la clave sigue igual) */
-body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));font-size:17px}
+body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));font-size:17px;max-width:calc(100% - 32px)}
+body.pnl #toast.pOk{white-space:nowrap}
+body.pnl #toast.pTop{top:calc(72px + env(safe-area-inset-top));bottom:auto!important}
+body.pnl #toast.pBar{bottom:calc(10px + env(safe-area-inset-bottom))!important;z-index:70}
+
 @media (prefers-reduced-motion:reduce){.pSw input,.pSw input::after{transition:none}}
 </style>
 <style>/*PNL v1 otros*/
@@ -614,7 +619,9 @@ body.pnl #manList .it img{width:56px;height:56px;border-radius:12px;object-fit:c
 body.pnl #manList .it .n{font-size:18px;font-weight:700} body.pnl #manList .it .d,body.pnl #manList .it .p{font-size:16px;color:var(--pm)}
 body.pnl #manList .dayh small,body.pnl #manList .day{font-size:16px}
 body.pnl #manList .st button{min-width:48px;min-height:48px;font-size:22px;border:1.5px solid var(--pt);border-radius:12px;background:transparent;color:var(--pt)}
+body.pnl #manList .st{border:0;background:none;box-shadow:none;padding:0}
 body.pnl #manList .st b{font-size:18px;min-width:28px;text-align:center}
+@media (max-width:389px){body.pnl #manList .it{flex-wrap:wrap} body.pnl #manList .it .tx{flex:1 1 calc(100% - 68px)} body.pnl #manList .it .st{flex:1 1 100%;display:flex;justify-content:flex-end;gap:8px;align-items:center}}   /* CONTENIDO 17/11 17:10 */
 body.pnl #panel .pSeg button{line-height:1.15;padding:4px 6px}
 /* Maru */
 body.pnl #panelApp>.wrap{max-width:600px;margin:0 auto;padding:0 16px}
@@ -622,7 +629,7 @@ body.pnl #panelApp .pv{padding-top:16px}
 body.pnl .p-top{display:none}
 body.pnl #sum{display:block;margin:0}
 body.pnl #pv-pedidos>.hint{display:none}
-body.pnl .pfilter{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;margin:16px 0 0;padding-bottom:4px}
+body.pnl .pfilter{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}   /* en varias filas: a 320 se cortaba el último (CONTENIDO 17/11 17:10) */
 body.pnl .pfilter button{flex:none;min-height:48px;padding:0 14px;border:1.5px solid var(--pt);border-radius:12px;background:transparent;color:var(--pt);font:600 16px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 body.pnl .pfilter button.on{background:var(--pt);color:var(--pf);border-color:var(--pt)}
 body.pnl #olist{display:block}
@@ -657,6 +664,7 @@ body.pnl #loginBox .kicker{text-transform:none;color:var(--pm)}
 body.pnl #loginBox a.hint{display:inline-flex;align-items:center;min-height:48px;color:var(--pt)}
 body.pnl #pv-m-enc .pBody>#tvpc{margin-top:0}
 body.pnl #pinBtn{text-transform:none;letter-spacing:0}
+body.pnl.pnlIn #cobL{margin-bottom:calc(68px + 40px + env(safe-area-inset-bottom))}   /* Maru: Tu plan y pagos queda fuera del panel, al final; no lo tapa la barra de abajo */
 body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing:0}
 </style>
 </head>
@@ -1475,7 +1483,7 @@ function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || 
         <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
         ${o ? opcHtml(p) : ''}</div>`; }).join(''); }
 function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return;
-  if(window.PNL){ const c = q('#tvpc'), m = window.PNL.tv; if(!c || !m) return; const p = (S.products||[]).find(x => x.id===m.id);   /* PANEL NUEVO: el panel arma las pantallas y la tienda pone el encabezado o las opciones de un producto */
+  if(window.PNL){ const cs = [...D.querySelectorAll('#tvpc')], c = cs.find(e => e.closest('.pv.on')) || cs.find(e => e.getClientRects().length) || cs[0], m = window.PNL.tv;   /* la pantalla que se ve: otra pestaña puede tener su lista con el mismo id (salió de un error en Ceci: Encabezado vacío) */ if(!c || !m) return; const p = (S.products||[]).find(x => x.id===m.id);   /* PANEL NUEVO: el panel arma las pantallas y la tienda pone el encabezado o las opciones de un producto */
     c.innerHTML = m.modo==='enc' ? encHtml() : (p ? opcHtml(p) : ''); return; }
   const host = C.tab ? q(C.tab) : null, anc = C.before ? q(C.before) : null;
   if(host && host.querySelector('[data-a="psave"],[data-a="esave"],#eName,#pName')) return;
@@ -1535,7 +1543,15 @@ const dl = s => { const d = new Date(s + 'T12:00:00'); return isNaN(d) ? s : d.t
 const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 const $m = n => '$' + Number(n||0).toLocaleString('es-AR');
 function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEnc ? window.tvEnc() : {nombre: ''}; m.innerHTML = (e.logo ? `<img src="${H(e.logo)}" alt="">` : '') + `<b>${H(e.nombre || '')}</b>`; }
-let tT; window.toast = function(m){ const t = q('#toast'); if(!t) return; t.textContent = m; t.classList.add('show'); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2000); };
+/* AVISOS DE GUARDADO (CONTENIDO 17/11 17:10): uno solo, "Guardado ✓", en una línea, arriba de la barra y sin tapar el botón que se tocó */
+(function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
+  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
+  window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
+  window.pnlPlace = () => { const t = document.getElementById('toast'); if(!t) return; t.classList.toggle('pOk', t.textContent==='Guardado ✓'); t.style.transition = 'none';   /* se mide donde queda de verdad (sin la animación de entrada) */   /* va donde no tape ningún botón: arriba de la barra, si no debajo de la barra de arriba, si no sobre las pestañas */
+    const tapa = () => { const a = t.getBoundingClientRect(); return [...document.querySelectorAll('#panel button, #panel a, #panel input, #panel select')].filter(b => { if(!b.offsetParent || b.closest('.tabs,.pT')) return false; const q = b.getBoundingClientRect(); return q.width && a.left < q.right && q.left < a.right && a.top < q.bottom && q.top < a.bottom; }).length; };
+    let best = null; for(const c of ['', 'pTop', 'pBar']){ t.classList.remove('pTop', 'pBar'); if(c) t.classList.add(c); const n = tapa(); if(!best || n < best[1]) best = [c, n]; if(!n) break; }
+    t.classList.remove('pTop', 'pBar'); if(best[0]) t.classList.add(best[0]); void last; }; })();
+let tT; window.toast = function(m){ const t = q('#toast'); if(!t) return; t.textContent = pnlNorm(m); t.classList.add('show'); pnlPlace(); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2000); };
 const up = () => { try{ window.scrollTo(0, 0); }catch(e){} };
 function visitas(el, conPed){ el.innerHTML = '<div class="pCard"><p><b id="vN">…</b> visitas a tu página.</p>' + (conPed ? '<p><b id="vP">…</b> pedidos hechos desde ahí.</p>' : '') + '</div>';
   const g = HIT.replace('/hit/','/get/'), put = (id,t) => { const e = q(id); if(e) e.textContent = t; }; fetch(g).then(r => r.json()).then(j => put('#vN', j.value||0)).catch(() => put('#vN', 0)); if(conPed) fetch(g+'-pedidos').then(r => r.json()).then(j => put('#vP', j.value||0)).catch(() => put('#vP', 0)); }
@@ -1572,7 +1588,7 @@ window.renderPed = function(){ if(manual){ renderManual(); return; }
   const w = X().week, gs = groups().filter(g => pedAll || g.some(o => o.date >= thisMon() || inWeek(o,w)));
   const deben = gs.reduce((s,g) => s + g.reduce((a,x) => a + Math.max(0, (x.total||0) - (x.paid||0)), 0), 0);
   const sum = `<p class="pSum">${gs.length ? (gs.length===1 ? '1 pedido' : gs.length + ' pedidos') + (deben ? ', falta cobrar ' + money(deben) : '') : 'Todavía no hay pedidos'}</p>`;
-  const seg = `<div class="pSeg" role="group"><button type="button" data-a="pf" data-v="0" class="${pedAll ? '' : 'on'}" aria-pressed="${!pedAll}">Esta semana y próximos</button><button type="button" data-a="pf" data-v="1" class="${pedAll ? 'on' : ''}" aria-pressed="${pedAll}">Todos</button></div>`;
+  const seg = `<div class="pSeg" role="group"><button type="button" data-a="pf" data-v="0" class="${pedAll ? '' : 'on'}" aria-pressed="${!pedAll}">Próximos</button><button type="button" data-a="pf" data-v="1" class="${pedAll ? 'on' : ''}" aria-pressed="${pedAll}">Todos</button></div>`;
   const cards = gs.map(g => { const o = g[0], tot = g.reduce((s,x) => s + x.total, 0), falta = g.reduce((s,x) => s + Math.max(0, (x.total||0) - (x.paid||0)), 0), paid = g.every(x => x.pay==='total'), tel = String(o.phone).replace(/\D/g,''), wa = tel.length>=10 ? (tel.startsWith('54') ? tel : '549'+tel.replace(/^0/,'')) : '';
     const tag = paid ? '<span class="pTag ok">Pagado</span>' : tot ? `<span class="pTag falta">Falta cobrar ${money(falta || tot)}</span>` : '<span class="pTag sin">Sin precio</span>';
     return `<div class="pCard"><div class="pRowT"><b>${H(o.name)}</b>${tag}</div><p class="pMeta" style="margin-top:6px">${H(o.delivery)}${o.phone ? ', ' + H(o.phone) : ''}</p>${g.map(x => `<p class="pMeta">${H(x.fill)} ${dm(x.date)}: ${x.people} × ${H(x.product)}${x.done ? ' ✓' : ''}</p>`).join('')}
@@ -1595,7 +1611,7 @@ window.renderMen = function(){ const x = X(), md = menuDays(), ended = md.length
   let h = `<p class="pHelp" style="margin-top:0!important">Lo que guardan aparece al instante en la página.</p>${ended ? '<div class="pCard"><p><b>Esta semana ya terminó.</b> Elijan abajo si repiten el menú o arman uno nuevo.</p></div>' : ''}
   <label for="wkSel">Semana que empieza el lunes</label><select id="wkSel">${mons.map(m => `<option value="${m}"${m===x.week ? ' selected' : ''}>${pd(m).getDate()} de ${MES[pd(m).getMonth()]}</option>`).join('')}</select>
   <div id="tvpc" class="pList">${falta ? `<p class="pPend"><b style="color:var(--prj)">${falta===1 ? 'Les falta 1 foto.' : 'Les faltan ' + falta + ' fotos.'}</b></p>` : ''}` + DAYS.map((d,i) => `<p class="pDay pIn">${d} ${dm(plus(x.week,i))}</p>` + S.products.filter(p => p.cat===d).map(p => { const vis = p.visible!==false;
-      return `<button type="button" class="pRowP vpr" data-a="eopen" data-id="${H(p.id)}">${p.img ? `<img src="${H(p.img)}" alt="">` : vis ? `<span class="vnf" role="img" aria-label="Falta foto">${CAM}</span>` : `<span class="vnx">${CAM}</span>`}<span class="pTx"><span class="vnm">${H(p.name)}</span>${p.desc ? `<span class="pPr">${H(p.desc)}</span>` : ''}<span class="pPr">${p.price ? money(p.price) : 'Sin precio'}</span>${!p.img && vis ? '<span class="vwn">Subí la foto</span>' : ''}</span><span class="pEd">Editar ›</span></button>`; }).join('')
+      return `<button type="button" class="pRowP vpr" data-a="eopen" data-id="${H(p.id)}">${p.img ? `<img src="${H(p.img)}" alt="">` : vis ? `<span class="vnf" role="img" aria-label="Falta foto">${CAM}</span>` : `<span class="vnx">${CAM}</span>`}<span class="pTx"><span class="vnm">${H(p.name)}</span>${p.desc ? `<span class="pPr">${H(p.desc)}</span>` : ''}<span class="pPr">${p.price ? money(p.price) : 'Sin precio'}</span></span><span class="pEd">Editar ›</span>${!p.img && vis ? '<span class="pWarn"><span class="vwn">Subí la foto</span></span>' : ''}</button>`; }).join('')
     + `<div class="pIn"><button type="button" class="pSec" data-a="eadd" data-day="${d}">+ Agregar plato</button></div>`).join('') + `</div>
   <div class="pCard"><h3>Precio de todas las viandas</h3><label for="allPrice">Precio</label><div class="pTwo"><input id="allPrice" type="number" inputmode="numeric" value="${H(x.price||'')}"><button type="button" class="pSec" data-a="allp" style="min-height:52px;width:100%">Aplicar a todas</button></div></div>
   <div class="pCard"><h3>Semana que viene</h3><p class="pHelp" style="margin:0 0 8px!important">Los platos que sacan del menú quedan guardados para volver a usarlos.</p><div class="pAcc"><button type="button" class="pSec" data-a="rep">Repetir este menú</button><button type="button" class="pSec" data-a="newm">Empezar un menú nuevo</button></div></div>`;
@@ -1632,6 +1648,14 @@ try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
 </body>
+
+
+
+
+
+
+
+
 
 
 
