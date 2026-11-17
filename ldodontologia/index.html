@@ -352,7 +352,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
     d.innerHTML = '<div class="cb"><h2 id="cobT">' + (b.estado==='pausa' ? 'Tu app está en pausa' : 'Tu plan y pagos') + '</h2>' + (st ? '<p>' + st + '</p>' : '') + (pl.length ? '<p class="mu">Plus activados: ' + pl.join(', ') + '.</p>' : '')
       + (bt.length && !b.pagado_hasta && b.prueba_hasta && b.estado!=='pausa' ? '<p>Si pagás ahora no perdés días: lo que pagás empieza a contar cuando termina la prueba.</p>' : '')
       + (bt.length ? '<p class="mu">Se paga con Mercado Pago y queda registrado solo.</p>' : '<p class="mu">Para pagar, escribinos a @webs.emprendedores por Instagram.</p>')
-      + bt.map(x => '<button type="button" data-cob="' + x[0] + '">' + (b.estado==='pausa' ? 'Pagar y reactivar: ' + x[1].replace(/^Pagar /, '') : x[1]) + (x[2] ? '<small>' + x[2] + '</small>' : '') + '</button>').join('')
+      + bt.map(x => '<button type="button" data-cob="' + x[0] + '">' + (b.estado==='pausa' ? 'Pagar y reactivar ' + x[1].replace(/^Pagar /, '') : x[1]) + (x[2] ? '<small>' + x[2] + '</small>' : '') + '</button>').join('')
       + (b.estado==='pausa' ? '<button type="button" class="o" data-cob="dl">Descargar mis datos</button>' : '') + (sinAcceso() ? '' : '<button type="button" class="o" data-cob="x">Cerrar</button>') + '</div>';
     document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-cob]'); if(!t) return; if(t.dataset.cob==='x'){ d.remove(); return; } if(t.dataset.cob==='dl'){ baja(); return; } pay(t.dataset.cob, t); }); d.querySelector('[data-cob]').focus(); }
   async function pay(item, btn){ btn.disabled = true;
