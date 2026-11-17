@@ -335,7 +335,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="pop"] .pSep:empty{display:block}
 #tv[data-familia="pop"] .pCat{position:relative;padding:40px 0 40px 20px;background:var(--fondo)}
 #tv[data-familia="pop"] .pCat.pAlt{background:var(--fondo-2)}
-#tv[data-familia="pop"] .pCatT{color:var(--tinta);font:400 28px/1.05 'Archivo Black',var(--fd);text-transform:uppercase;margin:0 20px 20px 0;display:flex;align-items:baseline;gap:12px}
+#tv[data-familia="pop"] .pCatT{color:var(--tinta);font:400 28px/1.05 'Archivo Black',var(--fd);font-size:min(28px,7.2vw);text-transform:uppercase;margin:0 20px 20px 0;display:block}   /* a 320 px una palabra larga entra entera (revisión de diseño 17/11) */
 #tv[data-familia="pop"] .pConf{position:absolute;right:14px;top:12px;width:72px;height:40px}
 #tv[data-familia="pop"] .pCarr{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 40px 14px 0;scrollbar-width:none}
 #tv[data-familia="pop"] .pCarr::-webkit-scrollbar{display:none}
@@ -358,6 +358,18 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 /* QUÉ SE TOCA (Dardo 17/11 09:17): cada tarjeta del carrusel lleva el botón Elegir */
 #tv[data-familia="pop"] .vElegir{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:12px;padding:0 22px;border:2px solid var(--tinta);border-radius:999px;background:var(--acento);color:var(--sobre-acento);font:700 17px/1 'Archivo',var(--fb)}
 #tv[data-familia="pop"] .pCard .vElegir{margin-top:10px}
+#tv .vAccs{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:16px 8px;align-items:start;padding:24px 20px 8px}
+#tv .vAcc{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;min-height:48px;padding:0;border:0;background:none;color:var(--tinta,inherit);font:inherit;cursor:pointer}
+#tv .vAccC{display:flex;align-items:center;justify-content:center;width:72px;height:72px;flex:none;border-radius:50%;border:3px solid var(--tinta,currentColor);background:var(--fondo-2,transparent);overflow:hidden;text-align:center}
+#tv .vAccC span{padding:0 6px;font-size:15px;font-weight:700;line-height:1.1;overflow-wrap:normal;word-break:normal;hyphens:none}
+#tv .vAccC img{width:100%;height:100%;object-fit:cover}
+#tv .vAccN{max-width:100%;font-size:15px;font-weight:700;line-height:1.25;text-align:center;text-decoration:underline;text-underline-offset:3px;overflow-wrap:normal;word-break:normal;hyphens:none}
+#tv .vAccs .vVer{grid-column:1/-1;justify-self:center}
+#tv .vAcc:focus-visible{outline:3px solid var(--tinta,currentColor);outline-offset:3px}
+#tv[data-familia="editorial"] .vAccC{border-width:1px}
+#tv[data-familia="editorial"] .vAccN{font-weight:500}
+#tv[data-familia="casera"] .vAccs{padding:24px 0 0}
+#tv[data-familia="casera"] .vAccC{border:2px dashed var(--tinta)}
 #tv .vVer{display:inline-flex;align-items:center;gap:4px;min-height:48px;padding:0 4px;border:0;background:none;color:inherit;font:inherit;font-size:17px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
 /*FAM casera*/
 #tv[data-familia="casera"]{--cost:color-mix(in srgb,var(--tinta) 35%,transparent);background-color:var(--fondo);background-image:linear-gradient(90deg,color-mix(in srgb,var(--tinta) 4%,transparent) 50%,transparent 50%),linear-gradient(color-mix(in srgb,var(--tinta) 4%,transparent) 50%,transparent 50%);background-size:28px 28px;color:var(--tinta);font-family:'Source Sans 3',var(--fb);font-weight:500;font-size:17px;line-height:1.55;padding-bottom:0}
@@ -417,9 +429,6 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="editorial"] [data-temporada]{pointer-events:none}
 #tv[data-familia="editorial"] [data-temporada]:empty{display:none}
 #tv[data-familia="editorial"] .eIdxZ{display:block;height:24px}
-#tv[data-familia="editorial"] .eIdx{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 24px;padding:16px 0;border-top:1px solid color-mix(in srgb,var(--tinta) 20%,transparent);border-bottom:1px solid color-mix(in srgb,var(--tinta) 20%,transparent)}
-#tv[data-familia="editorial"] .eIdx button{display:inline-flex;align-items:center;gap:4px;min-height:48px;border:0;background:none;color:var(--tinta);font:500 17px/1.2 'Work Sans',var(--fb);padding:0;cursor:pointer}
-#tv[data-familia="editorial"] .eIdx u{text-underline-offset:4px}
 #tv[data-familia="editorial"] .eSep{display:flex;justify-content:center;height:40px;margin:16px 0 0}
 #tv[data-familia="editorial"] .eSep svg{width:64px;height:40px}
 #tv[data-familia="editorial"] .eCat{padding:40px 0 16px;scroll-margin-top:12px}
@@ -437,7 +446,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="editorial"] .eD{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px}
 #tv[data-familia="editorial"] .ePr{display:block;margin-top:8px;font:450 17px/1.4 'Work Sans',var(--fb)}
 #tv[data-familia="editorial"] .vElegir{display:inline-flex;align-items:center;min-height:48px;margin-top:14px;padding:0 20px;border:1.5px solid var(--tinta);border-radius:2px;color:var(--tinta);font:600 17px/1 'Work Sans',var(--fb)}
-#tv[data-familia="editorial"] .eFull:focus-visible,#tv[data-familia="editorial"] .eAlt:focus-visible,#tv[data-familia="editorial"] .eIdx button:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+#tv[data-familia="editorial"] .eFull:focus-visible,#tv[data-familia="editorial"] .eAlt:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
 #tv[data-familia="editorial"] .ePie{margin-top:40px;padding:32px 24px 48px;border-top:1px solid var(--tinta);text-align:center}
 #tv[data-familia="editorial"] .ePie a{display:inline-flex;align-items:center;min-height:48px;margin:6px;padding:0 20px;border:1.5px solid var(--tinta);border-radius:2px;color:var(--tinta);font:600 15px/1 'Work Sans',var(--fb);letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 #tv[data-familia="editorial"] .ePie a:first-child{background:var(--tinta);color:var(--fondo)}
@@ -453,26 +462,21 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="moderna"] .mHero img{display:block;width:100%;aspect-ratio:1;object-fit:cover;object-position:center;border-radius:28px}
 #tv[data-familia="moderna"] [data-temporada]{pointer-events:none}
 #tv[data-familia="moderna"] [data-temporada]:empty{display:none}
-#tv[data-familia="moderna"] .mAccs{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:12px 8px;padding:20px 20px 8px}
-#tv[data-familia="moderna"] .mAcc{display:flex;flex-direction:column;align-items:center;gap:6px;width:92px;min-height:48px;padding:0;border:0;background:none;color:var(--tinta);font:inherit;cursor:pointer}
-#tv[data-familia="moderna"] .mAccC{display:flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;border:3px solid var(--tinta);background:var(--fondo-2);overflow:hidden;font:800 15px/1.1 'Manrope',var(--fb);text-align:center}
-#tv[data-familia="moderna"] .mAccC img{width:100%;height:100%;object-fit:cover}
-#tv[data-familia="moderna"] .mAccN{max-width:100%;font:700 15px/1.2 'Manrope',var(--fb);text-decoration:underline;text-underline-offset:3px;text-align:center;overflow-wrap:anywhere}
-#tv[data-familia="moderna"] .mAccs .vVer{align-self:center}
 #tv[data-familia="moderna"] .mCat{padding:36px 20px 8px;scroll-margin-top:12px}
 #tv[data-familia="moderna"] .mCatT{font:800 28px/1.1 'Manrope',var(--fb);margin:0 0 18px}
 #tv[data-familia="moderna"] .mFilas{display:grid;gap:18px}
-#tv[data-familia="moderna"] .mRow{display:grid;grid-template-columns:min(168px,40vw) 1fr;gap:16px;align-items:center;width:100%;min-height:48px;padding:16px;border:2px solid var(--tinta);border-radius:24px;background:var(--fondo-2);color:var(--tinta);font:inherit;text-align:left;cursor:pointer}
-#tv[data-familia="moderna"] .mRow.mIzq{grid-template-columns:1fr min(168px,40vw)}
+#tv[data-familia="moderna"] .mRow{display:grid;grid-template-columns:min(168px,34vw) 1fr;gap:16px;align-items:center;width:100%;min-height:48px;padding:16px;border:2px solid var(--tinta);border-radius:24px;background:var(--fondo-2);color:var(--tinta);font:inherit;text-align:left;cursor:pointer}
+#tv[data-familia="moderna"] .mRow.mIzq{grid-template-columns:1fr min(168px,34vw)}
 #tv[data-familia="moderna"] .mRow.mIzq .mRedonda{order:2}
 #tv[data-familia="moderna"] .mRow.mSinF{grid-template-columns:1fr}
 #tv[data-familia="moderna"] .mRedonda{width:100%;height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;object-position:center;border:3px solid var(--tinta);box-shadow:5px 5px 0 var(--tinta)}
 #tv[data-familia="moderna"] .mTx{min-width:0}
-#tv[data-familia="moderna"] .mN{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font:800 22px/1.15 'Manrope',var(--fb);overflow-wrap:anywhere}
+@media (max-width:360px){#tv[data-familia="moderna"] .mRow,#tv[data-familia="moderna"] .mRow.mIzq{grid-template-columns:1fr;justify-items:center;text-align:center}#tv[data-familia="moderna"] .mRow.mIzq .mRedonda{order:0}#tv[data-familia="moderna"] .mRedonda{width:min(168px,60vw)}}   /* celulares chicos: la foto arriba y el nombre entero abajo, sin cortar palabras */
+#tv[data-familia="moderna"] .mN{display:block;font:800 22px/1.15 'Manrope',var(--fb);overflow-wrap:normal;hyphens:none}
 #tv[data-familia="moderna"] .mD{display:block;font-size:16px;margin-top:4px}
 #tv[data-familia="moderna"] .mDato{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:4px;background:var(--acento-2);color:var(--tinta);font:700 15px/1.2 'Manrope',var(--fb)}
 #tv[data-familia="moderna"] .vElegir{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:12px;padding:0 22px;border:2px solid var(--acento);border-radius:999px;background:var(--acento);color:var(--sobre-acento);font:800 17px/1 'Manrope',var(--fb)}
-#tv[data-familia="moderna"] .mRow:focus-visible,#tv[data-familia="moderna"] .mAcc:focus-visible{outline:3px solid var(--acento);outline-offset:3px}
+#tv[data-familia="moderna"] .mRow:focus-visible{outline:3px solid var(--acento);outline-offset:3px}
 #tv[data-familia="moderna"] .mPie{margin-top:40px;padding:32px 20px 48px;background:var(--fondo-2);text-align:center}
 #tv[data-familia="moderna"] .mPie a{display:inline-flex;align-items:center;min-height:48px;margin:6px;padding:0 22px;border:2px solid var(--tinta);border-radius:999px;color:var(--tinta);font-weight:800;text-decoration:none}
 /*TVP v1*/
@@ -975,6 +979,8 @@ function V(p){ const v = ((X().var)||{})[p.id] || {}, t = torta(p) || isPers(p),
   const d = {sz:[], biz: t && (x.biz||[]).length ? 1 : 0, rel: t && relList().length ? (C.rel2 ? 2 : 1) : 0, cob: t && (x.cob||[]).length ? 1 : 0,
     per: t ? 1 : 0, qty: t ? 0 : 1, sab: t && !relList().length && !(x.biz||[]).length ? 1 : 0, ext: t && (x.cajas||[]).length ? x.cajas.map(n => ({n, p:0})) : [], idea: isPers(p) ? 1 : 0};
   return Object.assign(d, v); }
+/* categoría con la que se agrupa en la página: la que elige el emprendedor en Tu catálogo (var[id].grp) o la del producto */
+const grupo = p => String(V(p).grp || p.cat || 'Otros').trim() || 'Otros';
 const desde = p => { const v = V(p), ps = (v.sz||[]).map(s => Number(s.p)||0).filter(Boolean); return ps.length ? Math.min(...ps) : (Number(p.price)||0); };
 const ph = (p, cls) => p && p.img && !dup(p) ? `<img class="vph ${cls||''}" src="${E(p.img)}" alt="${E(p.name)}" loading="lazy">` : '';   /* sin foto, sin hueco (17/11): nunca una letra */
 const consulta = () => C.rubro!=='viandas' && !T.tal && !est();   /* sin precio: es una consulta, no un pedido con precio */
@@ -987,6 +993,10 @@ const precioTxt = p => { const n = desde(p); return n ? `Desde <b>${M(n)}</b>` :
 /* LISTAS QUE SE PUEDEN LLENAR (Dardo 17/11 10:43): categorías y accesos, máximo MAXL a la vista; el resto, con Ver todas */
 const MAXL = 5;
 const lim = (arr, k) => T.ver[k] ? arr : arr.slice(0, MAXL);
+/* ACCESOS A CATEGORÍAS (Dardo 17/11 11:13): círculos con la foto del primer producto (o el nombre) y el nombre subrayado con ↓; llevan a su grupo.
+   Máximo 5 y Ver todas. La flecha va pegada a la última palabra (&nbsp;) y las palabras nunca se cortan: si no entran, bajan enteras. */
+function accesos(secs){ const L = secs.filter(s => !s.pers); if(L.length < 2) return '';
+  return `<nav class="vAccs" aria-label="Categorías">${lim(L, 'acc').map(s => { const f = s.its && s.its[0] ? foto(s.its[0]) : ''; return `<button type="button" class="vAcc" data-ir="${s.i}"><span class="vAccC">${f ? `<img src="${E(f)}" alt="">` : `<span>${E(s.t)}</span>`}</span><span class="vAccN">${E(s.t)}&nbsp;↓</span></button>`; }).join('')}${verTodas(L, 'acc')}</nav>`; }
 const verTodas = (arr, k) => arr.length > MAXL && !T.ver[k] ? `<button type="button" class="vVer" data-ver="${k}">Ver todas (${arr.length}) ↓</button>` : '';
 let T = {ver:{}, cat:'', p:null, tal:null, step:0, date:'', mo:0, o:{}, ent:'Retiro', dir:'', name:'', phone:'', notes:'', err:'', sending:false, done:false};
 let Q = {}, QO = {};   // viandas: cantidad y opción por plato
@@ -1001,10 +1011,10 @@ function render(){
   if(C.familia==='casera') return renderCasera();
   if(C.familia==='editorial') return renderEditorial();
   if(C.familia==='moderna') return renderModerna();
-  const ps = prods(), cats = [...new Set(ps.map(p => p.cat||'Otros'))], tal = talleres(), pers = (S.products||[]).find(p => isPers(p) && p.visible!==false);
+  const ps = prods(), cats = [...new Set(ps.map(p => grupo(p)))], tal = talleres(), pers = (S.products||[]).find(p => isPers(p) && p.visible!==false);
   if(tal.length) cats.push('Talleres');
   if(T.cat && !cats.includes(T.cat)) T.cat = '';
-  const vis = T.cat==='Talleres' ? [] : ps.filter(p => !T.cat || (p.cat||'Otros')===T.cat);
+  const vis = T.cat==='Talleres' ? [] : ps.filter(p => !T.cat || grupo(p)===T.cat);
   put(`<div class="vtop">${B.logo?`<img src="${E(B.logo)}" alt="">`:''}<b>${E(B.name)}</b></div><div class="vw">
     ${B.h1?`<h1>${E(B.h1)}</h1>`:''}${B.lead?`<p class="vintro">${E(B.lead)}</p>`:''}
     ${cats.length > 1 ? `<nav class="vcats" aria-label="Categorías"><button type="button" data-c=""${!T.cat?' class="von"':''}>Todo</button>${lim(cats, 'cats').concat(T.cat && !lim(cats, 'cats').includes(T.cat) ? [T.cat] : []).map(c => `<button type="button" data-c="${E(c)}"${T.cat===c?' class="von"':''}>${E(c)}</button>`).join('')}${verTodas(cats, 'cats')}</nav>` : ''}
@@ -1022,7 +1032,7 @@ function popCard(p, ancho){ const f = foto(p), n = desde(p), pr = n ? 'Desde ' +
 function heroPop(){ const usadas = new Set((S.products||[]).map(p => p.img).filter(Boolean).concat(B.logo ? [B.logo] : []));
   return [C.destacada, B.hero].concat(B.fotos).find(s => s && !usadas.has(s) && !/icon-|logo/i.test(s)) || ''; }
 function renderPop(){
-  const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => p.cat||'Otros'))];
+  const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => grupo(p)))];
   const ciudad = ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
   const banda = cats.slice(0, MAXL).concat(tal.length ? ['Talleres'] : [], ciudad ? [ciudad] : []).join(' · ').toUpperCase() + ' · ';
   const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
@@ -1030,8 +1040,10 @@ function renderPop(){
     ${B.logo ? `<span class="pSticker"><img src="${E(B.logo)}" alt="${E(B.name)}"></span>` : `<p class="pN">${E(B.name)}</p>`}
     <h1 class="pTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="pLead">${E(B.lead)}</p>` : ''}
     ${heroPop() ? `<div class="pHero"><div class="pZona" data-temporada="foto"></div><img src="${E(heroPop())}" alt="${E(B.name)}"></div>` : ''}</div>`;
-  const banda2 = (i, titulo, html, n) => `<div class="pSep" data-temporada="separador"></div><section class="pCat${i % 2 ? ' pAlt' : ''}">${confites(i)}<h2 class="pCatT">${E(titulo)}</h2><div class="${n > 2 ? 'pCarr' : 'pCol'}">${html}</div></section>`;
-  cats.forEach((c, i) => { const its = ps.filter(p => (p.cat||'Otros')===c); h += banda2(i, c, its.map(p => popCard(p)).join(''), its.length); });
+  const secs = cats.map((c, i) => ({t:c, i, its:ps.filter(p => grupo(p)===c)})); if(tal.length) secs.push({t:'Talleres', i:cats.length, its:[]});
+  h += accesos(secs);
+  const banda2 = (i, titulo, html, n) => `<div class="pSep" data-temporada="separador"></div><section class="pCat${i % 2 ? ' pAlt' : ''}" id="tvCat${i}">${confites(i)}<h2 class="pCatT">${E(titulo)}</h2><div class="${n > 2 ? 'pCarr' : 'pCol'}">${html}</div></section>`;
+  cats.forEach((c, i) => { const its = ps.filter(p => grupo(p)===c); h += banda2(i, c, its.map(p => popCard(p)).join(''), its.length); });
   let k = cats.length;
   if(tal.length) h += banda2(k++, 'Talleres', tal.map(x => `<button type="button" class="pCard" data-tl="${E(x.id)}"><span class="pSinFoto"><span class="pN">${E(x.name)}</span><span class="pD">${fecha(x.date)}${x.time ? ', ' + E(x.time) + ' h' : ''}</span><span class="pPrecio pSolo">${x.price ? M(x.price) : 'A consultar'}</span></span><span class="vElegir">Elegir</span></button>`).join(''), tal.length);
   if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false), f = persFoto();
@@ -1055,10 +1067,10 @@ function portadaCasera(){ const hf = heroPop();
 const cinta = (titulo, extra) => `<h2 class="cBan"><span data-temporada="cinta-titulo"></span>${E(titulo)}${extra ? `<small>${extra}</small>` : ''}</h2>`;
 function cRow(p, attrs, precio){ const f = foto(p); return `<button type="button" class="cRow${f ? '' : ' cSolo'}" ${attrs}>${f ? `<img src="${E(f)}" alt="${E(p.name)}" loading="lazy">` : ''}<span><span class="cN">${E(p.name)}</span>${p.desc ? `<span class="cD">${E(p.desc)}</span>` : ''}<span class="cPr"><i></i>${precio}</span><span class="cEl"><span class="vElegir">Elegir</span></span></span></button>`; }
 function pieCasera(){ const wa = WAN(); return `<footer class="cPie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`; }
-function renderCasera(){ const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => p.cat||'Otros'))];
-  let h = portadaCasera() + '<div class="cCarta">';
-  cats.forEach(c => { h += `<section class="cCat">${cinta(c)}${ps.filter(p => (p.cat||'Otros')===c).map(p => cRow(p, `data-p="${E(p.id)}"`, desde(p) ? 'Desde ' + M(desde(p)) : 'A consultar')).join('')}</section>`; });
-  if(tal.length) h += `<section class="cCat">${cinta('Talleres')}${tal.map(x => cRow({name:x.name, desc:fecha(x.date) + (x.time ? ', ' + x.time + ' h' : '')}, `data-tl="${E(x.id)}"`, x.price ? M(x.price) : 'A consultar')).join('')}</section>`;
+function renderCasera(){ const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => grupo(p)))];
+  let h = portadaCasera() + '<div class="cCarta">' + accesos(cats.map((c, i) => ({t:c, i, its:ps.filter(p => grupo(p)===c)})).concat(tal.length ? [{t:'Talleres', i:cats.length, its:[]}] : []));
+  cats.forEach((c, i) => { h += `<section class="cCat" id="tvCat${i}">${cinta(c)}${ps.filter(p => grupo(p)===c).map(p => cRow(p, `data-p="${E(p.id)}"`, desde(p) ? 'Desde ' + M(desde(p)) : 'A consultar')).join('')}</section>`; });
+  if(tal.length) h += `<section class="cCat" id="tvCat${cats.length}">${cinta('Talleres')}${tal.map(x => cRow({name:x.name, desc:fecha(x.date) + (x.time ? ', ' + x.time + ' h' : '')}, `data-tl="${E(x.id)}"`, x.price ? M(x.price) : 'A consultar')).join('')}</section>`;
   if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false);
     h += `<section class="cCat">${cinta('A tu idea')}${cRow({id:'_pers', name: pers ? pers.name : 'Torta personalizada', desc: (pers && pers.desc) || 'Contame tu idea y te paso el precio.', img: persFoto()}, 'data-pers="1"', 'A consultar').replace('src=""', '')}</section>`; }
   if(!ps.length && !tal.length) h += '<p class="cLead">Estamos cargando los productos. Volvé en un rato.</p>';
@@ -1080,14 +1092,14 @@ const ramita = (w, h) => `<svg viewBox="0 0 64 40" width="${w}" height="${h}" ar
 function eItem(p, i, attrs, precio){ const f = foto(p), tx = `<span class="eTx"><span class="eN">${E(p.name)}</span>${p.desc ? `<span class="eD">${E(p.desc)}</span>` : ''}<span class="ePr">${precio}</span><span class="vElegir">Elegir →</span></span>`;
   if(i===0 && f) return `<button type="button" class="eFull" ${attrs}><img src="${E(f)}" alt="${E(p.name)}" loading="lazy">${tx}</button>`;
   return `<button type="button" class="eAlt${f ? (i % 2 ? '' : ' eDer') : ' eSolo'}" ${attrs}>${f ? `<img src="${E(f)}" alt="${E(p.name)}" loading="lazy">` : ''}${tx}</button>`; }
-function renderEditorial(){ const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => p.cat||'Otros'))], hf = heroPop(), ciudad = ciudadDe();
+function renderEditorial(){ const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => grupo(p)))], hf = heroPop(), ciudad = ciudadDe();
   const w = (B.h1 || B.name).trim().split(/\s+/), k = w.length > 2 ? w.reduce((m, x, i) => i && x.length > w[m].length ? i : m, 1) : -1;
-  const secs = cats.map(c => ({t:c, html: ps.filter(p => (p.cat||'Otros')===c).map((p, i) => eItem(p, i, `data-p="${E(p.id)}"`, desde(p) ? 'Desde ' + M(desde(p)) : 'Precio a consultar')).join('')}));
-  if(tal.length) secs.push({t:'Talleres', html: tal.map((x, i) => eItem({name:x.name, desc:fecha(x.date) + (x.time ? ', ' + x.time + ' h' : '')}, i, `data-tl="${E(x.id)}"`, x.price ? M(x.price) : 'Precio a consultar')).join('')});
-  if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', html: eItem({id:'_pers', name: pers ? pers.name : 'Torta personalizada', desc: (pers && pers.desc) || 'Contame tu idea y te paso el precio.', img: persFoto()}, 0, 'data-pers="1"', 'Precio a consultar')}); }
+  const secs = cats.map((c, i) => ({t:c, i, its:ps.filter(p => grupo(p)===c), html: ps.filter(p => grupo(p)===c).map((p, i) => eItem(p, i, `data-p="${E(p.id)}"`, desde(p) ? 'Desde ' + M(desde(p)) : 'Precio a consultar')).join('')}));
+  if(tal.length) secs.push({t:'Talleres', i:secs.length, its:[], html: tal.map((x, i) => eItem({name:x.name, desc:fecha(x.date) + (x.time ? ', ' + x.time + ' h' : '')}, i, `data-tl="${E(x.id)}"`, x.price ? M(x.price) : 'Precio a consultar')).join('')});
+  if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', i:secs.length, pers:1, html: eItem({id:'_pers', name: pers ? pers.name : 'Torta personalizada', desc: (pers && pers.desc) || 'Contame tu idea y te paso el precio.', img: persFoto()}, 0, 'data-pers="1"', 'Precio a consultar')}); }
   let h = `<p class="eTop">${E(B.name)}</p><div class="eHead"><span class="eOrn" data-temporada="ornamento">${ramita(58, 58)}</span><h1 class="eTit">${w.map((x, i) => i===k ? `<em>${E(x)}</em>` : E(x)).join(' ')}</h1>${B.lead ? `<p class="eLead">${E(B.lead)}</p>` : ''}</div>
     ${hf ? `<figure class="eHero"><img src="${E(hf)}" alt="${E(B.name)}"><figcaption data-temporada="epigrafe">Hecha a mano${ciudad ? ' en ' + E(ciudad) : ''}.</figcaption></figure>` : ''}
-    <span class="eIdxZ" data-temporada="indice"></span>${secs.length > 1 ? `<nav class="eIdx" aria-label="Categorías">${lim(secs, 'idx').map((s, i) => `<button type="button" data-ir="${i}"><u>${E(s.t)}</u> ↓</button>`).join('')}${verTodas(secs, 'idx')}</nav>` : ''}`;
+    <span class="eIdxZ" data-temporada="indice"></span>${accesos(secs)}`;
   secs.forEach((s, i) => { h += `${i ? `<div class="eSep" data-temporada="separador">${ramita(64, 40)}</div>` : ''}<section class="eCat" id="tvCat${i}"><h2 class="eCatT">${E(s.t)}</h2>${s.html}</section>`; });
   if(!ps.length && !tal.length) h += '<p class="eLead" style="margin:24px">Estamos cargando los productos. Volvé en un rato.</p>';
   const wa = WAN(); put(h + `<footer class="ePie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`); }
@@ -1096,14 +1108,14 @@ function renderEditorial(){ const ps = prods(), tal = talleres(), cats = [...new
    REDONDA de 168 px, borde 3 px y sombra dura, nombre en grotesca pesada, dato chico sobre fondo suave sin borde y botón Elegir. Fondo claro u oscuro según los colores. */
 function mRow(i, attrs, nombre, desc, dato, f){ return `<button type="button" class="mRow${f ? (i % 2 ? ' mIzq' : '') : ' mSinF'}" ${attrs}>${f ? `<img class="mRedonda" src="${E(f)}" alt="${E(nombre)}" loading="lazy">` : ''}<span class="mTx"><span class="mN">${E(nombre)}</span>${desc ? `<span class="mD">${E(desc)}</span>` : ''}${dato ? `<span class="mDato">${dato}</span>` : ''}<span class="vElegir">Elegir</span></span></button>`; }
 function renderModerna(){ const ps = prods(), tal = talleres(), hf = heroPop();
-  const secs = [...new Set(ps.map(p => p.cat||'Otros'))].map(c => ({t:c, html:'', its:ps.filter(p => (p.cat||'Otros')===c)}));
+  const secs = [...new Set(ps.map(p => grupo(p)))].map((c, i) => ({t:c, i, html:'', its:ps.filter(p => grupo(p)===c)}));
   secs.forEach(s => s.html = s.its.map((p, j) => mRow(j, `data-p="${E(p.id)}"`, p.name, p.desc, desde(p) ? 'Desde ' + M(desde(p)) : 'Precio a consultar', foto(p))).join(''));
-  if(tal.length) secs.push({t:'Talleres', its:[], html: tal.map((x, j) => mRow(j, `data-tl="${E(x.id)}"`, x.name, fecha(x.date) + (x.time ? ', ' + x.time + ' h' : ''), x.price ? M(x.price) : 'Precio a consultar', '')).join('')});
-  if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', its:[], html: mRow(0, 'data-pers="1"', pers ? pers.name : 'Torta personalizada', (pers && pers.desc) || 'Contame tu idea y te paso el precio.', 'Precio a consultar', persFoto())}); }
+  if(tal.length) secs.push({t:'Talleres', i:secs.length, its:[], html: tal.map((x, j) => mRow(j, `data-tl="${E(x.id)}"`, x.name, fecha(x.date) + (x.time ? ', ' + x.time + ' h' : ''), x.price ? M(x.price) : 'Precio a consultar', '')).join('')});
+  if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', i:secs.length, pers:1, its:[], html: mRow(0, 'data-pers="1"', pers ? pers.name : 'Torta personalizada', (pers && pers.desc) || 'Contame tu idea y te paso el precio.', 'Precio a consultar', persFoto())}); }
   const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
   let h = `<div class="mIn"><p class="mMarca">${B.logo ? `<img src="${E(B.logo)}" alt="">` : ''}${E(B.name)}</p><h1 class="mTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="mLead">${E(B.lead)}</p>` : ''}
     ${hf ? `<div class="mHero"><img src="${E(hf)}" alt="${E(B.name)}"></div>` : ''}<div data-temporada="foto"></div></div>`;
-  if(secs.length > 1) h += `<nav class="mAccs" aria-label="Categorías">${lim(secs, 'acc').map((s, i) => { const f = s.its[0] ? foto(s.its[0]) : ''; return `<button type="button" class="mAcc" data-ir="${i}"><span class="mAccC">${f ? `<img src="${E(f)}" alt="">` : E(s.t)}</span><span class="mAccN">${E(s.t)} ↓</span></button>`; }).join('')}${verTodas(secs, 'acc')}</nav>`;
+  h += accesos(secs);
   secs.forEach((s, i) => { h += `<div data-temporada="separador"></div><section class="mCat" id="tvCat${i}"><h2 class="mCatT">${E(s.t)}</h2><div class="mFilas">${s.html}</div></section>`; });
   if(!ps.length && !tal.length) h += '<div class="mIn"><p class="mLead">Estamos cargando los productos. Volvé en un rato.</p></div>';
   const wa = WAN(); put(h + `<footer class="mPie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`); }
@@ -1274,9 +1286,9 @@ function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || 
   const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
   return `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
     + ps.map(p => { const v = V(p), o = OPN===p.id;
-      return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">${E(p.cat||'')}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
+      return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">Categoría: ${E(grupo(p))}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
         <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
-        ${o ? `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">
+        ${o ? `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre ? '' : `<label>Categoría en tu página</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu página aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">
           <label>Tamaños y precios (uno por renglón)</label><textarea data-f="sz" placeholder="Para 10 personas 38000">${E(lstT(v.sz))}</textarea>
           ${(v.sz||[]).length ? '' : `<label class="vck"><input type="checkbox" data-f="per"${v.per?' checked':''}> Preguntar para cuántas personas</label>`}
           <label class="vck"><input type="checkbox" data-f="qty"${v.qty?' checked':''}> Preguntar cantidad</label>
@@ -1290,7 +1302,7 @@ function mount(){ if(!(typeof pinOk!=='undefined' && pinOk)) return; const host 
   let c = q('#tvpc'); if(!c){ c = D.createElement('div'); c.id = 'tvpc'; c.className = 'tvp'; }
   if(host){ if(c.parentNode !== host || host.firstElementChild !== c) host.insertBefore(c, host.firstChild); }
   else if(anc){ if(c.nextElementSibling !== anc) anc.parentNode.insertBefore(c, anc); } else return;
-  c.innerHTML = card(); }
+  c.innerHTML = card() + `<datalist id="tvCats">${[...new Set((S.products||[]).filter(p => !isPers(p)).map(grupo))].map(g => `<option value="${E(g)}">`).join('')}</datalist>`; }
 /* NOMBRES SUGERIDOS: lista fija del rubro en el campo de nombre del producto (no cambia lo que ya está escrito) */
 (function(){ const dl = D.createElement('datalist'); dl.id = 'tvNombres'; dl.innerHTML = (C.nombres||[]).map(n => `<option value="${E(n)}">`).join(''); D.body.appendChild(dl);
   D.addEventListener('focusin', e => { const i = e.target; if(i && i.matches && C.nom && i.matches(C.nom) && i.getAttribute('list') !== 'tvNombres'){ i.setAttribute('list', 'tvNombres'); i.setAttribute('autocomplete', 'off'); } }); })();
@@ -1299,6 +1311,7 @@ D.addEventListener('click', async e => { const b = e.target.closest('#tvpc butto
   if(b.dataset.tvo){ OPN = OPN===b.dataset.tvo ? '' : b.dataset.tvo; mount(); return; }
   if(b.dataset.tvs){ const id = b.dataset.tvs, ed = q('#tvpc [data-tve="' + CSS.escape(id) + '"]'), g = k => ed.querySelector('[data-f="' + k + '"]');
     const v = {ext: lst(g('ext').value)};
+    if(g('grp')){ const gr = g('grp').value.replace(/\s+/g, ' ').trim(); if(gr) v.grp = gr; }
     if(C.rubro!=='viandas'){ v.sz = lst(g('sz').value).filter(x => x.n); v.per = g('per') ? (g('per').checked ? 1 : 0) : 0; v.qty = g('qty').checked ? 1 : 0; v.biz = g('biz') && g('biz').checked ? 1 : 0; v.rel = g('rel') ? Number(g('rel').value) : 0; v.cob = g('cob') && g('cob').checked ? 1 : 0; }
     const pr = g('pr'), pp = (S.products||[]).find(x => x.id===id);
     if(pr && pp && String(Number(pr.value)||'') !== String(Number(pp.price)||'')){ pp.price = Number(pr.value) || null; try{ const rp = await api({a:'saveProducts', pin:pinOk, products:S.products}); if(!rp || !rp.ok){ if(typeof toast==='function') toast((rp && rp.msg) || 'No se pudo guardar el precio'); } }catch(err){} }
@@ -1315,6 +1328,10 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
+
+
+
 
 
 
