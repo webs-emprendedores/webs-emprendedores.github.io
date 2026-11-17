@@ -176,6 +176,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv .vct .vp{margin-top:4px;font-size:15px;color:var(--m)}
 #tv .vct .vp b{color:var(--i);font-weight:700}
 #tv .vpers{display:grid;grid-template-columns:112px minmax(0,1fr);gap:0;margin-top:18px;border:2px dashed color-mix(in srgb,var(--a) 55%,transparent);background:var(--s)}
+#tv .vpers.vsolo{grid-template-columns:1fr}
 #tv .vpers .vph{aspect-ratio:auto;height:100%;min-height:128px}
 #tv .vpers .vct{padding:14px 16px;align-self:center}
 #tv .vpers .vn{font-family:var(--fd);font-size:21px}
@@ -208,6 +209,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tvS h2{font-family:var(--fd);font-size:26px;line-height:1.15;margin:18px 0 6px}
 #tvS .vhint{color:var(--m);font-size:15px;margin:0 0 12px}
 #tvS .vhero{display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:center;margin-top:14px}
+#tvS .vhero.vsolo{grid-template-columns:1fr}
 #tvS .vhero .vph{aspect-ratio:1;border-radius:12px;width:76px}
 #tvS label.vf{display:block;font-weight:700;font-size:16px;margin:16px 0 6px}
 #tvS select,#tvS input[type=text],#tvS input[type=tel],#tvS input[type=number],#tvS textarea{width:100%;font:17px var(--fb);color:var(--i);background:var(--s);border:1.5px solid var(--l);border-radius:12px;padding:13px 14px;min-height:52px}
@@ -699,7 +701,11 @@ function V(p){ const v = ((X().var)||{})[p.id] || {}, t = torta(p) || isPers(p),
     per: t ? 1 : 0, qty: t ? 0 : 1, sab: t && !relList().length && !(x.biz||[]).length ? 1 : 0, ext: t && (x.cajas||[]).length ? x.cajas.map(n => ({n, p:0})) : [], idea: isPers(p) ? 1 : 0};
   return Object.assign(d, v); }
 const desde = p => { const v = V(p), ps = (v.sz||[]).map(s => Number(s.p)||0).filter(Boolean); return ps.length ? Math.min(...ps) : (Number(p.price)||0); };
-const ph = (p, cls) => p && p.img ? `<img class="vph ${cls||''}" src="${E(p.img)}" alt="${E(p.name)}" loading="lazy">` : `<span class="vph vno ${cls||''}" aria-hidden="true">${E(((p&&p.name)||B.name||'?').trim().charAt(0).toUpperCase())}</span>`;
+const ph = (p, cls) => p && p.img && !dup(p) ? `<img class="vph ${cls||''}" src="${E(p.img)}" alt="${E(p.name)}" loading="lazy">` : `<span class="vph vno ${cls||''}" aria-hidden="true">${E(((p&&p.name)||B.name||'?').trim().charAt(0).toUpperCase())}</span>`;
+const consulta = () => C.rubro!=='viandas' && !T.tal && !est();   /* sin precio: es una consulta, no un pedido con precio */
+const persFoto = () => { const p = (S.products||[]).find(x => isPers(x) && x.visible!==false); return p && p.img ? p.img : (B.hero || ''); };
+const foto = p => !p ? '' : isPers(p) || p.id==='_pers' ? persFoto() : (p.img && !dup(p) ? p.img : '');
+function dup(p){ const ps = (S.products||[]).filter(x => x.visible!==false && x.img); const i = ps.findIndex(x => x.img===p.img); return i >= 0 && ps[i].id !== p.id; }   /* FOTOS DE PRODUCTOS: nunca la misma foto en dos productos */
 const precioTxt = p => { const n = desde(p); return n ? `Desde <b>${M(n)}</b>` : 'Te paso el precio'; };
 
 /* ---- Estado del pedido ---- */
@@ -722,7 +728,7 @@ function render(){
     <div class="vgrid">${vis.map(p => `<button type="button" class="vcard" data-p="${E(p.id)}">${ph(p)}<span class="vct"><span class="vn">${E(p.name)}</span><span class="vp">${precioTxt(p)}</span></span></button>`).join('')}
     ${(!T.cat || T.cat==='Talleres') ? tal.map(t => `<button type="button" class="vcard" data-tl="${E(t.id)}">${ph({name:t.name})}<span class="vct"><span class="vn">Taller: ${E(t.name)}</span><span class="vp">${fecha(t.date)}${t.price?` · <b>${M(t.price)}</b>`:''}</span></span></button>`).join('') : ''}</div>
     ${!ps.length && !tal.length ? '<p class="vempty">Estamos cargando los productos. Volvé en un rato.</p>' : ''}
-    ${(!T.cat && C.rubro==='tortas') ? `<button type="button" class="vcard vpers" data-pers="1">${ph(pers && pers.img ? pers : (B.hero ? {name:'', img:B.hero} : {name:'+'}))}<span class="vct"><span class="vn">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="vp">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span></span></button>` : ''}
+    ${(!T.cat && C.rubro==='tortas') ? `<button type="button" class="vcard vpers${persFoto() ? '' : ' vsolo'}" data-pers="1">${persFoto() ? `<img class="vph" src="${E(persFoto())}" alt="">` : ''}<span class="vct"><span class="vn">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="vp">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span></span></button>` : ''}
     ${foot()}</div>`);
 }
 function put(h){ if(tv._h !== h){ tv.innerHTML = h; tv._h = h; } }   /* no redibujar si no cambió nada (las fotos no vuelven a cargar) */
@@ -789,8 +795,8 @@ function lines(){ const out = [];
   if(o.cob) out.push(['Cobertura', o.cob]); if((o.ext||[]).length) out.push(['Extras', o.ext.join(', ')]); if(o.idea) out.push(['Idea', o.idea]); if(o.ref) out.push(['Foto de referencia', 'Sí']);
   return out; }
 function datosHtml(){ const x = X();
-  return `<h2 id="tvST">Revisá y enviá tu pedido</h2><div class="vsum">${lines().map(l => `<div><span>${E(l[0])}</span><span>${E(l[1])}</span></div>`).join('')}
-    <div class="vtt"><span>${est() ? (C.rubro==='viandas' || T.tal ? 'Total' : 'Precio estimado') : 'Precio'}</span><span>${est() ? M(est()) : 'Te lo paso por WhatsApp'}</span></div></div>
+  return `<h2 id="tvST">${consulta() ? 'Revisá tu consulta' : 'Revisá y enviá tu pedido'}</h2><div class="vsum">${lines().map(l => `<div><span>${E(l[0])}</span><span>${E(l[1])}</span></div>`).join('')}
+    ${est() ? `<div class="vtt"><span>${C.rubro==='viandas' || T.tal ? 'Total' : 'Precio estimado'}</span><span>${M(est())}</span></div>` : ''}</div>${consulta() ? `<p class="vhint" style="margin-top:10px">Este producto no tiene precio publicado. Mandás una consulta por WhatsApp y ${E(B.who)} te responde con el precio.</p>` : ''}
     <label class="vf" for="tv_name">Tu nombre</label><input id="tv_name" type="text" autocomplete="name" data-k="name" value="${E(T.name)}">
     <label class="vf" for="tv_phone">Tu WhatsApp</label><input id="tv_phone" type="tel" inputmode="tel" autocomplete="tel" data-k="phone" value="${E(T.phone)}" placeholder="Con característica">
     ${T.tal ? '' : `<label class="vf">Entrega</label><div class="vseg"><button type="button" data-ent="Retiro"${T.ent==='Retiro'?' class="von"':''}>La retiro</button>${x.envio!==false?`<button type="button" data-ent="Envío"${T.ent==='Envío'?' class="von"':''}>Envío</button>`:''}</div>
@@ -799,8 +805,8 @@ function datosHtml(){ const x = X();
     ${T.err ? `<p class="verr" role="alert">${E(T.err)}</p>` : ''}<p class="cmP">Tus datos los ve solo ${E(B.who)} y se usan para tu pedido.</p>`; }
 function sheet(){ const st = steps(), k = st[T.step], title = C.rubro==='viandas' ? 'Tus viandas' : T.tal ? 'Taller: ' + T.tal.name : T.p.name;
   let body = '';
-  if(T.done) body = `<div class="vdone"><h2 id="tvST">Pedido enviado</h2><p>${WAN() ? 'Te llevamos a WhatsApp para que se lo mandes a ' + E(B.who) + ' y te confirme.' : E(B.who) + ' ya lo tiene y te escribe para confirmarlo.'}</p>${WAN() ? `<a href="${E(waUrl())}" rel="noopener">Abrir WhatsApp</a>` : B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Ir a Instagram</a>` : ''}</div>`;
-  else if(k==='fecha') body = `<div class="vhero">${ph(T.p)}<div><b>${E(T.p.name)}</b><div class="vhint" style="margin:2px 0 0">${precioTxt(T.p)}</div></div></div><h2 id="tvST">Para qué día</h2><p class="vhint">Los días tachados ya no tienen lugar.</p>${cal()}${T.err?`<p class="verr" role="alert">${E(T.err)}</p>`:''}`;
+  if(T.done) body = `<div class="vdone"><h2 id="tvST">${T.cons ? 'Consulta enviada' : 'Pedido enviado'}</h2><p>${WAN() ? 'Te llevamos a WhatsApp para que se lo mandes a ' + E(B.who) + ' y te confirme.' : E(B.who) + ' ya lo tiene y te escribe para confirmarlo.'}</p>${WAN() ? `<a href="${E(waUrl())}" rel="noopener">Abrir WhatsApp</a>` : B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Ir a Instagram</a>` : ''}</div>`;
+  else if(k==='fecha') body = `<div class="vhero${foto(T.p) ? '' : ' vsolo'}">${foto(T.p) ? `<img class="vph" src="${E(foto(T.p))}" alt="">` : ''}<div><b>${E(T.p.name)}</b><div class="vhint" style="margin:2px 0 0">${precioTxt(T.p)}</div></div></div><h2 id="tvST">Para qué día</h2><p class="vhint">Los días tachados ya no tienen lugar.</p>${cal()}${T.err?`<p class="verr" role="alert">${E(T.err)}</p>`:''}`;
   else if(k==='pers') body = `<h2 id="tvST">Armá tu ${E(T.p.name.toLowerCase())}</h2>${T.p.desc?`<p class="vhint">${E(T.p.desc)}</p>`:''}${persHtml()}${T.err?`<p class="verr" role="alert">${E(T.err)}</p>`:''}`;
   else body = datosHtml();
   SH.innerHTML = `<div class="vsh"><div class="vw"><button type="button" class="vbk" data-back="1">‹ ${T.step && !T.done ? 'Atrás' : 'Volver'}</button><span class="vt">${E(title)}</span></div>${st.length > 1 && !T.done ? `<div class="vw vsteps" aria-label="Paso ${T.step+1} de ${st.length}">${st.map((x,i) => `<i${i<=T.step?' class="von"':''}></i>`).join('')}</div>` : ''}</div><div class="vw">${body}</div>`;
@@ -810,28 +816,31 @@ function bar(){ const sh = !SH.hidden;
     if(n) BAR.innerHTML = `<div class="vw"><div class="ve">${n} ${n===1?'vianda':'viandas'}<b>${M(vTotal(L))}</b></div><button type="button" class="vgo" data-go="1">Seguir</button></div>`; return; }
   if(!sh || T.done){ BAR.hidden = true; return; }
   const st = steps(), last = T.step === st.length-1, e = est();
-  BAR.hidden = false; BAR.innerHTML = `<div class="vw"><div class="ve">${C.rubro==='viandas'||T.tal?'Total':e?'Estimado':'Precio'}<b>${e ? M(e) : 'Por WhatsApp'}</b></div><button type="button" class="vgo" data-go="1"${T.sending?' disabled':''}>${last ? (T.sending ? 'Enviando…' : 'Enviar pedido') : 'Seguir'}</button></div>`; }
+  BAR.hidden = false; BAR.innerHTML = `<div class="vw"><div class="ve">${C.rubro==='viandas'||T.tal?'Total':e?'Estimado':'Precio'}<b>${e ? M(e) : 'A consultar'}</b></div><button type="button" class="vgo" data-go="1"${T.sending?' disabled':''}>${last ? (T.sending ? 'Enviando…' : consulta() ? 'Consultar por WhatsApp' : 'Enviar pedido') : 'Seguir'}</button></div>`; }
 function waUrl(){ const wa = WAN(); if(!wa) return ''; const L = lines();
-  const msg = 'Hola ' + B.who + '! Te hice un pedido desde tu página:\n' + L.map(l => '• ' + l[0] + ': ' + l[1]).join('\n') + (est() ? '\n• ' + (C.rubro==='viandas'||T.tal ? 'Total' : 'Precio estimado') + ': ' + M(est()) : '')
+  const msg = 'Hola ' + B.who + '! ' + (consulta() ? 'Te hago una consulta de precio desde tu página:' : 'Te hice un pedido desde tu página:') + '\n' + L.map(l => '• ' + l[0] + ': ' + l[1]).join('\n') + (est() ? '\n• ' + (C.rubro==='viandas'||T.tal ? 'Total' : 'Precio estimado') + ': ' + M(est()) : '')
     + (T.tal ? '' : '\n• Entrega: ' + (T.ent==='Envío' ? 'envío a ' + T.dir : 'la retiro')) + (T.notes ? '\n• ' + T.notes : '') + '\n\nA nombre de: ' + T.name + ' (' + T.phone + ')';
   return 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg); }
-function next(){ const st = steps(), k = st[T.step]; T.err = '';
-  if(k==='fecha' && !T.date) T.err = 'Elegí un día del calendario.';
-  if(k==='pers'){ const v = V(T.p); if(v.per && !(v.sz||[]).length && !(Number(T.o.per) > 0)) T.err = 'Decime para cuántas personas es.'; if(v.idea && !String(T.o.idea||'').trim()) T.err = 'Contame en una línea qué idea tenés.'; }
+function errPaso(){ const k = steps()[T.step];   /* un solo lugar para los avisos: se recalculan mientras escribe y se van cuando el dato es válido */
+  if(k==='fecha') return T.date ? '' : 'Elegí un día del calendario.';
+  if(k==='pers'){ const v = V(T.p); if(v.per && !(v.sz||[]).length && !(Number(T.o.per) > 0)) return 'Decime para cuántas personas es.'; if(v.idea && !String(T.o.idea||'').trim()) return 'Contame en una línea qué idea tenés.'; return ''; }
+  if(!T.name.trim()) return 'Escribí tu nombre.'; if(T.phone.replace(/\D/g,'').length < 8) return 'Escribí tu WhatsApp con característica.'; if(T.ent==='Envío' && !T.tal && C.rubro!=='viandas' && !T.dir.trim()) return 'Escribí la dirección para el envío.';
+  if(T.ent==='Envío' && C.rubro==='viandas' && !T.dir.trim()) return 'Escribí la dirección para el envío.';
+  if(C.rubro==='viandas' && !vLines().length) return 'Elegí al menos una vianda.'; return ''; }
+function reval(){ if(!T.err) return; const e = errPaso(); if(e === T.err) return; T.err = e; const el = SH.querySelector('.verr'); if(el){ if(e) el.textContent = e; else el.remove(); } }
+function next(){ const st = steps(); T.err = errPaso();
   if(T.err){ sheet(); return; }
   if(T.step < st.length-1){ T.step++; sheet(); SH.scrollTop = 0; return; }
   send(); }
 async function send(){
-  if(!T.name.trim()) T.err = 'Escribí tu nombre.'; else if(T.phone.replace(/\D/g,'').length < 8) T.err = 'Escribí tu WhatsApp con característica.'; else if(T.ent==='Envío' && !T.tal && !T.dir.trim()) T.err = 'Escribí la dirección para el envío.';
-  if(C.rubro==='viandas' && !vLines().length) T.err = 'Elegí al menos una vianda.';
-  if(T.err){ sheet(); return; }
+  T.err = errPaso(); if(T.err){ sheet(); return; }
   const delivery = T.tal ? '' : (T.ent==='Envío' ? 'Envío: ' + T.dir.trim() : 'Retiro'), name = T.name.trim(), phone = T.phone.trim(), e = est();
   let body;
   if(C.rubro==='viandas') body = {a:'order', orders: vLines().map(l => ({date:l.d.date, product:l.p.name, people:l.n, fill:l.d.day, delivery, name, phone, notes:[l.op, T.notes.trim()].filter(Boolean).join(' · ')}))};
   else if(T.tal) body = {a:'order', order:{date:T.tal.date, product:'Taller: ' + T.tal.name, people:1, fill:'', delivery:'', name, phone, notes:T.notes.trim()}};
   else { const o = T.o, r = (o.rel||[]).filter(Boolean);
     const fill = [o.sab, o.biz && 'Bizcochuelo ' + o.biz, r.length && 'Relleno ' + r.join(' y '), o.cob && 'Cobertura ' + o.cob].filter(Boolean).join('. ');
-    const notes = [o.sz && 'Tamaño: ' + o.sz, V(T.p).qty && Number(o.qty) > 1 && 'Cantidad: ' + o.qty, (o.ext||[]).length && 'Extras: ' + o.ext.join(', '), o.idea && 'Idea: ' + o.idea, o.ref && 'Tiene foto de referencia', e && 'Precio estimado ' + M(e), T.notes.trim()].filter(Boolean).join(' · ');
+    const notes = [o.sz && 'Tamaño: ' + o.sz, V(T.p).qty && Number(o.qty) > 1 && 'Cantidad: ' + o.qty, (o.ext||[]).length && 'Extras: ' + o.ext.join(', '), o.idea && 'Idea: ' + o.idea, o.ref && 'Tiene foto de referencia', e ? 'Precio estimado ' + M(e) : 'Consulta de precio', T.notes.trim()].filter(Boolean).join(' · ');
     const ord = {date:T.date, product:T.p.name, people:Number(o.per)||'', fill, delivery, name, phone, notes};
     if(C.full) Object.assign(ord, {id:'o' + Date.now(), created:iso(new Date()), pay:'sin', total:e||0, paid:0, done:false});
     body = {a:'order', order:ord}; }
@@ -841,7 +850,7 @@ async function send(){
   if(!r || !r.ok){ T.err = (r && r.msg) || 'No se pudo enviar. Probá de nuevo.'; sheet(); if(typeof pullPub==='function') pullPub(); return; }
   try{ hit('-pedidos'); }catch(err){}
   if(T.date && !T.tal){ S.busy = S.busy || {}; S.busy[T.date] = (S.busy[T.date]||0) + 1; }
-  const u = waUrl(); T.done = true; sheet();
+  const u = waUrl(); T.cons = consulta(); T.done = true; sheet();
   if(C.rubro==='viandas'){ Q = {}; QO = {}; }
   if(u) setTimeout(() => { location.href = u; }, 700); }
 
@@ -855,12 +864,12 @@ tv.addEventListener('click', e => { const b = e.target.closest('button'); if(!b)
 tv.addEventListener('change', e => { const s = e.target.closest('[data-op]'); if(s){ QO[s.dataset.op] = s.value; bar(); } });
 SH.addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return;
   if(b.dataset.back){ if(T.step && !T.done){ T.step--; T.err = ''; sheet(); } else close(); return; }
-  if(b.dataset.d){ T.date = b.dataset.d; T.err = ''; sheet(); return; }
+  if(b.dataset.d){ T.date = b.dataset.d; T.err = errPaso(); sheet(); return; }
   if(b.dataset.mo){ T.mo = Math.max(0, Math.min(3, T.mo + Number(b.dataset.mo))); sheet(); return; }
-  if(b.dataset.ent){ T.ent = b.dataset.ent; sheet(); return; } });
+  if(b.dataset.ent){ T.ent = b.dataset.ent; if(T.err) T.err = errPaso(); sheet(); return; } });
 SH.addEventListener('input', e => { const t = e.target;
-  if(t.dataset.k){ T[t.dataset.k] = t.value; return; }
-  if(t.dataset.o){ const k = t.dataset.o; if(k==='rel0') T.o.rel[0] = t.value; else if(k==='rel1') T.o.rel[1] = t.value; else if(k==='ref') T.o.ref = t.checked; else T.o[k] = t.value; bar(); }
+  if(t.dataset.k){ T[t.dataset.k] = t.value; reval(); return; }
+  if(t.dataset.o){ const k = t.dataset.o; if(k==='rel0') T.o.rel[0] = t.value; else if(k==='rel1') T.o.rel[1] = t.value; else if(k==='ref') T.o.ref = t.checked; else T.o[k] = t.value; bar(); reval(); }
   if(t.dataset.ext !== undefined){ const n = t.dataset.ext; T.o.ext = (T.o.ext||[]).filter(x => x!==n); if(t.checked) T.o.ext.push(n); bar(); } });
 BAR.addEventListener('click', e => { if(!e.target.closest('[data-go]')) return; if(C.rubro==='viandas' && SH.hidden){ T = Object.assign(T, {step:0, err:'', done:false, p:null, tal:null}); SH.hidden = false; D.documentElement.style.overflow = 'hidden'; sheet(); return; } next(); });
 D.addEventListener('keydown', e => { if(e.key==='Escape' && !SH.hidden) close(); });
@@ -884,12 +893,13 @@ let OPN = '';
 function lst(t){ return String(t||'').split('\n').map(s => s.trim()).filter(Boolean).map(s => { const m = s.match(/^(.*?)[\s:=$-]*\$?\s*([\d.]+)\s*$/); return m && m[1] ? {n:m[1].trim(), p:Number(m[2].replace(/\./g,''))} : {n:s, p:0}; }); }
 const lstT = a => (a||[]).map(x => x.n + (Number(x.p) ? ' ' + x.p : '')).join('\n');
 function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || DIAS.includes(p.cat)), x = X();
-  const falta = ps.filter(p => !p.img && p.visible!==false).length;
-  return `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}</p>`
+  const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
+  return `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
     + ps.map(p => { const v = V(p), o = OPN===p.id;
-      return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">${E(p.cat||'')}</div>`:'<div class="vwn">Subí la foto</div>'}</div>
+      return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">${E(p.cat||'')}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
         <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
-        ${o ? `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' ? '' : `<label>Tamaños y precios (uno por renglón)</label><textarea data-f="sz" placeholder="Para 10 personas 38000">${E(lstT(v.sz))}</textarea>
+        ${o ? `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">
+          <label>Tamaños y precios (uno por renglón)</label><textarea data-f="sz" placeholder="Para 10 personas 38000">${E(lstT(v.sz))}</textarea>
           ${(v.sz||[]).length ? '' : `<label class="vck"><input type="checkbox" data-f="per"${v.per?' checked':''}> Preguntar para cuántas personas</label>`}
           <label class="vck"><input type="checkbox" data-f="qty"${v.qty?' checked':''}> Preguntar cantidad</label>
           ${(x.biz||[]).length?`<label class="vck"><input type="checkbox" data-f="biz"${v.biz?' checked':''}> Elige bizcochuelo</label>`:''}
@@ -909,6 +919,8 @@ D.addEventListener('click', async e => { const b = e.target.closest('#tvpc butto
   if(b.dataset.tvs){ const id = b.dataset.tvs, ed = q('#tvpc [data-tve="' + CSS.escape(id) + '"]'), g = k => ed.querySelector('[data-f="' + k + '"]');
     const v = {ext: lst(g('ext').value)};
     if(C.rubro!=='viandas'){ v.sz = lst(g('sz').value).filter(x => x.n); v.per = g('per') ? (g('per').checked ? 1 : 0) : 0; v.qty = g('qty').checked ? 1 : 0; v.biz = g('biz') && g('biz').checked ? 1 : 0; v.rel = g('rel') ? Number(g('rel').value) : 0; v.cob = g('cob') && g('cob').checked ? 1 : 0; }
+    const pr = g('pr'), pp = (S.products||[]).find(x => x.id===id);
+    if(pr && pp && String(Number(pr.value)||'') !== String(Number(pp.price)||'')){ pp.price = Number(pr.value) || null; try{ const rp = await api({a:'saveProducts', pin:pinOk, products:S.products}); if(!rp || !rp.ok){ if(typeof toast==='function') toast((rp && rp.msg) || 'No se pudo guardar el precio'); } }catch(err){} }
     S.settings.extra = S.settings.extra || {}; S.settings.extra.var = Object.assign({}, S.settings.extra.var || {}, {[id]: v});
     b.disabled = true; b.textContent = 'Guardando…';
     try{ const r = await api({a:'saveSettings', pin:pinOk, settings:S.settings}); if(r && r.ok){ OPN = ''; if(typeof toast==='function') toast('Opciones guardadas'); } else if(typeof toast==='function') toast((r && r.msg) || 'No se pudo guardar'); }
@@ -922,6 +934,8 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
+
 
 
 
