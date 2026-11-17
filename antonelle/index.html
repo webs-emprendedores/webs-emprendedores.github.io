@@ -460,10 +460,10 @@ body.pnl #panel input:focus-visible,body.pnl #panel select:focus-visible,body.pn
 .pnlMarca b{font-size:20px;line-height:1.1;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pnlVer{flex:none;min-height:48px;display:inline-flex;align-items:center;padding:0 12px;border:1.5px solid var(--pt);border-radius:12px;color:var(--pt)!important;font-weight:600;font-size:16px;text-decoration:none;white-space:nowrap}
 body.pnl #loginBox{background:var(--pc);border:1px solid var(--pl);border-radius:16px;padding:20px 16px}
-body.pnl #app .tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;margin:0;height:calc(68px + env(safe-area-inset-bottom));padding:4px 6px env(safe-area-inset-bottom);box-sizing:border-box;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--pc);border-top:1px solid var(--pl)}
-body.pnl #app .tabs button{min-height:0;height:60px;border:0;border-radius:14px;background:transparent;color:var(--pt);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:600 15px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 2px;cursor:pointer}
-body.pnl #app .tabs button svg{width:24px;height:24px;flex:none}
-body.pnl #app .tabs button.on{background:var(--pas15);color:var(--pt);font-weight:700}
+body.pnl #panel .tabs{max-width:none;overflow:visible;flex-wrap:nowrap;position:fixed;left:0;right:0;bottom:0;z-index:40;margin:0;height:calc(68px + env(safe-area-inset-bottom));padding:4px 6px env(safe-area-inset-bottom);box-sizing:border-box;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--pc);border-top:1px solid var(--pl)}
+body.pnl #panel .tabs button{flex:none;text-transform:none;letter-spacing:0;width:auto;min-height:0;height:60px;border:0;border-radius:14px;background:transparent;color:var(--pt);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:600 15px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 2px;cursor:pointer}
+body.pnl #panel .tabs button svg{width:24px;height:24px;flex:none}
+body.pnl #panel .tabs button.on{background:var(--pas15);color:var(--pt);font-weight:700}
 body.pnl #panel .pv{padding-top:16px}
 .pMain,body.pnl #pinBtn,body.pnl #tvpc .vsv{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;margin:16px 0 0;border:0;border-radius:14px;background:var(--pa)!important;color:var(--pas)!important;font:700 18px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer;text-decoration:none;padding:0 16px;box-sizing:border-box}
 .pSec{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 10px;border:1.5px solid var(--pt);border-radius:12px;background:transparent;color:var(--pt)!important;font:600 16px/1.15 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer;text-decoration:none;box-sizing:border-box;text-align:center}
@@ -530,7 +530,7 @@ body.pnl #tvpc .vsub{display:inline-flex!important;align-items:center;min-height
 body.pnl #tvpc .vlogo{display:flex;align-items:center;gap:14px}
 body.pnl #tvpc .vlogo img{width:64px;height:64px;border-radius:50%;object-fit:cover}
 body.pnl #tvpc .ved{border:0;padding:0;margin:0;background:none}
-body.pnl #app:not([hidden]) ~ #insL{display:none!important}   /* Instalar la app: en el panel, solo en Más (en la pantalla de la clave sigue igual) */
+body.pnl #app:not([hidden]) ~ #insL,body.pnl.pnlIn #insL{display:none!important}   /* Instalar la app: en el panel, solo en Más (en la pantalla de la clave sigue igual) */
 body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));font-size:17px}
 @media (prefers-reduced-motion:reduce){.pSw input,.pSw input::after{transition:none}}
 </style>
@@ -1480,6 +1480,10 @@ try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
 </body>
+
+
+
+
 
 
 

@@ -29,6 +29,10 @@
 
 
 
+
+
+
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Capas y Sabores · Tortas y postres en San Luis</title>
@@ -613,6 +617,159 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 .tvp .ved .vck input{width:20px;height:20px}
 .tvp .ved .vsv{margin-top:12px;width:100%;min-height:48px;border:0;border-radius:12px;background:var(--p,var(--r,#333));color:#fff;font-weight:800;font-size:16px;cursor:pointer}
 </style>
+<style>/*PNL v1*/
+body.pnl{--pa:#f2b8c6;--pas:#4a2c25;--pt:#4a2c25;--pf:#fff8f3;--pc:#ffffff;--prj:#b3261e;--pok:#1b6b34;--pas15:#fdf4f6;--pl:#d7d1cf;--pm:#725a55}
+body.pnl.admin{background:var(--pf)}
+body.pnl #panel{background:var(--pf);color:var(--pt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:18px;line-height:1.4;padding-bottom:calc(68px + 24px + env(safe-area-inset-bottom))}
+body.pnl #panel>.in{max-width:600px;margin:0 auto;padding:0 16px}
+body.pnl #panel h3,body.pnl #panel .pH{font-size:22px;line-height:1.2;font-weight:700;margin:4px 0 12px;color:var(--pt);font-family:inherit}
+body.pnl #panel p:not(#cobS):not(#cobB){font-size:18px;margin:0 0 8px}
+body.pnl #panel label{display:block;font-size:16px;font-weight:600;margin:16px 0 6px;color:var(--pt)}
+body.pnl #panel input:not([type=checkbox]):not([type=radio]):not([type=file]),body.pnl #panel select,body.pnl #panel textarea{display:block;width:100%;box-sizing:border-box;min-height:52px;font:inherit;font-size:18px;color:var(--pt);background:var(--pc);border:1.5px solid var(--pl);border-radius:12px;padding:10px 14px}
+body.pnl #panel textarea{min-height:120px}
+body.pnl #panel input:focus-visible,body.pnl #panel select:focus-visible,body.pnl #panel textarea:focus-visible,body.pnl #panel button:focus-visible,body.pnl #panel a:focus-visible{outline:3px solid var(--pa);outline-offset:2px}
+.pnlTop{position:sticky;top:0;z-index:30;min-height:64px;display:flex;align-items:center;gap:10px;padding:0 16px;background:var(--pc);border-bottom:1px solid var(--pl);color:var(--pt)}
+.pnlMarca{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.pnlMarca img{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none}
+.pnlMarca b{font-size:20px;line-height:1.1;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pnlVer{flex:none;min-height:48px;display:inline-flex;align-items:center;padding:0 12px;border:1.5px solid var(--pt);border-radius:12px;color:var(--pt)!important;font-weight:600;font-size:16px;text-decoration:none;white-space:nowrap}
+body.pnl #loginBox{background:var(--pc);border:1px solid var(--pl);border-radius:16px;padding:20px 16px}
+body.pnl #panel .tabs{max-width:none;overflow:visible;flex-wrap:nowrap;position:fixed;left:0;right:0;bottom:0;z-index:40;margin:0;height:calc(68px + env(safe-area-inset-bottom));padding:4px 6px env(safe-area-inset-bottom);box-sizing:border-box;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--pc);border-top:1px solid var(--pl)}
+body.pnl #panel .tabs button{flex:none;text-transform:none;letter-spacing:0;width:auto;min-height:0;height:60px;border:0;border-radius:14px;background:transparent;color:var(--pt);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:600 15px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 2px;cursor:pointer}
+body.pnl #panel .tabs button svg{width:24px;height:24px;flex:none}
+body.pnl #panel .tabs button.on{background:var(--pas15);color:var(--pt);font-weight:700}
+body.pnl #panel .pv{padding-top:16px}
+.pMain,body.pnl #pinBtn,body.pnl #tvpc .vsv{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;margin:16px 0 0;border:0;border-radius:14px;background:var(--pa)!important;color:var(--pas)!important;font:700 18px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer;text-decoration:none;padding:0 16px;box-sizing:border-box}
+.pSec{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;padding:0 10px;border:1.5px solid var(--pt);border-radius:12px;background:transparent;color:var(--pt)!important;font:600 16px/1.15 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer;text-decoration:none;box-sizing:border-box;text-align:center}
+.pDel{display:inline-flex;align-items:center;min-height:48px;margin-top:12px;padding:0 4px;border:0;background:none;color:var(--prj)!important;font:600 17px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.pBack{display:inline-flex;align-items:center;min-height:48px;margin:0 0 4px -4px;padding:0 4px;border:0;background:none;color:var(--pt);font:600 17px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer}
+.pHelp{font-size:16px!important;color:var(--pm);margin:10px 0 0!important}
+.pSum{font-size:18px!important;font-weight:600;margin:0 0 4px!important}
+.pCard{background:var(--pc);border:1px solid var(--pl);border-radius:16px;padding:16px;margin-top:12px}
+.pSeg{display:grid;grid-template-columns:1fr 1fr;margin-top:16px;border:1.5px solid var(--pt);border-radius:12px;overflow:hidden}
+.pSeg button{min-height:48px;border:0;background:transparent;color:var(--pt);font:600 17px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer}
+.pSeg button.on{background:var(--pt);color:var(--pf)}
+body.pnl #panel .pDay{font-size:18px;font-weight:700;margin:24px 0 0}
+.pDay::first-letter{text-transform:uppercase}
+.pRowT{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:6px 10px}
+.pRowT b{font-size:19px;line-height:1.25}
+.pTag{flex:none;display:inline-block;border-radius:6px;padding:4px 10px;font-size:16px;font-weight:700;line-height:1.25;border:1.5px solid currentColor}
+.pTag.falta{color:var(--prj)} .pTag.ok{color:var(--pok)} .pTag.sin{color:var(--pm)}
+.pMeta{font-size:17px!important;color:var(--pt)}
+.pAcc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pAcc>*{flex:1 1 auto;white-space:nowrap;padding:0 10px}
+.pMenu{margin-top:4px;background:var(--pc);border:1px solid var(--pl);border-radius:16px;overflow:hidden}
+.pRow{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:64px;padding:0 16px;border:0;border-top:1px solid var(--pl);background:transparent;color:var(--pt);font:600 18px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left;cursor:pointer;box-sizing:border-box;text-decoration:none}
+.pRow:first-child{border-top:0} .pRow span:last-child{font-size:24px;line-height:1} .pRow.pSalir{color:var(--prj)}
+.pRow.pSolo{border:1px solid var(--pl);border-radius:16px;margin-top:16px;background:var(--pc)}
+.pSw{display:flex!important;align-items:center;justify-content:space-between;gap:12px;min-height:56px;margin:16px 0 0!important;padding:0 16px;background:var(--pc);border:1px solid var(--pl);border-radius:14px;font-size:18px!important;cursor:pointer}
+.pSw input{appearance:none;-webkit-appearance:none;flex:none;width:52px;height:32px;border-radius:999px;background:var(--pl);position:relative;cursor:pointer;margin:0;transition:background .15s}
+.pSw input::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:var(--pc);transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.pSw input:checked{background:var(--pa)} .pSw input:checked::after{left:23px}
+.pFoto{display:flex;align-items:center;gap:14px;margin-top:8px}
+.pFoto img,.pFoto .pPh{width:96px;height:96px;border-radius:14px;object-fit:cover;flex:none;background:var(--pas15);display:flex;align-items:center;justify-content:center}
+.pFoto label{margin:0!important}
+body.pnl #panel label.pSec{display:inline-flex;margin:0;font-size:16px}
+.pTwo{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+@media (max-width:359px){.pTwo{grid-template-columns:1fr}.pnlMarca{gap:8px}.pnlMarca b{font-size:17px}.pnlVer{padding:0 8px}}
+.pList{margin-top:12px;background:var(--pc);border:1px solid var(--pl);border-radius:16px;overflow:hidden}
+body.pnl #tvpc.pList{padding:0}
+body.pnl #tvpc .pPend{margin:0;padding:14px 16px;border-bottom:1px solid var(--pl);font-size:16px!important}
+.pRowP{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:8px 16px;border:0;border-top:1px solid var(--pl);background:transparent;color:var(--pt);text-align:left;cursor:pointer;font:inherit;box-sizing:border-box}
+.pRowP:first-of-type{border-top:0}
+.pRowP img,.pRowP .vnf,.pRowP .vnx{width:56px;height:56px;border-radius:12px;object-fit:cover;flex:none;display:flex;align-items:center;justify-content:center;background:var(--pas15);color:var(--pt)}
+.pRowP .pTx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.pRowP .vnm{font-size:18px;font-weight:700;line-height:1.2}
+.pRowP .pPr{font-size:16px;color:var(--pm)}
+.pRowP .vwn{font-size:16px;font-weight:600;color:var(--prj)}
+.pRowP .pEd{flex:none;font-size:17px;font-weight:600;white-space:nowrap}
+.pIns{display:flex;align-items:center;gap:10px;min-height:56px;border-top:1px solid var(--pl);padding:8px 0}
+.pIns .pTx{flex:1;min-width:0}
+.pChips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+body.pnl #panel .res{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--pl);font-size:18px}
+body.pnl #panel .res b{font-size:20px;color:var(--pt)}
+body.pnl #panel .mut{font-size:16px;color:var(--pm)}
+body.pnl #panel .cal{gap:4px}
+body.pnl #panel .cal button{aspect-ratio:auto;min-height:48px;border-radius:12px;font-size:17px}
+body.pnl #panel .cal button em{font-size:16px;min-width:22px;height:22px;line-height:22px;border-radius:11px;top:-8px;right:-2px}
+body.pnl #panel .cal span{font-size:16px}
+body.pnl #panel .calh b{font-size:22px}
+body.pnl #panel .calh button{color:var(--pt);background:var(--pc);border-color:var(--pl)}
+body.pnl #tvpc{background:var(--pc);border:1px solid var(--pl);border-radius:16px;padding:16px;margin-top:12px}
+body.pnl #tvpc h3{font-size:22px}
+body.pnl #tvpc .vok,body.pnl #tvpc .vwn,body.pnl #tvpc .vck,body.pnl #tvpc label,body.pnl #tvpc .pm,body.pnl #tvpc .vsub,body.pnl #tvpc .vnl{font-size:16px!important}
+body.pnl #tvpc .vck{display:flex!important;align-items:center;gap:10px;min-height:48px;margin:4px 0!important;font-weight:500!important}
+body.pnl #tvpc .vck input{width:22px;height:22px;flex:none}
+body.pnl #tvpc .vsub{display:inline-flex!important;align-items:center;min-height:48px;padding:0 14px;border:1.5px solid var(--pt);border-radius:12px;color:var(--pt);cursor:pointer}
+body.pnl #tvpc .vlogo{display:flex;align-items:center;gap:14px}
+body.pnl #tvpc .vlogo img{width:64px;height:64px;border-radius:50%;object-fit:cover}
+body.pnl #tvpc .ved{border:0;padding:0;margin:0;background:none}
+body.pnl #app:not([hidden]) ~ #insL,body.pnl.pnlIn #insL{display:none!important}   /* Instalar la app: en el panel, solo en Más (en la pantalla de la clave sigue igual) */
+body.pnl #toast{bottom:calc(84px + env(safe-area-inset-bottom));font-size:17px}
+@media (prefers-reduced-motion:reduce){.pSw input,.pSw input::after{transition:none}}
+</style>
+<style>/*PNL v1 otros*/
+body.pnl .pWk{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0}
+body.pnl .pWk b{font-size:18px;text-align:center;line-height:1.25}
+body.pnl .pWk .pSec{width:48px;flex:none;font-size:22px}
+body.pnl .pIns{flex-wrap:wrap} body.pnl .pIns .pTx{flex:1 1 130px}
+body.pnl .pIns2 .pTx{flex-basis:100%} body.pnl .pIns2 .pSec{flex:1 1 0}
+body.pnl .pDish{padding-top:10px} body.pnl .pDish:first-child{padding-top:0}
+body.pnl #tvpc .pIn{margin:0;padding:12px 16px 4px;border-top:1px solid var(--pl)}
+body.pnl #tvpc .pIn:first-child,body.pnl #tvpc .pPend + .pIn{border-top:0}
+body.pnl #tvpc div.pIn{border-top:0;padding:4px 16px 14px}
+body.pnl #manList{padding:4px 16px}
+body.pnl #manList .it{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--pl)}
+body.pnl #manList .it img{width:56px;height:56px;border-radius:12px;object-fit:cover}
+body.pnl #manList .it .n{font-size:18px;font-weight:700} body.pnl #manList .it .d,body.pnl #manList .it .p{font-size:16px;color:var(--pm)}
+body.pnl #manList .dayh small,body.pnl #manList .day{font-size:16px}
+body.pnl #manList .st button{min-width:48px;min-height:48px;font-size:22px;border:1.5px solid var(--pt);border-radius:12px;background:transparent;color:var(--pt)}
+body.pnl #manList .st b{font-size:18px;min-width:28px;text-align:center}
+body.pnl #panel .pSeg button{line-height:1.15;padding:4px 6px}
+/* Maru */
+body.pnl #panelApp>.wrap{max-width:600px;margin:0 auto;padding:0 16px}
+body.pnl #panelApp .pv{padding-top:16px}
+body.pnl .p-top{display:none}
+body.pnl #sum{display:block;margin:0}
+body.pnl #pv-pedidos>.hint{display:none}
+body.pnl .pfilter{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;margin:16px 0 0;padding-bottom:4px}
+body.pnl .pfilter button{flex:none;min-height:48px;padding:0 14px;border:1.5px solid var(--pt);border-radius:12px;background:transparent;color:var(--pt);font:600 16px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body.pnl .pfilter button.on{background:var(--pt);color:var(--pf);border-color:var(--pt)}
+body.pnl #olist{display:block}
+body.pnl #olist .order.pCard{display:block;border-radius:16px;background:var(--pc);border:1px solid var(--pl);padding:16px;margin-top:12px}
+body.pnl #olist .order.pEd{display:block;background:none;border:0;padding:0;margin:0}
+body.pnl #olist .pay{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--pt);border-radius:12px;overflow:hidden}
+body.pnl #olist .pay button{min-height:48px;border:0;border-radius:0;background:transparent;color:var(--pt);font:600 16px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 4px}
+body.pnl #olist .pay button.on{background:var(--pt);color:var(--pf)}
+#pv-pedidos.pnlEd>:not(#olist),#pv-precios.pnlEd>:not(#plist),body.pnlNew #pv-pedidos>:not(#newOrder){display:none!important}
+body.pnl #newOrder{background:none;border:0;padding:0;margin:0}
+body.pnl #newOrder h3{font-size:22px!important} body.pnl #noCancel{display:none}
+body.pnl #newOrder .row2,body.pnl #pv-calc .row2,body.pnl #pv-m-clave .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
+@media (max-width:359px){body.pnl #newOrder .row2,body.pnl #pv-calc .row2,body.pnl #pv-m-clave .row2{grid-template-columns:1fr}}
+body.pnl #plist{display:block}
+body.pnl #plist .pcard.pEd{display:block;background:none;border:0;padding:0}
+body.pnl #plist .pDel{font-size:17px;padding:0 4px;border:0;background:none}
+body.pnl #panelApp .card{background:var(--pc);border:1px solid var(--pl);border-radius:16px;padding:16px}
+body.pnl .pSub .card>h3{display:none}
+body.pnl .pSub .pBody>.card{margin-top:0!important}
+body.pnl #maxDay,body.pnl #blockDate{width:100%!important;min-height:52px!important;border:1.5px solid var(--pl)!important;border-radius:12px!important;padding:10px 14px!important;font-size:18px!important}
+body.pnl #blockBtn{margin-top:10px;width:100%}
+body.pnl #pv-agenda .card>div[style*="flex"]{display:block!important}
+body.pnl #blockedList{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+body.pnl #blockedList span{display:inline-flex;align-items:center;gap:4px;min-height:48px;padding:0 0 0 12px;border:1.5px solid var(--pt);border-radius:12px;background:transparent;font-size:16px;color:var(--pt)}
+body.pnl #blockedList span.hint{border:0;padding:0}
+body.pnl #blockedList button{min-width:48px;min-height:48px;border:0;background:none;color:var(--prj);font-size:22px;cursor:pointer}
+body.pnl #panel label.sw.pSw{flex-direction:row-reverse;color:var(--pt)}
+body.pnl #panel .hint,body.pnl #panel .meta,body.pnl #panel .lbl,body.pnl #panel .shop li,body.pnl #panel .empty,body.pnl #panel .warn,body.pnl #panel .kicker{font-size:16px!important;letter-spacing:0!important}
+body.pnl #kOut h3{font-size:22px!important} body.pnl #kOut b{color:var(--pt)!important}
+body.pnl #loginBox.login{max-width:420px;margin:24px auto;padding:20px 16px}
+body.pnl #loginBox .kicker{text-transform:none;color:var(--pm)}
+body.pnl #loginBox a.hint{display:inline-flex;align-items:center;min-height:48px;color:var(--pt)}
+body.pnl #pv-m-enc .pBody>#tvpc{margin-top:0}
+body.pnl #pinBtn{text-transform:none;letter-spacing:0}
+body.pnl.pnlIn #cobL{margin-bottom:calc(68px + 40px + env(safe-area-inset-bottom))}   /* Maru: Tu plan y pagos queda fuera del panel, al final; no lo tapa la barra de abajo */
+body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing:0}
+</style>
 </head>
 <body>
 
@@ -775,6 +932,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 
 <!-- ================= PANEL PRIVADO ================= -->
 <div id="panel">
+  <header class="pnlTop"><span class="pnlMarca" id="pnlMarca"></span><a class="pnlVer" href="#">Ver mi página ↗</a></header>
   <div id="loginBox" class="login card">
     <span class="kicker">Panel de Maru</span>
     <h2>Ingresá tu clave</h2>
@@ -784,8 +942,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
   </div>
 
   <div id="panelApp" style="display:none">
-    <div class="p-top"><div class="wrap"><span class="brand" style="font-size:1.05rem">Panel de Maru</span><a class="btn ghost sm" href="#">Ver página</a></div></div>
-    <div class="tabs">
+        <div class="tabs">
       <button class="on" data-t="pedidos">📋 Pedidos</button>
       <button data-t="precios">🧁 Productos</button>
       <button data-t="calc">💰 Cuánto cobrar</button>
@@ -1814,7 +1971,126 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   }catch(err){ if(typeof toast==='function') toast('Sin conexión: no se subió. Probá de nuevo.'); }
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
+<script>/*PNL v1*/ (function(){
+const P = {"agenda": false, "sab3": ["Coberturas", "cob"], "calc": "Por ejemplo: Torta de 1 kg"};
+const D = document, q = s => D.querySelector(s);
+const IC = {ped:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3.5h6v3H9zM9 11h6M9 15h4"/>', cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  car:'<path d="M5 5.5A1.5 1.5 0 0 1 6.5 4H18v14H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H18M9 8h6M9 11.5h4"/>', mas:'<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>',
+  olla:'<path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h20M9 6.5c0-1 1-1.5 1-2.5M14 6.5c0-1 1-1.5 1-2.5"/>'};
+const SVG = i => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + i + '</svg>';
+const CAM = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+const nav = (v, l, id) => `<button type="button" class="pBack" data-a="pnl" data-v="${v}"${id ? ` data-id="${id}"` : ''}>← ${l || 'Volver'}</button>`;
+const main = (a, l, ex) => `<button type="button" class="pMain" data-a="${a}"${ex||''}>${l}</button>`;
+const row = (v, l, cls) => `<button type="button" class="pRow${cls ? ' ' + cls : ''}" data-a="pnl" data-v="${v}"><span>${l}</span><span>›</span></button>`;
+const dl = s => { const d = new Date(s + 'T12:00:00'); return isNaN(d) ? s : d.toLocaleDateString('es-AR', {weekday: 'long', day: 'numeric', month: 'long'}); };
+const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const $m = n => '$' + Number(n||0).toLocaleString('es-AR');
+function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEnc ? window.tvEnc() : {nombre: ''}; m.innerHTML = (e.logo ? `<img src="${H(e.logo)}" alt="">` : '') + `<b>${H(e.nombre || '')}</b>`; }
+let tT; window.toast = function(m){ const t = q('#toast'); if(!t) return; t.textContent = m; t.classList.add('show'); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2000); };
+const up = () => { try{ window.scrollTo(0, 0); }catch(e){} };
+function visitas(el, conPed){ el.innerHTML = '<div class="pCard"><p><b id="vN">…</b> visitas a tu página.</p>' + (conPed ? '<p><b id="vP">…</b> pedidos hechos desde ahí.</p>' : '') + '</div>';
+  const g = HIT.replace('/hit/','/get/'), put = (id,t) => { const e = q(id); if(e) e.textContent = t; }; fetch(g).then(r => r.json()).then(j => put('#vN', j.value||0)).catch(() => put('#vN', 0)); if(conPed) fetch(g+'-pedidos').then(r => r.json()).then(j => put('#vP', j.value||0)).catch(() => put('#vP', 0)); }
+function instalar(el){ const l = D.getElementById('insL'); el.innerHTML = l ? '<p>Te queda el ícono en el celular y entrás directo a tu panel, sin buscar el link.</p>' + main('pnlins', 'Instalar la app') : '<div class="pCard"><p>Ya la tenés instalada en este celular.</p></div>'; }
+
+if(typeof renderPanel!=='function' || !q('#panelApp .tabs') || typeof renderPrices!=='function') return;
+window.PNL = {tv: null, sub: '', oed: '', ped: ''}; const N = window.PNL; D.body.classList.add('pnl');
+const tabs = q('#panelApp .tabs'), wrap = q('#panelApp > .wrap');
+/* pestañas: Pedidos, Agenda, Carta, Más (Cuánto cobrar pasa a Más) */
+tabs.innerHTML = [['pedidos','Pedidos',IC.ped],['agenda','Agenda',IC.cal],['precios','Carta',IC.car],['mas','Más',IC.mas]].map(([v,l,i],k) => `<button type="button" data-t="${v}"${k ? '' : ' class="on"'}>${SVG(i)}<span>${l}</span></button>`).join('');
+/* un solo renglón de ayuda por pantalla, en lugar de los "Cómo se usa" */
+const AY = {'pv-pedidos': 'Los pedidos de tu página aparecen acá solos.', 'pv-precios': 'Lo que cambies se guarda solo y se ve al instante en tu página.', 'pv-agenda': 'Cuántos pedidos tomás por día y qué días no.', 'pv-calc': 'Cargá lo que gastás en hacer un producto y las horas que te lleva.'};
+D.querySelectorAll('#panelApp details.help').forEach(d => { const v = d.closest('.pv'), tx = AY[v && v.id]; if(tx){ const p = D.createElement('p'); p.className = 'pHelp'; p.textContent = tx; d.replaceWith(p); } else d.remove(); });
+/* Más: cada tarjeta de siempre pasa a su propia pantalla, con los mismos campos */
+const MENU = [['cobrar','pv-calc','Cuánto cobrar'],['sena','pv-m-sena','Seña y alias'],['esp','pv-m-esp','Fecha especial'],['enc','pv-m-enc','Encabezado de tu página'],['visitas','pv-m-vis','Visitas'],['instalar','pv-m-ins','Instalar como app'],['clave','pv-m-clave','Cambiar la clave']];
+const sec = (id, tit, nodo) => { const s = D.createElement('div'); s.className = 'pv pSub'; s.id = id; s.innerHTML = nav('mas0') + `<h3>${tit}</h3><div class="pBody"></div>`; if(nodo) s.querySelector('.pBody').appendChild(nodo); wrap.appendChild(s); return s; };
+const tarjeta = sel => { const e = q(sel); return e ? e.closest('.card') : null; };
+const mas = D.createElement('div'); mas.className = 'pv'; mas.id = 'pv-mas'; wrap.appendChild(mas);
+sec('pv-m-sena', 'Seña y alias', tarjeta('#alias')); sec('pv-m-esp', 'Fecha especial', tarjeta('#spTitle')); sec('pv-m-clave', 'Cambiar la clave', tarjeta('#npin'));
+sec('pv-m-enc', 'Encabezado de tu página'); sec('pv-m-vis', 'Visitas'); sec('pv-m-ins', 'Instalar como app');
+q('#pv-calc').classList.add('pSub'); q('#pv-calc').insertAdjacentHTML('afterbegin', nav('mas0') + '<h3>Cuánto cobrar</h3>');
+D.querySelectorAll('#panelApp label.sw').forEach(l => l.classList.add('pSw'));
+const pin = q('#pinSave'); if(pin){ pin.className = 'pMain'; pin.textContent = 'Cambiar la clave'; }
+const bb = q('#blockBtn'); if(bb) bb.className = 'pSec';
+const nb = q('#newOrderBtn'); if(nb){ nb.className = 'pMain'; nb.textContent = '+ Cargar un pedido'; }
+const fo = q('#newOrder'); if(fo){ fo.insertAdjacentHTML('afterbegin', nav('nueva0')); const sb = fo.querySelector('button[type=submit]'); if(sb){ sb.className = 'pMain'; sb.textContent = 'Guardar'; } }
+const ad = q('#addProd'); if(ad){ ad.className = 'pMain'; ad.textContent = '+ Agregar producto'; q('#plist').before(ad); }
+const show = id => D.querySelectorAll('#panelApp .pv').forEach(v => v.classList.toggle('on', v.id===id));
+const encOff = () => { const b = q('#pv-m-enc .pBody'); if(b) b.innerHTML = ''; N.tv = null; };
+
+/* ---------- PEDIDOS ---------- */
+const saldoOf = o => Math.max(0, (o.total||0) - (o.paid||0));
+const tagOf = o => !o.total ? (o.pay==='total' ? '<span class="pTag ok">Pagado</span>' : '<span class="pTag sin">Sin precio</span>') : saldoOf(o) ? `<span class="pTag falta">Falta cobrar ${$m(saldoOf(o))}</span>` : '<span class="pTag ok">Pagado</span>';
+window.renderPanel = function(){ marca(); D.body.classList.add('pnlIn'); const hoy = iso(today), pv = q('#pv-pedidos');
+  let o = N.oed ? S.orders.find(x => x.id===N.oed) : null; if(!o) N.oed = ''; pv.classList.toggle('pnlEd', !!o);
+  if(o){ q('#olist').innerHTML = `<div class="order pEd" data-id="${H(o.id)}">${nav('oed0')}<h3>Cambiar el pedido</h3><p class="pSum">${H(o.product)}${o.people ? ' para ' + H(o.people) : ''}</p><p class="pMeta">${dl(o.date)}, ${H(o.name)}${o.phone ? ', ' + H(o.phone) : ''}, ${H(o.delivery).toLowerCase()}</p>${o.notes ? `<p class="mut">${H(o.notes)}</p>` : ''}
+      <label>Estado del pago</label><div class="pay">${[['sin','Sin pagar'],['sena','Seña'],['total','Pagado']].map(([v,l]) => `<button type="button" data-v="${v}" class="${o.pay===v ? 'on' : ''}" aria-pressed="${o.pay===v}">${l}</button>`).join('')}</div>
+      <div class="pTwo"><div><label for="pnlTot">Precio total</label><input id="pnlTot" type="number" inputmode="numeric" data-k="total" value="${o.total||''}" placeholder="$"></div><div><label for="pnlPaid">Pagó</label><input id="pnlPaid" type="number" inputmode="numeric" data-k="paid" value="${o.paid||''}" placeholder="$"></div></div>
+      <p class="pSum" style="margin-top:14px!important">Saldo: ${$m(saldoOf(o))}</p>${main('pnl', 'Guardar', ' data-v="oed0"')}<button type="button" class="pDel" data-a="del">Borrar el pedido</button></div>`; return; }
+  const prox = S.orders.filter(x => !x.done && x.date >= hoy), deben = prox.reduce((s,x) => s + saldoOf(x), 0);
+  q('#sum').innerHTML = `<p class="pSum">${prox.length ? (prox.length===1 ? '1 pedido por entregar' : prox.length + ' pedidos por entregar') + (deben ? ', falta cobrar ' + $m(deben) : '') : 'No tenés pedidos por entregar'}</p>`;
+  let list = [...S.orders]; if(oFilter==='prox') list = list.filter(x => !x.done && x.date >= hoy); else if(oFilter!=='todos') list = list.filter(x => x.pay===oFilter);
+  list.sort((a,b) => a.date.localeCompare(b.date)); let h = '', dia = '';
+  list.forEach(x => { if(x.date!==dia){ dia = x.date; h += `<p class="pDay">${dia===hoy ? 'Hoy, ' : ''}${dl(dia)}</p>`; }
+    h += `<div class="order pCard" data-id="${H(x.id)}"><div class="pRowT"><b>${H(x.product)}${x.people ? ' para ' + H(x.people) : ''}</b>${tagOf(x)}</div>${x.notes ? `<p class="mut" style="margin-top:6px">${H(x.notes)}</p>` : ''}<p class="pMeta" style="margin-top:6px">${H(x.name)}${x.delivery ? ', ' + H(x.delivery).toLowerCase() : ''}</p>
+      <div class="pAcc">${x.phone ? '<button type="button" class="pSec" data-a="wa">WhatsApp</button>' : ''}<button type="button" class="pSec" data-a="done">${x.done ? 'Volver a pendiente' : 'Entregado ✓'}</button><button type="button" class="pSec" data-a="pnl" data-v="oed" data-id="${H(x.id)}">Cambiar ›</button></div></div>`; });
+  q('#olist').innerHTML = h || '<div class="pCard"><p>No hay pedidos en esta vista.</p></div>'; };
+
+/* ---------- CARTA ---------- */
+const info = p => window.tvInfo ? window.tvInfo(p) : {desde: p.price};
+window.renderPrices = function(){ const pl = q('#plist'), cats = [...new Set(S.products.map(p => p.cat))]; q('#catList').innerHTML = cats.map(c => `<option value="${H(c)}">`).join('');
+  const p = N.ped ? S.products.find(x => x.id===N.ped) : null; if(!p){ N.ped = ''; N.sub = ''; } q('#pv-precios').classList.toggle('pnlEd', !!p);
+  if(p && N.sub==='opc'){ N.tv = {modo: 'opc', id: p.id}; pl.innerHTML = nav('opc0') + `<h3>Opciones de ${H(p.name)}</h3><p class="pHelp" style="margin:0 0 4px!important">Lo que tu cliente puede elegir en este producto.</p><div id="tvpc"></div>`; if(window.tvMount) window.tvMount(); return; }
+  if(p){ N.tv = null; pl.innerHTML = `<div class="pcard pEd" data-id="${H(p.id)}">${nav('ped0')}<h3>Editar producto</h3>
+      <label>Foto</label><div class="pFoto">${p.img ? `<img src="${H(p.img)}" alt="">` : `<span class="pPh">${CAM}</span>`}<label class="pSec">${p.img ? 'Cambiar foto' : 'Subir foto'}<input type="file" accept="image/*" data-k="img" hidden></label></div>
+      <label for="pnlN">Nombre</label><input id="pnlN" type="text" data-k="name" value="${H(p.name)}"><label for="pnlPr">Precio desde ($)</label><input id="pnlPr" type="number" inputmode="numeric" data-k="price" value="${p.price||''}" placeholder="Vacío: dice Consultar">
+      <label for="pnlCat">Categoría en tu página</label><input id="pnlCat" type="text" data-k="cat" list="catList" value="${H(p.cat)}"><label for="pnlD">Descripción</label><textarea id="pnlD" data-k="desc">${H(p.desc)}</textarea>
+      <label class="pSw"><span>Se muestra en tu página</span><input type="checkbox" data-k="visible"${p.visible ? ' checked' : ''}></label>
+      ${row('opc', 'Opciones', 'pSolo')}${main('pnl', 'Guardar', ' data-v="ped0"')}<button type="button" class="pDel del" data-a="pdel">Borrar el producto</button></div>`; return; }
+  N.tv = null; const ps = S.products, falta = ps.filter(x => !x.img && x.visible!==false).length, sinP = ps.filter(x => x.visible!==false && !info(x).desde).length;
+  const pend = falta || sinP ? `<p class="pPend">${falta ? `<b style="color:var(--prj)">${falta===1 ? 'Te falta 1 foto.' : 'Te faltan ' + falta + ' fotos.'}</b> ` : ''}${sinP ? `<b style="color:var(--prj)">${sinP===1 ? '1 producto no tiene' : sinP + ' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>` : '';
+  pl.innerHTML = `<div id="tvpc" class="pList">${pend}` + ps.map(x => { const i = info(x), w = [], vis = x.visible!==false;
+    if(!x.img && vis) w.push('Subí la foto'); if(vis && !i.desde) w.push('Cargá un precio "Desde"'); if(!vis) w.push('No se muestra en tu página');
+    return `<button type="button" class="pRowP vpr" data-a="pnl" data-v="ped" data-id="${H(x.id)}">${x.img ? `<img src="${H(x.img)}" alt="">` : vis ? `<span class="vnf" role="img" aria-label="Falta foto">${CAM}</span>` : `<span class="vnx">${CAM}</span>`}<span class="pTx"><span class="vnm">${H(x.name)}</span><span class="pPr">${i.desde ? 'Desde ' + $m(i.desde) : 'Sin precio'}</span>${w.map(z => `<span class="vwn">${z}</span>`).join('')}</span><span class="pEd">Editar ›</span></button>`; }).join('') + '</div>'; };
+
+/* ---------- MÁS ---------- */
+function renderMas(){ mas.innerHTML = '<div class="pMenu">' + MENU.map(m => row(m[0], m[2])).join('') + '</div>'; }
+function abrir(k){ const m = MENU.find(x => x[0]===k); if(!m) return; encOff(); show(m[1]);
+  if(k==='cobrar') renderCalc(); if(k==='sena' || k==='esp' || k==='clave') renderAgenda();
+  if(k==='enc'){ q('#plist').innerHTML = ''; N.tv = {modo: 'enc'}; q('#pv-m-enc .pBody').innerHTML = '<div id="tvpc"></div>'; if(window.tvMount) window.tvMount(); const h = q('#tvpc .venc h3'); if(h) h.remove(); }
+  if(k==='visitas') visitas(q('#pv-m-vis .pBody'), false); if(k==='instalar') instalar(q('#pv-m-ins .pBody')); up(); }
+
+/* ---------- acciones (las de siempre las sigue haciendo el panel de Maru) ---------- */
+tabs.addEventListener('click', () => { N.sub = ''; N.oed = ''; N.ped = ''; encOff(); D.body.classList.remove('pnlNew'); }, true);
+tabs.addEventListener('click', e => { const b = e.target.closest('button'); if(b && b.dataset.t==='mas') renderMas(); up(); });
+const blur = () => { const a = D.activeElement; if(a && a.blur && a.matches('input,textarea,select')) a.blur(); };
+q('#panelApp').addEventListener('click', e => { const b = e.target.closest('[data-a]'); if(!b) return; const a = b.dataset.a, v = b.dataset.v;
+  if(a==='pnl'){
+    if(v==='mas0'){ encOff(); show('pv-mas'); renderMas(); }
+    else if(v==='oed'){ N.oed = b.dataset.id; renderPanel(); }
+    else if(v==='oed0'){ blur(); N.oed = ''; renderPanel(); if(b.classList.contains('pMain')) toast('Guardado ✓'); }
+    else if(v==='nueva0'){ q('#noCancel').click(); }
+    else if(v==='ped'){ N.ped = b.dataset.id; N.sub = ''; renderPrices(); }
+    else if(v==='ped0'){ blur(); N.ped = ''; N.sub = ''; renderPrices(); if(b.classList.contains('pMain')) toast('Guardado ✓'); }
+    else if(v==='opc'){ blur(); N.sub = 'opc'; renderPrices(); }
+    else if(v==='opc0'){ N.sub = ''; renderPrices(); }
+    else abrir(v);
+    up(); return; }
+  if(a==='pnlins'){ const l = D.getElementById('insL'); if(l) l.click(); } });
+if(nb) nb.addEventListener('click', () => { D.body.classList.add('pnlNew'); up(); });
+q('#noCancel').addEventListener('click', () => D.body.classList.remove('pnlNew'));
+if(ad) ad.addEventListener('click', () => { const p = S.products[0]; if(p){ N.ped = p.id; N.sub = ''; renderPrices(); up(); toast('Producto nuevo: completalo y prendé "Se muestra en tu página".'); } });
+try{ if(q('#panelApp').style.display!=='none') renderPanel(); }catch(e){ console.error('PNL', e); }
+marca();
+})();</script>
 </body>
+
+
+
+
+
+
+
+
 
 
 
