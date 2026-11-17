@@ -245,7 +245,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="pop"] .pSticker{display:inline-block;width:88px;height:88px;border-radius:50%;border:3px solid var(--tinta);background:var(--fondo);transform:rotate(-6deg);overflow:hidden;box-shadow:4px 4px 0 var(--tinta)}
 #tv[data-familia="pop"] .pSticker img{width:100%;height:100%;object-fit:cover;display:block}
 #tv[data-familia="pop"] .pTit{color:var(--tinta);font:400 36px/1.05 'Archivo Black',var(--fd);text-transform:uppercase;margin:18px 0 12px;letter-spacing:-.01em;overflow-wrap:anywhere}
-#tv[data-familia="pop"] .pTit mark{background:var(--acento);color:var(--sobre-acento);padding:0 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#tv[data-familia="pop"] .pTit mark{background:var(--acento);color:var(--sobre-acento);padding:0 8px;border-radius:999px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 #tv[data-familia="pop"] .pLead{color:var(--tinta);font-size:17px;margin:0 0 24px;max-width:36ch}
 #tv[data-familia="pop"] .pHero{position:relative;margin:0 0 6px}
 #tv[data-familia="pop"] .pHero img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center;border:3px solid var(--tinta);box-shadow:6px 6px 0 var(--tinta)}
@@ -274,8 +274,27 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="pop"] .pCard:focus-visible{outline:3px solid var(--tinta);outline-offset:4px}
 #tv[data-familia="pop"] .pD{display:block;font-size:16px;margin-top:4px}
 #tv[data-familia="pop"] .pPie{background:var(--tinta);color:var(--fondo);padding:32px 20px 40px;font-size:16px}
-#tv[data-familia="pop"] .pPie a{color:var(--fondo);display:inline-block;padding:12px 16px 12px 0;font-weight:700}
+#tv[data-familia="pop"] .pPie a{color:var(--fondo);display:inline-flex;align-items:center;min-height:48px;margin:6px 8px 0 0;padding:0 20px;border:2px solid var(--fondo);border-radius:999px;font-weight:700;text-decoration:none}
 #tv[data-familia="pop"] .pPie .pAcc{font-weight:500}
+/* QUÉ SE TOCA (Dardo 17/11 09:17): pop en filas que alternan lado, foto redonda, botón Elegir */
+#tv[data-familia="pop"] .pFilas{display:grid;gap:18px;padding-right:20px}
+#tv[data-familia="pop"] .pRow{display:grid;grid-template-columns:min(168px,40vw) 1fr;gap:16px;align-items:center;width:100%;min-height:48px;padding:16px;border:2px solid var(--tinta);border-radius:16px;background:var(--fondo);color:var(--tinta);font:inherit;text-align:left;cursor:pointer}
+#tv[data-familia="pop"] .pAlt .pRow{background:var(--fondo)}
+#tv[data-familia="pop"] .pRow.pIzq{grid-template-columns:1fr min(168px,40vw)}
+#tv[data-familia="pop"] .pRow.pIzq .pRedonda{order:2}
+#tv[data-familia="pop"] .pRow.pSinF{grid-template-columns:1fr}
+#tv[data-familia="pop"] .pRedonda{width:100%;height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;object-position:center;border:3px solid var(--tinta);box-shadow:5px 5px 0 var(--tinta)}
+#tv[data-familia="pop"] .pRow .pTx{min-width:0}
+#tv[data-familia="pop"] .pRow .pN{margin:0;font:400 22px/1.1 'Archivo Black',var(--fd);text-transform:none;letter-spacing:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#tv[data-familia="pop"] .pRow .pD{font-size:16px}
+#tv[data-familia="pop"] .pDato{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:4px;background:var(--acento-2);color:var(--tinta);font:700 15px/1.2 'Archivo',var(--fb)}
+#tv[data-familia="pop"] .vElegir{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:12px;padding:0 22px;border:2px solid var(--tinta);border-radius:999px;background:var(--acento);color:var(--sobre-acento);font:700 17px/1 'Archivo',var(--fb)}
+#tv[data-familia="pop"] .pRow:focus-visible{outline:3px solid var(--tinta);outline-offset:3px}
+#tv[data-familia="pop"] .pAccs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 8px;padding:8px 20px 28px}
+#tv[data-familia="pop"] .pAcc2{display:flex;flex-direction:column;align-items:center;gap:6px;width:76px;min-height:48px;padding:0;border:0;background:none;color:var(--tinta);font:inherit;cursor:pointer}
+#tv[data-familia="pop"] .pAccC{display:flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;border:3px solid var(--tinta);background:var(--acento-2);overflow:hidden;font:700 15px/1.1 'Archivo',var(--fb);text-align:center}
+#tv[data-familia="pop"] .pAccC img{width:100%;height:100%;object-fit:cover}
+#tv[data-familia="pop"] .pAccN{font:700 15px/1.2 'Figtree',var(--fb);text-decoration:underline;text-underline-offset:3px;text-align:center}
 /*FAM casera*/
 #tv[data-familia="casera"]{--cost:color-mix(in srgb,var(--tinta) 35%,transparent);background-color:var(--fondo);background-image:linear-gradient(90deg,color-mix(in srgb,var(--tinta) 4%,transparent) 50%,transparent 50%),linear-gradient(color-mix(in srgb,var(--tinta) 4%,transparent) 50%,transparent 50%);background-size:28px 28px;color:var(--tinta);font-family:'Source Sans 3',var(--fb);font-weight:500;font-size:17px;line-height:1.55;padding-bottom:0}
 #tv[data-familia="casera"] .cIn{padding:32px 20px 32px;text-align:center;max-width:620px;margin:0 auto}
@@ -314,8 +333,10 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="casera"] .cVst b{min-width:24px;text-align:center;font-size:19px}
 #tv[data-familia="casera"] .cRow select{margin-top:10px;max-width:100%;font-size:17px}
 #tv[data-familia="casera"] .cCerr{margin:24px 0 0;font-size:15px}
+#tv[data-familia="casera"] .cEl{display:flex;justify-content:flex-end;margin-top:10px}
+#tv[data-familia="casera"] .vElegir{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border:2px solid var(--tinta);border-radius:999px;color:var(--tinta);font:700 17px/1 'Source Sans 3',var(--fb)}
 #tv[data-familia="casera"] .cPie{background:var(--fondo-2);padding:28px 20px 40px;text-align:center;font-size:17px}
-#tv[data-familia="casera"] .cPie a{display:inline-block;margin:6px;padding:12px 22px;border-radius:999px;border:2px solid var(--tinta);background:var(--acento);color:var(--sobre-acento);font-weight:700;text-decoration:none}
+#tv[data-familia="casera"] .cPie a{display:inline-flex;align-items:center;min-height:48px;margin:6px;padding:0 22px;border-radius:999px;border:2px solid var(--tinta);background:var(--acento);color:var(--sobre-acento);font-weight:700;text-decoration:none}
 /*FAM editorial*/
 #tv[data-familia="editorial"]{background:var(--fondo);color:var(--tinta);font-family:'Work Sans',var(--fb);font-weight:450;font-size:17px;line-height:1.6;padding-bottom:0}
 #tv[data-familia="editorial"] .eTop{display:flex;align-items:center;gap:14px;margin:0 24px;padding:22px 0 0;font:600 15px/1.2 'Work Sans',var(--fb);letter-spacing:.2em;text-transform:uppercase;text-align:center}
@@ -333,8 +354,8 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="editorial"] [data-temporada]:empty{display:none}
 #tv[data-familia="editorial"] .eIdxZ{display:block;height:24px}
 #tv[data-familia="editorial"] .eIdx{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 24px;padding:16px 0;border-top:1px solid color-mix(in srgb,var(--tinta) 20%,transparent);border-bottom:1px solid color-mix(in srgb,var(--tinta) 20%,transparent)}
-#tv[data-familia="editorial"] .eIdx button{border:0;background:none;color:var(--tinta);font:600 15px/1.2 'Work Sans',var(--fb);letter-spacing:.14em;text-transform:uppercase;padding:10px 0;cursor:pointer}
-#tv[data-familia="editorial"] .eIdx button+button::before{content:'·';display:inline-block;margin:0 14px 0 -4px}
+#tv[data-familia="editorial"] .eIdx button{display:inline-flex;align-items:center;gap:4px;min-height:48px;border:0;background:none;color:var(--tinta);font:500 17px/1.2 'Work Sans',var(--fb);padding:0;cursor:pointer}
+#tv[data-familia="editorial"] .eIdx u{text-underline-offset:4px}
 #tv[data-familia="editorial"] .eSep{display:flex;justify-content:center;height:40px;margin:16px 0 0}
 #tv[data-familia="editorial"] .eSep svg{width:64px;height:40px}
 #tv[data-familia="editorial"] .eCat{padding:40px 0 16px;scroll-margin-top:12px}
@@ -351,9 +372,10 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="editorial"] .eN{display:block;font:600 22px/1.2 'Playfair Display',Georgia,serif;margin:0 0 4px}
 #tv[data-familia="editorial"] .eD{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px}
 #tv[data-familia="editorial"] .ePr{display:block;margin-top:8px;font:450 17px/1.4 'Work Sans',var(--fb)}
+#tv[data-familia="editorial"] .vElegir{display:inline-flex;align-items:center;min-height:48px;margin-top:14px;padding:0 20px;border:1.5px solid var(--tinta);border-radius:2px;color:var(--tinta);font:600 17px/1 'Work Sans',var(--fb)}
 #tv[data-familia="editorial"] .eFull:focus-visible,#tv[data-familia="editorial"] .eAlt:focus-visible,#tv[data-familia="editorial"] .eIdx button:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
 #tv[data-familia="editorial"] .ePie{margin-top:40px;padding:32px 24px 48px;border-top:1px solid var(--tinta);text-align:center}
-#tv[data-familia="editorial"] .ePie a{display:inline-block;margin:6px;padding:14px 20px;border:1.5px solid var(--tinta);border-radius:2px;color:var(--tinta);font:600 15px/1 'Work Sans',var(--fb);letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
+#tv[data-familia="editorial"] .ePie a{display:inline-flex;align-items:center;min-height:48px;margin:6px;padding:0 20px;border:1.5px solid var(--tinta);border-radius:2px;color:var(--tinta);font:600 15px/1 'Work Sans',var(--fb);letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 #tv[data-familia="editorial"] .ePie a:first-child{background:var(--tinta);color:var(--fondo)}
 /*TVP v1*/
 .tvp{border:2px solid var(--line,#ddd);border-radius:14px;padding:14px;margin:12px 0 16px;background:#fff}
@@ -850,8 +872,10 @@ function render(){
     ${foot()}</div>`);
 }
 /* FAMILIA A POP / FESTEJO: banda con texto repetido, logo en sticker, título en mayúscula con una palabra resaltada,
-   foto destacada con sombra dura; catálogo en bandas por categoría (sin números) y carrusel (1 o 2 productos: columna). */
+   foto destacada con sombra dura; catálogo en bandas por categoría (sin números), con accesos redondos arriba y filas que alternan lado con foto redonda y botón Elegir (1 o 2 productos: columna). */
 const confites = i => `<svg class="pConf" viewBox="0 0 72 40" aria-hidden="true"><circle cx="10" cy="12" r="6" fill="var(--acento)" stroke="var(--tinta)" stroke-width="2.5"/><path d="M30 30 l8-14 8 14z" fill="var(--acento-2)" stroke="var(--tinta)" stroke-width="2.5" stroke-linejoin="round"/><path d="M52 10 l5 6 5-6 5 6" fill="none" stroke="var(--tinta)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+/* fila pop: tarjeta entera tocable con foto redonda (o solo texto), nombre, dato chico y botón Elegir; alterna lado */
+function popRow(i, attrs, nombre, desc, dato, f){ return `<button type="button" class="pRow${f ? (i % 2 ? ' pIzq' : '') : ' pSinF'}" ${attrs}>${f ? `<img class="pRedonda" src="${E(f)}" alt="${E(nombre)}" loading="lazy">` : ''}<span class="pTx"><span class="pN">${E(nombre)}</span>${desc ? `<span class="pD">${E(desc)}</span>` : ''}${dato ? `<span class="pDato">${dato}</span>` : ''}<span class="vElegir">Elegir</span></span></button>`; }
 function popCard(p, ancho){ const f = foto(p), n = desde(p), pr = n ? 'Desde ' + M(n) : 'A consultar';
   return `<button type="button" class="pCard" data-p="${E(p.id)}">${f ? `<span class="pFoto"><img src="${E(f)}" alt="${E(p.name)}"><span class="pPrecio">${pr}</span></span><span class="pN">${E(p.name)}</span>` : `<span class="pSinFoto"><span class="pN">${E(p.name)}</span>${p.desc ? `<span class="pD">${E(p.desc)}</span>` : ''}<span class="pPrecio pSolo">${pr}</span></span>`}</button>`; }
 function heroPop(){ const usadas = new Set((S.products||[]).map(p => p.img).filter(Boolean).concat(B.logo ? [B.logo] : []));
@@ -865,12 +889,14 @@ function renderPop(){
     ${B.logo ? `<span class="pSticker"><img src="${E(B.logo)}" alt="${E(B.name)}"></span>` : `<p class="pN">${E(B.name)}</p>`}
     <h1 class="pTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="pLead">${E(B.lead)}</p>` : ''}
     ${heroPop() ? `<div class="pHero"><div class="pZona" data-temporada="foto"></div><img src="${E(heroPop())}" alt="${E(B.name)}"></div>` : ''}</div>`;
-  const banda2 = (i, titulo, html, n) => `<div class="pSep" data-temporada="separador"></div><section class="pCat${i % 2 ? ' pAlt' : ''}">${confites(i)}<h2 class="pCatT">${E(titulo)}</h2><div class="${n > 2 ? 'pCarr' : 'pCol'}">${html}</div></section>`;
-  cats.forEach((c, i) => { const its = ps.filter(p => (p.cat||'Otros')===c); h += banda2(i, c, its.map(p => popCard(p)).join(''), its.length); });
+  const banda2 = (i, titulo, html) => `<div class="pSep" data-temporada="separador"></div><section class="pCat${i % 2 ? ' pAlt' : ''}" id="tvCat${i}">${confites(i)}<h2 class="pCatT">${E(titulo)}</h2><div class="pFilas">${html}</div></section>`;
+  const secs = cats.map(c => ({t:c, its:ps.filter(p => (p.cat||'Otros')===c)}));
+  if(secs.length + (tal.length ? 1 : 0) > 1) h += `<nav class="pAccs" aria-label="Categorías">${secs.map((s, i) => { const f = foto(s.its[0]); return `<button type="button" class="pAcc2" data-ir="${i}"><span class="pAccC">${f ? `<img src="${E(f)}" alt="">` : E(s.t)}</span><span class="pAccN">${E(s.t)} ↓</span></button>`; }).join('')}${tal.length ? `<button type="button" class="pAcc2" data-ir="${secs.length}"><span class="pAccC">${E('Talleres')}</span><span class="pAccN">Talleres ↓</span></button>` : ''}</nav>`;
+  secs.forEach((s, i) => { h += banda2(i, s.t, s.its.map((p, j) => popRow(j, `data-p="${E(p.id)}"`, p.name, p.desc, desde(p) ? 'Desde ' + M(desde(p)) : 'Precio a consultar', foto(p))).join('')); });
   let k = cats.length;
-  if(tal.length) h += banda2(k++, 'Talleres', tal.map(x => `<button type="button" class="pCard" data-tl="${E(x.id)}"><span class="pSinFoto"><span class="pN">${E(x.name)}</span><span class="pD">${fecha(x.date)}${x.time ? ', ' + E(x.time) + ' h' : ''}</span><span class="pPrecio pSolo">${x.price ? M(x.price) : 'A consultar'}</span></span></button>`).join(''), tal.length);
+  if(tal.length) h += banda2(k++, 'Talleres', tal.map((x, j) => popRow(j, `data-tl="${E(x.id)}"`, x.name, fecha(x.date) + (x.time ? ', ' + x.time + ' h' : ''), x.price ? M(x.price) : 'Precio a consultar', '')).join(''));
   if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false), f = persFoto();
-    h += banda2(k++, 'Personalizada', `<button type="button" class="pCard" data-pers="1">${f ? `<span class="pFoto"><img src="${E(f)}" alt=""><span class="pPrecio">A tu idea</span></span><span class="pN">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="pD">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span>` : `<span class="pSinFoto"><span class="pN">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="pD">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span></span>`}</button>`, 1); }
+    h += banda2(k++, 'Personalizada', popRow(0, 'data-pers="1"', pers ? pers.name : 'Torta personalizada', (pers && pers.desc) || 'Contame tu idea y te paso el precio.', 'Precio a consultar', f)); }
   if(!ps.length && !tal.length) h += '<div class="pIn"><p class="pLead">Estamos cargando los productos. Volvé en un rato.</p></div>';
   const wa = WAN();
   h += `<footer class="pPie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`;
@@ -888,7 +914,7 @@ function portadaCasera(){ const hf = heroPop();
     <p class="cHola">Hola, ${/ y /.test(B.who) ? 'somos' : 'soy'} ${E(B.who)}</p><h1 class="cTit">${E(B.h1 || B.name)}</h1>${sinNombre(B.lead) ? `<p class="cLead">${E(sinNombre(B.lead))}</p>` : ''}
     ${hf ? `<figure class="cPola"><span class="cCinta1" data-temporada="cinta"></span><span class="cCinta2" data-temporada="cinta"></span><img src="${E(hf)}" alt="${E(B.name)}"><figcaption>Hecho en casa${ciudadDe() ? ', en ' + E(ciudadDe()) : ''}</figcaption></figure>` : ''}</div>`; }
 const cinta = (titulo, extra) => `<h2 class="cBan"><span data-temporada="cinta-titulo"></span>${E(titulo)}${extra ? `<small>${extra}</small>` : ''}</h2>`;
-function cRow(p, attrs, precio){ const f = foto(p); return `<button type="button" class="cRow${f ? '' : ' cSolo'}" ${attrs}>${f ? `<img src="${E(f)}" alt="${E(p.name)}" loading="lazy">` : ''}<span><span class="cN">${E(p.name)}</span>${p.desc ? `<span class="cD">${E(p.desc)}</span>` : ''}<span class="cPr"><i></i>${precio}</span></span></button>`; }
+function cRow(p, attrs, precio){ const f = foto(p); return `<button type="button" class="cRow${f ? '' : ' cSolo'}" ${attrs}>${f ? `<img src="${E(f)}" alt="${E(p.name)}" loading="lazy">` : ''}<span><span class="cN">${E(p.name)}</span>${p.desc ? `<span class="cD">${E(p.desc)}</span>` : ''}<span class="cPr"><i></i>${precio}</span><span class="cEl"><span class="vElegir">Elegir</span></span></span></button>`; }
 function pieCasera(){ const wa = WAN(); return `<footer class="cPie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`; }
 function renderCasera(){ const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => p.cat||'Otros'))];
   let h = portadaCasera() + '<div class="cCarta">';
@@ -912,7 +938,7 @@ function renderVCasera(){ const md = menu();
 /* FAMILIA C EDITORIAL ARTESANAL: nombre espaciado entre filetes, título serif con una palabra en itálica, foto a sangre con epígrafe, índice numerado;
    la primera de cada categoría a sangre y las demás en filas que alternan lado; ornamento botánico. Sin números decorativos (CONTENIDO 17/11 08:49). */
 const ramita = (w, h) => `<svg viewBox="0 0 64 40" width="${w}" height="${h}" aria-hidden="true" fill="none" stroke="var(--tinta)" stroke-width="1.2" stroke-linecap="round"><path d="M4 30 C20 26 38 18 60 8"/><path d="M18 26 c-2-6 2-10 6-11 c0 5-2 9-6 11z M30 21 c0-6 4-9 8-9 c-1 5-4 8-8 9z M42 15 c1-5 5-8 9-7 c-2 4-5 7-9 7z M24 24 c4 3 9 3 12 1 c-4-3-8-3-12-1z M37 18 c4 2 8 2 11 0 c-3-3-8-3-11 0z"/></svg>`;
-function eItem(p, i, attrs, precio){ const f = foto(p), tx = `<span class="eTx"><span class="eN">${E(p.name)}</span>${p.desc ? `<span class="eD">${E(p.desc)}</span>` : ''}<span class="ePr">${precio}</span></span>`;
+function eItem(p, i, attrs, precio){ const f = foto(p), tx = `<span class="eTx"><span class="eN">${E(p.name)}</span>${p.desc ? `<span class="eD">${E(p.desc)}</span>` : ''}<span class="ePr">${precio}</span><span class="vElegir">Elegir →</span></span>`;
   if(i===0 && f) return `<button type="button" class="eFull" ${attrs}><img src="${E(f)}" alt="${E(p.name)}" loading="lazy">${tx}</button>`;
   return `<button type="button" class="eAlt${f ? (i % 2 ? '' : ' eDer') : ' eSolo'}" ${attrs}>${f ? `<img src="${E(f)}" alt="${E(p.name)}" loading="lazy">` : ''}${tx}</button>`; }
 function renderEditorial(){ const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => p.cat||'Otros'))], hf = heroPop(), ciudad = ciudadDe();
@@ -922,8 +948,8 @@ function renderEditorial(){ const ps = prods(), tal = talleres(), cats = [...new
   if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', html: eItem({id:'_pers', name: pers ? pers.name : 'Torta personalizada', desc: (pers && pers.desc) || 'Contame tu idea y te paso el precio.', img: persFoto()}, 0, 'data-pers="1"', 'Precio a consultar')}); }
   let h = `<p class="eTop">${E(B.name)}</p><div class="eHead"><span class="eOrn" data-temporada="ornamento">${ramita(58, 58)}</span><h1 class="eTit">${w.map((x, i) => i===k ? `<em>${E(x)}</em>` : E(x)).join(' ')}</h1>${B.lead ? `<p class="eLead">${E(B.lead)}</p>` : ''}</div>
     ${hf ? `<figure class="eHero"><img src="${E(hf)}" alt="${E(B.name)}"><figcaption data-temporada="epigrafe">Hecha a mano${ciudad ? ' en ' + E(ciudad) : ''}.</figcaption></figure>` : ''}
-    <span class="eIdxZ" data-temporada="indice"></span>${secs.length > 1 ? `<nav class="eIdx" aria-label="Categorías">${secs.map((s, i) => `<button type="button" data-ir="${i}">${E(s.t)}</button>`).join('')}</nav>` : ''}`;
-  secs.forEach((s, i) => { h += `${i ? `<div class="eSep" data-temporada="separador">${ramita(64, 40)}</div>` : ''}<section class="eCat" id="eCat${i}"><h2 class="eCatT">${E(s.t)}</h2>${s.html}</section>`; });
+    <span class="eIdxZ" data-temporada="indice"></span>${secs.length > 1 ? `<nav class="eIdx" aria-label="Categorías">${secs.map((s, i) => `<button type="button" data-ir="${i}"><u>${E(s.t)}</u> ↓</button>`).join('')}</nav>` : ''}`;
+  secs.forEach((s, i) => { h += `${i ? `<div class="eSep" data-temporada="separador">${ramita(64, 40)}</div>` : ''}<section class="eCat" id="tvCat${i}"><h2 class="eCatT">${E(s.t)}</h2>${s.html}</section>`; });
   if(!ps.length && !tal.length) h += '<p class="eLead" style="margin:24px">Estamos cargando los productos. Volvé en un rato.</p>';
   const wa = WAN(); put(h + `<footer class="ePie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}</footer>`); }
 function put(h){ if(tv._h !== h){ tv.innerHTML = h; tv._h = h; } }   /* no redibujar si no cambió nada (las fotos no vuelven a cargar) */
@@ -1052,7 +1078,7 @@ async function send(){
 /* ---- Eventos ---- */
 tv.addEventListener('click', e => { const b = e.target.closest('button'); if(!b) return;
   if(b.dataset.c !== undefined){ T.cat = b.dataset.c; render(); return; }
-  if(b.dataset.ir){ const s = D.getElementById('eCat' + b.dataset.ir); if(s) s.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); return; }
+  if(b.dataset.ir){ const s = D.getElementById('tvCat' + b.dataset.ir); if(s) s.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); return; }
   if(b.dataset.p){ const p = (S.products||[]).find(x => x.id===b.dataset.p); if(p) open(p); return; }
   if(b.dataset.tl){ const t = talleres().find(x => x.id===b.dataset.tl); if(t){ if(!t.left){ alert('Ese taller ya no tiene lugar.'); return; } open(null, t); } return; }
   if(b.dataset.pers){ const p = (S.products||[]).find(x => isPers(x) && x.visible!==false) || {id:'_pers', name:'Torta personalizada', cat:'Tortas', desc:'', price:0, img:''}; open(p); return; }
@@ -1133,6 +1159,8 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
+
 
 
 
