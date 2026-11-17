@@ -156,7 +156,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv{--a:#6b4fb5;--ai:#fff;--i:#2a2220;--b:#fbf8f4;--s:#fff;--m:#6d625c;--l:rgba(0,0,0,.12);--fd:inherit;--fb:inherit;--fn:inherit;
   background:var(--b);color:var(--i);font-family:var(--fb);font-size:17px;line-height:1.45;min-height:100vh;padding-bottom:40px}
 #tv *{box-sizing:border-box}
-#tv .vw{max-width:620px;margin:0 auto;padding:0 16px}
+#tv .vw,#tvS .vw{max-width:620px;margin:0 auto;padding:0 16px}
 #tv .vtop{display:flex;align-items:center;gap:12px;padding:14px 16px 6px;max-width:620px;margin:0 auto}
 #tv .vtop img{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:none}
 #tv .vtop b{font-family:var(--fn);font-size:24px;font-weight:600;line-height:1.1}
@@ -921,6 +921,7 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
 
 
 
