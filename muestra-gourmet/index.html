@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
 <style>
-:root{--p:#7b5fc0;--pd:#5d44a0;--ps:#ece5fa;--ink:#3a2418;--mut:#6a5a52;--bg:#faf7ff;--line:#ddd2f1;--rosa:#f3b5c3;--ok:#2f6b3a;--oks:#e2f1e3;--no:#b3261e;--nos:#fbe3e1}
+:root{--p:#8c6e62;--pd:#735a50;--ps:#fbf2ef;--ink:#2a2421;--mut:#595351;--bg:#fefbfa;--line:#e2d8d4;--rosa:#f3b5c3;--ok:#2f6b3a;--oks:#e2f1e3;--no:#b3261e;--nos:#fbe3e1}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--ink);font-family:"Nunito Sans",system-ui,sans-serif;font-size:17.5px;line-height:1.5}
@@ -922,7 +922,7 @@ function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length 
   b.addEventListener('click', () => { try{ localStorage.setItem(k, NOV.v); }catch(x){} d.remove(); }); } /*NOV fin*/
 </script>
 <script>/*TV v1*/ (function(){
-const C = {"rubro": "tortas", "nom": "#pName", "tab": "#pv-car", "fn": "renderCar", "full": false, "rel2": false, "lead": 2, "familia": "moderna", "colores": {"tinta": "#f4eee6", "fondo": "#121110", "fondo-2": "#1f1c1a", "acento": "#e9b8a4", "acento-2": "#3a322d", "sobre-acento": "#121110"}, "destacada": "img/hero.svg", "logo": "", "slug": "muestra-gourmet", "nombres": ["Torta de cumplea\u00f1os", "Torta personalizada", "Torta tem\u00e1tica", "Torta de dos pisos", "Minitorta", "Bento cake", "Chocotorta", "Cheesecake", "Cheesecake de frutos rojos", "Lemon pie", "Key lime pie", "Red velvet", "Toffee", "Brownie", "Brownie con merengue", "Tarta de frutillas", "Tarta de frutos rojos", "Tarta de durazno", "Tarta de manzana", "Pastafrola", "Tiramis\u00fa", "Marquise", "Torta Balcarce", "Rogel", "Selva negra", "Carrot cake", "Torta galesa", "Torta de ricota", "Bud\u00edn de lim\u00f3n", "Bud\u00edn de naranja", "Bud\u00edn marmolado", "Alfajores de maicena", "Alfajores de chocolate", "Cookies", "Box de cookies", "Cupcakes", "Macarons", "Cake pops", "Mesa dulce", "Postres en vasito", "Bombones", "Pavlova", "Trufas", "Scones", "Medialunas", "Flan casero", "Mousse de chocolate", "Torta matilda"]}, D = document, q = s => D.querySelector(s);
+const C = {"rubro": "tortas", "nom": "#pName", "tab": "#pv-car", "fn": "renderCar", "full": false, "rel2": false, "lead": 2, "familia": "moderna", "colores": {"tinta": "#f4eee6", "fondo": "#121110", "fondo-2": "#1f1c1a", "acento": "#e9b8a4", "acento-2": "#3a322d", "sobre-acento": "#121110"}, "destacada": "img/hero.svg", "logo": "", "raiz": true, "slug": "muestra-gourmet", "nombres": ["Torta de cumplea\u00f1os", "Torta personalizada", "Torta tem\u00e1tica", "Torta de dos pisos", "Minitorta", "Bento cake", "Chocotorta", "Cheesecake", "Cheesecake de frutos rojos", "Lemon pie", "Key lime pie", "Red velvet", "Toffee", "Brownie", "Brownie con merengue", "Tarta de frutillas", "Tarta de frutos rojos", "Tarta de durazno", "Tarta de manzana", "Pastafrola", "Tiramis\u00fa", "Marquise", "Torta Balcarce", "Rogel", "Selva negra", "Carrot cake", "Torta galesa", "Torta de ricota", "Bud\u00edn de lim\u00f3n", "Bud\u00edn de naranja", "Bud\u00edn marmolado", "Alfajores de maicena", "Alfajores de chocolate", "Cookies", "Box de cookies", "Cupcakes", "Macarons", "Cake pops", "Mesa dulce", "Postres en vasito", "Bombones", "Pavlova", "Trufas", "Scones", "Medialunas", "Flan casero", "Mousse de chocolate", "Torta matilda"]}, D = document, q = s => D.querySelector(s);
 const E = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const M = n => '$' + Math.round(Number(n)||0).toLocaleString('es-AR');
 const site = q('#site'), tv = q('#tv'), SH = q('#tvS'), BAR = q('#tvB');
@@ -1490,6 +1490,8 @@ try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
 </body>
+
+
 
 
 
