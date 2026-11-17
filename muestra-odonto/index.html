@@ -227,6 +227,9 @@ body.pnl #toast.pOk{white-space:nowrap}
 body.pnl #panel .durrow{display:block} body.pnl #panel .durrow select{width:100%} body.pnl #panel .durrow .btn{width:100%;margin-top:10px}   /* CONTENIDO 17/11 17:10: el select cortaba el texto */
 body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, también antes de entrar (CONTENIDO 17/11 17:10); #avisos de LD sigue con su botón */
 </style>
+<style>/*NTF v1*/
+.ntf{margin-top:16px} .ntf .btn{width:100%} .ntf p{font-size:16px;line-height:1.4;margin:0} .ntf .ntfok{font-weight:700;color:var(--pet)}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -918,6 +921,38 @@ function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) r
 D.addEventListener('click', e => { const b = e.target.closest('#panel [data-a="pnlins"]'); if(!b) return; const l = D.getElementById('insL'); if(l) l.click(); });
 try{ if(!q('#panel').hidden && location.hash!=='#avisos' && !q('#panel .pnlTop')) deco(); }catch(e){}   /* sin volver a dibujar: en LD #avisos es otra pantalla (salió de un error: se pisaba con la elección de profesional) */
 })();</script>
+<script>/*NTF v1*/ (function(){
+const NTF = {api: 'https://miwebsapp.netlify.app/api/push', key: 'BImwbVkkD9IqBkXNmvQvsf1xzS-lX6eTDIoZK0iQ5D3mJnFDzM3AU_Id5VnpuDU5KY9rQqIsjbV8k2yWByOVoww'}; window.NTF = NTF;
+if(typeof renderSite!=='function' || typeof S==='undefined') return;
+const D = document, q = s => D.querySelector(s), ua = navigator.userAgent || '';
+const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua);
+const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+const puede = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const u8 = s => { const b = atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+const turno = () => (typeof P!=='undefined' && P.last && !P.last.req) ? S.turnos.find(x => x.id===P.last.id) : null;
+function bloque(){ const d = q('#site .done'), t = turno(); if(!d || !t || d.querySelector('.ntf')) return; const quien = esc(S.cfg.short);
+  const box = D.createElement('div'); box.className = 'ntf';
+  box.innerHTML = t.push ? `<p class="ntfok">Listo: te avisamos en este celular cuando ${quien} te responda.</p>`
+    : INAPP ? `<p class="mut">Para recibir un aviso cuando ${quien} te responda, abrí esta página en Chrome o Safari.</p>`
+    : IOS && !SA() ? `<p class="mut">En iPhone, el aviso solo llega si agregás esta página a tu pantalla de inicio y la abrís desde el ícono.</p>`
+    : (!puede() || Notification.permission==='denied') ? `<p class="mut">Este navegador no deja recibir avisos. ${quien} te responde por WhatsApp.</p>`
+    : `<button type="button" class="btn o w" data-a="ntf">Avisame cuando me confirmen</button><p class="hint" style="margin:8px 0 0">Te llega un aviso a este celular. El WhatsApp sigue igual.</p>`;
+  const ag = d.querySelector('[data-a="again"]'); d.insertBefore(box, ag || null); }
+const R0 = window.renderSite; window.renderSite = function(){ const r = R0.apply(this, arguments); try{ bloque(); }catch(e){} return r; };
+D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-a="ntf"]'); if(!b) return; const t = turno(); if(!t) return; b.disabled = true;
+  try{ const perm = Notification.requestPermission();   /* primero el permiso, dentro del toque (iPhone lo exige) */
+    await navigator.serviceWorker.register('sw-ntf.js'); const reg = await navigator.serviceWorker.ready;
+    if(await perm !== 'granted'){ toast('Sin permiso no te podemos avisar. Te responden por WhatsApp.'); b.disabled = false; return; }
+    const sub = await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: u8(NTF.key)});
+    t.push = JSON.parse(JSON.stringify(sub)); save(); renderSite();
+  }catch(err){ toast('No se pudo activar el aviso. Te responden por WhatsApp.'); b.disabled = false; } });
+/* panel: Lo tomo / Confirmarle y No puedo tomarlo le mandan el aviso al paciente que lo pidió (el WhatsApp sale igual) */
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('#panel [data-a="conf"], #panel [data-a="rej"]'); if(!b || typeof A==='undefined') return;
+  const t = S.turnos.find(x => x.id===(b.dataset.id || A.tid)); if(!t || !t.push) return; const sub = t.push; t.push = null;
+  try{ fetch(NTF.api, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sub, tipo: b.dataset.a==='conf' ? 'ok' : 'no', quien: S.cfg.short, cuando: cap(longDate(t.date)) + ', ' + t.time, url: location.href.split('#')[0]})}).catch(() => {}); }catch(err){} }, true);
+try{ bloque(); }catch(e){}
+})();</script>
 </body>
+
 
 </html>
