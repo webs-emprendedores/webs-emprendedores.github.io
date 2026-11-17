@@ -154,7 +154,6 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv .vgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 #tv .vcard{display:block;width:100%;text-align:left;background:var(--s);border:0;border-radius:16px;padding:0;overflow:hidden;cursor:pointer;color:inherit;font:inherit;box-shadow:0 1px 0 var(--l)}
 #tv .vph{display:block;aspect-ratio:4/5;width:100%;object-fit:cover;background:color-mix(in srgb,var(--a) 14%,var(--s))}
-#tv .vph.vno{display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:44px;color:var(--a)}
 #tv .vct{padding:10px 12px 14px}
 #tv .vct .vn,#tv .vct .vp{display:block}
 #tv .vct .vn{font-weight:700;font-size:16px;line-height:1.25;overflow-wrap:anywhere}
@@ -170,6 +169,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv .vday span{color:var(--m);font-size:15px}
 #tv .vrow{display:grid;grid-template-columns:92px 1fr;gap:12px;background:var(--s);border-radius:16px;padding:10px;margin-bottom:10px;align-items:center}
 #tv .vrow .vph{aspect-ratio:1;border-radius:12px}
+#tv .vrow.vsolo{grid-template-columns:1fr}
 #tv .vrow.voff{opacity:.55}
 #tv .vrow .vn{font-weight:700;font-size:17px;line-height:1.25}
 #tv .vrow .vd{color:var(--m);font-size:15px}
@@ -235,6 +235,47 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tvB .vgo:disabled{opacity:.6}
 @media (max-width:360px){#tv .vgrid{gap:10px}#tv h1{font-size:26px}#tvB .vgo{min-width:140px;padding:0 14px}#tvS .vcal{gap:3px}}
 @media (prefers-reduced-motion:no-preference){#tvS{animation:tvIn .18s ease-out}@keyframes tvIn{from{transform:translateY(14px);opacity:.4}to{transform:none;opacity:1}}}
+/*FAM pop*/
+#tv[data-familia="pop"]{background:var(--fondo);color:var(--tinta);font-family:'Figtree',var(--fb);font-weight:500;font-size:17px;line-height:1.5;padding-bottom:0;overflow:hidden}
+#tv[data-familia="pop"] .pBanda{height:40px;background:var(--tinta);color:var(--fondo);overflow:hidden;white-space:nowrap;display:flex;align-items:center;font:700 15px/1 'Archivo',var(--fb);letter-spacing:.04em;text-transform:uppercase}
+#tv[data-familia="pop"] .pBandaT{display:inline-block;padding-left:8px}
+@media (prefers-reduced-motion:no-preference){#tv[data-familia="pop"] .pBandaT{animation:pMarq 28s linear infinite}@keyframes pMarq{to{transform:translateX(-50%)}}}
+#tv[data-familia="pop"] .pIn{padding:24px 20px 40px;position:relative}
+#tv[data-familia="pop"] .pSticker{display:inline-block;width:88px;height:88px;border-radius:50%;border:3px solid var(--tinta);background:var(--fondo);transform:rotate(-6deg);overflow:hidden;box-shadow:4px 4px 0 var(--tinta)}
+#tv[data-familia="pop"] .pSticker img{width:100%;height:100%;object-fit:cover;display:block}
+#tv[data-familia="pop"] .pTit{color:var(--tinta);font:400 36px/1.05 'Archivo Black',var(--fd);text-transform:uppercase;margin:18px 0 12px;letter-spacing:-.01em;overflow-wrap:anywhere}
+#tv[data-familia="pop"] .pTit mark{background:var(--acento);color:var(--sobre-acento);padding:0 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#tv[data-familia="pop"] .pLead{color:var(--tinta);font-size:17px;margin:0 0 24px;max-width:36ch}
+#tv[data-familia="pop"] .pHero{position:relative;margin:0 0 6px}
+#tv[data-familia="pop"] .pHero img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center;border:3px solid var(--tinta);box-shadow:6px 6px 0 var(--tinta)}
+#tv[data-familia="pop"] [data-temporada]{pointer-events:none}
+#tv[data-familia="pop"] [data-temporada]:empty{display:none}
+#tv[data-familia="pop"] .pZona{position:absolute;right:0;top:-132px;width:120px;height:120px}
+#tv[data-familia="pop"] .pSep{height:24px;background:var(--tinta)}
+#tv[data-familia="pop"] .pSep:empty{display:block}
+#tv[data-familia="pop"] .pCat{position:relative;padding:40px 0 40px 20px;background:var(--fondo)}
+#tv[data-familia="pop"] .pCat.pAlt{background:var(--fondo-2)}
+#tv[data-familia="pop"] .pCatT{color:var(--tinta);font:400 28px/1.05 'Archivo Black',var(--fd);text-transform:uppercase;margin:0 20px 20px 0;display:flex;align-items:baseline;gap:12px}
+#tv[data-familia="pop"] .pCatT span{font-size:44px;color:var(--tinta);-webkit-text-stroke:0;opacity:1}
+#tv[data-familia="pop"] .pConf{position:absolute;right:14px;top:12px;width:72px;height:40px}
+#tv[data-familia="pop"] .pCarr{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 40px 14px 0;scrollbar-width:none}
+#tv[data-familia="pop"] .pCarr::-webkit-scrollbar{display:none}
+#tv[data-familia="pop"] .pCarr .pCard{flex:0 0 240px;scroll-snap-align:start}
+#tv[data-familia="pop"] .pCol{display:grid;gap:28px;padding-right:20px}
+#tv[data-familia="pop"] .pCard{display:block;text-align:left;background:none;border:0;padding:0 6px 6px 0;color:inherit;font:inherit;cursor:pointer;width:100%}
+#tv[data-familia="pop"] .pFoto{position:relative;display:block}
+#tv[data-familia="pop"] .pFoto img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center;border:3px solid var(--tinta);box-shadow:6px 6px 0 var(--tinta)}
+#tv[data-familia="pop"] .pPrecio{position:absolute;left:-4px;bottom:14px;background:var(--acento-2);color:var(--tinta);border:2px solid var(--tinta);padding:6px 10px;font:700 15px/1 'Archivo',var(--fb);text-transform:uppercase;letter-spacing:.04em;transform:rotate(-3deg)}
+#tv[data-familia="pop"] .pPrecio.pSolo{position:static;display:inline-block;margin-top:8px}
+#tv[data-familia="pop"] .pN{display:block;margin-top:14px;font:700 17px/1.25 'Figtree',var(--fb);text-transform:uppercase;letter-spacing:.02em}
+#tv[data-familia="pop"] .pSinFoto{display:block;border:3px solid var(--tinta);box-shadow:6px 6px 0 var(--tinta);padding:16px;background:var(--fondo)}
+#tv[data-familia="pop"] .pSinFoto .pN{margin-top:0}
+#tv[data-familia="pop"] .pCard:active .pFoto img,#tv[data-familia="pop"] .pCard:active .pSinFoto{box-shadow:4px 4px 0 var(--tinta);transform:translate(2px,2px)}
+#tv[data-familia="pop"] .pCard:focus-visible{outline:3px solid var(--tinta);outline-offset:4px}
+#tv[data-familia="pop"] .pD{display:block;font-size:16px;margin-top:4px}
+#tv[data-familia="pop"] .pPie{background:var(--tinta);color:var(--fondo);padding:32px 20px 40px;font-size:16px}
+#tv[data-familia="pop"] .pPie a{color:var(--fondo);display:inline-block;padding:12px 16px 12px 0;font-weight:700}
+#tv[data-familia="pop"] .pPie .pAcc{font-weight:500}
 /*TVP v1*/
 .tvp{border:2px solid var(--line,#ddd);border-radius:14px;padding:14px;margin:12px 0 16px;background:#fff}
 .tvp h3{margin:0 0 4px}
@@ -674,12 +715,14 @@ const B = (function(){ const h = site.querySelector('header'), cs = e => e ? get
   const rs = getComputedStyle(D.documentElement), pv = ['--p','--r','--accent','--rose'].map(k => rs.getPropertyValue(k).trim()).find(v => v && sat((() => { const d = D.createElement('i'); d.style.color = v; D.body.appendChild(d); const c = getComputedStyle(d).color; d.remove(); return c; })()) > .25);
   const bc = cands[0] || null, bg = pv || (bc ? bc.backgroundColor : ''), col = '#fff';
   let who = (acc && acc.textContent || '').replace(/^\s*acceso\s*/i,'').trim();
-  return {name, hero: hero ? hero.getAttribute('src') : '', logo: logo ? logo.getAttribute('src') : '', h1: h1 ? h1.textContent.trim() : '', lead: lead ? lead.textContent.trim() : '',
+  const fotos = [...new Set([...site.querySelectorAll('img')].map(i => i.getAttribute('src')).filter(s => s && !/^data:/.test(s)))];
+  return {name, fotos, hero: hero ? hero.getAttribute('src') : '', logo: logo ? logo.getAttribute('src') : '', h1: h1 ? h1.textContent.trim() : '', lead: lead ? lead.textContent.trim() : '',
     ig: ig ? ig.href : '', acc: acc ? acc.getAttribute('href') : '#panel', accT: acc ? acc.textContent.trim() : 'Acceso', who: who || name,
     fd, fb: f(D.body), fn: f(br), a: (bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg)) ? bg : '', ai: col,
     b: cs(D.body).backgroundColor, i: cs(D.body).color};
 })();
 ['a','ai','b','i'].forEach(k => { if(B[k]) tv.style.setProperty('--'+k, B[k]); });
+if(C.familia){ tv.dataset.familia = C.familia; D.body.dataset.familia = C.familia; Object.entries(C.colores||{}).forEach(([k,v]) => tv.style.setProperty('--' + k, v)); }
 tv.style.setProperty('--fd', B.fd); tv.style.setProperty('--fb', B.fb); tv.style.setProperty('--fn', B.fn || B.fd);
 [SH, BAR].forEach(el => { ['--a','--ai','--b','--i','--fd','--fb','--s','--m','--l'].forEach(k => { const v = getComputedStyle(tv).getPropertyValue(k); if(v) el.style.setProperty(k, v); }); });
 
@@ -693,7 +736,7 @@ function V(p){ const v = ((X().var)||{})[p.id] || {}, t = torta(p) || isPers(p),
     per: t ? 1 : 0, qty: t ? 0 : 1, sab: t && !relList().length && !(x.biz||[]).length ? 1 : 0, ext: t && (x.cajas||[]).length ? x.cajas.map(n => ({n, p:0})) : [], idea: isPers(p) ? 1 : 0};
   return Object.assign(d, v); }
 const desde = p => { const v = V(p), ps = (v.sz||[]).map(s => Number(s.p)||0).filter(Boolean); return ps.length ? Math.min(...ps) : (Number(p.price)||0); };
-const ph = (p, cls) => p && p.img && !dup(p) ? `<img class="vph ${cls||''}" src="${E(p.img)}" alt="${E(p.name)}" loading="lazy">` : `<span class="vph vno ${cls||''}" aria-hidden="true">${E(((p&&p.name)||B.name||'?').trim().charAt(0).toUpperCase())}</span>`;
+const ph = (p, cls) => p && p.img && !dup(p) ? `<img class="vph ${cls||''}" src="${E(p.img)}" alt="${E(p.name)}" loading="lazy">` : '';   /* sin foto, sin hueco (17/11): nunca una letra */
 const consulta = () => C.rubro!=='viandas' && !T.tal && !est();   /* sin precio: es una consulta, no un pedido con precio */
 const persFoto = () => { const p = (S.products||[]).find(x => isPers(x) && x.visible!==false); return p && p.img ? p.img : (B.hero || ''); };
 const foto = p => !p ? '' : isPers(p) || p.id==='_pers' ? persFoto() : (p.img && !dup(p) ? p.img : '');
@@ -710,6 +753,7 @@ function talleres(){ const t = X().talleres || [], tk = S.taken || {}; return t.
 /* ---- Página ---- */
 function render(){
   if(C.rubro==='viandas') return renderViandas();
+  if(C.familia==='pop') return renderPop();
   const ps = prods(), cats = [...new Set(ps.map(p => p.cat||'Otros'))], tal = talleres(), pers = (S.products||[]).find(p => isPers(p) && p.visible!==false);
   if(tal.length) cats.push('Talleres');
   if(T.cat && !cats.includes(T.cat)) T.cat = '';
@@ -723,6 +767,32 @@ function render(){
     ${(!T.cat && C.rubro==='tortas') ? `<button type="button" class="vcard vpers${persFoto() ? '' : ' vsolo'}" data-pers="1">${persFoto() ? `<img class="vph" src="${E(persFoto())}" alt="">` : ''}<span class="vct"><span class="vn">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="vp">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span></span></button>` : ''}
     ${foot()}</div>`);
 }
+/* FAMILIA A POP / FESTEJO: banda con texto repetido, logo en sticker, título en mayúscula con una palabra resaltada,
+   foto destacada con sombra dura; catálogo en bandas por categoría con número grande y carrusel (1 o 2 productos: columna). */
+const confites = i => `<svg class="pConf" viewBox="0 0 72 40" aria-hidden="true"><circle cx="10" cy="12" r="6" fill="var(--acento)" stroke="var(--tinta)" stroke-width="2.5"/><path d="M30 30 l8-14 8 14z" fill="var(--acento-2)" stroke="var(--tinta)" stroke-width="2.5" stroke-linejoin="round"/><path d="M52 10 l5 6 5-6 5 6" fill="none" stroke="var(--tinta)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+function popCard(p, ancho){ const f = foto(p), n = desde(p), pr = n ? 'Desde ' + M(n) : 'A consultar';
+  return `<button type="button" class="pCard" data-p="${E(p.id)}">${f ? `<span class="pFoto"><img src="${E(f)}" alt="${E(p.name)}"><span class="pPrecio">${pr}</span></span><span class="pN">${E(p.name)}</span>` : `<span class="pSinFoto"><span class="pN">${E(p.name)}</span>${p.desc ? `<span class="pD">${E(p.desc)}</span>` : ''}<span class="pPrecio pSolo">${pr}</span></span>`}</button>`; }
+function heroPop(){ const usadas = new Set((S.products||[]).map(p => p.img).filter(Boolean).concat(B.logo ? [B.logo] : []));
+  return [C.destacada, B.hero].concat(B.fotos).find(s => s && !usadas.has(s) && !/icon-|logo/i.test(s)) || ''; }
+function renderPop(){
+  const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => p.cat||'Otros'))];
+  const ciudad = ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
+  const banda = cats.concat(tal.length ? ['Talleres'] : [], ciudad ? [ciudad] : []).join(' · ').toUpperCase() + ' · ';
+  const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
+  let h = `<div class="pBanda" aria-hidden="true"><span class="pBandaT" data-temporada="banda">${E(banda.repeat(8))}</span></div><div class="pIn">
+    ${B.logo ? `<span class="pSticker"><img src="${E(B.logo)}" alt="${E(B.name)}"></span>` : `<p class="pN">${E(B.name)}</p>`}
+    <h1 class="pTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="pLead">${E(B.lead)}</p>` : ''}
+    ${heroPop() ? `<div class="pHero"><div class="pZona" data-temporada="foto"></div><img src="${E(heroPop())}" alt="${E(B.name)}"></div>` : ''}</div>`;
+  const banda2 = (i, titulo, html, n) => `<div class="pSep" data-temporada="separador"></div><section class="pCat${i % 2 ? ' pAlt' : ''}">${confites(i)}<h2 class="pCatT"><span>${String(i+1).padStart(2,'0')}</span>${E(titulo)}</h2><div class="${n > 2 ? 'pCarr' : 'pCol'}">${html}</div></section>`;
+  cats.forEach((c, i) => { const its = ps.filter(p => (p.cat||'Otros')===c); h += banda2(i, c, its.map(p => popCard(p)).join(''), its.length); });
+  let k = cats.length;
+  if(tal.length) h += banda2(k++, 'Talleres', tal.map(x => `<button type="button" class="pCard" data-tl="${E(x.id)}"><span class="pSinFoto"><span class="pN">${E(x.name)}</span><span class="pD">${fecha(x.date)}${x.time ? ', ' + E(x.time) + ' h' : ''}</span><span class="pPrecio pSolo">${x.price ? M(x.price) : 'A consultar'}</span></span></button>`).join(''), tal.length);
+  if(C.rubro==='tortas'){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false), f = persFoto();
+    h += banda2(k++, 'Personalizada', `<button type="button" class="pCard" data-pers="1">${f ? `<span class="pFoto"><img src="${E(f)}" alt=""><span class="pPrecio">A tu idea</span></span><span class="pN">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="pD">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span>` : `<span class="pSinFoto"><span class="pN">${E(pers ? pers.name : 'Torta personalizada')}</span><span class="pD">${E((pers && pers.desc) || 'Contame tu idea y te paso el precio.')}</span></span>`}</button>`, 1); }
+  if(!ps.length && !tal.length) h += '<div class="pIn"><p class="pLead">Estamos cargando los productos. Volvé en un rato.</p></div>';
+  const wa = WAN();
+  h += `<footer class="pPie"><div data-temporada="pie"></div>${wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>` : ''}${B.ig ? `<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>` : ''}<br><a class="pAcc" href="${E(B.acc)}">${E(B.accT)}</a></footer>`;
+  put(h); }
 function put(h){ if(tv._h !== h){ tv.innerHTML = h; tv._h = h; } }   /* no redibujar si no cambió nada (las fotos no vuelven a cargar) */
 function foot(){ const wa = WAN();
   return `<div class="vfoot">${wa?`<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Escribir por WhatsApp</a>`:''}${B.ig?`<a href="${E(B.ig)}" target="_blank" rel="noopener">Instagram</a>`:''}<br><a class="vacc" href="${E(B.acc)}">${E(B.accT)}</a></div>`; }
@@ -739,7 +809,7 @@ function renderViandas(){ const md = menu();
   put(`<div class="vtop">${B.logo?`<img src="${E(B.logo)}" alt="">`:''}<b>${E(B.name)}</b></div><div class="vw">
     ${B.h1?`<h1>${E(B.h1)}</h1>`:''}<p class="vintro">${md.some(d => d.open) ? 'Elegí tus viandas de la semana y cuántas querés de cada una.' : 'El menú de esta semana ya cerró. En breve sale el nuevo.'}</p>
     ${md.length ? md.map(d => `<div class="vday"><b>${d.day}</b><span>${pd(d.date).getDate()} de ${MES[pd(d.date).getMonth()]}${d.open?'':' · ya cerró'}</span></div>` + d.items.map(p => { const n = Q[p.id]||0, ex = V(p).ext||[];
-      return `<div class="vrow${d.open?'':' voff'}">${ph(p)}<div><div class="vn">${E(p.name)}</div>${p.desc?`<div class="vd">${E(p.desc)}</div>`:''}${p.price?`<div class="vp">${M(p.price)}</div>`:''}
+      return `<div class="vrow${d.open?'':' voff'}${foto(p)?'':' vsolo'}">${ph(p)}<div><div class="vn">${E(p.name)}</div>${p.desc?`<div class="vd">${E(p.desc)}</div>`:''}${p.price?`<div class="vp">${M(p.price)}</div>`:''}
         ${d.open ? `<div class="vst"><button type="button" data-st="-1" data-id="${E(p.id)}" aria-label="Quitar una">−</button><b>${n}</b><button type="button" data-st="1" data-id="${E(p.id)}" aria-label="Agregar una">+</button></div>` : ''}</div>
         ${d.open && n && ex.length ? `<div class="vx"><select data-op="${E(p.id)}" aria-label="Opción para ${E(p.name)}"><option value="">Sin cambios</option>${ex.map(e => `<option${QO[p.id]===e.n?' selected':''}>${E(e.n)}</option>`).join('')}</select></div>` : ''}</div>`; }).join('')).join('')
       : '<p class="vempty">Estamos armando el menú de la semana.</p>'}
@@ -929,6 +999,9 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
   mount(); if(typeof RP==='function'){ try{ RP(); }catch(err){} } try{ render(); }catch(err){} });
 })();</script>
 </body>
+
+
+
 
 
 
