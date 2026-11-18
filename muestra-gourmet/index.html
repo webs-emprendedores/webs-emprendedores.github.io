@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <script>/*DEMO v1*/(function(){ var D = {"ok": true, "busy": {}, "taken": {}, "products": [{"id": "g1", "cat": "Tortas", "name": "Torta de chocolate y frambuesa", "desc": "Bizcocho húmedo, ganache y frambuesas frescas.", "price": 38000, "visible": true, "img": "img/choco.svg"}, {"id": "g2", "cat": "Tortas", "name": "Torta de autor", "desc": "La diseñamos juntas, con el sabor que quieras.", "price": 0, "visible": true, "img": ""}, {"id": "g3", "cat": "Tartas", "name": "Tarta de frutos rojos", "desc": "Masa sablée, crema pastelera y frutos rojos.", "price": 26000, "visible": true, "img": "img/tarta.svg"}, {"id": "g4", "cat": "Tartas", "name": "Lemon pie", "desc": "Crema de limón y merengue italiano.", "price": 24000, "visible": true, "img": "img/lemon.svg"}, {"id": "g5", "cat": "Cheesecakes", "name": "Cheesecake de maracuyá", "desc": "Base de galleta y coulis de maracuyá.", "price": 28000, "visible": true, "img": "img/cheesecake.svg"}, {"id": "g6", "cat": "Petit four", "name": "Caja de macarons", "desc": "Doce macarons de tres sabores.", "price": 18000, "visible": true, "img": "img/macarons.svg"}, {"id": "g7", "cat": "Cookies", "name": "Cookies de manteca", "desc": "Media docena, con chips de chocolate.", "price": 9000, "visible": true, "img": "img/cookies.svg"}, {"id": "g8", "cat": "Mesa dulce", "name": "Mesa dulce para 20", "desc": "Tartas, macarons y cookies para tu evento.", "price": 0, "visible": true, "img": ""}], "settings": {"maxPerDay": 9999, "blocked": [], "extra": {"kind": "tortas", "lead": 3, "biz": ["Vainilla", "Chocolate"], "rel": ["Dulce de leche", "Crema de frambuesa", "Ganache de chocolate"], "cob": ["Ganache", "Buttercream"], "talleres": [], "pickup": "Barrio Güemes, Córdoba (te paso la dirección al confirmar)"}}}, of = window.fetch; if(window.NO_DEMO) return;   /* demo: servidor de mentira, nada sale de tu Link de pedidos (las pruebas lo apagan con NO_DEMO y usan su servidor simulado) */
-  window.fetch = function(u, o){ if(String(u).indexOf('script.google.com') < 0) return of.apply(this, arguments);
+  window.fetch = function(u, o){ if(String(u).indexOf('script.google.com') < 0) return of.apply(this, arguments); if(localStorage.getItem('cont_caido') === '1') return Promise.reject(new TypeError('Failed to fetch'));   /* MUESTRA: servidor caído a propósito (plan de contingencia, 17/11 22:41) */ 
     var q = {}; try{ q = JSON.parse((o && o.body) || '{}'); }catch(e){} var a = q.a || 'pub', r = {ok:true};
     if(a === 'pub') r = D; else if(a === 'all') r = q.pin === '1234' ? {ok:true, products:D.products, orders:[], settings:D.settings, calc:{rows:[]}} : {ok:false, msg:'Clave incorrecta (en la demo es 1234)'};
     else if(a === 'saveProducts') D.products = q.products; else if(a === 'saveSettings') D.settings = q.settings; else if(a === 'order') r = {ok:true, id:'D' + Date.now()};
@@ -534,6 +534,12 @@ body.pnl #toast.pOk{white-space:nowrap}
 #panel .pLnk b{display:block;font-size:18px;line-height:1.25;margin:0 0 6px}
 #panel .pLnk p{margin:0 0 12px;font-size:16px;line-height:1.35;overflow-wrap:anywhere;color:var(--pt,inherit)}
 #panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font-weight:700;font-size:17px;line-height:1.2;font-family:inherit;cursor:pointer}   /* Copiar en negrita como los demás botones (CONTENIDO 21:25) */
+</style>
+<style>/*CONT v1*/
+#cont{position:fixed;left:0;right:0;top:0;z-index:95;padding:10px 16px;background:#fff3c4;color:#2b2200;border-bottom:1px solid #d9b84a;font-weight:600;font-size:16px;line-height:1.35;text-align:center;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#cont.ok{background:#e2f1e3;color:#123d1c;border-color:#7fb38a}
+body.contOn{padding-top:var(--contH,48px)}
+body.contOn .pnlTop{top:var(--contH,48px)!important}
 </style>
 </head>
 <body>
@@ -1515,7 +1521,51 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
   const say = m => { try{ toast(m); }catch(x){} };
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
+<script>/*CONT v1*/ (function(){ const D = document, F0 = window.fetch, P = location.pathname;
+const LEE = ['all','pub','consInfo','consPub','payCheck','export'];
+const COLA = ['saveOrders','saveOrder','delOrders','delOrder','saveSettings','saveProducts','saveProduct','delProduct','order','consDatos','consIg','consVote','ntfSub'];
+const KO = 'cont_out_' + P, KC = 'cont_cola_' + P, KA = c => 'cont_all_' + P + '_' + (c || '');
+const lee = k => { try{ return JSON.parse(localStorage.getItem(k)) || null; }catch(e){ return null; } }, pone = (k, v) => { try{ v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+const resp = o => new Response(JSON.stringify(o), {headers:{'Content-Type':'application/json'}});
+const hash = async s => { try{ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('cont|' + s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,'0')).join(''); }catch(e){ return 'x' + String(s).length; } };
+let TM = null;
+function aviso(t, ok, ms){ let b = D.getElementById('cont'); if(!t){ if(b) b.remove(); D.body.classList.remove('contOn'); return; }
+  if(!b){ b = D.createElement('div'); b.id = 'cont'; b.setAttribute('role','status'); D.body.appendChild(b); } b.textContent = t; b.classList.toggle('ok', !!ok);
+  D.body.classList.add('contOn'); D.body.style.setProperty('--contH', b.offsetHeight + 'px'); clearTimeout(TM); if(ms) TM = setTimeout(() => aviso(''), ms); }
+const pendientes = () => (lee(KO) || []).length + (lee(KC) || []).length;
+async function servidor(u, o){ const r = await F0(u, o); if(r.status >= 500) throw new Error('caído'); const j = await r.clone().json().catch(() => null); if(!j || typeof j !== 'object') throw new Error('caído'); return r; }
+window.fetch = async function(u, o){ let q = null; try{ q = JSON.parse(o && o.body); }catch(e){} if(!q || !q.a || !/script\.google\.com|^muestra:local$/.test(String(u))) return F0.apply(this, arguments);
+  try{ const r = await servidor(u, o);
+    if(q.a === 'all' && q.pin){ const j = await r.clone().json(); if(j.ok) pone(KA(q.c), {t: Date.now(), h: await hash(q.pin), r: j}); }
+    if(pendientes()) setTimeout(subir, 0); return r;
+  }catch(err){
+    if(q.a === 'order' && !q.pin){   /* (a) Link de turnos / pedidos: WhatsApp ahora y reenvío cuando vuelva */
+      const x = JSON.parse(JSON.stringify(q)); const nota = 'Sin servidor: también llegó por WhatsApp'; const f = o => { o.notes = [o.notes, nota].filter(Boolean).join(o.notes && o.notes.indexOf('\n') >= 0 ? '\n' : ' · '); };
+      if(x.order) f(x.order); (x.orders || []).forEach(f); const out = lee(KO) || []; out.push({u: String(u), b: x, t: Date.now()}); pone(KO, out);
+      aviso('No se pudo guardar: mandalo por WhatsApp (se abre ahora). Queda guardado en tu celular y se envía solo cuando vuelva.', false, 9000);
+      return resp({ok:true, id:'sin-servidor-' + Date.now(), offline:true}); }
+    if(q.a === 'all' && q.pin){   /* (b) Panel: la última copia, solo con la misma clave */
+      const c = lee(KA(q.c)); if(c && c.h === await hash(q.pin)){ aviso('Sin conexión: estás viendo la última copia guardada en este celular. Lo que anotes se guarda cuando vuelva.'); const j = JSON.parse(JSON.stringify(c.r)); j.offline = true; return resp(j); }
+      return resp({ok:false, msg:'Sin conexión con el servidor. Probá de nuevo en un rato.'}); }
+    if(q.pin && COLA.includes(q.a)){ const c = lee(KC) || []; c.push({u: String(u), b: q, t: Date.now()}); pone(KC, c); aviso('Sin conexión: se guarda cuando vuelva.'); return resp({ok:true, offline:true}); }
+    if(q.a === 'ntfSub'){ const c = lee(KO) || []; c.push({u: String(u), b: q, t: Date.now()}); pone(KO, c); return resp({ok:true, offline:true}); }
+    if(LEE.includes(q.a)) throw err;
+    return resp({ok:false, msg:'Sin conexión con el servidor: esto se puede hacer cuando vuelva.'}); } };
+let SUBE = false;
+async function subir(){ if(SUBE) return; SUBE = true; let ok = 0;
+  for(const k of [KO, KC]){ let c = lee(k) || [];
+    while(c.length){ try{ await servidor(c[0].u, {method:'POST', body:JSON.stringify(c[0].b)}); c.shift(); pone(k, c.length ? c : null); ok++; }catch(e){ break; } } }
+  SUBE = false; if(ok && !pendientes()) aviso('Listo: volvió el servidor y quedó todo guardado.', true, 4000); }
+/* MUESTRAS: simular la caída desde Más */
+const MUES = /\/muestra-[^/]*\//.test(P);
+if(MUES){ new MutationObserver(() => { const m = [...D.querySelectorAll('#panel .pMenu')].find(x => x.offsetParent); if(!m || m.querySelector('[data-cont]')) return; const on = localStorage.getItem('cont_caido') === '1';
+    m.insertAdjacentHTML('beforeend', `<button type="button" class="btn o w opt pRow" data-cont="1"><b>Muestra: ${on ? 'volver a prender el servidor' : 'simular que se cae el servidor'}</b><span>${on ? 'Ahora está apagado: probá anotar o pedir' : 'Para probar el plan de contingencia'}</span></button>`); }).observe(D.body, {childList:true, subtree:true});
+  D.addEventListener('click', e => { const b = e.target.closest('[data-cont]'); if(!b) return; const on = localStorage.getItem('cont_caido') === '1'; try{ on ? localStorage.removeItem('cont_caido') : localStorage.setItem('cont_caido', '1'); }catch(x){} b.remove(); if(on) subir(); aviso(on ? 'Servidor de la muestra prendido.' : 'Servidor de la muestra apagado: probá anotar o pedir.', on, 3500); }); }
+addEventListener('online', subir); setInterval(subir, 30000); setTimeout(subir, 1500);
+if(pendientes()) setTimeout(() => { if(!SUBE && pendientes()) aviso('Sin conexión: se guarda cuando vuelva.'); }, 2500);
+})();</script>
 </body>
+
 
 
 

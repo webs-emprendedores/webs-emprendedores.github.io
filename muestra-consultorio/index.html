@@ -346,6 +346,12 @@ body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, t
 #panel .cPin{display:block;width:100%;box-sizing:border-box;min-height:52px;font-size:18px;padding:0 14px;border:1.5px solid var(--pt);border-radius:12px;background:var(--pc);color:var(--pt)}
 body.cEsp #panel .pT{display:none}
 </style>
+<style>/*CONT v1*/
+#cont{position:fixed;left:0;right:0;top:0;z-index:95;padding:10px 16px;background:#fff3c4;color:#2b2200;border-bottom:1px solid #d9b84a;font-weight:600;font-size:16px;line-height:1.35;text-align:center;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#cont.ok{background:#e2f1e3;color:#123d1c;border-color:#7fb38a}
+body.contOn{padding-top:var(--contH,48px)}
+body.contOn .pnlTop{top:var(--contH,48px)!important}
+</style>
 <style>/*GRD v1*/
 .grd{display:inline-flex;align-items:center;gap:8px;min-height:48px;margin:0 0 18px;padding:0 14px;border:1.5px solid currentColor;border-radius:999px;background:transparent;color:inherit;font-weight:600;font-size:16px;line-height:1.2;font-family:inherit;cursor:pointer}
 .grd svg{width:20px;height:20px;flex:none}
@@ -1068,7 +1074,7 @@ function consFake(q, D, d){ const C = consDb(D), yo = C.miembros.find(m => m.cli
   if(q.a==='consFinMuestra'){ C.prueba_terminada = true; return info(); }
   if(q.a==='setPin' && yo.nueva) yo.nueva = false;
   return null; }
-function fakeApi(q){ let D = {}; try{ D = JSON.parse(localStorage.getItem(MDB)) || {}; }catch(e){}
+function fakeApi(q){ if(localStorage.getItem('cont_caido') === '1') return Promise.reject(new TypeError('Failed to fetch'));   /* MUESTRA: servidor caído a propósito (plan de contingencia, 17/11 22:41) */  let D = {}; try{ D = JSON.parse(localStorage.getItem(MDB)) || {}; }catch(e){}
   const d = D[q.c] = D[q.c] || {pin:'1234', orders:[], extra:{kind:'turnos', cfg:{}}, n:0}; let r = {ok:true};
   const cr = consFake(q, D, d); if(cr){ try{ localStorage.setItem(MDB, JSON.stringify(D)); }catch(e){} return Promise.resolve(new Response(JSON.stringify(cr), {headers:{'Content-Type':'application/json'}})); }
   if(q.a==='pub' && D._cons){ const m = D._cons.miembros.find(x => x.cliente===q.c); if(m && m.alta!=='activo'){ r.pausa = true; } }
@@ -1361,7 +1367,8 @@ function pagina(){ const el = q('#site'); if(!el || el.hidden || !CPUB) return;
   if(!el.querySelector('.cFoot')) el.insertAdjacentHTML('beforeend', pie()); }
 fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(r => r.json()).then(r => { if(r.ok){ CPUB = r; if(!q('#site').hidden) renderSite(); } }).catch(() => {});
 /* ===== PANEL ===== */
-async function pull(){ if(BUSY || !A.ok || CUR===null) return; BUSY = true; try{ const r = await api({a:'consInfo', pin:A.pin}); if(r.ok){ CI = r; CIK = PROS[CUR].c + '|' + A.pin; } }catch(e){} BUSY = false; renderPanel(); }
+let FALLA = 0;   /* sin servidor (plan de contingencia): no reintentar en cada dibujo, recién a los 30 s */
+async function pull(){ if(BUSY || !A.ok || CUR===null || Date.now() - FALLA < 30000) return; BUSY = true; let bien = false; try{ const r = await api({a:'consInfo', pin:A.pin}); if(r.ok){ CI = r; CIK = PROS[CUR].c + '|' + A.pin; bien = true; } }catch(e){} BUSY = false; if(!bien){ FALLA = Date.now(); return; } FALLA = 0; renderPanel(); }
 const R1 = window.renderPanel;
 window.renderPanel = function(){ R1.apply(this, arguments); try{ paint(); }catch(e){ console.error('CONS', e); } };
 function screen(h){ const el = q('#panel'); [...el.children].forEach(x => { if(!x.classList.contains('pnlTop') && !x.classList.contains('pT')) x.remove(); }); const top = el.querySelector('.pnlTop'); top ? top.insertAdjacentHTML('afterend', h) : el.insertAdjacentHTML('afterbegin', h); }
@@ -1423,6 +1430,49 @@ D.addEventListener('click', e => { if(e.target.closest('#panel .pT button, #pane
 addEventListener('hashchange', () => { CI = null; CS = ''; });
 })();
 </script>
+<script>/*CONT v1*/ (function(){ const D = document, F0 = window.fetch, P = location.pathname;
+const LEE = ['all','pub','consInfo','consPub','payCheck','export'];
+const COLA = ['saveOrders','saveOrder','delOrders','delOrder','saveSettings','saveProducts','saveProduct','delProduct','order','consDatos','consIg','consVote','ntfSub'];
+const KO = 'cont_out_' + P, KC = 'cont_cola_' + P, KA = c => 'cont_all_' + P + '_' + (c || '');
+const lee = k => { try{ return JSON.parse(localStorage.getItem(k)) || null; }catch(e){ return null; } }, pone = (k, v) => { try{ v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+const resp = o => new Response(JSON.stringify(o), {headers:{'Content-Type':'application/json'}});
+const hash = async s => { try{ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('cont|' + s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,'0')).join(''); }catch(e){ return 'x' + String(s).length; } };
+let TM = null;
+function aviso(t, ok, ms){ let b = D.getElementById('cont'); if(!t){ if(b) b.remove(); D.body.classList.remove('contOn'); return; }
+  if(!b){ b = D.createElement('div'); b.id = 'cont'; b.setAttribute('role','status'); D.body.appendChild(b); } b.textContent = t; b.classList.toggle('ok', !!ok);
+  D.body.classList.add('contOn'); D.body.style.setProperty('--contH', b.offsetHeight + 'px'); clearTimeout(TM); if(ms) TM = setTimeout(() => aviso(''), ms); }
+const pendientes = () => (lee(KO) || []).length + (lee(KC) || []).length;
+async function servidor(u, o){ const r = await F0(u, o); if(r.status >= 500) throw new Error('caído'); const j = await r.clone().json().catch(() => null); if(!j || typeof j !== 'object') throw new Error('caído'); return r; }
+window.fetch = async function(u, o){ let q = null; try{ q = JSON.parse(o && o.body); }catch(e){} if(!q || !q.a || !/script\.google\.com|^muestra:local$/.test(String(u))) return F0.apply(this, arguments);
+  try{ const r = await servidor(u, o);
+    if(q.a === 'all' && q.pin){ const j = await r.clone().json(); if(j.ok) pone(KA(q.c), {t: Date.now(), h: await hash(q.pin), r: j}); }
+    if(pendientes()) setTimeout(subir, 0); return r;
+  }catch(err){
+    if(q.a === 'order' && !q.pin){   /* (a) Link de turnos / pedidos: WhatsApp ahora y reenvío cuando vuelva */
+      const x = JSON.parse(JSON.stringify(q)); const nota = 'Sin servidor: también llegó por WhatsApp'; const f = o => { o.notes = [o.notes, nota].filter(Boolean).join(o.notes && o.notes.indexOf('\n') >= 0 ? '\n' : ' · '); };
+      if(x.order) f(x.order); (x.orders || []).forEach(f); const out = lee(KO) || []; out.push({u: String(u), b: x, t: Date.now()}); pone(KO, out);
+      aviso('No se pudo guardar: mandalo por WhatsApp (se abre ahora). Queda guardado en tu celular y se envía solo cuando vuelva.', false, 9000);
+      return resp({ok:true, id:'sin-servidor-' + Date.now(), offline:true}); }
+    if(q.a === 'all' && q.pin){   /* (b) Panel: la última copia, solo con la misma clave */
+      const c = lee(KA(q.c)); if(c && c.h === await hash(q.pin)){ aviso('Sin conexión: estás viendo la última copia guardada en este celular. Lo que anotes se guarda cuando vuelva.'); const j = JSON.parse(JSON.stringify(c.r)); j.offline = true; return resp(j); }
+      return resp({ok:false, msg:'Sin conexión con el servidor. Probá de nuevo en un rato.'}); }
+    if(q.pin && COLA.includes(q.a)){ const c = lee(KC) || []; c.push({u: String(u), b: q, t: Date.now()}); pone(KC, c); aviso('Sin conexión: se guarda cuando vuelva.'); return resp({ok:true, offline:true}); }
+    if(q.a === 'ntfSub'){ const c = lee(KO) || []; c.push({u: String(u), b: q, t: Date.now()}); pone(KO, c); return resp({ok:true, offline:true}); }
+    if(LEE.includes(q.a)) throw err;
+    return resp({ok:false, msg:'Sin conexión con el servidor: esto se puede hacer cuando vuelva.'}); } };
+let SUBE = false;
+async function subir(){ if(SUBE) return; SUBE = true; let ok = 0;
+  for(const k of [KO, KC]){ let c = lee(k) || [];
+    while(c.length){ try{ await servidor(c[0].u, {method:'POST', body:JSON.stringify(c[0].b)}); c.shift(); pone(k, c.length ? c : null); ok++; }catch(e){ break; } } }
+  SUBE = false; if(ok && !pendientes()) aviso('Listo: volvió el servidor y quedó todo guardado.', true, 4000); }
+/* MUESTRAS: simular la caída desde Más */
+const MUES = /\/muestra-[^/]*\//.test(P);
+if(MUES){ new MutationObserver(() => { const m = [...D.querySelectorAll('#panel .pMenu')].find(x => x.offsetParent); if(!m || m.querySelector('[data-cont]')) return; const on = localStorage.getItem('cont_caido') === '1';
+    m.insertAdjacentHTML('beforeend', `<button type="button" class="btn o w opt pRow" data-cont="1"><b>Muestra: ${on ? 'volver a prender el servidor' : 'simular que se cae el servidor'}</b><span>${on ? 'Ahora está apagado: probá anotar o pedir' : 'Para probar el plan de contingencia'}</span></button>`); }).observe(D.body, {childList:true, subtree:true});
+  D.addEventListener('click', e => { const b = e.target.closest('[data-cont]'); if(!b) return; const on = localStorage.getItem('cont_caido') === '1'; try{ on ? localStorage.removeItem('cont_caido') : localStorage.setItem('cont_caido', '1'); }catch(x){} b.remove(); if(on) subir(); aviso(on ? 'Servidor de la muestra prendido.' : 'Servidor de la muestra apagado: probá anotar o pedir.', on, 3500); }); }
+addEventListener('online', subir); setInterval(subir, 30000); setTimeout(subir, 1500);
+if(pendientes()) setTimeout(() => { if(!SUBE && pendientes()) aviso('Sin conexión: se guarda cuando vuelva.'); }, 2500);
+})();</script>
 <script>/*GRD v1*/ (function(){ const D = document, ua = navigator.userAgent || '';
 const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
 const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
@@ -1488,6 +1538,7 @@ D.addEventListener('click', e => { const b = e.target.closest && e.target.closes
 try{ bloque(); }catch(e){}
 })();</script>
 </body>
+
 
 
 
