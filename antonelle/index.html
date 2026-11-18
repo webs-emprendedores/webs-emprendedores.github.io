@@ -453,6 +453,13 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #tv[data-familia="pop"] .pCarr .pCard .vElegir{margin-top:auto;align-self:flex-start}
 #tv[data-familia="pop"] .pCarr .pCard>:nth-last-child(2){margin-bottom:10px}   /* el aire de siempre antes del Elegir */
 body>#site.filaSt{position:sticky}
+/* FLUIDO EN IPHONE (Dardo 18/11 10:41): la fila trabada no se mueve con scrollLeft (scroll anidado en el hilo principal, se veía a
+   saltos en iPhone) sino corriendo una pista con transform en su propia capa; donde el navegador sabe animar con el scroll
+   (animation-timeline), lo hace él solo sin JS en cada cuadro. Se ve igual: la fila recorta en el mismo borde. */
+#tv[data-familia="pop"] .pCarr.filaOn{overflow:hidden;padding-right:0;scroll-snap-type:none}
+#tv[data-familia="pop"] .pCarr.filaOn>.filaPista{display:flex;gap:16px;align-items:stretch;width:max-content;padding-right:40px;box-sizing:content-box;will-change:transform;transform:translate3d(0,0,0);backface-visibility:hidden}
+@keyframes filaMov{from{transform:translate3d(0,0,0)}to{transform:translate3d(var(--filaX),0,0)}}
+@supports (animation-timeline: scroll()){#tv[data-familia="pop"] .pCarr.filaOn.filaCss>.filaPista{animation:filaMov linear both;animation-timeline:scroll(root block);animation-range:var(--filaA) var(--filaB)}}
 .filaEsp{display:block;width:1px}
 </style>
 <style>/*PNL v1*/
@@ -1385,7 +1392,7 @@ D.addEventListener('change', async e => { const f = e.target.closest('#tvpc inpu
 const D = document, mq = matchMedia('(prefers-reduced-motion: reduce)'); let fila = null, t0 = 0;
 function bloque(sec){ const a = sec.previousElementSibling, z = sec.nextElementSibling;
   return [a && a.classList.contains('pSep') ? a : sec, z && z.classList.contains('pSep') ? z : sec]; }
-function desarmar(){ D.querySelectorAll('.filaEsp').forEach(e => e.remove()); const st = D.getElementById('site'); if(st){ st.classList.remove('filaSt'); st.style.top = ''; }
+function desarmar(){ D.querySelectorAll('.filaEsp').forEach(e => e.remove()); D.querySelectorAll('#tv .filaPista').forEach(t => { const c = t.parentElement; c.classList.remove('filaOn', 'filaCss'); ['--filaA', '--filaB', '--filaX'].forEach(k => c.style.removeProperty(k)); while(t.firstChild) c.insertBefore(t.firstChild, t); t.remove(); c.onscroll = null; }); const st = D.getElementById('site'); if(st){ st.classList.remove('filaSt'); st.style.top = ''; }
   D.querySelectorAll('#tv .pCarr').forEach(c => c.style.scrollSnapType = ''); fila = null; }
 function armar(){
   desarmar(); const tv = D.getElementById('tv'), st = D.getElementById('site'); if(!tv || !st || st.parentElement !== D.body || tv.hidden || !tv.offsetHeight || tv.dataset.familia !== 'pop' || mq.matches) return;
@@ -1396,16 +1403,21 @@ function armar(){
   const yb = ra.top + sy, ys = st.getBoundingClientRect().top + sy, fin = D.documentElement.scrollHeight - vh;
   const A = Math.round(Math.max(0, Math.min(yb - (vh - alto) / 2, fin)));   /* se traba con el bloque centrado (o donde termina el Link de pedidos) */
   const e = D.createElement('div'); e.className = 'filaEsp'; e.setAttribute('aria-hidden', 'true'); e.style.height = max + 'px'; st.after(e);
-  st.classList.add('filaSt'); st.style.top = Math.round(ys - A) + 'px'; c.style.scrollSnapType = 'none';
-  fila = {c, max, A, a, z}; mover(); }
-function mover(){ if(!fila) return; const p = Math.min(1, Math.max(0, (scrollY - fila.A) / fila.max)); fila.c.scrollLeft = Math.round(p * fila.max); }
+  st.classList.add('filaSt'); st.style.top = Math.round(ys - A) + 'px';
+  const t = D.createElement('div'); t.className = 'filaPista'; while(c.firstChild) t.appendChild(c.firstChild); c.appendChild(t); c.classList.add('filaOn');
+  const m = Math.max(0, Math.round(t.offsetWidth - c.clientWidth)); c.scrollLeft = 0; c.onscroll = () => { if(c.scrollLeft) c.scrollLeft = 0; };   /* el foco con teclado no la corre */
+  const css = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline', 'scroll()'));
+  if(css){ c.style.setProperty('--filaA', A + 'px'); c.style.setProperty('--filaB', (A + m) + 'px'); c.style.setProperty('--filaX', (-m) + 'px'); c.classList.add('filaCss'); }
+  fila = {c, t, max: m, A, a, z, css}; mover(); }
+function mover(){ if(!fila || fila.css) return; const p = Math.min(1, Math.max(0, (scrollY - fila.A) / fila.max)), x = Math.round(p * fila.max); if(x !== fila.x){ fila.x = x; fila.t.style.transform = 'translate3d(' + (-x) + 'px,0,0)'; } }   /* solo transform, nada que lea el diseño */
 function luego(){ clearTimeout(t0); t0 = setTimeout(armar, 120); }
-addEventListener('scroll', () => { if(fila) mover(); }, {passive: true});   /* directo, sin requestAnimationFrame (18/11) */
+addEventListener('scroll', () => { if(fila && !fila.css) mover(); }, {passive: true});   /* directo, sin requestAnimationFrame (18/11) */
 addEventListener('resize', luego); addEventListener('load', luego); addEventListener('hashchange', luego);
 D.addEventListener('load', e => { if(e.target && e.target.tagName === 'IMG' && e.target.closest('#tv')) luego(); }, true);
 if(mq.addEventListener) mq.addEventListener('change', luego); else if(mq.addListener) mq.addListener(luego);
 const RS = window.renderSite; if(typeof RS === 'function') window.renderSite = function(){ const r = RS.apply(this, arguments); luego(); return r; };
-window.__fila = () => fila ? [{max: fila.max, A: fila.A, cat: fila.c.parentElement.querySelector('.pCatT').textContent}] : [];
+window.__fila = () => fila ? [{max: fila.max, A: fila.A, css: fila.css, cat: fila.c.parentElement.querySelector('.pCatT').textContent}] : [];
+window.__filaX = () => { if(!fila) return null; const m = new DOMMatrixReadOnly(getComputedStyle(fila.t).transform); return Math.round(-m.m41); };   /* cuánto corrió la fila (para las pruebas) */
 luego();
 })();</script>
 <script>/*PNL v1*/ (function(){
