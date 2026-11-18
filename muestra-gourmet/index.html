@@ -1528,17 +1528,19 @@ const KO = 'cont_out_' + P, KC = 'cont_cola_' + P, KA = c => 'cont_all_' + P + '
 const lee = k => { try{ return JSON.parse(localStorage.getItem(k)) || null; }catch(e){ return null; } }, pone = (k, v) => { try{ v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
 const resp = o => new Response(JSON.stringify(o), {headers:{'Content-Type':'application/json'}});
 const hash = async s => { try{ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('cont|' + s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,'0')).join(''); }catch(e){ return 'x' + String(s).length; } };
-let TM = null;
+let TM = null, EN_COLA = 0, CAE = false;   /* CAE: el último pedido al servidor falló */
+/* sin servidor, el panel no puede decir "Guardado": queda anotado en el celular hasta que vuelva */
+{ const T0 = window.toast; if(typeof T0 === 'function') window.toast = function(m){ if((CAE || Date.now() - EN_COLA < 2500) && /guard|listo|cambi|anotad/i.test(String(m))) m = 'Anotado en este celular: se guarda cuando vuelva'; return T0.call(this, m); }; }
 function aviso(t, ok, ms){ let b = D.getElementById('cont'); if(!t){ if(b) b.remove(); D.body.classList.remove('contOn'); return; }
   if(!b){ b = D.createElement('div'); b.id = 'cont'; b.setAttribute('role','status'); D.body.appendChild(b); } b.textContent = t; b.classList.toggle('ok', !!ok);
   D.body.classList.add('contOn'); D.body.style.setProperty('--contH', b.offsetHeight + 'px'); clearTimeout(TM); if(ms) TM = setTimeout(() => aviso(''), ms); }
 const pendientes = () => (lee(KO) || []).length + (lee(KC) || []).length;
 async function servidor(u, o){ const r = await F0(u, o); if(r.status >= 500) throw new Error('caído'); const j = await r.clone().json().catch(() => null); if(!j || typeof j !== 'object') throw new Error('caído'); return r; }
 window.fetch = async function(u, o){ let q = null; try{ q = JSON.parse(o && o.body); }catch(e){} if(!q || !q.a || !/script\.google\.com|^muestra:local$/.test(String(u))) return F0.apply(this, arguments);
-  try{ const r = await servidor(u, o);
+  try{ const r = await servidor(u, o); CAE = false;
     if(q.a === 'all' && q.pin){ const j = await r.clone().json(); if(j.ok) pone(KA(q.c), {t: Date.now(), h: await hash(q.pin), r: j}); }
     if(pendientes()) setTimeout(subir, 0); return r;
-  }catch(err){
+  }catch(err){ CAE = true;
     if(q.a === 'order' && !q.pin){   /* (a) Link de turnos / pedidos: WhatsApp ahora y reenvío cuando vuelva */
       const x = JSON.parse(JSON.stringify(q)); const nota = 'Sin servidor: también llegó por WhatsApp'; const f = o => { o.notes = [o.notes, nota].filter(Boolean).join(o.notes && o.notes.indexOf('\n') >= 0 ? '\n' : ' · '); };
       if(x.order) f(x.order); (x.orders || []).forEach(f); const out = lee(KO) || []; out.push({u: String(u), b: x, t: Date.now()}); pone(KO, out);
@@ -1547,7 +1549,7 @@ window.fetch = async function(u, o){ let q = null; try{ q = JSON.parse(o && o.bo
     if(q.a === 'all' && q.pin){   /* (b) Panel: la última copia, solo con la misma clave */
       const c = lee(KA(q.c)); if(c && c.h === await hash(q.pin)){ aviso('Sin conexión: estás viendo la última copia guardada en este celular. Lo que anotes se guarda cuando vuelva.'); const j = JSON.parse(JSON.stringify(c.r)); j.offline = true; return resp(j); }
       return resp({ok:false, msg:'Sin conexión con el servidor. Probá de nuevo en un rato.'}); }
-    if(q.pin && COLA.includes(q.a)){ const c = lee(KC) || []; c.push({u: String(u), b: q, t: Date.now()}); pone(KC, c); aviso('Sin conexión: se guarda cuando vuelva.'); return resp({ok:true, offline:true}); }
+    if(q.pin && COLA.includes(q.a)){ const c = lee(KC) || []; c.push({u: String(u), b: q, t: Date.now()}); pone(KC, c); EN_COLA = Date.now(); aviso('Sin conexión: se guarda cuando vuelva.'); return resp({ok:true, offline:true}); }
     if(q.a === 'ntfSub'){ const c = lee(KO) || []; c.push({u: String(u), b: q, t: Date.now()}); pone(KO, c); return resp({ok:true, offline:true}); }
     if(LEE.includes(q.a)) throw err;
     return resp({ok:false, msg:'Sin conexión con el servidor: esto se puede hacer cuando vuelva.'}); } };
