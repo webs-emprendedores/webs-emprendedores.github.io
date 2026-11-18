@@ -205,7 +205,7 @@ body.pnl #panel .pnlTop{position:sticky;top:0;z-index:30;min-height:64px;display
 .pnlVer{flex:none;min-height:48px;display:inline-flex;align-items:center;padding:0 12px;border:1.5px solid var(--pt);border-radius:12px;color:var(--pt)!important;font-weight:600;font-size:16px;text-decoration:none;white-space:nowrap}
 @media (max-width:359px){.pnlMarca{gap:8px}.pnlMarca b{font-size:17px}.pnlVer{padding:0 8px}}
 body.pnl #panel .pT{position:fixed;left:0;right:0;bottom:0;z-index:40;height:calc(68px + env(safe-area-inset-bottom));padding:4px 6px env(safe-area-inset-bottom);box-sizing:border-box;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--pc);border-top:1px solid var(--pl)}
-body.pnl #panel .pT button{height:60px;border:0;border-radius:14px;background:transparent;color:var(--pt);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font:600 15px/1.1 inherit;font-family:inherit;padding:0 2px;cursor:pointer}
+body.pnl #panel .pT button{height:60px;border:0;border-radius:14px;background:transparent;color:var(--pt);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-weight:600;font-size:15px;line-height:1.1;font-family:inherit;padding:0 2px;cursor:pointer}
 body.pnl #panel .pT button svg{width:24px;height:24px;flex:none}
 body.pnl #panel .pT button.on{background:var(--pas15);font-weight:700}
 body.pnl #panel .ptop h1,body.pnl #panel .sheet>h2{font-size:22px}
@@ -221,7 +221,7 @@ body.pnl #panel .opt::after{content:"›";position:absolute;right:16px;top:50%;t
 body.pnl #panel .opt b{font-size:18px;color:var(--pt)}
 body.pnl #panel .pMenu{margin-top:4px;border:1px solid var(--pl);border-radius:16px;overflow:hidden;background:var(--pc)}
 body.pnl #panel .pMenu .opt:first-child{border-top:0}
-body.pnl #panel .pSalir{display:flex;align-items:center;width:100%;min-height:64px;padding:0 16px;border:0;border-top:1px solid var(--pl);background:var(--pc);color:var(--prj);font:600 18px/1.2 inherit;font-family:inherit;text-align:left;cursor:pointer}
+body.pnl #panel .pSalir{display:flex;align-items:center;width:100%;min-height:64px;padding:0 16px;border:0;border-top:1px solid var(--pl);background:var(--pc);color:var(--prj);font-weight:600;font-size:18px;line-height:1.2;font-family:inherit;text-align:left;cursor:pointer}
 body.pnl #panel .hint,body.pnl #panel .sheet>.sub,body.pnl #panel .mut,body.pnl #panel .row .tag,body.pnl #panel .opt span,body.pnl #panel .days span,body.pnl #panel .days small{font-size:16px}
 body.pnl #panel .days button{min-height:56px}
 body.pnl #panel input:not([type=checkbox]):not([type=radio]),body.pnl #panel select,body.pnl #panel textarea{min-height:52px;font-size:18px;border-radius:12px}
@@ -237,11 +237,23 @@ body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, t
 <style>/*NTF v1*/
 .ntf{margin-top:16px} .ntf .btn{width:100%} .ntf p{font-size:16px;line-height:1.4;margin:0} .ntf .ntfok{font-weight:700;color:var(--pet)}
 </style>
+<style>/*GRD v1*/
+.grd{display:inline-flex;align-items:center;gap:8px;min-height:48px;margin:0 0 18px;padding:0 14px;border:1.5px solid currentColor;border-radius:999px;background:transparent;color:inherit;font-weight:600;font-size:16px;line-height:1.2;font-family:inherit;cursor:pointer}
+.grd svg{width:20px;height:20px;flex:none}
+.grdW{display:flex;justify-content:flex-start}
+.cover .grdW{justify-content:center;margin-top:12px}
+#grdD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
+#grdD .gb{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
+#grdD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
+#grdD ol{margin:0 0 6px;padding:0 0 0 24px}#grdD li{margin:0 0 12px;color:#2b2b2b}
+#grdD svg{width:22px;height:22px;vertical-align:-5px;margin:0 2px}
+#grdD button{display:block;width:100%;min-height:52px;margin-top:10px;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
+</style>
 <style>/*LNK v1*/
 #panel .pLnk{margin:12px 0;padding:16px;background:var(--pc,#fff);border:1px solid var(--pl,#ddd);border-radius:16px;color:var(--pt,inherit)}
 #panel .pLnk b{display:block;font-size:18px;line-height:1.25;margin:0 0 6px}
 #panel .pLnk p{margin:0 0 12px;font-size:16px;line-height:1.35;overflow-wrap:anywhere;color:var(--pt,inherit)}
-#panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font:600 17px/1.2 inherit;font-family:inherit;cursor:pointer}
+#panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font-weight:700;font-size:17px;line-height:1.2;font-family:inherit;cursor:pointer}   /* Copiar en negrita como los demás botones (CONTENIDO 21:25) */
 </style>
 </head>
 <body>
@@ -938,7 +950,7 @@ function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) r
   el.querySelectorAll('.quick').forEach(x => { if(x.querySelector('[data-a="go"][data-v="day"]') && x.querySelector('[data-a="go"][data-v="set"]')) x.remove(); });   /* Ver otros días y Ajustes ya están en las pestañas */
   el.insertAdjacentHTML('afterbegin', `<header class="pnlTop"><span class="pnlMarca">${c.photo ? `<img src="${H(c.photo)}" alt="">` : ''}<b>${H(((c.title ? c.title + ' ' : '') + (c.name || '')).trim())}</b></span></header>`);
   if(!A.ok) return;
-  if(A.scr==='sv') el.querySelectorAll('.back').forEach(b => b.remove());   /* Servicios es una pestaña: sin Volver a Ajustes */
+  if(A.scr==='sv' || A.scr==='set') el.querySelectorAll('.back').forEach(b => b.remove());   /* Servicios y Más son pestañas: sin Volver (CONTENIDO 17/11 17:04 y 21:25) */
   if(A.scr==='turno'){ const lt = el.querySelector('[data-a="conf"]'), ll = el.querySelector('a.btn[href^="tel:"]');   /* por resolver: la principal es Lo tomo; Llamar con borde */
     if(lt && ll && lt.classList.contains('o')){ lt.classList.remove('o'); ll.classList.add('o'); }
     const rj = el.querySelector('[data-a="rej"]'); if(rj && !/›\s*$/.test(rj.textContent)) rj.textContent = rj.textContent.trim() + ' ›'; }
@@ -982,20 +994,53 @@ D.addEventListener('click', e => { const b = e.target.closest && e.target.closes
   try{ fetch(NTF.api, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sub, tipo: b.dataset.a==='conf' ? 'ok' : 'no', quien: S.cfg.short, cuando: cap(longDate(t.date)) + ', ' + t.time, url: location.href.split('#')[0]})}).catch(() => {}); }catch(err){} }, true);
 try{ bloque(); }catch(e){}
 })();</script>
+<script>/*GRD v1*/ (function(){ const D = document, ua = navigator.userAgent || '';
+const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
+const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+let DP = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
+const NOM = () => { const m = D.querySelector('meta[name="apple-mobile-web-app-title"]'); return m ? m.content : D.title; };
+const H = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
+const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
+const ICO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 7v7M9 11l3 3 3-3"/></svg>';
+function pasos(){ const n = '<b>' + H(NOM()) + '</b>', fin = 'Te queda el ícono de ' + n + ' junto a tus aplicaciones.';
+  if(INAPP) return ['Primero abrilo en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede guardar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Guardar en tu celular</b>.']];
+  if(IOS && OTRO) return ['Guardalo en tu iPhone', ['Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. ' + fin]];
+  if(IOS) return ['Guardalo en tu iPhone', ['Tocá el botón de menú que está junto a la dirección (las tres rayitas o los tres puntitos).', 'Tocá <b>Compartir</b> ' + SH + '.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. ' + fin]];
+  return ['Guardalo en tu celular', ['Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. ' + fin]]; }
+function abrir(){ if(D.getElementById('grdD')) return; const p = pasos(), d = D.createElement('div'); d.id = 'grdD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','grdT');
+  d.innerHTML = '<div class="gb"><h2 id="grdT">' + p[0] + '</h2><ol>' + p[1].map(x => '<li>' + x + '</li>').join('') + '</ol><button type="button">Listo</button></div>';
+  D.body.appendChild(d); const b = d.querySelector('button'); b.onclick = () => d.remove(); b.focus(); }
+async function guardar(){ if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); await e.userChoice; return; }catch(x){} } abrir(); }
+const visible = () => (IOS || AND || INAPP) && !SA();
+function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd')) return;
+  const ref = s.querySelector('.lk') || s.querySelector('.lead') || s.querySelector('.cover .kick, .cover .lead') || s.querySelector('.top');
+  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>';
+  (ref.classList.contains('kick') ? ref.parentNode : ref).insertAdjacentElement('afterend', w); w.firstChild.onclick = guardar; }
+const R0 = window.renderSite; if(typeof R0==='function') window.renderSite = function(){ const r = R0.apply(this, arguments); try{ poner(); }catch(e){} return r; };
+addEventListener('appinstalled', () => { D.querySelectorAll('.grdW').forEach(x => x.remove()); });
+poner(); setTimeout(poner, 400);
+})();</script>
 <script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu Link de turnos';
 const url = () => location.href.split('#')[0].split('?')[0];
+/* se muestra limpio (CONTENIDO 17/11 21:25): sin https:// ni index.html ni la barra final; se copia completo */
+const limpio = u => u.replace(/^[a-z]+:\/\/+/i, '').replace(/index\.html$/i, '').replace(/\/$/, '');
 function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
   /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
   let m = [...P.querySelectorAll('.pMenu')].find(x => x.offsetParent && (x.closest('#pv-mas') || (typeof A!=='undefined' && A.scr==='set')));
   if(!m && typeof A!=='undefined' && A.ok && A.scr==='set') m = P.querySelector('.opt');   /* turnos sin panel nuevo (plantilla y demos): arriba de Ajustes */
   if(!m || m.parentNode.querySelector(':scope > .pLnk')) return;
-  m.insertAdjacentHTML('beforebegin', '<div class="pLnk"><b>' + TXT + '</b><p data-lnk-url>' + url().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) + '</p><button type="button" data-lnk>Copiar</button></div>'); }
+  m.insertAdjacentHTML('beforebegin', '<div class="pLnk"><b>' + TXT + '</b><p data-lnk-url>' + limpio(url()).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) + '</p><button type="button" data-lnk>Copiar</button></div>'); }
 new MutationObserver(put).observe(D.body, {childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class']});
 D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-lnk]'); if(!b) return;
   const say = m => { try{ toast(m); }catch(x){} };
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
 </body>
+
+
+
 
 
 

@@ -669,7 +669,7 @@ body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing
 #panel .pLnk{margin:12px 0;padding:16px;background:var(--pc,#fff);border:1px solid var(--pl,#ddd);border-radius:16px;color:var(--pt,inherit)}
 #panel .pLnk b{display:block;font-size:18px;line-height:1.25;margin:0 0 6px}
 #panel .pLnk p{margin:0 0 12px;font-size:16px;line-height:1.35;overflow-wrap:anywhere;color:var(--pt,inherit)}
-#panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font:600 17px/1.2 inherit;font-family:inherit;cursor:pointer}
+#panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font-weight:700;font-size:17px;line-height:1.2;font-family:inherit;cursor:pointer}   /* Copiar en negrita como los demás botones (CONTENIDO 21:25) */
 </style>
 </head>
 <body>
@@ -1658,18 +1658,26 @@ marca();
 })();</script>
 <script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu Link de pedidos';
 const url = () => location.href.split('#')[0].split('?')[0];
+/* se muestra limpio (CONTENIDO 17/11 21:25): sin https:// ni index.html ni la barra final; se copia completo */
+const limpio = u => u.replace(/^[a-z]+:\/\/+/i, '').replace(/index\.html$/i, '').replace(/\/$/, '');
 function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
   /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
   let m = [...P.querySelectorAll('.pMenu')].find(x => x.offsetParent && (x.closest('#pv-mas') || (typeof A!=='undefined' && A.scr==='set')));
   if(!m && typeof A!=='undefined' && A.ok && A.scr==='set') m = P.querySelector('.opt');   /* turnos sin panel nuevo (plantilla y demos): arriba de Ajustes */
   if(!m || m.parentNode.querySelector(':scope > .pLnk')) return;
-  m.insertAdjacentHTML('beforebegin', '<div class="pLnk"><b>' + TXT + '</b><p data-lnk-url>' + url().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) + '</p><button type="button" data-lnk>Copiar</button></div>'); }
+  m.insertAdjacentHTML('beforebegin', '<div class="pLnk"><b>' + TXT + '</b><p data-lnk-url>' + limpio(url()).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) + '</p><button type="button" data-lnk>Copiar</button></div>'); }
 new MutationObserver(put).observe(D.body, {childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class']});
 D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-lnk]'); if(!b) return;
   const say = m => { try{ toast(m); }catch(x){} };
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
 </body>
+
+
+
+
+
+
 
 
 
