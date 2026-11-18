@@ -313,6 +313,7 @@ body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, t
 .mcD{margin:0 0 16px;padding:12px 14px;border:1px dashed var(--line);border-radius:8px;font-size:16px;color:var(--mut);text-align:center}
 </style>
 <style>/*CONS v1*/
+.cover{min-height:0!important;justify-content:flex-start!important;gap:18px!important}   /* portada sin huecos: la de LD reparte el alto para su logo animado; acá no hay foto ni logo (CONTENIDO 17/11 22:05) */
 .duo{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
 .duo>.pro2{flex:0 0 calc(50% - 5px);box-sizing:border-box}
 #panel .cV{margin:12px 0 0;padding:16px;background:var(--pc);border:1px solid var(--pl);border-radius:16px}
@@ -340,8 +341,7 @@ body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, t
 #panel .cR div{flex:1;min-width:0}
 #panel .cR b{display:block;font-size:18px}
 #panel .cR span{font-size:16px;color:var(--pm)}
-#panel .cDel{flex:none;width:48px;height:48px;border:0;border-radius:12px;background:transparent;color:var(--prj);display:grid;place-items:center;cursor:pointer}
-#panel .cDel svg{width:24px;height:24px}
+#panel .cDel{flex:none;min-height:48px;padding:0 16px;border:1.5px solid var(--prj);border-radius:12px;background:transparent;color:var(--prj);font-weight:700;font-size:17px;font-family:inherit;cursor:pointer}   /* botón Sacar con texto (CONTENIDO 17/11 22:05) */
 #panel .cLink{display:block;width:100%;box-sizing:border-box;min-height:52px;padding:12px;border:1px solid var(--pl);border-radius:12px;background:var(--pf);font-size:16px;overflow-wrap:anywhere;margin:4px 0 0}
 #panel .cPin{display:block;width:100%;box-sizing:border-box;min-height:52px;font-size:18px;padding:0 14px;border:1.5px solid var(--pt);border-radius:12px;background:var(--pc);color:var(--pt)}
 body.cEsp #panel .pT{display:none}
@@ -1343,7 +1343,6 @@ put(); })();</script>
 <script>/*CONS v1*/
 (function(){ const D = document, q = s => D.querySelector(s), H = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let CI = null, CIK = '', BUSY = false, CS = '', CX = null, CPUB = null;   /* CI = consInfo de esta profesional; CPUB = consPub (página); CS = pantalla propia */
-const TACHO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
 const dm = s => s ? Number(s.slice(8,10)) + '/' + Number(s.slice(5,7)) : '';
 const nom = c => { const m = CI && CI.miembros.find(x => x.cliente===c); return m ? m.nombre : ''; };
 const pri = n => String(n).split(' ')[0];
@@ -1386,7 +1385,7 @@ function paint(){ const el = q('#panel'); D.body.classList.remove('cEsp'); if(!e
   /* 3. pantallas propias */
   if(CS==='voto'){ screen(`<button class="btn o sm back" data-cons="mas">← Volver</button>` + voto()); return; }
   if(CS==='lista'){ const pend = CI.miembros.length < CI.tope, puede = CI.prueba_terminada && CI.al_dia && pend;
-    screen(`<button class="btn o sm back" data-cons="mas">← Volver</button><div class="ptop" style="padding-top:12px"><h1>Profesionales del consultorio</h1></div><div class="cL">${CI.miembros.map(m => `<div class="cR"><div><b>${H(m.nombre)}</b><span>${m.cliente===CI.yo ? 'Vos administrás' : m.alta==='espera' ? 'Falta pagar, hasta el ' + dm(m.alta_vence) : 'Con el panel activo'}</span></div>${m.cliente===CI.yo ? '' : `<button type="button" class="cDel" data-cons="sacar" data-v="${H(m.cliente)}" aria-label="Sacar a ${H(m.nombre)} del consultorio">${TACHO}</button>`}</div>`).join('')}</div>`
+    screen(`<button class="btn o sm back" data-cons="mas">← Volver</button><div class="ptop" style="padding-top:12px"><h1>Profesionales del consultorio</h1></div><div class="cL">${CI.miembros.map(m => `<div class="cR"><div><b>${H(m.nombre)}</b><span>${m.cliente===CI.yo ? 'Vos administrás' : m.alta==='espera' ? 'Falta pagar, hasta el ' + dm(m.alta_vence) : 'Con el panel activo'}</span></div>${m.cliente===CI.yo ? '' : `<button type="button" class="cDel" data-cons="sacar" data-v="${H(m.cliente)}" aria-label="Sacar a ${H(m.nombre)} del consultorio">Sacar</button>`}</div>`).join('')}</div>`
       + (puede ? `<button class="btn w gap" data-cons="nueva">Agregar profesional</button><p class="cSt">Cada profesional paga su suscripción. Si deja de pagar, sale del Link de turnos.</p>` : `<p class="cSt">${!CI.prueba_terminada ? 'Vas a poder agregar profesionales cuando termine la prueba.' : !CI.al_dia ? 'Para agregar profesionales, el consultorio tiene que estar al día.' : 'Llegaron al máximo de ' + CI.tope + ' profesionales.'}</p>`)); return; }
   if(CS==='sacar'){ const m = CI.miembros.find(x => x.cliente===CX); if(!m){ CS = 'lista'; return paint(); }
     screen(`<button class="btn o sm back" data-cons="lista">← Volver</button><div class="ptop" style="padding-top:12px"><h1>Sacar a ${H(pri(m.nombre))} del consultorio</h1></div><section class="cV"><p>${H(m.nombre)} deja de aparecer en el Link de turnos y su panel deja de andar.</p><button class="btn w" data-cons="sacarok">Sí, sacar del consultorio</button><button class="btn o w gap" data-cons="lista">No, dejar como está</button></section>`); return; }
