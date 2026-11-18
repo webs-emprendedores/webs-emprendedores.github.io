@@ -208,8 +208,10 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 <style>/*GRD v1*/
 .grd{display:inline-flex;align-items:center;gap:8px;min-height:48px;margin:0 0 18px;padding:0 14px;border:1.5px solid currentColor;border-radius:999px;background:transparent;color:inherit;font-weight:600;font-size:16px;line-height:1.2;font-family:inherit;cursor:pointer}
 .grd svg{width:20px;height:20px;flex:none}
-.grdW{display:flex;justify-content:flex-start}
-.cover .grdW{justify-content:center;margin-top:12px}
+.grdW{display:flex;flex-direction:column;align-items:flex-start}
+.grdN{margin:-8px 0 18px;font-size:16px;line-height:1.4;opacity:.85;max-width:34em}
+.cover .grdN{text-align:center}
+.cover .grdW{align-items:center;margin-top:12px}
 #grdD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
 #grdD .gb{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
 #grdD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
@@ -217,6 +219,13 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #grdD svg{width:22px;height:22px;vertical-align:-5px;margin:0 2px}
 #grdD button:focus{outline:none}#grdD button:focus-visible{outline:3px solid #1d1d1d;outline-offset:3px}
 #grdD button{display:block;width:100%;min-height:52px;margin-top:10px;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
+</style>
+<script>/*DONDE v1*/ window.INS_NOTA = {"*": {"nota": "Esta app se instala en tu celular."}}; window.GRD_NOTA = "Podés instalar esta app en tu celular para recibir avisos, además de WhatsApp.";</script>
+<style>/*PRIM v1*/
+#panel .prim{margin:6px 0 18px;padding:18px;border:2px solid currentColor;border-radius:16px}
+#panel .prim h2{margin:0 0 6px;font-size:20px;line-height:1.25}
+#panel .prim p{margin:0 0 14px;line-height:1.45}
+#panel .prim .btn{margin-top:8px}
 </style>
 </head>
 <body>
@@ -982,11 +991,22 @@ async function guardar(){ if(DP && !INAPP){ const e = DP; DP = null; try{ e.prom
 const visible = () => (IOS || AND || INAPP) && !SA();
 function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd') || s.querySelector('.avT')) return;   /* la pantalla del turno (al tocar el aviso) no lleva el botón */
   const ref = s.querySelector('.lk') || s.querySelector('.lead') || s.querySelector('.cover .kick, .cover .lead') || s.querySelector('.top');
-  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>';
+  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>' + (window.GRD_NOTA ? '<p class="grdN">' + window.GRD_NOTA.replace(/[<>&]/g, '') + '</p>' : '');   /* QUÉ SE INSTALA DÓNDE (18/11): cartel C */
   (ref.classList.contains('kick') ? ref.parentNode : ref).insertAdjacentElement('afterend', w); w.firstChild.onclick = guardar; }
 const R0 = window.renderSite; if(typeof R0==='function') window.renderSite = function(){ const r = R0.apply(this, arguments); try{ poner(); }catch(e){} return r; };
 addEventListener('appinstalled', () => { D.querySelectorAll('.grdW').forEach(x => x.remove()); });
 poner(); setTimeout(poner, 400);
+})();</script>
+<script>/*PRIM v1*/ (function(){
+const D = document, K = 'prim_' + location.pathname, visto = () => { try{ return localStorage.getItem(K) === '1'; }catch(e){ return true; } }, ver = () => { try{ localStorage.setItem(K, '1'); }catch(e){} };
+function sinCargar(){ try{ if(typeof DEMO !== 'undefined' && DEMO) return false;   /* en las muestras no: ya vienen cargadas */
+  const c = S.cfg || {}, f = c.fees || {}; return !Number(f.part) && !(c.os || []).length && !(c.serv || []).filter(x => x && x.on !== false).length && JSON.stringify(c.days) === JSON.stringify(DEFAULT.days); }catch(e){ return false; } }
+function poner(){ const el = D.getElementById('panel'); if(!el || !A.ok || A.scr !== 'home' || visto() || !sinCargar() || el.querySelector('.prim')) return;
+  const h = el.querySelector('.ptop'); if(!h) return;
+  h.insertAdjacentHTML('afterend', '<section class="prim" role="note"><h2>Cargá tu forma de trabajar</h2><p>Antes de compartir tu link, cargá tus horarios, tus honorarios y las obras sociales con las que trabajás. Así los turnos que te pidan ya te sirven.</p><button class="btn o w" data-a="go" data-v="ho" data-prim="1">Cargar mis horarios</button><button class="btn o w" data-a="go" data-v="co" data-prim="1">Cargar honorarios y obras sociales</button><button class="btn o w" data-prim="1">Ahora no</button></section>'); }
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-prim]'); if(!b) return; ver(); if(!b.dataset.a){ const s = b.closest('.prim'); if(s) s.remove(); } }, true);
+const RP = window.renderPanel; if(typeof RP === 'function') window.renderPanel = function(){ const r = RP.apply(this, arguments); try{ poner(); }catch(e){} return r; };
+window.__prim = () => ({visto: visto(), sinCargar: sinCargar()});
 })();</script>
 </body>
 </html>

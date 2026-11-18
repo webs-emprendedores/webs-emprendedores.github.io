@@ -268,6 +268,8 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #insL{display:block;width:calc(100% - 32px);max-width:560px;margin:16px auto 40px;min-height:52px;border:2px solid #4a4a4a;border-radius:12px;background:#fff;color:#1d1d1d;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
 #cobL + #insL{margin-top:-24px}
 #insL:has(+ #insN){margin-bottom:12px}
+body.pnl.tLogin #insN{display:none!important}
+#insL[style*="display: none"] + #insN{display:none}
 #insN{display:block;width:calc(100% - 32px);max-width:560px;margin:0 auto 40px;font-size:16px;line-height:1.45;color:#4a4a4a}
 #insD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
 #insD .ib{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
@@ -278,6 +280,7 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #insD button{display:block;width:100%;min-height:56px;margin:10px 0 0;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
 #insD button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
 </style>
+<script>/*DONDE v1*/ window.INS_NOTA = {"*": {"nota": "Esta app se instala en tu celular personal, no en el del consultorio."}, "avisos": {"nota": "Esta app se instala en el celular o la notebook del consultorio, no en tu celular personal."}}; window.GRD_NOTA = "Podés instalar esta app en tu celular para recibir avisos, además de WhatsApp.";</script>
 <style>/*TPNL v1*/
 body.pnl{--pa:var(--pet);--pas:#fff;--pt:var(--ink);--pf:var(--bg);--pc:var(--paper);--prj:var(--red,#9B3B2E);--pl:var(--line);--pm:var(--mut);--pas15:color-mix(in srgb,var(--pet) 14%,var(--paper))}
 body.pnl.pnlIn #panel{padding-bottom:calc(148px + env(safe-area-inset-bottom))}
@@ -326,8 +329,10 @@ body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, t
 <style>/*GRD v1*/
 .grd{display:inline-flex;align-items:center;gap:8px;min-height:48px;margin:0 0 18px;padding:0 14px;border:1.5px solid currentColor;border-radius:999px;background:transparent;color:inherit;font-weight:600;font-size:16px;line-height:1.2;font-family:inherit;cursor:pointer}
 .grd svg{width:20px;height:20px;flex:none}
-.grdW{display:flex;justify-content:flex-start}
-.cover .grdW{justify-content:center;margin-top:12px}
+.grdW{display:flex;flex-direction:column;align-items:flex-start}
+.grdN{margin:-8px 0 18px;font-size:16px;line-height:1.4;opacity:.85;max-width:34em}
+.cover .grdN{text-align:center}
+.cover .grdW{align-items:center;margin-top:12px}
 #grdD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
 #grdD .gb{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
 #grdD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
@@ -381,7 +386,7 @@ body.contOn .pnlTop{top:var(--contH,48px)!important}
     const l = document.createElement('button'); l.id = 'insL'; l.type = 'button'; l.textContent = IOS || AND ? 'Instalar la app en este celular' : 'Instalar la app'; l.onclick = go;
     const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling);
     /* NOTA POR PANTALLA (LD 18/11): una app puede decir en qué celular va instalado cada panel (window.INS_NOTA = {hash: {label, nota}}) */
-    const N = window.INS_NOTA && window.INS_NOTA[location.hash.slice(1).split('&')[0]]; if(N){ if(N.label) l.textContent = N.label; if(N.nota){ const n = document.createElement('p'); n.id = 'insN'; n.textContent = N.nota; l.after(n); } } }
+    const N = window.INS_NOTA && (window.INS_NOTA[location.hash.slice(1).split('&')[0]] || window.INS_NOTA['*']); if(N){ if(N.label) l.textContent = N.label; if(N.nota){ const n = document.createElement('p'); n.id = 'insN'; n.textContent = N.nota; l.after(n); } } }
   addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
   addEventListener('appinstalled', () => { DP = null; const o = el('insL'); if(o) o.remove(); say('Listo: la app quedó instalada.'); });
   addEventListener('hashchange', () => setTimeout(paint, 60));
@@ -1201,7 +1206,6 @@ function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length 
   document.body.appendChild(d); const b = document.getElementById('novOk'); if(window.__tecla) b.focus();   /* el foco se mueve solo si se viene usando el teclado */
   b.addEventListener('click', () => { try{ localStorage.setItem(k, NOV.v); }catch(x){} d.remove(); }); } /*NOV fin*/
 </script>
-<script>/*INSNOTA*/ window.INS_NOTA = {"avisos": {"label": "Instalar en el celular del consultorio", "nota": "Solo en el celular del WhatsApp de LD Odontología, no en un celular personal: los avisos se mandan desde el WhatsApp del celular donde esté instalado."}};</script>
 <script>/*TPNL v1*/ (function(){
 if(typeof renderPanel!=='function' || typeof A==='undefined') return;
 const D = document, q = s => D.querySelector(s); D.body.classList.add('pnl');
@@ -1236,7 +1240,7 @@ function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) r
   el.insertAdjacentHTML('beforeend', '<nav class="pT" aria-label="Secciones del panel">' + TAB.map(([v,l]) => `<button type="button" data-a="go" data-v="${v}" class="${g===v ? 'on' : ''}" aria-current="${g===v ? 'page' : 'false'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[v]}</svg><span>${l}</span></button>`).join('') + '</nav>');
   if(A.scr==='set'){   /* Más: las filas de Ajustes en un solo bloque, Instalar la app acá, y Cerrar con clave como fila roja */
     const ops = [...el.querySelectorAll('.opt')]; if(ops.length){ const m = D.createElement('div'); m.className = 'pMenu'; ops[0].before(m); ops.forEach(o => m.appendChild(o));
-      if(D.getElementById('insL')) m.insertAdjacentHTML('beforeend', '<button class="btn o w opt" data-a="pnlins"><b>Instalar como app</b><span>Entrás directo a tu panel desde el ícono</span></button>');
+      if(D.getElementById('insL')) m.insertAdjacentHTML('beforeend', '<button class="btn o w opt" data-a="pnlins"><b>Instalar como app</b><span>' + ((window.INS_NOTA && (INS_NOTA[location.hash.slice(1)] || INS_NOTA['*']) || {}).nota || 'Entrás directo a tu panel desde el ícono') + '</span></button>');
       const out = el.querySelector('[data-a="out"]'); if(out){ out.className = 'pSalir'; m.appendChild(out); } } } }
 D.addEventListener('click', e => { const b = e.target.closest('#panel [data-a="pnlins"]'); if(!b) return; const l = D.getElementById('insL'); if(l) l.click(); });
 try{ if(!q('#panel').hidden && location.hash!=='#avisos' && !q('#panel .pnlTop')) deco(); }catch(e){}   /* sin volver a dibujar: en LD #avisos es otra pantalla (salió de un error: se pisaba con la elección de profesional) */
@@ -1279,7 +1283,7 @@ async function guardar(){ if(DP && !INAPP){ const e = DP; DP = null; try{ e.prom
 const visible = () => (IOS || AND || INAPP) && !SA();
 function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd') || s.querySelector('.avT')) return;   /* la pantalla del turno (al tocar el aviso) no lleva el botón */
   const ref = s.querySelector('.lk') || s.querySelector('.lead') || s.querySelector('.cover .kick, .cover .lead') || s.querySelector('.top');
-  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>';
+  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>' + (window.GRD_NOTA ? '<p class="grdN">' + window.GRD_NOTA.replace(/[<>&]/g, '') + '</p>' : '');   /* QUÉ SE INSTALA DÓNDE (18/11): cartel C */
   (ref.classList.contains('kick') ? ref.parentNode : ref).insertAdjacentElement('afterend', w); w.firstChild.onclick = guardar; }
 const R0 = window.renderSite; if(typeof R0==='function') window.renderSite = function(){ const r = R0.apply(this, arguments); try{ poner(); }catch(e){} return r; };
 addEventListener('appinstalled', () => { D.querySelectorAll('.grdW').forEach(x => x.remove()); });

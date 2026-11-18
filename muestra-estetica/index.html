@@ -187,6 +187,10 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 <style>/*INS v1*/
 #insL{display:block;width:calc(100% - 32px);max-width:560px;margin:16px auto 40px;min-height:52px;border:2px solid #4a4a4a;border-radius:12px;background:#fff;color:#1d1d1d;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
 #cobL + #insL{margin-top:-24px}
+#insL:has(+ #insN){margin-bottom:12px}
+body.pnl.tLogin #insN{display:none!important}
+#insL[style*="display: none"] + #insN{display:none}
+#insN{display:block;width:calc(100% - 32px);max-width:560px;margin:0 auto 40px;font-size:16px;line-height:1.45;color:#4a4a4a}
 #insD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
 #insD .ib{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
 #insD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
@@ -202,8 +206,10 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 <style>/*GRD v1*/
 .grd{display:inline-flex;align-items:center;gap:8px;min-height:48px;margin:0 0 18px;padding:0 14px;border:1.5px solid currentColor;border-radius:999px;background:transparent;color:inherit;font-weight:600;font-size:16px;line-height:1.2;font-family:inherit;cursor:pointer}
 .grd svg{width:20px;height:20px;flex:none}
-.grdW{display:flex;justify-content:flex-start}
-.cover .grdW{justify-content:center;margin-top:12px}
+.grdW{display:flex;flex-direction:column;align-items:flex-start}
+.grdN{margin:-8px 0 18px;font-size:16px;line-height:1.4;opacity:.85;max-width:34em}
+.cover .grdN{text-align:center}
+.cover .grdW{align-items:center;margin-top:12px}
 #grdD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
 #grdD .gb{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
 #grdD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
@@ -217,6 +223,13 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #panel .pLnk b{display:block;font-size:18px;line-height:1.25;margin:0 0 6px}
 #panel .pLnk p{margin:0 0 12px;font-size:16px;line-height:1.35;overflow-wrap:anywhere;color:var(--pt,inherit)}
 #panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font-weight:700;font-size:17px;line-height:1.2;font-family:inherit;cursor:pointer}   /* Copiar en negrita como los demás botones (CONTENIDO 21:25) */
+</style>
+<script>/*DONDE v1*/ window.INS_NOTA = {"*": {"nota": "Esta app se instala en tu celular."}}; window.GRD_NOTA = "Podés instalar esta app en tu celular para recibir avisos, además de WhatsApp.";</script>
+<style>/*PRIM v1*/
+#panel .prim{margin:6px 0 18px;padding:18px;border:2px solid currentColor;border-radius:16px}
+#panel .prim h2{margin:0 0 6px;font-size:20px;line-height:1.25}
+#panel .prim p{margin:0 0 14px;line-height:1.45}
+#panel .prim .btn{margin-top:8px}
 </style>
 </head>
 <body>
@@ -250,9 +263,11 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
   async function go(){ try{ const h = location.hash.split('&')[0]; if(h.length > 1) localStorage.setItem(HK, h); }catch(e){}
     if(IOS && !INAPP && document.querySelector('link[rel=manifest]') && /^#[\w-]+$/.test(location.hash.split('&')[0])){ try{ sessionStorage.setItem('ins_open', '1'); }catch(e){} location.reload(); return; }   /* iPhone: el manifest se decide al cargar */
     if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); const r = await e.userChoice; if(r && r.outcome==='accepted'){ paint(); return; } }catch(err){} DP = e; return; } open(); }
-  function paint(){ const o = el('insL'); if(o) o.remove(); const p = panel(); if(!inPanel() || SA()) return;
+  function paint(){ const o = el('insL'); if(o) o.remove(); const on = el('insN'); if(on) on.remove(); const p = panel(); if(!inPanel() || SA()) return;
     const l = document.createElement('button'); l.id = 'insL'; l.type = 'button'; l.textContent = IOS || AND ? 'Instalar la app en este celular' : 'Instalar la app'; l.onclick = go;
-    const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling); }
+    const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling);
+    /* NOTA POR PANTALLA (LD 18/11): una app puede decir en qué celular va instalado cada panel (window.INS_NOTA = {hash: {label, nota}}) */
+    const N = window.INS_NOTA && (window.INS_NOTA[location.hash.slice(1).split('&')[0]] || window.INS_NOTA['*']); if(N){ if(N.label) l.textContent = N.label; if(N.nota){ const n = document.createElement('p'); n.id = 'insN'; n.textContent = N.nota; l.after(n); } } }
   addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
   addEventListener('appinstalled', () => { DP = null; const o = el('insL'); if(o) o.remove(); say('Listo: la app quedó instalada.'); });
   addEventListener('hashchange', () => setTimeout(paint, 60));
@@ -968,7 +983,7 @@ async function guardar(){ if(DP && !INAPP){ const e = DP; DP = null; try{ e.prom
 const visible = () => (IOS || AND || INAPP) && !SA();
 function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd') || s.querySelector('.avT')) return;   /* la pantalla del turno (al tocar el aviso) no lleva el botón */
   const ref = s.querySelector('.lk') || s.querySelector('.lead') || s.querySelector('.cover .kick, .cover .lead') || s.querySelector('.top');
-  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>';
+  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>' + (window.GRD_NOTA ? '<p class="grdN">' + window.GRD_NOTA.replace(/[<>&]/g, '') + '</p>' : '');   /* QUÉ SE INSTALA DÓNDE (18/11): cartel C */
   (ref.classList.contains('kick') ? ref.parentNode : ref).insertAdjacentElement('afterend', w); w.firstChild.onclick = guardar; }
 const R0 = window.renderSite; if(typeof R0==='function') window.renderSite = function(){ const r = R0.apply(this, arguments); try{ poner(); }catch(e){} return r; };
 addEventListener('appinstalled', () => { D.querySelectorAll('.grdW').forEach(x => x.remove()); });
@@ -989,5 +1004,16 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
   const say = m => { try{ toast(m); }catch(x){} };
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
+<script>/*PRIM v1*/ (function(){
+const D = document, K = 'prim_' + location.pathname, visto = () => { try{ return localStorage.getItem(K) === '1'; }catch(e){ return true; } }, ver = () => { try{ localStorage.setItem(K, '1'); }catch(e){} };
+function sinCargar(){ try{ if(typeof DEMO !== 'undefined' && DEMO) return false;   /* en las muestras no: ya vienen cargadas */
+  const c = S.cfg || {}, f = c.fees || {}; return !Number(f.part) && !(c.os || []).length && !(c.serv || []).filter(x => x && x.on !== false).length && JSON.stringify(c.days) === JSON.stringify(DEFAULT.days); }catch(e){ return false; } }
+function poner(){ const el = D.getElementById('panel'); if(!el || !A.ok || A.scr !== 'home' || visto() || !sinCargar() || el.querySelector('.prim')) return;
+  const h = el.querySelector('.ptop'); if(!h) return;
+  h.insertAdjacentHTML('afterend', '<section class="prim" role="note"><h2>Cargá tu forma de trabajar</h2><p>Antes de compartir tu link, cargá tus horarios, tus honorarios y las obras sociales con las que trabajás. Así los turnos que te pidan ya te sirven.</p><button class="btn o w" data-a="go" data-v="ho" data-prim="1">Cargar mis horarios</button><button class="btn o w" data-a="go" data-v="co" data-prim="1">Cargar honorarios y obras sociales</button><button class="btn o w" data-prim="1">Ahora no</button></section>'); }
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-prim]'); if(!b) return; ver(); if(!b.dataset.a){ const s = b.closest('.prim'); if(s) s.remove(); } }, true);
+const RP = window.renderPanel; if(typeof RP === 'function') window.renderPanel = function(){ const r = RP.apply(this, arguments); try{ poner(); }catch(e){} return r; };
+window.__prim = () => ({visto: visto(), sinCargar: sinCargar()});
+})();</script>
 </body>
 </html>
