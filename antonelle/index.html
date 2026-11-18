@@ -445,7 +445,13 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 .tvp .ved .vsv{margin-top:12px;width:100%;min-height:48px;border:0;border-radius:12px;background:var(--p,var(--r,#333));color:#fff;font-weight:800;font-size:16px;cursor:pointer}
 </style>
 <style>/*FILA v1*/
-#tv[data-familia="pop"] .pCarr{align-items:flex-start}   /* tarjetas con y sin foto alineadas arriba (CONTENIDO 18/11 01:50) */
+/* FILA PAREJA (CONTENIDO 18/11 01:50 y 03:55): todas las tarjetas de una fila arrancan arriba, la sin foto ocupa el alto del bloque
+   de foto (y el nombre) de las otras, y el Elegir queda en la misma línea en toda la fila */
+#tv[data-familia="pop"] .pCarr{align-items:stretch}
+#tv[data-familia="pop"] .pCarr .pCard{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start}
+#tv[data-familia="pop"] .pCarr .pSinFoto{flex:1 1 auto;box-sizing:border-box;min-height:0}
+#tv[data-familia="pop"] .pCarr .pCard .vElegir{margin-top:auto;align-self:flex-start}
+#tv[data-familia="pop"] .pCarr .pCard>:nth-last-child(2){margin-bottom:10px}   /* el aire de siempre antes del Elegir */
 body>#site.filaSt{position:sticky}
 .filaEsp{display:block;width:1px}
 </style>
