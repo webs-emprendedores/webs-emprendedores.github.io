@@ -10,7 +10,7 @@
 <meta property="og:description" content="Armá tu torta eligiendo tamaño, relleno y cobertura.">
 <meta property="og:image" content="img/hero.jpg">
 <link rel="icon" href="img/icon-192.png">
-<script>/*INSM*/(function(){var u=navigator.userAgent||"",I=/iPhone|iPad|iPod/.test(u)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),h=location.hash.split("&")[0],q=null;try{q=new URLSearchParams(location.search).get("app")}catch(e){}if(I&&q&&/^[\w-]+$/.test(q)&&h.length<2){history.replaceState(null,"",location.pathname+location.search+"#"+q);h="#"+q}if(I&&/^#[\w-]+$/.test(h)){if(q!==h.slice(1))history.replaceState(null,"",location.pathname+"?app="+h.slice(1)+location.hash);return}document.write('<link rel="manifest" href="manifest.json">')})();</script>
+<script>/*INSM*/(function(){var u=navigator.userAgent||"",I=/iPhone|iPad|iPod/.test(u)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),h=location.hash.split("&")[0],q=null;try{q=new URLSearchParams(location.search).get("app")}catch(e){}if(I&&q&&/^[\w-]+$/.test(q)&&h.length<2){history.replaceState(null,"",location.pathname+location.search+"#"+q);h="#"+q}addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__DP=e});if(!I&&q&&/^[\w-]+$/.test(q)&&h.length<2){history.replaceState(null,"",location.pathname+location.search+"#"+q);h="#"+q}if(I&&/^#[\w-]+$/.test(h)){if(q!==h.slice(1))history.replaceState(null,"",location.pathname+"?app="+h.slice(1)+location.hash);return}var X=[],f=X.indexOf(h.slice(1))>=0?"manifest-"+h.slice(1)+".json":"manifest.json";document.write('<link rel="manifest" href="'+f+'">')})();</script>
 <link rel="apple-touch-icon" href="img/icon-192.png">
 <meta name="theme-color" content="#7b5fc0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -124,6 +124,10 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 <style>/*INS v1*/
 #insL{display:block;width:calc(100% - 32px);max-width:560px;margin:16px auto 40px;min-height:52px;border:2px solid #4a4a4a;border-radius:12px;background:#fff;color:#1d1d1d;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
 #cobL + #insL{margin-top:-24px}
+#insL:has(+ #insN){margin-bottom:12px}
+body.pnl.tLogin #insN{display:none!important}
+#insL[style*="display: none"] + #insN{display:none}
+#insN{display:block;width:calc(100% - 32px);max-width:560px;margin:0 auto 40px;font-size:16px;line-height:1.45;color:#4a4a4a}
 #insD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
 #insD .ib{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
 #insD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
@@ -619,7 +623,8 @@ body.pnl #toast.pOk{white-space:nowrap}
     if(INAPP) return ['Primero abrila en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede instalar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Instalar la app</b>.'], true];
     if(IOS && OTRO) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Si no te aparece esa opción, abrí este link en Safari y repetí los pasos.'], true];
     if(IOS) return ['Instalarla en tu iPhone', ['', 'Tocá el botón de menú que está junto a la dirección (las tres rayitas o los tres puntitos).', 'Tocá <b>Compartir</b> ' + SH + '.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
-    if(AND) return ['Instalarla en tu celular', ['', 'Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
+    const AND1 = 'Tocá el menú de Chrome (los tres puntitos) y elegí <b>Agregar a la pantalla principal</b>. Puede estar más abajo en el menú: deslizá hasta verlo.';   /* nombre de la opción en Chrome Android en español (ayuda de Google; Dardo 18/11) */
+    if(AND) return ['Instalarla en tu celular', ['', AND1, 'Tocá <b>Instalar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
     return ['Instalarla en tu computadora', ['', 'Abrí este link en Chrome o en Edge.', 'Tocá el ícono de instalar que aparece a la derecha de la dirección.', 'Si lo que querés es tenerla en el celular, abrí este mismo link desde el celular y tocá <b>Instalar la app</b>.'], true]; }
   function open(){ if(el('insD')) return; const p = pasos(), d = document.createElement('div'); d.id = 'insD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','insT');
     d.innerHTML = '<div class="ib"><h2 id="insT">' + p[0] + '</h2>' + (p[1][0] ? '<p>' + p[1][0] + '</p>' : '') + '<ol>' + p[1].slice(1).map(x => '<li>' + x + '</li>').join('') + '</ol>' + (p[2] ? '<button type="button" data-ins="c">Copiar el link</button>' : '') + '<button type="button" class="o" data-ins="x">Cerrar</button></div>';
@@ -627,10 +632,14 @@ body.pnl #toast.pOk{white-space:nowrap}
       try{ navigator.clipboard.writeText(location.href).then(() => say('Link copiado.'), () => say('No se pudo copiar. Copialo desde la barra de direcciones.')); }catch(err){ say('No se pudo copiar. Copialo desde la barra de direcciones.'); } }); d.querySelector('[data-ins]').focus(); }
   async function go(){ try{ const h = location.hash.split('&')[0]; if(h.length > 1) localStorage.setItem(HK, h); }catch(e){}
     if(IOS && !INAPP && document.querySelector('link[rel=manifest]') && /^#[\w-]+$/.test(location.hash.split('&')[0])){ try{ sessionStorage.setItem('ins_open', '1'); }catch(e){} location.reload(); return; }   /* iPhone: el manifest se decide al cargar */
-    if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); const r = await e.userChoice; if(r && r.outcome==='accepted'){ paint(); return; } }catch(err){} DP = e; return; } open(); }
-  function paint(){ const o = el('insL'); if(o) o.remove(); const p = panel(); if(!inPanel() || SA()) return;
+    if(!DP && window.__DP) DP = window.__DP;
+    if(DP && !INAPP){ const e = DP; DP = null; window.__DP = null; try{ e.prompt(); const r = await e.userChoice; if(r && r.outcome==='accepted'){ paint(); return; } }catch(err){} DP = e; return; } open(); }
+  function paint(){ const o = el('insL'); if(o) o.remove(); const on = el('insN'); if(on) on.remove(); const p = panel(); if(!inPanel() || SA()) return;
     const l = document.createElement('button'); l.id = 'insL'; l.type = 'button'; l.textContent = IOS || AND ? 'Instalar la app en este celular' : 'Instalar la app'; l.onclick = go;
-    const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling); }
+    const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling);
+    /* NOTA POR PANTALLA (LD 18/11): una app puede decir en qué celular va instalado cada panel (window.INS_NOTA = {hash: {label, nota}}) */
+    const N = window.INS_NOTA && (window.INS_NOTA[location.hash.slice(1).split('&')[0]] || window.INS_NOTA['*']); if(N){ if(N.label) l.textContent = N.label; if(N.nota){ const n = document.createElement('p'); n.id = 'insN'; n.textContent = N.nota; l.after(n); } } }
+  if(window.__DP) DP = window.__DP;   /* el evento puede llegar antes que este bloque: lo atrapa el head (18/11) */
   addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
   addEventListener('appinstalled', () => { DP = null; const o = el('insL'); if(o) o.remove(); say('Listo: la app quedó instalada.'); });
   addEventListener('hashchange', () => setTimeout(paint, 60));

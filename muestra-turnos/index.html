@@ -160,21 +160,8 @@ footer a{color:var(--mut)}
 #nov button{width:100%;min-height:52px;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
 #nov button:focus{outline:none}#nov button:focus-visible{outline:3px solid #1d1d1d;outline-offset:3px}   /* foco solo con teclado (CONTENIDO 17/11 22:45: al tocar salía doble borde) */
 </style>
-<script>/*INSM*/(function(){var u=navigator.userAgent||"",I=/iPhone|iPad|iPod/.test(u)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),h=location.hash.split("&")[0],q=null;try{q=new URLSearchParams(location.search).get("app")}catch(e){}if(I&&q&&/^[\w-]+$/.test(q)&&h.length<2){history.replaceState(null,"",location.pathname+location.search+"#"+q);h="#"+q}if(I&&/^#[\w-]+$/.test(h)){if(q!==h.slice(1))history.replaceState(null,"",location.pathname+"?app="+h.slice(1)+location.hash);return}document.write('<link rel="manifest" href="manifest.json">')})();</script>
+<script>/*INSM*/(function(){var u=navigator.userAgent||"",I=/iPhone|iPad|iPod/.test(u)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),h=location.hash.split("&")[0],q=null;try{q=new URLSearchParams(location.search).get("app")}catch(e){}if(I&&q&&/^[\w-]+$/.test(q)&&h.length<2){history.replaceState(null,"",location.pathname+location.search+"#"+q);h="#"+q}addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__DP=e});if(!I&&q&&/^[\w-]+$/.test(q)&&h.length<2){history.replaceState(null,"",location.pathname+location.search+"#"+q);h="#"+q}if(I&&/^#[\w-]+$/.test(h)){if(q!==h.slice(1))history.replaceState(null,"",location.pathname+"?app="+h.slice(1)+location.hash);return}var X=[],f=X.indexOf(h.slice(1))>=0?"manifest-"+h.slice(1)+".json":"manifest.json";document.write('<link rel="manifest" href="'+f+'">')})();</script>
 <link rel="apple-touch-icon" href="icon-180.png">
-<meta name="apple-mobile-web-app-title" content="Daniela Paz">
-<style>/*INS v1*/
-#insL{display:block;width:calc(100% - 32px);max-width:560px;margin:16px auto 40px;min-height:52px;border:2px solid #4a4a4a;border-radius:12px;background:#fff;color:#1d1d1d;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
-#cobL + #insL{margin-top:-24px}
-#insD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
-#insD .ib{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
-#insD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
-#insD ol{margin:0 0 6px;padding:0 0 0 24px}#insD li{margin:0 0 12px;color:#2b2b2b}
-#insD svg{width:22px;height:22px;vertical-align:-5px;margin:0 2px}
-#insD p{margin:0 0 12px;color:#4a4a4a;font-size:16px}
-#insD button{display:block;width:100%;min-height:56px;margin:10px 0 0;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
-#insD button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
-</style>
 <style>/*COB v1*/
 #cobB{margin:0;padding:14px 16px;background:#fff3cd;color:#3d2f00;font-size:17px;line-height:1.4;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 #cobB.p{background:#fde8e6;color:#5c1410}
@@ -220,6 +207,23 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #grdD button:focus{outline:none}#grdD button:focus-visible{outline:3px solid #1d1d1d;outline-offset:3px}
 #grdD button{display:block;width:100%;min-height:52px;margin-top:10px;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
 </style>
+<meta name="apple-mobile-web-app-title" content="Daniela Paz">
+<style>/*INS v1*/
+#insL{display:block;width:calc(100% - 32px);max-width:560px;margin:16px auto 40px;min-height:52px;border:2px solid #4a4a4a;border-radius:12px;background:#fff;color:#1d1d1d;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
+#cobL + #insL{margin-top:-24px}
+#insL:has(+ #insN){margin-bottom:12px}
+body.pnl.tLogin #insN{display:none!important}
+#insL[style*="display: none"] + #insN{display:none}
+#insN{display:block;width:calc(100% - 32px);max-width:560px;margin:0 auto 40px;font-size:16px;line-height:1.45;color:#4a4a4a}
+#insD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
+#insD .ib{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
+#insD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
+#insD ol{margin:0 0 6px;padding:0 0 0 24px}#insD li{margin:0 0 12px;color:#2b2b2b}
+#insD svg{width:22px;height:22px;vertical-align:-5px;margin:0 2px}
+#insD p{margin:0 0 12px;color:#4a4a4a;font-size:16px}
+#insD button{display:block;width:100%;min-height:56px;margin:10px 0 0;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
+#insD button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
+</style>
 <script>/*DONDE v1*/ window.INS_NOTA = {"*": {"nota": "Esta app se instala en tu celular."}}; window.GRD_NOTA = "Podés instalar esta app en tu celular para recibir avisos, además de WhatsApp.";</script>
 <style>/*PRIM v1*/
 #panel .prim{margin:6px 0 18px;padding:18px;border:2px solid currentColor;border-radius:16px}
@@ -236,6 +240,44 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 <div id="toast" role="status"></div>
 
 <script>
+/*INS v1*/ (function(){ let DP = null; const el = id => document.getElementById(id), ua = navigator.userAgent || '';
+  const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
+  const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const HK = 'ins_h_' + location.pathname, vis = e => !!e && !e.hidden && e.getClientRects().length > 0, panel = () => [el('app'), el('panel')].find(vis), inPanel = () => !!panel();   /* también en la pantalla de la clave */
+  const say = m => { try{ toast(m); }catch(e){ alert(m); } };
+  /* la app instalada abre en el panel donde se instaló */
+  try{ if(SA() && location.hash.length <= 1){ const h = localStorage.getItem(HK); if(h && /^#[\w-]+$/.test(h)) location.replace(location.pathname + location.search + h); } }catch(e){}
+  const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
+  const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
+  function pasos(){
+    if(INAPP) return ['Primero abrila en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede instalar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Instalar la app</b>.'], true];
+    if(IOS && OTRO) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Si no te aparece esa opción, abrí este link en Safari y repetí los pasos.'], true];
+    if(IOS) return ['Instalarla en tu iPhone', ['', 'Tocá el botón de menú que está junto a la dirección (las tres rayitas o los tres puntitos).', 'Tocá <b>Compartir</b> ' + SH + '.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
+    const AND1 = 'Tocá el menú de Chrome (los tres puntitos) y elegí <b>Agregar a la pantalla principal</b>. Puede estar más abajo en el menú: deslizá hasta verlo.';   /* nombre de la opción en Chrome Android en español (ayuda de Google; Dardo 18/11) */
+    if(AND) return ['Instalarla en tu celular', ['', AND1, 'Tocá <b>Instalar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
+    return ['Instalarla en tu computadora', ['', 'Abrí este link en Chrome o en Edge.', 'Tocá el ícono de instalar que aparece a la derecha de la dirección.', 'Si lo que querés es tenerla en el celular, abrí este mismo link desde el celular y tocá <b>Instalar la app</b>.'], true]; }
+  function open(){ if(el('insD')) return; const p = pasos(), d = document.createElement('div'); d.id = 'insD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','insT');
+    d.innerHTML = '<div class="ib"><h2 id="insT">' + p[0] + '</h2>' + (p[1][0] ? '<p>' + p[1][0] + '</p>' : '') + '<ol>' + p[1].slice(1).map(x => '<li>' + x + '</li>').join('') + '</ol>' + (p[2] ? '<button type="button" data-ins="c">Copiar el link</button>' : '') + '<button type="button" class="o" data-ins="x">Cerrar</button></div>';
+    document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-ins]'); if(!t) return; if(t.dataset.ins==='x'){ d.remove(); return; }
+      try{ navigator.clipboard.writeText(location.href).then(() => say('Link copiado.'), () => say('No se pudo copiar. Copialo desde la barra de direcciones.')); }catch(err){ say('No se pudo copiar. Copialo desde la barra de direcciones.'); } }); d.querySelector('[data-ins]').focus(); }
+  async function go(){ try{ const h = location.hash.split('&')[0]; if(h.length > 1) localStorage.setItem(HK, h); }catch(e){}
+    if(IOS && !INAPP && document.querySelector('link[rel=manifest]') && /^#[\w-]+$/.test(location.hash.split('&')[0])){ try{ sessionStorage.setItem('ins_open', '1'); }catch(e){} location.reload(); return; }   /* iPhone: el manifest se decide al cargar */
+    if(!DP && window.__DP) DP = window.__DP;
+    if(DP && !INAPP){ const e = DP; DP = null; window.__DP = null; try{ e.prompt(); const r = await e.userChoice; if(r && r.outcome==='accepted'){ paint(); return; } }catch(err){} DP = e; return; } open(); }
+  function paint(){ const o = el('insL'); if(o) o.remove(); const on = el('insN'); if(on) on.remove(); const p = panel(); if(!inPanel() || SA()) return;
+    const l = document.createElement('button'); l.id = 'insL'; l.type = 'button'; l.textContent = IOS || AND ? 'Instalar la app en este celular' : 'Instalar la app'; l.onclick = go;
+    const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling);
+    /* NOTA POR PANTALLA (LD 18/11): una app puede decir en qué celular va instalado cada panel (window.INS_NOTA = {hash: {label, nota}}) */
+    const N = window.INS_NOTA && (window.INS_NOTA[location.hash.slice(1).split('&')[0]] || window.INS_NOTA['*']); if(N){ if(N.label) l.textContent = N.label; if(N.nota){ const n = document.createElement('p'); n.id = 'insN'; n.textContent = N.nota; l.after(n); } } }
+  if(window.__DP) DP = window.__DP;   /* el evento puede llegar antes que este bloque: lo atrapa el head (18/11) */
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
+  addEventListener('appinstalled', () => { DP = null; const o = el('insL'); if(o) o.remove(); say('Listo: la app quedó instalada.'); });
+  addEventListener('hashchange', () => setTimeout(paint, 60));
+  addEventListener('load', () => { [0, 400, 1500].forEach(ms => setTimeout(paint, ms)); try{ if(sessionStorage.getItem('ins_open')){ sessionStorage.removeItem('ins_open'); setTimeout(open, 600); } }catch(e){} });
+  document.addEventListener('click', () => setTimeout(() => { const c = el('cobL'), l = el('insL'); if(!!l !== (inPanel() && !SA()) || (l && c && c.nextSibling !== l)) paint(); }, 120));
+})(); /*INS fin*/
+
 /*COB v1*/ (function(){ const TIPO = 'turnos', F = window.fetch.bind(window); let G = null, PUB = null, PAGO = '';
   { const m = location.hash.match(/&pago=(ok|error|pendiente)/); if(m){ PAGO = m[1]; location.hash = location.hash.replace(/&pago=\w+/, ''); } }
   const el = id => document.getElementById(id), money = n => '$' + Number(n).toLocaleString('es-AR'), dm = s => { const p = String(s).split('-'); return Number(p[2]) + '/' + Number(p[1]); };
@@ -304,39 +346,6 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
   addEventListener('hashchange', () => setTimeout(() => { paint(); pub(); }, 50));
   document.addEventListener('click', e => { if(e.target.closest && e.target.closest('[data-a="out"]')){ G = null; setTimeout(paint, 50); } else if(G) setTimeout(() => { if(!!el('cobL') !== inPanel()) paint(); }, 80); });
 })(); /*COB fin*/
-
-/*INS v1*/ (function(){ let DP = null; const el = id => document.getElementById(id), ua = navigator.userAgent || '';
-  const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
-  const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
-  const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-  const HK = 'ins_h_' + location.pathname, vis = e => !!e && !e.hidden && e.getClientRects().length > 0, panel = () => [el('app'), el('panel')].find(vis), inPanel = () => !!panel();   /* también en la pantalla de la clave */
-  const say = m => { try{ toast(m); }catch(e){ alert(m); } };
-  /* la app instalada abre en el panel donde se instaló */
-  try{ if(SA() && location.hash.length <= 1){ const h = localStorage.getItem(HK); if(h && /^#[\w-]+$/.test(h)) location.replace(location.pathname + location.search + h); } }catch(e){}
-  const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
-  const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
-  function pasos(){
-    if(INAPP) return ['Primero abrila en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede instalar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Instalar la app</b>.'], true];
-    if(IOS && OTRO) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Si no te aparece esa opción, abrí este link en Safari y repetí los pasos.'], true];
-    if(IOS) return ['Instalarla en tu iPhone', ['', 'Tocá el botón de menú que está junto a la dirección (las tres rayitas o los tres puntitos).', 'Tocá <b>Compartir</b> ' + SH + '.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
-    if(AND) return ['Instalarla en tu celular', ['', 'Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
-    return ['Instalarla en tu computadora', ['', 'Abrí este link en Chrome o en Edge.', 'Tocá el ícono de instalar que aparece a la derecha de la dirección.', 'Si lo que querés es tenerla en el celular, abrí este mismo link desde el celular y tocá <b>Instalar la app</b>.'], true]; }
-  function open(){ if(el('insD')) return; const p = pasos(), d = document.createElement('div'); d.id = 'insD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','insT');
-    d.innerHTML = '<div class="ib"><h2 id="insT">' + p[0] + '</h2>' + (p[1][0] ? '<p>' + p[1][0] + '</p>' : '') + '<ol>' + p[1].slice(1).map(x => '<li>' + x + '</li>').join('') + '</ol>' + (p[2] ? '<button type="button" data-ins="c">Copiar el link</button>' : '') + '<button type="button" class="o" data-ins="x">Cerrar</button></div>';
-    document.body.appendChild(d); d.addEventListener('click', e => { const t = e.target.closest('[data-ins]'); if(!t) return; if(t.dataset.ins==='x'){ d.remove(); return; }
-      try{ navigator.clipboard.writeText(location.href).then(() => say('Link copiado.'), () => say('No se pudo copiar. Copialo desde la barra de direcciones.')); }catch(err){ say('No se pudo copiar. Copialo desde la barra de direcciones.'); } }); d.querySelector('[data-ins]').focus(); }
-  async function go(){ try{ const h = location.hash.split('&')[0]; if(h.length > 1) localStorage.setItem(HK, h); }catch(e){}
-    if(IOS && !INAPP && document.querySelector('link[rel=manifest]') && /^#[\w-]+$/.test(location.hash.split('&')[0])){ try{ sessionStorage.setItem('ins_open', '1'); }catch(e){} location.reload(); return; }   /* iPhone: el manifest se decide al cargar */
-    if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); const r = await e.userChoice; if(r && r.outcome==='accepted'){ paint(); return; } }catch(err){} DP = e; return; } open(); }
-  function paint(){ const o = el('insL'); if(o) o.remove(); const p = panel(); if(!inPanel() || SA()) return;
-    const l = document.createElement('button'); l.id = 'insL'; l.type = 'button'; l.textContent = IOS || AND ? 'Instalar la app en este celular' : 'Instalar la app'; l.onclick = go;
-    const c = el('cobL'); (c || p).parentNode.insertBefore(l, (c || p).nextSibling); }
-  addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
-  addEventListener('appinstalled', () => { DP = null; const o = el('insL'); if(o) o.remove(); say('Listo: la app quedó instalada.'); });
-  addEventListener('hashchange', () => setTimeout(paint, 60));
-  addEventListener('load', () => { [0, 400, 1500].forEach(ms => setTimeout(paint, ms)); try{ if(sessionStorage.getItem('ins_open')){ sessionStorage.removeItem('ins_open'); setTimeout(open, 600); } }catch(e){} });
-  document.addEventListener('click', () => setTimeout(() => { const c = el('cobL'), l = el('insL'); if(!!l !== (inPanel() && !SA()) || (l && c && c.nextSibling !== l)) paint(); }, 120));
-})(); /*INS fin*/
 
 // ===== Datos del profesional (se adaptan a cada cliente) =====
 const DEMO = true;                 // muestra: nada sale de este celular
@@ -972,7 +981,7 @@ try{ if(avDatos()) renderSite(); else bloque(); }catch(e){}
 const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
 const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
 const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-let DP = null; addEventListener('keydown', e => { if(e.key === 'Tab' || e.key === 'Enter') window.__tecla = true; }, true); addEventListener('pointerdown', () => { window.__tecla = false; }, true); addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
+let DP = window.__DP || null; addEventListener('keydown', e => { if(e.key === 'Tab' || e.key === 'Enter') window.__tecla = true; }, true); addEventListener('pointerdown', () => { window.__tecla = false; }, true); addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
 const NOM = () => { const m = D.querySelector('meta[name="apple-mobile-web-app-title"]'); return m ? m.content : D.title; };
 const H = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
@@ -983,11 +992,11 @@ function pasos(){ const n = '<b>' + H(NOM()) + '</b>', fin = 'Te queda el ícono
   const A3 = 'Bajá en la lista y tocá <b>Agregar a Inicio</b> ' + MA + '. Si no aparece, tocá <b>Ver más</b>.', A4 = 'Dejá activado <b>Abrir como app web</b> y tocá <b>Agregar</b>. ' + fin;   /* pasos según el Manual de uso del iPhone (iOS 27), CONTENIDO 17/11 22:55 */
   if(IOS && OTRO) return ['Guardalo en tu iPhone', ['Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', A3, A4]];
   if(IOS) return ['Guardalo en tu iPhone', ['Tocá el botón de menú que está junto a la dirección (los tres puntitos) y después <b>Compartir</b> ' + SH + '. Si abajo ya ves el botón Compartir, tocalo directo.', A3, A4]];
-  return ['Guardalo en tu celular', ['Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. ' + fin]]; }
+  return ['Guardalo en tu celular', ['Tocá el menú de Chrome (los tres puntitos) y elegí <b>Agregar a la pantalla principal</b>. Puede estar más abajo en el menú: deslizá hasta verlo.', 'Tocá <b>Instalar</b>. ' + fin]   /* nombre de la opción en Chrome Android en español (Dardo 18/11) */]; }
 function abrir(){ if(D.getElementById('grdD')) return; const p = pasos(), d = D.createElement('div'); d.id = 'grdD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','grdT');
   d.innerHTML = '<div class="gb"><h2 id="grdT">' + p[0] + '</h2><ol>' + p[1].map(x => '<li>' + x + '</li>').join('') + '</ol><button type="button">Listo</button></div>';
   D.body.appendChild(d); const b = d.querySelector('button'); b.onclick = () => d.remove(); if(window.__tecla) b.focus(); }
-async function guardar(){ if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); await e.userChoice; return; }catch(x){} } abrir(); }
+async function guardar(){ if(!DP && window.__DP) DP = window.__DP; if(DP && !INAPP){ const e = DP; DP = null; window.__DP = null; try{ e.prompt(); await e.userChoice; return; }catch(x){} } abrir(); }
 const visible = () => (IOS || AND || INAPP) && !SA();
 function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd') || s.querySelector('.avT')) return;   /* la pantalla del turno (al tocar el aviso) no lleva el botón */
   const ref = s.querySelector('.lk') || s.querySelector('.lead') || s.querySelector('.cover .kick, .cover .lead') || s.querySelector('.top');
