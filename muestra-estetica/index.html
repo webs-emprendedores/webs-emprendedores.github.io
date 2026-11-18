@@ -196,6 +196,22 @@ html.cobSin #app,html.cobSin #panel>*:not(header),html.cobSin #cobL{display:none
 #insD button{display:block;width:100%;min-height:56px;margin:10px 0 0;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
 #insD button.o{background:#fff;color:#1d1d1d;border:2px solid #4a4a4a}
 </style>
+<style>/*NTF v1*/
+.ntf{margin-top:16px} .ntf .btn{width:100%} .ntf p{font-size:16px;line-height:1.4;margin:0} .ntf .ntfok{font-weight:700;color:var(--pet)}
+</style>
+<style>/*GRD v1*/
+.grd{display:inline-flex;align-items:center;gap:8px;min-height:48px;margin:0 0 18px;padding:0 14px;border:1.5px solid currentColor;border-radius:999px;background:transparent;color:inherit;font-weight:600;font-size:16px;line-height:1.2;font-family:inherit;cursor:pointer}
+.grd svg{width:20px;height:20px;flex:none}
+.grdW{display:flex;justify-content:flex-start}
+.cover .grdW{justify-content:center;margin-top:12px}
+#grdD{position:fixed;inset:0;z-index:96;background:rgba(20,20,20,.5);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto}
+#grdD .gb{background:#fff;color:#1d1d1d;border-radius:16px;max-width:460px;width:100%;padding:22px 20px 18px;margin-top:max(12px,env(safe-area-inset-top));box-shadow:0 10px 40px rgba(0,0,0,.25);font-size:17px;line-height:1.45;text-align:left}
+#grdD h2{font-size:24px;line-height:1.2;margin:0 0 12px;color:#1d1d1d}
+#grdD ol{margin:0 0 6px;padding:0 0 0 24px}#grdD li{margin:0 0 12px;color:#2b2b2b}
+#grdD svg{width:22px;height:22px;vertical-align:-5px;margin:0 2px}
+#grdD button:focus{outline:none}#grdD button:focus-visible{outline:3px solid #1d1d1d;outline-offset:3px}
+#grdD button{display:block;width:100%;min-height:52px;margin-top:10px;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
+</style>
 <style>/*LNK v1*/
 #panel .pLnk{margin:12px 0;padding:16px;background:var(--pc,#fff);border:1px solid var(--pl,#ddd);border-radius:16px;color:var(--pt,inherit)}
 #panel .pLnk b{display:block;font-size:18px;line-height:1.25;margin:0 0 6px}
@@ -872,6 +888,92 @@ function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length 
   document.body.appendChild(d); const b = document.getElementById('novOk'); if(window.__tecla) b.focus();   /* el foco se mueve solo si se viene usando el teclado */
   b.addEventListener('click', () => { try{ localStorage.setItem(k, NOV.v); }catch(x){} d.remove(); }); } /*NOV fin*/
 </script>
+<script>/*NTF v1*/ (function(){
+const NTF = {api: 'https://miwebsapp.netlify.app/api/push', key: 'BImwbVkkD9IqBkXNmvQvsf1xzS-lX6eTDIoZK0iQ5D3mJnFDzM3AU_Id5VnpuDU5KY9rQqIsjbV8k2yWByOVoww'}; window.NTF = NTF;
+if(typeof renderSite!=='function' || typeof S==='undefined') return;
+const D = document, q = s => D.querySelector(s), ua = navigator.userAgent || '';
+const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua);
+const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+const puede = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const u8 = s => { const b = atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+/* DEMO EN IPHONE (17/11 22:42): en iPhone la app del inicio y Safari guardan aparte, así que el panel tiene que abrirse en la MISMA app.
+   Solo en las muestras: botón para abrir el panel acá mismo, y el aviso sale con unos segundos de espera para salir de la app y verlo llegar. */
+const PRUEBA = (h, quien) => `<p class="hint" style="margin:12px 0 6px">Para probar el aviso en esta muestra: abrí ${quien} desde acá (clave 1234), tocá Lo tomo y salí enseguida a la pantalla de inicio. El aviso llega en unos segundos.</p><button type="button" class="btn w" data-ntfp="${h}">Probar ahora: abrir ${quien}</button>`;
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-ntfp]'); if(b){ location.hash = b.dataset.ntfp; scrollTo(0,0); } });
+const turno = () => (typeof P!=='undefined' && P.last && !P.last.req) ? S.turnos.find(x => x.id===P.last.id) : null;
+function bloque(){ const d = q('#site .done'), t = turno(); if(!d || !t || d.querySelector('.ntf')) return; const quien = esc(S.cfg.short);
+  const box = D.createElement('div'); box.className = 'ntf';
+  box.innerHTML = t.push ? `<p class="ntfok">Listo: te avisamos en este celular cuando ${quien} te responda.</p>` + (typeof DEMO!=='undefined' && DEMO ? PRUEBA('#panel', 'el panel de la muestra') : '')
+    : INAPP ? `<p class="mut">Para recibir un aviso cuando ${quien} te responda, abrí esta página en Chrome o Safari.</p>`
+    : IOS && !SA() ? `<p class="mut">En iPhone, el aviso solo llega si agregás esta página a tu pantalla de inicio y la abrís desde el ícono.</p>`
+    : (!puede() || Notification.permission==='denied') ? `<p class="mut">Este navegador no deja recibir avisos. ${quien} te responde por WhatsApp.</p>`
+    : `<button type="button" class="btn o w" data-a="ntf">Avisame cuando me confirmen</button><p class="hint" style="margin:8px 0 0">Te llega un aviso a este celular. El WhatsApp sigue igual.</p>`;
+  const ag = d.querySelector('[data-a="again"]'); d.insertBefore(box, ag || null); }
+
+/* TOCAR LA NOTIFICACIÓN ABRE SU TURNO (regla Dardo 17/11 23:34): el aviso trae en el link #aviso=ok|no&d=AAAA-MM-DD&h=HH:MM&p=profesional
+   y al abrirlo se muestra ese turno. Confirmado: día, hora y profesional + Agregar al calendario + Cómo llegar (solo con dirección cargada).
+   No se pudo: "No pudieron tomar tu turno" + Pedir otro turno. */
+const avLink = (tipo, d, h, p) => location.href.split('#')[0] + '#aviso=' + tipo + (d ? '&d=' + d : '') + (h ? '&h=' + encodeURIComponent(h) : '') + (p ? '&p=' + encodeURIComponent(p) : '');
+function avDatos(){ const m = location.hash.match(/^#aviso=(ok|no)(.*)$/); if(!m) return null; const q = new URLSearchParams(m[2].replace(/^&/, '')); return {tipo:m[1], d:q.get('d') || '', h:q.get('h') || '', p:q.get('p') || ''}; }
+function avDir(){ try{ if(typeof CPUB!=='undefined' && CPUB && CPUB.datos) return CPUB.datos.direccion || ''; }catch(e){} try{ if(window.__CPUB && window.__CPUB.datos) return window.__CPUB.datos.direccion || ''; }catch(e){} try{ return (S && S.cfg && S.cfg.addr) || ''; }catch(e){ return ''; } }
+function avIcs(a){ const p2 = n => String(n).padStart(2, '0'), [hh, mm] = a.h.split(':').map(Number), dur = (typeof S!=='undefined' && S && S.cfg && S.cfg.dur) || 30, ini = hh * 60 + mm, fin = ini + dur, f = x => a.d.replace(/-/g, '') + 'T' + p2(Math.floor(x / 60)) + p2(x % 60) + '00', dir = avDir();
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Turnos//ES', 'BEGIN:VEVENT', 'UID:' + Date.now() + '@turnos', 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''), 'DTSTART:' + f(ini), 'DTEND:' + f(fin), 'SUMMARY:Turno con ' + a.p, dir ? 'LOCATION:' + dir.replace(/[,;]/g, ' ') : '', 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n'); }
+function avPantalla(){ const a = avDatos(), el = q('#site'); if(!a || !el) return false;
+  let h;
+  if(a.tipo === 'ok'){ const dir = avDir(); h = `<section class="sheet avT"><div class="done"><h2>Tu turno está confirmado</h2><p class="gap"><b>${a.d ? esc(cap(longDate(a.d))) : ''}${a.h ? ' a las ' + esc(a.h) : ''}</b>${a.p ? ' con ' + esc(a.p) : ''}.</p>
+      <button type="button" class="btn w gap" data-av="cal">Agregar al calendario</button>${dir ? `<a class="btn o w gap" target="_blank" rel="noopener" href="${esc(mapsUrl(dir))}">Cómo llegar ↗</a>` : ''}<button type="button" class="btn o w gap" data-av="ini">Volver al inicio</button></div></section>`; }
+  else h = `<section class="sheet avT"><div class="done"><h2>No pudieron tomar tu turno</h2><p class="gap">${a.d && a.h ? 'El turno del ' + esc(longDate(a.d)) + ' a las ' + esc(a.h) + ' no está disponible. ' : ''}Elegí otro día y horario.</p><button type="button" class="btn w gap" data-av="otro">Pedir otro turno</button></div></section>`;
+  /* CONTENIDO 18/11 00:00: SÍ lleva encabezado (el de tu Link de turnos: logo o foto y nombre; en consultorio, el del consultorio) y aire arriba */
+  const cab = el.querySelector('header.top'), marca = el.querySelector('.cover .mcb, .cover .lg, .brand');
+  const sin = n => { if(!n) return ''; const c = n.cloneNode(true); c.querySelectorAll('.grd, .grdW, #grdD, button, a').forEach(x => x.remove()); return c.outerHTML; };
+  el.innerHTML = '<style>.avCab *{animation:none!important}</style><div class="avCab">' + sin(marca) + sin(cab) + '</div>' + h.replace('class="sheet avT"', 'class="sheet avT" style="margin-top:18px"'); return true; }
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-av]'); if(!b) return; const a = avDatos();
+  if(b.dataset.av === 'cal' && a){ const u = URL.createObjectURL(new Blob([avIcs(a)], {type: 'text/calendar'})), l = D.createElement('a'); l.href = u; l.download = 'turno.ics'; D.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return; }
+  history.replaceState(null, '', location.pathname + location.search); renderSite(); scrollTo(0, 0); });
+addEventListener('hashchange', () => { if(avDatos()) renderSite(); });
+const R0 = window.renderSite; window.renderSite = function(){ if(avDatos()){ const r0 = R0.apply(this, arguments); avPantalla(); return r0; } const r = R0.apply(this, arguments); try{ bloque(); }catch(e){} return r; };
+D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-a="ntf"]'); if(!b) return; const t = turno(); if(!t) return; b.disabled = true;
+  try{ const perm = Notification.requestPermission();   /* primero el permiso, dentro del toque (iPhone lo exige) */
+    await navigator.serviceWorker.register('sw-ntf.js'); const reg = await navigator.serviceWorker.ready;
+    if(await perm !== 'granted'){ toast('Sin permiso no te podemos avisar. Te responden por WhatsApp.'); b.disabled = false; return; }
+    const sub = await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: u8(NTF.key)});
+    t.push = JSON.parse(JSON.stringify(sub)); save(); renderSite();
+  }catch(err){ toast('No se pudo activar el aviso. Te responden por WhatsApp.'); b.disabled = false; } });
+/* panel: Lo tomo / Confirmarle y No puedo tomarlo le mandan el aviso al paciente que lo pidió (el WhatsApp sale igual) */
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('#panel [data-a="conf"], #panel [data-a="rej"]'); if(!b || typeof A==='undefined') return;
+  const t = S.turnos.find(x => x.id===(b.dataset.id || A.tid)); if(!t || !t.push) return; const sub = t.push; t.push = null; if(typeof DEMO!=='undefined' && DEMO) setTimeout(() => { try{ toast('Aviso en camino: salí a la pantalla de inicio y en unos segundos llega.'); }catch(err){} }, 400);
+  try{ fetch(NTF.api, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sub, tipo: b.dataset.a==='conf' ? 'ok' : 'no', quien: S.cfg.short, cuando: cap(longDate(t.date)) + ', ' + t.time, url: avLink(b.dataset.a==='conf' ? 'ok' : 'no', t.date, t.time, S.cfg.name), espera: (typeof DEMO!=='undefined' && DEMO) ? 8 : 0})}).catch(() => {}); }catch(err){} }, true);
+try{ if(avDatos()) renderSite(); else bloque(); }catch(e){}
+})();</script>
+<script>/*GRD v1*/ (function(){ const D = document, ua = navigator.userAgent || '';
+const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
+const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+let DP = null; addEventListener('keydown', e => { if(e.key === 'Tab' || e.key === 'Enter') window.__tecla = true; }, true); addEventListener('pointerdown', () => { window.__tecla = false; }, true); addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
+const NOM = () => { const m = D.querySelector('meta[name="apple-mobile-web-app-title"]'); return m ? m.content : D.title; };
+const H = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
+const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
+const ICO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 7v7M9 11l3 3 3-3"/></svg>';
+function pasos(){ const n = '<b>' + H(NOM()) + '</b>', fin = 'Te queda el ícono de ' + n + ' junto a tus aplicaciones.';
+  if(INAPP) return ['Primero abrilo en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede guardar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Guardar en tu celular</b>.']];
+  const A3 = 'Bajá en la lista y tocá <b>Agregar a Inicio</b> ' + MA + '. Si no aparece, tocá <b>Ver más</b>.', A4 = 'Dejá activado <b>Abrir como app web</b> y tocá <b>Agregar</b>. ' + fin;   /* pasos según el Manual de uso del iPhone (iOS 27), CONTENIDO 17/11 22:55 */
+  if(IOS && OTRO) return ['Guardalo en tu iPhone', ['Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', A3, A4]];
+  if(IOS) return ['Guardalo en tu iPhone', ['Tocá el botón de menú que está junto a la dirección (los tres puntitos) y después <b>Compartir</b> ' + SH + '. Si abajo ya ves el botón Compartir, tocalo directo.', A3, A4]];
+  return ['Guardalo en tu celular', ['Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. ' + fin]]; }
+function abrir(){ if(D.getElementById('grdD')) return; const p = pasos(), d = D.createElement('div'); d.id = 'grdD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','grdT');
+  d.innerHTML = '<div class="gb"><h2 id="grdT">' + p[0] + '</h2><ol>' + p[1].map(x => '<li>' + x + '</li>').join('') + '</ol><button type="button">Listo</button></div>';
+  D.body.appendChild(d); const b = d.querySelector('button'); b.onclick = () => d.remove(); if(window.__tecla) b.focus(); }
+async function guardar(){ if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); await e.userChoice; return; }catch(x){} } abrir(); }
+const visible = () => (IOS || AND || INAPP) && !SA();
+function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd') || s.querySelector('.avT')) return;   /* la pantalla del turno (al tocar el aviso) no lleva el botón */
+  const ref = s.querySelector('.lk') || s.querySelector('.lead') || s.querySelector('.cover .kick, .cover .lead') || s.querySelector('.top');
+  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>';
+  (ref.classList.contains('kick') ? ref.parentNode : ref).insertAdjacentElement('afterend', w); w.firstChild.onclick = guardar; }
+const R0 = window.renderSite; if(typeof R0==='function') window.renderSite = function(){ const r = R0.apply(this, arguments); try{ poner(); }catch(e){} return r; };
+addEventListener('appinstalled', () => { D.querySelectorAll('.grdW').forEach(x => x.remove()); });
+poner(); setTimeout(poner, 400);
+})();</script>
 <script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu Link de turnos';
 const url = () => location.href.split('#')[0].split('?')[0];
 /* se muestra limpio (CONTENIDO 17/11 21:25): sin https:// ni index.html ni la barra final; se copia completo */
@@ -888,6 +990,24 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
 </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

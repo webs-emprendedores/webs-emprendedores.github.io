@@ -1001,12 +1001,15 @@ function avPantalla(){ const a = avDatos(), el = q('#site'); if(!a || !el) retur
   if(a.tipo === 'ok'){ const dir = avDir(); h = `<section class="sheet avT"><div class="done"><h2>Tu turno está confirmado</h2><p class="gap"><b>${a.d ? esc(cap(longDate(a.d))) : ''}${a.h ? ' a las ' + esc(a.h) : ''}</b>${a.p ? ' con ' + esc(a.p) : ''}.</p>
       <button type="button" class="btn w gap" data-av="cal">Agregar al calendario</button>${dir ? `<a class="btn o w gap" target="_blank" rel="noopener" href="${esc(mapsUrl(dir))}">Cómo llegar ↗</a>` : ''}<button type="button" class="btn o w gap" data-av="ini">Volver al inicio</button></div></section>`; }
   else h = `<section class="sheet avT"><div class="done"><h2>No pudieron tomar tu turno</h2><p class="gap">${a.d && a.h ? 'El turno del ' + esc(longDate(a.d)) + ' a las ' + esc(a.h) + ' no está disponible. ' : ''}Elegí otro día y horario.</p><button type="button" class="btn w gap" data-av="otro">Pedir otro turno</button></div></section>`;
-  el.innerHTML = h; return true; }
+  /* CONTENIDO 18/11 00:00: SÍ lleva encabezado (el de tu Link de turnos: logo o foto y nombre; en consultorio, el del consultorio) y aire arriba */
+  const cab = el.querySelector('header.top'), marca = el.querySelector('.cover .mcb, .cover .lg, .brand');
+  const sin = n => { if(!n) return ''; const c = n.cloneNode(true); c.querySelectorAll('.grd, .grdW, #grdD, button, a').forEach(x => x.remove()); return c.outerHTML; };
+  el.innerHTML = '<style>.avCab *{animation:none!important}</style><div class="avCab">' + sin(marca) + sin(cab) + '</div>' + h.replace('class="sheet avT"', 'class="sheet avT" style="margin-top:18px"'); return true; }
 D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-av]'); if(!b) return; const a = avDatos();
   if(b.dataset.av === 'cal' && a){ const u = URL.createObjectURL(new Blob([avIcs(a)], {type: 'text/calendar'})), l = D.createElement('a'); l.href = u; l.download = 'turno.ics'; D.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return; }
   history.replaceState(null, '', location.pathname + location.search); renderSite(); scrollTo(0, 0); });
 addEventListener('hashchange', () => { if(avDatos()) renderSite(); });
-const R0 = window.renderSite; window.renderSite = function(){ if(avDatos() && avPantalla()) return; const r = R0.apply(this, arguments); try{ bloque(); }catch(e){} return r; };
+const R0 = window.renderSite; window.renderSite = function(){ if(avDatos()){ const r0 = R0.apply(this, arguments); avPantalla(); return r0; } const r = R0.apply(this, arguments); try{ bloque(); }catch(e){} return r; };
 D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-a="ntf"]'); if(!b) return; const t = turno(); if(!t) return; b.disabled = true;
   try{ const perm = Notification.requestPermission();   /* primero el permiso, dentro del toque (iPhone lo exige) */
     await navigator.serviceWorker.register('sw-ntf.js'); const reg = await navigator.serviceWorker.ready;
@@ -1041,7 +1044,7 @@ function abrir(){ if(D.getElementById('grdD')) return; const p = pasos(), d = D.
   D.body.appendChild(d); const b = d.querySelector('button'); b.onclick = () => d.remove(); if(window.__tecla) b.focus(); }
 async function guardar(){ if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); await e.userChoice; return; }catch(x){} } abrir(); }
 const visible = () => (IOS || AND || INAPP) && !SA();
-function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd')) return;
+function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd') || s.querySelector('.avT')) return;   /* la pantalla del turno (al tocar el aviso) no lleva el botón */
   const ref = s.querySelector('.lk') || s.querySelector('.lead') || s.querySelector('.cover .kick, .cover .lead') || s.querySelector('.top');
   if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>';
   (ref.classList.contains('kick') ? ref.parentNode : ref).insertAdjacentElement('afterend', w); w.firstChild.onclick = guardar; }
@@ -1065,6 +1068,21 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
 </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

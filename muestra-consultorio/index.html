@@ -307,11 +307,6 @@ body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, t
 #panel .pLnk b{display:block;font-size:18px;line-height:1.25;margin:0 0 6px}
 #panel .pLnk p{margin:0 0 12px;font-size:16px;line-height:1.35;overflow-wrap:anywhere;color:var(--pt,inherit)}
 #panel .pLnk button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;border:1.5px solid var(--pt,#1d1d1d);border-radius:12px;background:transparent;color:var(--pt,#1d1d1d);font-weight:700;font-size:17px;line-height:1.2;font-family:inherit;cursor:pointer}   /* Copiar en negrita como los demás botones (CONTENIDO 21:25) */
-.mcb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:22px 0 6px;text-align:center}
-.mcb span{font:500 16px/1 Jost,system-ui,sans-serif;letter-spacing:.32em;text-transform:uppercase;color:var(--mut)}
-.mcb b{font:500 34px/1.1 "Playfair Display",Georgia,serif;color:var(--ink)}
-.mcb.sm{padding:12px 0 4px}.mcb.sm b{font-size:26px}
-.mcD{margin:0 0 16px;padding:12px 14px;border:1px dashed var(--line);border-radius:8px;font-size:16px;color:var(--mut);text-align:center}
 </style>
 <style>/*CONS v1*/
 .cover{min-height:0!important;justify-content:flex-start!important;gap:18px!important}   /* portada sin huecos: la de LD reparte el alto para su logo animado; acá no hay foto ni logo (CONTENIDO 17/11 22:05) */
@@ -347,12 +342,6 @@ body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, t
 #panel .cPin{display:block;width:100%;box-sizing:border-box;min-height:52px;font-size:18px;padding:0 14px;border:1.5px solid var(--pt);border-radius:12px;background:var(--pc);color:var(--pt)}
 body.cEsp #panel .pT{display:none}
 </style>
-<style>/*CONT v1*/
-#cont{position:fixed;left:0;right:0;top:0;z-index:95;padding:10px 16px;background:#fff3c4;color:#2b2200;border-bottom:1px solid #d9b84a;font-weight:600;font-size:16px;line-height:1.35;text-align:center;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-#cont.ok{background:#e2f1e3;color:#123d1c;border-color:#7fb38a}
-body.contOn{padding-top:var(--contH,48px)}
-body.contOn .pnlTop{top:var(--contH,48px)!important}
-</style>
 <style>/*GRD v1*/
 .grd{display:inline-flex;align-items:center;gap:8px;min-height:48px;margin:0 0 18px;padding:0 14px;border:1.5px solid currentColor;border-radius:999px;background:transparent;color:inherit;font-weight:600;font-size:16px;line-height:1.2;font-family:inherit;cursor:pointer}
 .grd svg{width:20px;height:20px;flex:none}
@@ -368,6 +357,12 @@ body.contOn .pnlTop{top:var(--contH,48px)!important}
 </style>
 <style>/*NTF v1*/
 .ntf{margin-top:16px} .ntf .btn{width:100%} .ntf p{font-size:16px;line-height:1.4;margin:0} .ntf .ntfok{font-weight:700;color:var(--pet)}
+</style>
+<style>/*CONT v1*/
+#cont{position:fixed;left:0;right:0;top:0;z-index:95;padding:10px 16px;background:#fff3c4;color:#2b2200;border-bottom:1px solid #d9b84a;font-weight:600;font-size:16px;line-height:1.35;text-align:center;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#cont.ok{background:#e2f1e3;color:#123d1c;border-color:#7fb38a}
+body.contOn{padding-top:var(--contH,48px)}
+body.contOn .pnlTop{top:var(--contH,48px)!important}
 </style>
 <meta name="apple-mobile-web-app-title" content="Consultorio de muestra">
 <style>/*INS v1*/
@@ -1053,7 +1048,7 @@ function consFake(q, D, d){ const C = consDb(D), yo = C.miembros.find(m => m.cli
     datos:Object.assign({}, C.datos), instagram:yo ? yo.instagram || '' : '',
     miembros:C.miembros.filter(m => m.alta==='activo' || m.alta==='espera').map(m => ({cliente:m.cliente, nombre:m.nombre, slug:m.slug, alta:m.alta, alta_vence:m.alta_vence, al_dia:true, estado:m.alta, instagram:m.instagram || ''}))});
   /* AVISOS (17/11 20:03): la suscripción del paciente viaja con su pedido y el panel la retira una sola vez al resolverlo */
-  if(q.a==='ntfSub'){ const o = d.orders.slice().reverse().find(x => x.product==='Pedido nuevo' && x.name===q.name && x.phone===q.phone); if(!o || !q.sub || !q.sub.endpoint) return {ok:false, msg:'No encuentro el pedido.'}; o.push = q.sub; return {ok:true}; }
+  if(q.a==='ntfSub'){ const o = (q.id && d.orders.find(x => x.id===q.id)) || (q.rid && d.orders.find(x => x.rid===q.rid)) || d.orders.slice().reverse().find(x => x.name===q.name && x.phone===q.phone); if(!o || !q.sub || !q.sub.endpoint) return {ok:false, msg:'No encuentro el pedido.'}; o.push = q.sub; return {ok:true}; }
   if(q.a==='ntfTake'){ if(q.pin!==d.pin) return {ok:false, msg:'Clave incorrecta'}; const o = d.orders.find(x => x.id===q.id); const sub = o && o.push; if(o) delete o.push; return {ok:true, sub:sub || null}; }
   if(q.a==='consPub') return {ok:true, datos:Object.assign({}, C.datos), profesionales:act().map(m => ({cliente:m.cliente, nombre:m.nombre, instagram:m.instagram || ''}))};
   if(!yo || yo.alta==='baja' || yo.alta==='vencido') return {ok:false, msg:'Este panel ya no anda. Pedile uno nuevo a quien administra el consultorio.'};
@@ -1082,7 +1077,7 @@ function fakeApi(q){ if(localStorage.getItem('cont_caido') === '1') return Promi
   if(q.a==='pub' && D._cons){ const m = D._cons.miembros.find(x => x.cliente===q.c); if(m && m.alta!=='activo'){ r.pausa = true; } }
   if(q.a==='order' && D._cons){ const m = D._cons.miembros.find(x => x.cliente===q.c); if(m && m.alta!=='activo') return Promise.resolve(new Response(JSON.stringify({ok:false, msg:'Esta profesional no está tomando turnos.'}), {headers:{'Content-Type':'application/json'}})); } const st = () => ({maxPerDay:9999, blocked:[], extra:d.extra});
   if(q.a==='pub') Object.assign(r, {products:[], settings:st(), busy:{}, taken:{}, slots:d.orders.filter(o => TPF.includes(o.product) && o.fill).map(o => ({date:o.date, time:o.fill, weekly:!!o.done, skip:[]}))});
-  else if(q.a==='order'){ if(q.rid && d.orders.some(x => x.rid===q.rid)) r.repetido = true; else { d.n++; d.orders.push(Object.assign({}, q.order, {id:'o'+Date.now()+'_'+d.n, pay:'sin', done:false}, q.rid ? {rid:q.rid} : {})); } }   /* rid: el mismo envío no se guarda dos veces (como el servidor v19) */
+  else if(q.a==='order'){ if(q.rid && d.orders.some(x => x.rid===q.rid)) r.repetido = true; else { d.n++; const id = 'o'+Date.now()+'_'+d.n; d.orders.push(Object.assign({}, q.order, {id, pay:'sin', done:false}, q.rid ? {rid:q.rid} : {})); r.id = id; r.ids = [id]; } }   /* como el v20: order devuelve el id */   /* rid: el mismo envío no se guarda dos veces (como el servidor v19) */
   else if(q.pin!==d.pin) r = {ok:false, msg:'Clave incorrecta'};
   else if(q.a==='all') Object.assign(r, {products:[], orders:JSON.parse(JSON.stringify(d.orders)), settings:st(), calc:{}});
   else if(q.a==='saveOrders') q.orders.forEach(o => { d.orders = d.orders.filter(x => x.id!==o.id).concat([o]); });
@@ -1433,6 +1428,100 @@ D.addEventListener('click', e => { if(e.target.closest('#panel .pT button, #pane
 addEventListener('hashchange', () => { CI = null; CS = ''; });
 })();
 </script>
+<script>/*GRD v1*/ (function(){ const D = document, ua = navigator.userAgent || '';
+const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
+const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+let DP = null; addEventListener('keydown', e => { if(e.key === 'Tab' || e.key === 'Enter') window.__tecla = true; }, true); addEventListener('pointerdown', () => { window.__tecla = false; }, true); addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
+const NOM = () => { const m = D.querySelector('meta[name="apple-mobile-web-app-title"]'); return m ? m.content : D.title; };
+const H = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
+const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
+const ICO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 7v7M9 11l3 3 3-3"/></svg>';
+function pasos(){ const n = '<b>' + H(NOM()) + '</b>', fin = 'Te queda el ícono de ' + n + ' junto a tus aplicaciones.';
+  if(INAPP) return ['Primero abrilo en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede guardar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Guardar en tu celular</b>.']];
+  const A3 = 'Bajá en la lista y tocá <b>Agregar a Inicio</b> ' + MA + '. Si no aparece, tocá <b>Ver más</b>.', A4 = 'Dejá activado <b>Abrir como app web</b> y tocá <b>Agregar</b>. ' + fin;   /* pasos según el Manual de uso del iPhone (iOS 27), CONTENIDO 17/11 22:55 */
+  if(IOS && OTRO) return ['Guardalo en tu iPhone', ['Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', A3, A4]];
+  if(IOS) return ['Guardalo en tu iPhone', ['Tocá el botón de menú que está junto a la dirección (los tres puntitos) y después <b>Compartir</b> ' + SH + '. Si abajo ya ves el botón Compartir, tocalo directo.', A3, A4]];
+  return ['Guardalo en tu celular', ['Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. ' + fin]]; }
+function abrir(){ if(D.getElementById('grdD')) return; const p = pasos(), d = D.createElement('div'); d.id = 'grdD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','grdT');
+  d.innerHTML = '<div class="gb"><h2 id="grdT">' + p[0] + '</h2><ol>' + p[1].map(x => '<li>' + x + '</li>').join('') + '</ol><button type="button">Listo</button></div>';
+  D.body.appendChild(d); const b = d.querySelector('button'); b.onclick = () => d.remove(); if(window.__tecla) b.focus(); }
+async function guardar(){ if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); await e.userChoice; return; }catch(x){} } abrir(); }
+const visible = () => (IOS || AND || INAPP) && !SA();
+function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd') || s.querySelector('.avT')) return;   /* la pantalla del turno (al tocar el aviso) no lleva el botón */
+  const ref = s.querySelector('.lk') || s.querySelector('.lead') || s.querySelector('.cover .kick, .cover .lead') || s.querySelector('.top');
+  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>';
+  (ref.classList.contains('kick') ? ref.parentNode : ref).insertAdjacentElement('afterend', w); w.firstChild.onclick = guardar; }
+const R0 = window.renderSite; if(typeof R0==='function') window.renderSite = function(){ const r = R0.apply(this, arguments); try{ poner(); }catch(e){} return r; };
+addEventListener('appinstalled', () => { D.querySelectorAll('.grdW').forEach(x => x.remove()); });
+poner(); setTimeout(poner, 400);
+})();</script>
+<script>/*NTF v1*/ (function(){
+const NTF = {api: 'https://miwebsapp.netlify.app/api/push', key: 'BImwbVkkD9IqBkXNmvQvsf1xzS-lX6eTDIoZK0iQ5D3mJnFDzM3AU_Id5VnpuDU5KY9rQqIsjbV8k2yWByOVoww'}; window.NTF = NTF;
+if(typeof renderSite!=='function') return;
+const D = document, q = s => D.querySelector(s), ua = navigator.userAgent || '';
+const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua);
+const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+const puede = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const u8 = s => { const b = atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+/* DEMO EN IPHONE (17/11 22:42): mismo arreglo que en muestra-odonto (panel en la misma app y aviso con espera) */
+const PRUEBA = (h, quien) => `<p class="hint" style="margin:12px 0 6px">Para probar el aviso en esta muestra: abrí ${quien} desde acá (clave 1234), dale turno y salí enseguida a la pantalla de inicio. El aviso llega en unos segundos.</p><button type="button" class="btn w" data-ntfp="${h}">Probar ahora: abrir ${quien}</button>`;
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-ntfp]'); if(b){ location.hash = b.dataset.ntfp; scrollTo(0,0); } });
+const pedido = () => (typeof P!=='undefined' && P.last && S) ? P.last : null;   /* pedido (sin horario) o turno elegido por el paciente */
+/* APPS REALES (Dardo 17/11 23:53): el aviso se guarda en el servidor junto al pedido. La respuesta de order trae su id (ids, COBROS v20) y el envío su rid */
+let NTF_ID = '', NTF_RID = ''; { const F1 = window.fetch; window.fetch = async function(u, o){ let b = null; try{ b = JSON.parse(o && o.body); }catch(e){}
+  const r = await F1.apply(this, arguments); if(b && b.a === 'order' && !b.pin){ NTF_RID = b.rid || ''; try{ const j = await r.clone().json(); NTF_ID = j.id || (j.ids && j.ids[0]) || ''; }catch(e){} } return r; }; }
+function bloque(){ const d = q('#site .done'), r = pedido(); if(!d || !r || d.querySelector('.ntf')) return; const quien = esc(S.cfg.short);
+  const box = D.createElement('div'); box.className = 'ntf';
+  box.innerHTML = r.ntf ? `<p class="ntfok">Listo: te avisamos en este celular cuando ${quien} te responda.</p>` + (typeof MUESTRA!=='undefined' && MUESTRA ? PRUEBA('#' + PROS[CUR].slug, 'el panel de ' + esc(S.cfg.short)) : '')
+    : INAPP ? `<p class="mut">Para recibir un aviso cuando ${quien} te responda, abrí esta página en Chrome o Safari.</p>`
+    : IOS && !SA() ? `<p class="mut">En iPhone, el aviso solo llega si agregás esta página a tu pantalla de inicio y la abrís desde el ícono.</p>`
+    : (!puede() || Notification.permission==='denied') ? `<p class="mut">Este navegador no deja recibir avisos. ${quien} te responde por WhatsApp.</p>`
+    : `<button type="button" class="btn o w" data-a="ntf">${r.req ? 'Avisame cuando me den el turno' : 'Avisame cuando me confirmen'}</button><p class="hint" style="margin:8px 0 0">Te llega un aviso a este celular. El WhatsApp sigue igual.</p>`;
+  const ag = d.querySelector('[data-a="again"]'); d.insertBefore(box, ag || null); }
+
+/* TOCAR LA NOTIFICACIÓN ABRE SU TURNO (regla Dardo 17/11 23:34): el aviso trae en el link #aviso=ok|no&d=AAAA-MM-DD&h=HH:MM&p=profesional
+   y al abrirlo se muestra ese turno. Confirmado: día, hora y profesional + Agregar al calendario + Cómo llegar (solo con dirección cargada).
+   No se pudo: "No pudieron tomar tu turno" + Pedir otro turno. */
+const avLink = (tipo, d, h, p) => location.href.split('#')[0] + '#aviso=' + tipo + (d ? '&d=' + d : '') + (h ? '&h=' + encodeURIComponent(h) : '') + (p ? '&p=' + encodeURIComponent(p) : '');
+function avDatos(){ const m = location.hash.match(/^#aviso=(ok|no)(.*)$/); if(!m) return null; const q = new URLSearchParams(m[2].replace(/^&/, '')); return {tipo:m[1], d:q.get('d') || '', h:q.get('h') || '', p:q.get('p') || ''}; }
+function avDir(){ try{ if(typeof CPUB!=='undefined' && CPUB && CPUB.datos) return CPUB.datos.direccion || ''; }catch(e){} try{ if(window.__CPUB && window.__CPUB.datos) return window.__CPUB.datos.direccion || ''; }catch(e){} try{ return (S && S.cfg && S.cfg.addr) || ''; }catch(e){ return ''; } }
+function avIcs(a){ const p2 = n => String(n).padStart(2, '0'), [hh, mm] = a.h.split(':').map(Number), dur = (typeof S!=='undefined' && S && S.cfg && S.cfg.dur) || 30, ini = hh * 60 + mm, fin = ini + dur, f = x => a.d.replace(/-/g, '') + 'T' + p2(Math.floor(x / 60)) + p2(x % 60) + '00', dir = avDir();
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Turnos//ES', 'BEGIN:VEVENT', 'UID:' + Date.now() + '@turnos', 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''), 'DTSTART:' + f(ini), 'DTEND:' + f(fin), 'SUMMARY:Turno con ' + a.p, dir ? 'LOCATION:' + dir.replace(/[,;]/g, ' ') : '', 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n'); }
+function avPantalla(){ const a = avDatos(), el = q('#site'); if(!a || !el) return false;
+  let h;
+  if(a.tipo === 'ok'){ const dir = avDir(); h = `<section class="sheet avT"><div class="done"><h2>Tu turno está confirmado</h2><p class="gap"><b>${a.d ? esc(cap(longDate(a.d))) : ''}${a.h ? ' a las ' + esc(a.h) : ''}</b>${a.p ? ' con ' + esc(a.p) : ''}.</p>
+      <button type="button" class="btn w gap" data-av="cal">Agregar al calendario</button>${dir ? `<a class="btn o w gap" target="_blank" rel="noopener" href="${esc(mapsUrl(dir))}">Cómo llegar ↗</a>` : ''}<button type="button" class="btn o w gap" data-av="ini">Volver al inicio</button></div></section>`; }
+  else h = `<section class="sheet avT"><div class="done"><h2>No pudieron tomar tu turno</h2><p class="gap">${a.d && a.h ? 'El turno del ' + esc(longDate(a.d)) + ' a las ' + esc(a.h) + ' no está disponible. ' : ''}Elegí otro día y horario.</p><button type="button" class="btn w gap" data-av="otro">Pedir otro turno</button></div></section>`;
+  /* CONTENIDO 18/11 00:00: SÍ lleva encabezado (el de tu Link de turnos: logo o foto y nombre; en consultorio, el del consultorio) y aire arriba */
+  const cab = el.querySelector('header.top'), marca = el.querySelector('.cover .mcb, .cover .lg, .brand');
+  const sin = n => { if(!n) return ''; const c = n.cloneNode(true); c.querySelectorAll('.grd, .grdW, #grdD, button, a').forEach(x => x.remove()); return c.outerHTML; };
+  el.innerHTML = '<style>.avCab *{animation:none!important}</style><div class="avCab">' + sin(marca) + sin(cab) + '</div>' + h.replace('class="sheet avT"', 'class="sheet avT" style="margin-top:18px"'); return true; }
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-av]'); if(!b) return; const a = avDatos();
+  if(b.dataset.av === 'cal' && a){ const u = URL.createObjectURL(new Blob([avIcs(a)], {type: 'text/calendar'})), l = D.createElement('a'); l.href = u; l.download = 'turno.ics'; D.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return; }
+  history.replaceState(null, '', location.pathname + location.search); renderSite(); scrollTo(0, 0); });
+addEventListener('hashchange', () => { if(avDatos()) renderSite(); });
+const R0 = window.renderSite; window.renderSite = function(){ if(avDatos()){ const r0 = R0.apply(this, arguments); avPantalla(); return r0; } const r = R0.apply(this, arguments); try{ bloque(); }catch(e){} return r; };
+window.ntfGuardar = async sub => { const r = pedido(); const x = await api({a:'ntfSub', id:NTF_ID, rid:NTF_RID, name:r.name, phone:r.phone, sub}); if(!x.ok) throw 0; r.ntf = true; renderSite(); };
+D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-a="ntf"]'); if(!b || !pedido()) return; b.disabled = true;
+  try{ const perm = Notification.requestPermission();   /* primero el permiso, dentro del toque (iPhone lo exige) */
+    await navigator.serviceWorker.register('sw-ntf.js'); const reg = await navigator.serviceWorker.ready;
+    if(await perm !== 'granted'){ toast('Sin permiso no te podemos avisar. Te responden por WhatsApp.'); b.disabled = false; return; }
+    await ntfGuardar(JSON.parse(JSON.stringify(await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: u8(NTF.key)}))));
+  }catch(err){ toast('No se pudo activar el aviso. Te responden por WhatsApp.'); b.disabled = false; } });
+/* panel: al darle turno (se guarda) o al decir que no, el servidor entrega la suscripción una sola vez y sale el aviso (el WhatsApp sigue igual) */
+async function avisar(id, tipo, cuando, d, h){ try{ const x = await api({a:'ntfTake', pin:A.pin, id}); if(!x.ok || !x.sub) return; if(typeof MUESTRA!=='undefined' && MUESTRA){ try{ toast('Aviso en camino: salí a la pantalla de inicio y en unos segundos llega.'); }catch(err){} } await fetch(NTF.api, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sub:x.sub, tipo, quien:S.cfg.short, cuando, url:avLink(tipo, d, h, S.cfg.name), espera: (typeof MUESTRA!=='undefined' && MUESTRA) ? 8 : 0})}); }catch(err){} }
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('#panel [data-a="reqrej"], #panel [data-a="wsave"]'); if(!b || typeof A==='undefined' || !A.ok) return;
+  if(b.dataset.a==='reqrej'){ avisar(b.dataset.id, 'no', '', '', ''); return; }
+  const w = A.w; if(!w || !w.req || !w.date || !w.time) return; const id = w.req, cuando = cap(longDate(w.date)) + ', ' + w.time;
+  const wd = w.date, wt = w.time; setTimeout(() => { if(!S.reqs.some(x => x.id===id)) avisar(id, 'ok', cuando, wd, wt); }, 0); }, true);   /* solo si el turno quedó guardado */
+/* turno que eligió el paciente (por confirmar): Lo tomo / No puedo tomarlo */
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('#panel [data-a="conf"], #panel [data-a="rej"]'); if(!b || typeof A==='undefined' || !A.ok) return;
+  const t = S.turnos.find(x => x.id===(b.dataset.id || A.tid)); if(!t || t.status==='confirmado') return; const ok = b.dataset.a==='conf';
+  avisar(t.id, ok ? 'ok' : 'no', cap(longDate(t.date)) + ', ' + t.time, t.date, t.time); }, true);
+try{ if(avDatos()) renderSite(); else bloque(); }catch(e){}
+})();</script>
 <script>/*CONT v1*/ (function(){ const D = document, F0 = window.fetch, P = location.pathname;
 const LEE = ['all','pub','consInfo','consPub','payCheck','export'];
 const COLA = ['saveOrders','saveOrder','delOrders','delOrder','saveSettings','saveProducts','saveProduct','delProduct','order','consDatos','consIg','consVote','ntfSub'];
@@ -1480,91 +1569,26 @@ if(MUES){ new MutationObserver(() => { const m = [...D.querySelectorAll('#panel 
 addEventListener('online', subir); setInterval(subir, 30000); setTimeout(subir, 1500);
 if(pendientes()) setTimeout(() => { if(!SUBE && pendientes()) aviso('Sin conexión: se guarda cuando vuelva.'); }, 2500);
 })();</script>
-<script>/*GRD v1*/ (function(){ const D = document, ua = navigator.userAgent || '';
-const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
-const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
-const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-let DP = null; addEventListener('keydown', e => { if(e.key === 'Tab' || e.key === 'Enter') window.__tecla = true; }, true); addEventListener('pointerdown', () => { window.__tecla = false; }, true); addEventListener('beforeinstallprompt', e => { e.preventDefault(); DP = e; });
-const NOM = () => { const m = D.querySelector('meta[name="apple-mobile-web-app-title"]'); return m ? m.content : D.title; };
-const H = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const SH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>';
-const MA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>';
-const ICO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 7v7M9 11l3 3 3-3"/></svg>';
-function pasos(){ const n = '<b>' + H(NOM()) + '</b>', fin = 'Te queda el ícono de ' + n + ' junto a tus aplicaciones.';
-  if(INAPP) return ['Primero abrilo en tu navegador', ['Estás viendo esto dentro de otra aplicación (Instagram, Facebook o TikTok) y desde acá no se puede guardar.', 'Tocá los tres puntitos de arriba a la derecha.', IOS ? 'Elegí <b>Abrir en Safari</b> o <b>Abrir en el navegador</b>.' : 'Elegí <b>Abrir en Chrome</b> o <b>Abrir en el navegador</b>.', 'Ahí volvé a tocar <b>Guardar en tu celular</b>.']];
-  const A3 = 'Bajá en la lista y tocá <b>Agregar a Inicio</b> ' + MA + '. Si no aparece, tocá <b>Ver más</b>.', A4 = 'Dejá activado <b>Abrir como app web</b> y tocá <b>Agregar</b>. ' + fin;   /* pasos según el Manual de uso del iPhone (iOS 27), CONTENIDO 17/11 22:55 */
-  if(IOS && OTRO) return ['Guardalo en tu iPhone', ['Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', A3, A4]];
-  if(IOS) return ['Guardalo en tu iPhone', ['Tocá el botón de menú que está junto a la dirección (los tres puntitos) y después <b>Compartir</b> ' + SH + '. Si abajo ya ves el botón Compartir, tocalo directo.', A3, A4]];
-  return ['Guardalo en tu celular', ['Tocá el menú del navegador: los tres puntitos o las tres rayitas.', 'Elegí <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b>.', 'Confirmá con <b>Instalar</b> o <b>Agregar</b>. ' + fin]]; }
-function abrir(){ if(D.getElementById('grdD')) return; const p = pasos(), d = D.createElement('div'); d.id = 'grdD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','grdT');
-  d.innerHTML = '<div class="gb"><h2 id="grdT">' + p[0] + '</h2><ol>' + p[1].map(x => '<li>' + x + '</li>').join('') + '</ol><button type="button">Listo</button></div>';
-  D.body.appendChild(d); const b = d.querySelector('button'); b.onclick = () => d.remove(); if(window.__tecla) b.focus(); }
-async function guardar(){ if(DP && !INAPP){ const e = DP; DP = null; try{ e.prompt(); await e.userChoice; return; }catch(x){} } abrir(); }
-const visible = () => (IOS || AND || INAPP) && !SA();
-function poner(){ const s = D.getElementById('site'); if(!s || s.hidden || !visible() || s.querySelector('.grd')) return;
-  const ref = s.querySelector('.lk') || s.querySelector('.lead') || s.querySelector('.cover .kick, .cover .lead') || s.querySelector('.top');
-  if(!ref) return; const w = D.createElement('div'); w.className = 'grdW'; w.innerHTML = '<button type="button" class="grd">' + ICO + '<span>Guardar en tu celular</span></button>';
-  (ref.classList.contains('kick') ? ref.parentNode : ref).insertAdjacentElement('afterend', w); w.firstChild.onclick = guardar; }
-const R0 = window.renderSite; if(typeof R0==='function') window.renderSite = function(){ const r = R0.apply(this, arguments); try{ poner(); }catch(e){} return r; };
-addEventListener('appinstalled', () => { D.querySelectorAll('.grdW').forEach(x => x.remove()); });
-poner(); setTimeout(poner, 400);
-})();</script>
-<script>/*NTF v1*/ (function(){
-const NTF = {api: 'https://miwebsapp.netlify.app/api/push', key: 'BImwbVkkD9IqBkXNmvQvsf1xzS-lX6eTDIoZK0iQ5D3mJnFDzM3AU_Id5VnpuDU5KY9rQqIsjbV8k2yWByOVoww'}; window.NTF = NTF;
-if(typeof renderSite!=='function') return;
-const D = document, q = s => D.querySelector(s), ua = navigator.userAgent || '';
-const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua);
-const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-const puede = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
-const u8 = s => { const b = atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)); return Uint8Array.from(b, c => c.charCodeAt(0)); };
-/* DEMO EN IPHONE (17/11 22:42): mismo arreglo que en muestra-odonto (panel en la misma app y aviso con espera) */
-const PRUEBA = (h, quien) => `<p class="hint" style="margin:12px 0 6px">Para probar el aviso en esta muestra: abrí ${quien} desde acá (clave 1234), dale turno y salí enseguida a la pantalla de inicio. El aviso llega en unos segundos.</p><button type="button" class="btn w" data-ntfp="${h}">Probar ahora: abrir ${quien}</button>`;
-D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-ntfp]'); if(b){ location.hash = b.dataset.ntfp; scrollTo(0,0); } });
-const pedido = () => (typeof P!=='undefined' && P.last && P.last.req && S) ? P.last : null;
-function bloque(){ const d = q('#site .done'), r = pedido(); if(!d || !r || d.querySelector('.ntf')) return; const quien = esc(S.cfg.short);
-  const box = D.createElement('div'); box.className = 'ntf';
-  box.innerHTML = r.ntf ? `<p class="ntfok">Listo: te avisamos en este celular cuando ${quien} te responda.</p>` + (typeof MUESTRA!=='undefined' && MUESTRA ? PRUEBA('#' + PROS[CUR].slug, 'el panel de ' + esc(S.cfg.short)) : '')
-    : INAPP ? `<p class="mut">Para recibir un aviso cuando ${quien} te responda, abrí esta página en Chrome o Safari.</p>`
-    : IOS && !SA() ? `<p class="mut">En iPhone, el aviso solo llega si agregás esta página a tu pantalla de inicio y la abrís desde el ícono.</p>`
-    : (!puede() || Notification.permission==='denied') ? `<p class="mut">Este navegador no deja recibir avisos. ${quien} te responde por WhatsApp.</p>`
-    : `<button type="button" class="btn o w" data-a="ntf">Avisame cuando me den el turno</button><p class="hint" style="margin:8px 0 0">Te llega un aviso a este celular. El WhatsApp sigue igual.</p>`;
-  const ag = d.querySelector('[data-a="again"]'); d.insertBefore(box, ag || null); }
-
-/* TOCAR LA NOTIFICACIÓN ABRE SU TURNO (regla Dardo 17/11 23:34): el aviso trae en el link #aviso=ok|no&d=AAAA-MM-DD&h=HH:MM&p=profesional
-   y al abrirlo se muestra ese turno. Confirmado: día, hora y profesional + Agregar al calendario + Cómo llegar (solo con dirección cargada).
-   No se pudo: "No pudieron tomar tu turno" + Pedir otro turno. */
-const avLink = (tipo, d, h, p) => location.href.split('#')[0] + '#aviso=' + tipo + (d ? '&d=' + d : '') + (h ? '&h=' + encodeURIComponent(h) : '') + (p ? '&p=' + encodeURIComponent(p) : '');
-function avDatos(){ const m = location.hash.match(/^#aviso=(ok|no)(.*)$/); if(!m) return null; const q = new URLSearchParams(m[2].replace(/^&/, '')); return {tipo:m[1], d:q.get('d') || '', h:q.get('h') || '', p:q.get('p') || ''}; }
-function avDir(){ try{ if(typeof CPUB!=='undefined' && CPUB && CPUB.datos) return CPUB.datos.direccion || ''; }catch(e){} try{ if(window.__CPUB && window.__CPUB.datos) return window.__CPUB.datos.direccion || ''; }catch(e){} try{ return (S && S.cfg && S.cfg.addr) || ''; }catch(e){ return ''; } }
-function avIcs(a){ const p2 = n => String(n).padStart(2, '0'), [hh, mm] = a.h.split(':').map(Number), dur = (typeof S!=='undefined' && S && S.cfg && S.cfg.dur) || 30, ini = hh * 60 + mm, fin = ini + dur, f = x => a.d.replace(/-/g, '') + 'T' + p2(Math.floor(x / 60)) + p2(x % 60) + '00', dir = avDir();
-  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Turnos//ES', 'BEGIN:VEVENT', 'UID:' + Date.now() + '@turnos', 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''), 'DTSTART:' + f(ini), 'DTEND:' + f(fin), 'SUMMARY:Turno con ' + a.p, dir ? 'LOCATION:' + dir.replace(/[,;]/g, ' ') : '', 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n'); }
-function avPantalla(){ const a = avDatos(), el = q('#site'); if(!a || !el) return false;
-  let h;
-  if(a.tipo === 'ok'){ const dir = avDir(); h = `<section class="sheet avT"><div class="done"><h2>Tu turno está confirmado</h2><p class="gap"><b>${a.d ? esc(cap(longDate(a.d))) : ''}${a.h ? ' a las ' + esc(a.h) : ''}</b>${a.p ? ' con ' + esc(a.p) : ''}.</p>
-      <button type="button" class="btn w gap" data-av="cal">Agregar al calendario</button>${dir ? `<a class="btn o w gap" target="_blank" rel="noopener" href="${esc(mapsUrl(dir))}">Cómo llegar ↗</a>` : ''}<button type="button" class="btn o w gap" data-av="ini">Volver al inicio</button></div></section>`; }
-  else h = `<section class="sheet avT"><div class="done"><h2>No pudieron tomar tu turno</h2><p class="gap">${a.d && a.h ? 'El turno del ' + esc(longDate(a.d)) + ' a las ' + esc(a.h) + ' no está disponible. ' : ''}Elegí otro día y horario.</p><button type="button" class="btn w gap" data-av="otro">Pedir otro turno</button></div></section>`;
-  el.innerHTML = h; return true; }
-D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-av]'); if(!b) return; const a = avDatos();
-  if(b.dataset.av === 'cal' && a){ const u = URL.createObjectURL(new Blob([avIcs(a)], {type: 'text/calendar'})), l = D.createElement('a'); l.href = u; l.download = 'turno.ics'; D.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return; }
-  history.replaceState(null, '', location.pathname + location.search); renderSite(); scrollTo(0, 0); });
-addEventListener('hashchange', () => { if(avDatos()) renderSite(); });
-const R0 = window.renderSite; window.renderSite = function(){ if(avDatos() && avPantalla()) return; const r = R0.apply(this, arguments); try{ bloque(); }catch(e){} return r; };
-window.ntfGuardar = async sub => { const r = pedido(); const x = await api({a:'ntfSub', name:r.name, phone:r.phone, sub}); if(!x.ok) throw 0; r.ntf = true; renderSite(); };
-D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-a="ntf"]'); if(!b || !pedido()) return; b.disabled = true;
-  try{ const perm = Notification.requestPermission();   /* primero el permiso, dentro del toque (iPhone lo exige) */
-    await navigator.serviceWorker.register('sw-ntf.js'); const reg = await navigator.serviceWorker.ready;
-    if(await perm !== 'granted'){ toast('Sin permiso no te podemos avisar. Te responden por WhatsApp.'); b.disabled = false; return; }
-    await ntfGuardar(JSON.parse(JSON.stringify(await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: u8(NTF.key)}))));
-  }catch(err){ toast('No se pudo activar el aviso. Te responden por WhatsApp.'); b.disabled = false; } });
-/* panel: al darle turno (se guarda) o al decir que no, el servidor entrega la suscripción una sola vez y sale el aviso (el WhatsApp sigue igual) */
-async function avisar(id, tipo, cuando, d, h){ try{ const x = await api({a:'ntfTake', pin:A.pin, id}); if(!x.ok || !x.sub) return; if(typeof MUESTRA!=='undefined' && MUESTRA){ try{ toast('Aviso en camino: salí a la pantalla de inicio y en unos segundos llega.'); }catch(err){} } await fetch(NTF.api, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sub:x.sub, tipo, quien:S.cfg.short, cuando, url:avLink(tipo, d, h, S.cfg.name), espera: (typeof MUESTRA!=='undefined' && MUESTRA) ? 8 : 0})}); }catch(err){} }
-D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('#panel [data-a="reqrej"], #panel [data-a="wsave"]'); if(!b || typeof A==='undefined' || !A.ok) return;
-  if(b.dataset.a==='reqrej'){ avisar(b.dataset.id, 'no', '', '', ''); return; }
-  const w = A.w; if(!w || !w.req || !w.date || !w.time) return; const id = w.req, cuando = cap(longDate(w.date)) + ', ' + w.time;
-  const wd = w.date, wt = w.time; setTimeout(() => { if(!S.reqs.some(x => x.id===id)) avisar(id, 'ok', cuando, wd, wt); }, 0); }, true);   /* solo si el turno quedó guardado */
-try{ if(avDatos()) renderSite(); else bloque(); }catch(e){}
-})();</script>
 </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
