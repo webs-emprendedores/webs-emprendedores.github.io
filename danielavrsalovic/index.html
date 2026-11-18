@@ -158,6 +158,7 @@ footer a{color:var(--mut)}
 #nov ul{margin:0 0 12px;padding-left:20px}#nov li{margin:6px 0}
 #nov .ok2{margin:0 0 16px;color:#3d3d3d}
 #nov button{width:100%;min-height:52px;border:0;border-radius:12px;background:#1d1d1d;color:#fff;font:inherit;font-weight:700;font-size:18px;cursor:pointer}
+#nov button:focus{outline:none}#nov button:focus-visible{outline:3px solid #1d1d1d;outline-offset:3px}   /* foco solo con teclado (CONTENIDO 17/11 22:45: al tocar salía doble borde) */
 </style>
 <script>/*INSM*/(function(){var u=navigator.userAgent||"",I=/iPhone|iPad|iPod/.test(u)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),h=location.hash.split("&")[0],q=null;try{q=new URLSearchParams(location.search).get("app")}catch(e){}if(I&&q&&/^[\w-]+$/.test(q)&&h.length<2){history.replaceState(null,"",location.pathname+location.search+"#"+q);h="#"+q}if(I&&/^#[\w-]+$/.test(h)){if(q!==h.slice(1))history.replaceState(null,"",location.pathname+"?app="+h.slice(1)+location.hash);return}document.write('<link rel="manifest" href="manifest.json">')})();</script>
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -861,13 +862,14 @@ load(); addEventListener('hashchange', route); route();
 /* SOLO A QUIEN YA LA USABA (regla Dardo 17/11 19:48): nunca en las demos ni en la primera entrada de un cliente nuevo.
    La primera vez que se entra al panel en este aparato queda la marca de uso y la versión actual como vista; el cartel sale recién
    con una actualización posterior. También cuenta como uso haber visto un cartel anterior. */
+addEventListener('keydown', e => { if(e.key === 'Tab' || e.key === 'Enter') window.__tecla = true; }, true); addEventListener('pointerdown', () => { window.__tecla = false; }, true);
 function novDemo(){ try{ if(typeof DEMO!=='undefined' && DEMO) return true; }catch(e){} try{ if(typeof MUESTRA!=='undefined' && MUESTRA) return true; }catch(e){} return /\/muestra-[^/]*\//.test(location.pathname); }
 function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length || document.getElementById('nov') || novDemo()) return; let k = 'nov_'+location.pathname, u = 'novu_'+location.pathname;
   try{ const visto = localStorage.getItem(k), uso = localStorage.getItem(u); if(!uso) localStorage.setItem(u, '1'); if(visto===NOV.v) return; if(!uso && !visto){ localStorage.setItem(k, NOV.v); return; } }catch(e){ return; }
   const d = document.createElement('div'); d.id = 'nov'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','novT');
   const e = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   d.innerHTML = '<div class="nb"><h2 id="novT">Actualizamos tu app</h2><ul>' + NOV.items.map(x => '<li>'+e(x)+'</li>').join('') + '</ul><p class="ok2">' + e(NOV.safe) + '</p><button type="button" id="novOk">Entendido</button></div>';
-  document.body.appendChild(d); const b = document.getElementById('novOk'); b.focus();
+  document.body.appendChild(d); const b = document.getElementById('novOk'); if(window.__tecla) b.focus();   /* el foco se mueve solo si se viene usando el teclado */
   b.addEventListener('click', () => { try{ localStorage.setItem(k, NOV.v); }catch(x){} d.remove(); }); } /*NOV fin*/
 </script>
 <script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu Link de turnos';
@@ -886,6 +888,8 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
 </body>
+
+
 
 
 
