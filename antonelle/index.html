@@ -1411,7 +1411,11 @@ function armar(){
   fila = {c, t, max: m, A, a, z, css}; mover(); }
 function mover(){ if(!fila || fila.css) return; const p = Math.min(1, Math.max(0, (scrollY - fila.A) / fila.max)), x = Math.round(p * fila.max); if(x !== fila.x){ fila.x = x; fila.t.style.transform = 'translate3d(' + (-x) + 'px,0,0)'; } }   /* solo transform, nada que lea el diseño */
 function luego(){ clearTimeout(t0); t0 = setTimeout(armar, 120); }
-addEventListener('scroll', () => { if(fila && !fila.css) mover(); }, {passive: true});   /* directo, sin requestAnimationFrame (18/11) */
+function revisar(){   /* RED DE SEGURIDAD: las primeras veces que la fila está en su tramo se mira si el navegador de verdad la mueve; si no (navegador que dice saber y no anima), pasa a moverla con JS */
+  const p = (scrollY - fila.A) / fila.max; if(p < .2 || p > .8) return; fila.chk = (fila.chk || 0) + 1;
+  const m = new DOMMatrixReadOnly(getComputedStyle(fila.t).transform), x = -m.m41, e = p * fila.max;
+  if(Math.abs(x - e) > 40){ fila.css = false; fila.c.classList.remove('filaCss'); mover(); } }
+addEventListener('scroll', () => { if(!fila) return; if(fila.css){ if((fila.chk || 0) < 4 && !fila.esp){ fila.esp = setTimeout(() => { if(fila){ fila.esp = 0; if(fila.css) revisar(); } }, 300); } } else mover(); }, {passive: true});   /* se revisa un rato después: el navegador actualiza la animación en el cuadro siguiente */   /* directo, sin requestAnimationFrame (18/11) */
 addEventListener('resize', luego); addEventListener('load', luego); addEventListener('hashchange', luego);
 D.addEventListener('load', e => { if(e.target && e.target.tagName === 'IMG' && e.target.closest('#tv')) luego(); }, true);
 if(mq.addEventListener) mq.addEventListener('change', luego); else if(mq.addListener) mq.addListener(luego);
