@@ -821,7 +821,7 @@ function renderPed(){ if(edit && edit.k==='o'){ const o = edit.o;
     <div class="two"><div><label>Precio total</label><input id="oTot" type="number" inputmode="numeric" value="${o.total||''}"></div><div><label>Ya pagó</label><input id="oPaid" type="number" inputmode="numeric" value="${o.paid||''}"></div></div>
     <button class="btn" data-a="osave" style="margin-top:16px">Guardar</button><button class="btn o" data-a="cancel" style="margin-top:10px">Cancelar</button>`; return; }
   const list = S.orders.filter(o => !isTal(o)).filter(o => old ? (o.done || o.date < iso(today)) : (!o.done && o.date >= iso(today))).sort((a,b) => a.date < b.date ? -1 : 1); if(old) list.reverse();
-  $('#pv-ped').innerHTML = `<button class="btn" data-a="onew">+ Cargar un pedido</button><p class="help" style="margin-top:10px">Los pedidos de la página aparecen solos. Tocá "Cambiar" para ponerle el precio y anotar la seña.</p>
+  $('#pv-ped').innerHTML = `<button class="btn" data-a="onew">+ Cargar un pedido</button><p class="help" style="margin-top:10px">Los pedidos de tu Link de pedidos aparecen solos. Tocá "Cambiar" para ponerle el precio y anotar la seña.</p>
   <div class="opts" style="margin-top:8px"><button data-a="old" data-v="0" class="${old?'':'on'}">Próximas entregas</button><button data-a="old" data-v="1" class="${old?'on':''}">Anteriores</button></div>` +
   (list.length ? list.map(o => `<div class="card"><div class="row"><span class="dt">${dshort(o.date)}</span>${payPill(o)}</div><h3 style="margin:8px 0 4px">${esc(o.product)}${o.people?' para '+esc(o.people):''}</h3><p>${esc(o.fill)}</p>${o.notes?`<p class="mut">${esc(o.notes)}</p>`:''}
     <p style="margin-top:8px"><b>${esc(o.name)}</b> · ${esc(o.phone)} · ${esc(o.delivery)}</p><p>${o.total ? 'Total '+money(o.total)+(o.total>o.paid ? ', falta cobrar '+money(o.total-o.paid) : '') : 'Sin precio cargado'}</p>
@@ -831,7 +831,7 @@ function renderTal(){ const x = X();
   if(edit && edit.k==='t'){ const t = edit.t; $('#pv-tal').innerHTML = `<h3>${edit.isNew?'Agregar taller':'Cambiar taller'}</h3><label>Nombre del taller</label><input id="tName" value="${esc(t.name)}" placeholder="Por ejemplo: Decoración con manga"><div class="two"><div><label>Fecha</label><input id="tDate" type="date" value="${esc(t.date)}"></div><div><label>Hora</label><input id="tTime" value="${esc(t.time)}" placeholder="16 h"></div></div>
     <div class="two"><div><label>Cupos</label><input id="tCup" type="number" inputmode="numeric" value="${esc(t.cupos)}"></div><div><label>Precio</label><input id="tPrice" type="number" inputmode="numeric" value="${esc(t.price)}"></div></div><label>Qué incluye</label><textarea id="tDesc">${esc(t.desc)}</textarea>
     <button class="btn" data-a="tsave" style="margin-top:16px">Guardar</button>${edit.isNew?'':'<button class="btn no" data-a="tdel" style="margin-top:10px">Quitar taller</button>'}<button class="btn o" data-a="cancel" style="margin-top:10px">Cancelar</button>`; return; }
-  $('#pv-tal').innerHTML = `<button class="btn" data-a="tnew">+ Agregar taller</button><p class="help" style="margin-top:10px">Cargá la fecha y los cupos. La gente se anota desde la página y acá ves quién se anotó.</p>` +
+  $('#pv-tal').innerHTML = `<button class="btn" data-a="tnew">+ Agregar taller</button><p class="help" style="margin-top:10px">Cargá la fecha y los cupos. La gente se anota desde tu Link de pedidos y acá ves quién se anotó.</p>` +
   ((x.talleres||[]).length ? x.talleres.slice().sort((a,b) => a.date < b.date ? -1 : 1).map(t => { const ins = S.orders.filter(o => o.product===TAL+t.name && o.date===t.date), n = ins.reduce((s,o) => s + (Number(o.people)||1), 0);
     return `<div class="card"><div class="row"><span class="dt">${dshort(t.date)}${t.time?' · '+esc(t.time):''}</span><span class="pill ne">${n} de ${esc(t.cupos)}</span></div><h3 style="margin:8px 0 4px">${esc(t.name)}</h3><p class="mut">${t.price?money(t.price):'Sin precio'}</p>` +
       ins.map(o => `<div class="it"><div class="tx"><div class="n">${esc(o.name)}</div><div class="mut">${esc(o.phone)}</div></div><button class="pill ${o.paid>0?'ok':'no'}" data-a="tpay" data-id="${esc(o.id)}">${o.paid>0?'Pagó':'Debe'}</button><button class="pill ne" data-a="odel" data-id="${esc(o.id)}">Quitar</button></div>`).join('') + `<div class="acts"><button class="btn sm" data-a="tedit" data-id="${esc(t.id)}">Cambiar</button></div></div>`; }).join('') : '<div class="card">Todavía no cargaste ningún taller.</div>'); }
@@ -839,10 +839,10 @@ function renderTal(){ const x = X();
 function renderCar(){ const x = X();
   if(edit && edit.k==='p'){ const p = edit.p; $('#pv-car').innerHTML = `<h3>${edit.isNew?'Agregar producto':'Cambiar producto'}</h3><label>Nombre</label><input id="pName" value="${esc(p.name)}"><label>Tipo</label><select id="pCat"><option value="${CAKES}"${p.cat===CAKES?' selected':''}>Torta para armar (elige relleno y cobertura)</option><option value="Otros"${p.cat!==CAKES?' selected':''}>Otro producto</option></select>
     <label>Descripción corta</label><input id="pDesc" value="${esc(p.desc)}"><label>Precio (vacío = a confirmar)</label><input id="pPrice" type="number" inputmode="numeric" value="${p.price||''}">
-    <label class="chk"><input type="checkbox" id="pVis"${p.visible?' checked':''}> Se muestra en la página</label>
+    <label class="chk"><input type="checkbox" id="pVis"${p.visible?' checked':''}> Se muestra en tu Link de pedidos</label>
     <label>Foto</label><div style="display:flex;gap:12px;align-items:center">${p.img?`<img src="${esc(p.img)}" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:cover">`:''}<label class="btn sm o" style="margin:0;cursor:pointer">${p.img?'Cambiar foto':'Subir foto'}<input type="file" id="pFile" accept="image/*" hidden></label></div>
     <button class="btn" data-a="psave" style="margin-top:16px">Guardar</button>${edit.isNew?'':'<button class="btn no" data-a="pdel" style="margin-top:10px">Borrar producto</button>'}<button class="btn o" data-a="cancel" style="margin-top:10px">Cancelar</button>`; return; }
-  $('#pv-car').innerHTML = `<p class="help">Lo que cambies acá se ve al instante en tu página.</p><div class="card"><h3>Productos</h3>` + S.products.map(p => `<div class="it">${p.img?`<img src="${esc(p.img)}" alt="">`:''}<div class="tx"><div class="n">${esc(p.name)}${p.visible?'':' (oculto)'}</div><div class="mut">${p.price?money(p.price):'Precio a confirmar'}</div></div><button class="btn sm o" data-a="pedit" data-id="${esc(p.id)}">Cambiar</button></div>`).join('') + `<button class="btn o" data-a="pnew" style="margin-top:12px">+ Agregar producto</button></div>
+  $('#pv-car').innerHTML = `<p class="help">Lo que cambies acá se ve al instante en tu Link de pedidos.</p><div class="card"><h3>Productos</h3>` + S.products.map(p => `<div class="it">${p.img?`<img src="${esc(p.img)}" alt="">`:''}<div class="tx"><div class="n">${esc(p.name)}${p.visible?'':' (oculto)'}</div><div class="mut">${p.price?money(p.price):'Precio a confirmar'}</div></div><button class="btn sm o" data-a="pedit" data-id="${esc(p.id)}">Cambiar</button></div>`).join('') + `<button class="btn o" data-a="pnew" style="margin-top:12px">+ Agregar producto</button></div>
   <div class="card"><h3>Sabores para armar la torta</h3><p class="mut">Uno por renglón.</p><label>Bizcochuelos</label><textarea id="xBiz">${esc(x.biz.join('\n'))}</textarea><label>Rellenos</label><textarea id="xRel" style="min-height:120px">${esc(x.rel.join('\n'))}</textarea><label>Coberturas</label><textarea id="xCob" style="min-height:120px">${esc(x.cob.join('\n'))}</textarea><button class="btn" data-a="xsave" style="margin-top:14px">Guardar sabores</button></div>`; }
 
 const CK = ['name','ing','pack','hours','rate','gas','margin']; let C = {name:'',ing:'',pack:'',hours:'',rate:'',gas:'',margin:'30'};
@@ -855,7 +855,7 @@ function renderMas(){ const s = S.settings, x = X(), f = (k,l,ph,t) => `<label>$
     <label>Días que no tomás pedidos</label><div class="two"><input id="sBlk" type="date"><button class="btn sm o" data-a="badd" style="min-height:52px;width:100%">Agregar</button></div><div class="acts">${(s.blocked||[]).filter(d => d >= iso(today)).sort().map(d => `<button class="pill ne" data-a="bdel" data-d="${d}">${dshort(d)} ✕</button>`).join('')}</div>
     <h3 style="margin-top:20px">Seña</h3><div class="two"><div><label>Seña (%)</label><input id="sSena" type="number" inputmode="numeric" value="${esc(s.senaPct)}"></div><div><label>Alias</label><input id="sAlias" value="${esc(s.alias)}"></div></div><label>A nombre de</label><input id="sAliasN" value="${esc(s.aliasName)}"><button class="btn" data-a="ssave" style="margin-top:14px">Guardar</button></div>
   <div class="card"><h3>Clave de acceso</h3><p class="mut">De 4 a 8 números.</p><label>Clave nueva</label><input id="npin" type="password" inputmode="numeric"><label>Repetir la clave nueva</label><input id="npin2" type="password" inputmode="numeric"><button class="btn" data-a="pinsave" style="margin-top:14px">Cambiar la clave</button></div>
-  <div class="card"><h3>Visitas</h3><p><b id="vN">…</b> visitas a tu página y <b id="vP">…</b> pedidos hechos desde ahí.</p></div>
+  <div class="card"><h3>Visitas</h3><p><b id="vN">…</b> visitas a tu Link de pedidos y <b id="vP">…</b> pedidos hechos desde ahí.</p></div>
   <div class="card"><h3>Tenerla como app</h3><p style="margin-top:6px">En iPhone: abrila en Safari, tocá Compartir y después "Agregar a inicio". En Android: abrí el menú de Chrome y tocá "Agregar a la pantalla principal".</p></div>
   <button class="btn o" data-a="out" style="margin-top:16px">Salir del panel</button>`;
   calcOut(); const g = HIT.replace('/hit/','/get/'), put = (id,v) => { const e = $(id); if(e) e.textContent = v; }; fetch(g).then(r => r.json()).then(j => put('#vN', j.value||0)).catch(() => put('#vN', 0)); fetch(g+'-pedidos').then(r => r.json()).then(j => put('#vP', j.value||0)).catch(() => put('#vP', 0)); }
@@ -940,7 +940,7 @@ const norm = s => String(s||'').trim().toLowerCase();
 
 /* ---- Contenido de la propia página (no se pide nada nuevo al dueño) ---- */
 const B = (function(){ const h = site.querySelector('header'), cs = e => e ? getComputedStyle(e) : null;
-  /* logo: solo una imagen que sea logo (src, alt o clase con 'logo'); nunca la primera foto de la página (CONTENIDO 17/11 08:49). APPS[slug]['logo'] lo fija a mano */
+  /* logo: solo una imagen que sea logo (src, alt o clase con 'logo'); nunca la primera foto de tu Link de pedidos (CONTENIDO 17/11 08:49). APPS[slug]['logo'] lo fija a mano */
   const esLogo = e => /logo/i.test((e.getAttribute('src')||'') + ' ' + (e.alt||'') + ' ' + (e.className||'')), logo = C.logo !== undefined ? null : [...site.querySelectorAll('img')].find(esLogo), br = h && (h.querySelector('.brand') || h);
   const accs = [...site.querySelectorAll('a[href="#panel"],a[href="#admin"]')], acc = accs[accs.length-1];
   const h1 = site.querySelector('h1'), lead = h1 && h1.parentElement.querySelector('p');
@@ -973,7 +973,7 @@ function V(p){ const v = ((X().var)||{})[p.id] || {}, t = torta(p) || isPers(p),
   const d = {sz:[], biz: t && (x.biz||[]).length ? 1 : 0, rel: t && relList().length ? (C.rel2 ? 2 : 1) : 0, cob: t && (x.cob||[]).length ? 1 : 0,
     per: t ? 1 : 0, qty: t ? 0 : 1, sab: t && !relList().length && !(x.biz||[]).length ? 1 : 0, ext: t && (x.cajas||[]).length ? x.cajas.map(n => ({n, p:0})) : [], idea: isPers(p) ? 1 : 0};
   return Object.assign(d, v); }
-/* categoría con la que se agrupa en la página: la que elige el emprendedor en Tu catálogo (var[id].grp) o la del producto */
+/* categoría con la que se agrupa en tu Link de pedidos: la que elige el emprendedor en Tu catálogo (var[id].grp) o la del producto */
 const grupo = p => String(V(p).grp || p.cat || 'Otros').trim() || 'Otros';
 const desde = p => { const v = V(p), ps = (v.sz||[]).map(s => Number(s.p)||0).filter(Boolean); return ps.length ? Math.min(...ps) : (Number(p.price)||0); };
 const ph = (p, cls) => p && p.img && !dup(p) ? `<img class="vph ${cls||''}" src="${E(p.img)}" alt="${E(p.name)}" loading="lazy">` : '';   /* sin foto, sin hueco (17/11): nunca una letra */
@@ -1286,11 +1286,11 @@ let OPN = '';
 function lst(t){ return String(t||'').split('\n').map(s => s.trim()).filter(Boolean).map(s => { const m = s.match(/^(.*?)[\s:=$-]*\$?\s*([\d.]+)\s*$/); return m && m[1] ? {n:m[1].trim(), p:Number(m[2].replace(/\./g,''))} : {n:s, p:0}; }); }
 const lstT = a => (a||[]).map(x => x.n + (Number(x.p) ? ' ' + x.p : '')).join('\n');
 function encHtml(){ const fe = formaEnc(), lg = logoEnc();
-  return `<div class="venc"><h3>Encabezado de tu página</h3><div class="vlogo">${lg ? `<img src="${E(lg)}" alt="Tu logo">` : '<span class="vnf vnl" style="width:64px;height:64px;border-radius:50%">Sin logo</span>'}<label class="vsub">${lg ? 'Cambiar logo' : 'Subir logo'}<input type="file" accept="image/*" hidden data-tvlogo="1"></label></div>
+  return `<div class="venc"><h3>Encabezado de tu Link de pedidos</h3><div class="vlogo">${lg ? `<img src="${E(lg)}" alt="Tu logo">` : '<span class="vnf vnl" style="width:64px;height:64px;border-radius:50%">Sin logo</span>'}<label class="vsub">${lg ? 'Cambiar logo' : 'Subir logo'}<input type="file" accept="image/*" hidden data-tvlogo="1"></label></div>
     ${[['logo-nombre', 'Logo y nombre'], ['nombre', 'Solo el nombre'], ['logo', 'Solo el logo (si tu logo ya trae el nombre)']].map(([v, l]) => `<label class="vck"><input type="radio" name="tvenc" value="${v}"${fe===v ? ' checked' : ''}${v!=='nombre' && !lg ? ' disabled' : ''}> ${l}</label>`).join('')}
     ${lg ? '' : '<div class="vok" style="margin:2px 0 6px">Para mostrar el logo, primero subilo.</div>'}<button type="button" class="vsv" data-tvenc="1">Guardar encabezado</button></div>`; }
 function opcHtml(p){ const v = V(p), x = X();
-  return `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre || window.PNL ? '' : `<label>Categoría en tu página</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu página aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `${window.PNL ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">`}
+  return `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre || window.PNL ? '' : `<label>Categoría en tu Link de pedidos</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu Link de pedidos aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `${window.PNL ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">`}
           <label>Tamaños y precios (uno por renglón)</label><textarea data-f="sz" placeholder="Para 10 personas 38000">${E(lstT(v.sz))}</textarea>
           ${(v.sz||[]).length ? '' : `<label class="vck"><input type="checkbox" data-f="per"${v.per?' checked':''}> Preguntar para cuántas personas</label>`}
           <label class="vck"><input type="checkbox" data-f="qty"${v.qty?' checked':''}> Preguntar cantidad</label>
@@ -1303,7 +1303,7 @@ function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || 
   const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
   const fe = formaEnc(), lg = logoEnc();
   return encHtml()
-    + `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
+    + `<h3>Tu catálogo en tu Link de pedidos</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
     + ps.map(p => { const v = V(p), o = OPN===p.id;
       return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">Categoría: ${E(grupo(p))}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
         <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
@@ -1370,7 +1370,7 @@ function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEn
 /* el toast dura 2 segundos y queda arriba de la barra */
 /* AVISOS DE GUARDADO (CONTENIDO 17/11 17:10): uno solo, "Guardado ✓", en una línea, arriba de la barra y sin tapar el botón que se tocó */
 (function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
-  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
+  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu Link de pedidos queda como antes/i;
   window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
   window.pnlPlace = () => { const t = document.getElementById('toast'); if(t) t.classList.toggle('pOk', t.textContent==='Guardado ✓'); };   /* siempre abajo, centrado sobre la barra de pestañas (CONTENIDO 18:00) */
   window.pnlHide = () => { const t = document.getElementById('toast'); if(t) t.classList.remove('show', 'on'); };   /* todo aviso se borra al cambiar de pantalla o de pestaña */
@@ -1405,7 +1405,7 @@ window.renderPed = function(){ const v = q('#pv-ped');
       <p class="pMeta" style="margin-top:6px">${esc(o.name)}${o.delivery ? ', ' + esc(o.delivery).toLowerCase() : ''}</p>
       <div class="pAcc">${w ? `<a class="pSec" target="_blank" rel="noopener" href="${w}">WhatsApp</a>` : ''}<button type="button" class="pSec" data-a="odone" data-id="${esc(o.id)}">${o.done ? 'Volver a pendiente' : 'Entregado ✓'}</button><button type="button" class="pSec" data-a="oedit" data-id="${esc(o.id)}">Cambiar ›</button></div></div>`; });
   v.innerHTML = list.length ? sum + main('onew', '+ Cargar un pedido') + seg + h
-    : sum + seg + `<div class="pCard" style="margin-top:16px"><p>${old ? 'No hay pedidos anteriores.' : 'No hay pedidos por entregar. Los que hagan desde tu página aparecen acá solos.'}</p>${main('onew', '+ Cargar un pedido')}</div>`; };
+    : sum + seg + `<div class="pCard" style="margin-top:16px"><p>${old ? 'No hay pedidos anteriores.' : 'No hay pedidos por entregar. Los que hagan desde tu Link de pedidos aparecen acá solos.'}</p>${main('onew', '+ Cargar un pedido')}</div>`; };
 
 /* ---------- TALLERES o AGENDA ---------- */
 window.renderTal = P.agenda ? function(){ const v = q('#pv-tal'), s = S.settings;
@@ -1421,11 +1421,11 @@ window.renderTal = P.agenda ? function(){ const v = q('#pv-tal'), s = S.settings
       <div class="pTwo"><div><label for="tCup">Cupos</label><input id="tCup" type="number" inputmode="numeric" value="${esc(t.cupos)}"></div><div><label for="tPrice">Precio</label><input id="tPrice" type="number" inputmode="numeric" value="${esc(t.price)}"></div></div><label for="tDesc">Qué incluye</label><textarea id="tDesc">${esc(t.desc)}</textarea>
       ${main('tsave', 'Guardar')}${edit.isNew ? '' : '<button type="button" class="pDel" data-a="tdel">Quitar el taller</button>'}`; return; }
   const ts = (x.talleres||[]).slice().sort((a,b) => a.date < b.date ? -1 : 1);
-  v.innerHTML = ts.length ? main('tnew', '+ Agregar taller') + '<p class="pHelp">La gente se anota desde tu página y acá ves quién se anotó.</p>' + ts.map(t => { const ins = S.orders.filter(o => o.product===TAL+t.name && o.date===t.date), n = ins.reduce((s,o) => s + (Number(o.people)||1), 0);
+  v.innerHTML = ts.length ? main('tnew', '+ Agregar taller') + '<p class="pHelp">La gente se anota desde tu Link de pedidos y acá ves quién se anotó.</p>' + ts.map(t => { const ins = S.orders.filter(o => o.product===TAL+t.name && o.date===t.date), n = ins.reduce((s,o) => s + (Number(o.people)||1), 0);
       return `<p class="pDay">${dlong(t.date)}${t.time ? ', ' + esc(t.time) : ''}</p><div class="pCard"><div class="pRowT"><b>${esc(t.name)}</b><span class="pTag sin">${n} de ${esc(t.cupos)}</span></div><p class="pMeta" style="margin-top:6px">${t.price ? money(t.price) : 'Sin precio'}</p>`
         + ins.map(o => `<div class="pIns"><div class="pTx"><b>${esc(o.name)}</b><br><span class="mut">${esc(o.phone)}</span></div><button type="button" class="pSec" data-a="tpay" data-id="${esc(o.id)}">${o.paid > 0 ? 'Pagó ✓' : 'Debe'}</button><button type="button" class="pDel" style="margin:0" data-a="odel" data-id="${esc(o.id)}">Quitar</button></div>`).join('')
         + `<div class="pAcc"><button type="button" class="pSec" data-a="tedit" data-id="${esc(t.id)}">Cambiar ›</button></div></div>`; }).join('')
-    : `<div class="pCard"><p>Todavía no cargaste ningún taller. Cargá la fecha y los cupos, y la gente se anota desde tu página.</p>${main('tnew', '+ Agregar taller')}</div>`; };
+    : `<div class="pCard"><p>Todavía no cargaste ningún taller. Cargá la fecha y los cupos, y la gente se anota desde tu Link de pedidos.</p>${main('tnew', '+ Agregar taller')}</div>`; };
 
 /* ---------- CARTA ---------- */
 const info = p => window.tvInfo ? window.tvInfo(p) : {grupo: p.cat, desde: p.price, pers: false};
@@ -1436,23 +1436,23 @@ window.renderCar = function(){ const v = q('#pv-car'), x = X();
     v.innerHTML = back() + `<h3>${edit.isNew ? 'Agregar producto' : 'Editar producto'}</h3>
       <label>Foto</label><div class="pFoto">${p.img ? `<img src="${esc(p.img)}" alt="">` : `<span class="pPh">${CAM}</span>`}<label class="pSec">${p.img ? 'Cambiar foto' : 'Subir foto'}<input type="file" id="pFile" accept="image/*" hidden></label></div>
       <label for="pName">Nombre</label><input id="pName" value="${esc(p.name)}"><label for="pPrice">Precio desde ($)</label><input id="pPrice" type="number" inputmode="numeric" value="${p.price||''}" placeholder="Vacío: a confirmar">
-      <label for="pGrp">Categoría en tu página</label><input id="pGrp" list="pnlCats" maxlength="30" value="${esc(g)}" placeholder="Por ejemplo: Cookies"><datalist id="pnlCats">${cats.map(c => `<option value="${esc(c)}">`).join('')}</datalist>
+      <label for="pGrp">Categoría en tu Link de pedidos</label><input id="pGrp" list="pnlCats" maxlength="30" value="${esc(g)}" placeholder="Por ejemplo: Cookies"><datalist id="pnlCats">${cats.map(c => `<option value="${esc(c)}">`).join('')}</datalist>
       <label for="pDesc">Descripción corta</label><input id="pDesc" value="${esc(p.desc)}"><label for="pCat">Tipo</label><select id="pCat"><option value="${CAKES}"${p.cat===CAKES?' selected':''}>Torta para armar (elige relleno)</option><option value="Otros"${p.cat!==CAKES?' selected':''}>Otro producto</option></select>
-      <label class="pSw"><span>Se muestra en tu página</span><input type="checkbox" id="pVis"${p.visible ? ' checked' : ''}></label>
+      <label class="pSw"><span>Se muestra en tu Link de pedidos</span><input type="checkbox" id="pVis"${p.visible ? ' checked' : ''}></label>
       ${edit.isNew ? '<p class="pHelp">Las opciones se cargan después de guardar el producto.</p>' : '<button type="button" class="pRow pSolo" data-a="pnl" data-v="opc"><span>Opciones</span><span>›</span></button>'}
       ${main('psave', 'Guardar')}${edit.isNew ? '' : '<button type="button" class="pDel" data-a="pdel">Borrar el producto</button>'}`; return; }
   if(N.sub==='sab'){ const s3 = P.sab3; v.innerHTML = back('sab0') + `<h3>Sabores para armar la torta</h3><p class="pHelp" style="margin:0!important">Uno por renglón.</p><label for="xBiz">Bizcochuelos</label><textarea id="xBiz">${esc((x.biz||[]).join('\n'))}</textarea><label for="xRel">Rellenos</label><textarea id="xRel">${esc((x.rel||[]).join('\n'))}</textarea><label for="xCob">${s3[0]}</label><textarea id="xCob">${esc((x[s3[1]]||[]).join('\n'))}</textarea>${main('xsave', 'Guardar')}`; return; }
   const ps = S.products, falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = ps.filter(p => p.visible!==false && !info(p).desde).length;
   const pend = falta || sinP ? `<p class="pPend">${falta ? `<b style="color:var(--prj)">${falta===1 ? 'Te falta 1 foto.' : 'Te faltan ' + falta + ' fotos.'}</b> ` : ''}${sinP ? `<b style="color:var(--prj)">${sinP===1 ? '1 producto no tiene' : sinP + ' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>` : '';
   const rows = ps.map(p => { const i = info(p), w = [], vis = p.visible!==false;
-    if(!p.img && vis) w.push('Subí la foto'); if(vis && !i.desde) w.push('Cargá un precio "Desde"'); if(!vis) w.push('No se muestra en tu página');
+    if(!p.img && vis) w.push('Subí la foto'); if(vis && !i.desde) w.push('Cargá un precio "Desde"'); if(!vis) w.push('No se muestra en tu Link de pedidos');
     return `<button type="button" class="pRowP vpr" data-a="pedit" data-id="${esc(p.id)}">${p.img ? `<img src="${esc(p.img)}" alt="">` : vis ? `<span class="vnf" role="img" aria-label="Falta foto">${CAM}</span>` : `<span class="vnx">${CAM}</span>`}<span class="pTx"><span class="vnm">${esc(p.name)}</span><span class="pPr">${i.desde ? 'Desde ' + money(i.desde) : 'Sin precio'}</span></span><span class="pEd">Editar ›</span>${w.length ? `<span class="pWarn">${w.map(t => `<span class="vwn">${t}</span>`).join('')}</span>` : ''}</button>`; }).join('');
-  v.innerHTML = (ps.length ? main('pnew', '+ Agregar producto') + '<p class="pHelp">Lo que cambies acá se ve al instante en tu página.</p>' + `<div id="tvpc" class="pList">${pend}${rows}</div>`
+  v.innerHTML = (ps.length ? main('pnew', '+ Agregar producto') + '<p class="pHelp">Lo que cambies acá se ve al instante en tu Link de pedidos.</p>' + `<div id="tvpc" class="pList">${pend}${rows}</div>`
       : `<div class="pCard"><p>Todavía no cargaste productos.</p>${main('pnew', '+ Agregar producto')}</div><div id="tvpc" hidden></div>`)
     + ((x.biz||[]).length || (x.rel||[]).length ? '<button type="button" class="pRow pSolo" data-a="pnl" data-v="sab"><span>Sabores para armar la torta</span><span>›</span></button>' : ''); };
 
 /* ---------- MÁS ---------- */
-const MENU = [['cobrar', 'Cuánto cobrar'], ['entrega', 'Pedidos y entrega'], ['sena', 'Seña y alias'], ['enc', 'Encabezado de tu página'], ['visitas', 'Visitas'], ['instalar', 'Instalar como app'], ['clave', 'Cambiar la clave']];
+const MENU = [['cobrar', 'Cuánto cobrar'], ['entrega', 'Pedidos y entrega'], ['sena', 'Seña y alias'], ['enc', 'Encabezado de tu Link de pedidos'], ['visitas', 'Visitas'], ['instalar', 'Instalar como app'], ['clave', 'Cambiar la clave']];
 window.renderMas = function(){ const v = q('#pv-mas'), s = S.settings, x = X(), f = (k,l,ph,t) => `<label>${l}<input data-c="${k}" ${t?'':'type="number" inputmode="decimal"'} value="${esc(C[k])}" placeholder="${ph||''}" style="margin-top:6px"></label>`;
   const sb = N.sub, tit = sb ? `${back('mas0')}<h3>${(MENU.find(m => m[0]===sb)||['',''])[1]}</h3>` : '';
   if(sb==='cobrar'){ v.innerHTML = tit + f('name', 'Producto', P.calc, 1) + f('ing', 'Ingredientes ($)') + f('pack', 'Caja, base y decoración ($)') + `<div class="pTwo"><div>${f('hours', 'Horas de trabajo')}</div><div>${f('rate', 'Valor de tu hora ($)')}</div></div>` + f('gas', 'Gas, luz y envío ($)') + f('margin', 'Ganancia que querés (%)')
@@ -1463,7 +1463,7 @@ window.renderMas = function(){ const v = q('#pv-mas'), s = S.settings, x = X(), 
       + main('pnlent', 'Guardar'); return; }
   if(sb==='sena'){ v.innerHTML = tit + `<label for="sSena">Seña (%)</label><input id="sSena" type="number" inputmode="numeric" value="${esc(s.senaPct)}"><label for="sAlias">Alias</label><input id="sAlias" value="${esc(s.alias)}"><label for="sAliasN">A nombre de</label><input id="sAliasN" value="${esc(s.aliasName)}">` + main('pnlsena', 'Guardar'); return; }
   if(sb==='enc'){ N.tv = {modo: 'enc'}; v.innerHTML = tit + '<div id="tvpc"></div>'; if(window.tvMount) window.tvMount(); const h = q('#tvpc .venc h3'); if(h) h.remove(); return; }
-  if(sb==='visitas'){ v.innerHTML = tit + '<div class="pCard"><p><b id="vN">…</b> visitas a tu página.</p><p><b id="vP">…</b> pedidos hechos desde ahí.</p></div>';
+  if(sb==='visitas'){ v.innerHTML = tit + '<div class="pCard"><p><b id="vN">…</b> visitas a tu Link de pedidos.</p><p><b id="vP">…</b> pedidos hechos desde ahí.</p></div>';
     const g = HIT.replace('/hit/','/get/'), put = (id,t) => { const e = q(id); if(e) e.textContent = t; }; fetch(g).then(r => r.json()).then(j => put('#vN', j.value||0)).catch(() => put('#vN', 0)); fetch(g+'-pedidos').then(r => r.json()).then(j => put('#vP', j.value||0)).catch(() => put('#vP', 0)); return; }
   if(sb==='instalar'){ const l = D.getElementById('insL'); v.innerHTML = tit + (l ? '<p>Te queda el ícono en el celular y entrás directo a tu panel, sin buscar el link.</p>' + main('pnlins', 'Instalar la app') : '<div class="pCard"><p>Ya la tenés instalada en este celular.</p></div>'); return; }
   if(sb==='clave'){ v.innerHTML = tit + `<p class="pHelp" style="margin:0!important">De 4 a 8 números.</p><label for="npin">Clave nueva</label><input id="npin" type="password" inputmode="numeric"><label for="npin2">Repetir la clave nueva</label><input id="npin2" type="password" inputmode="numeric">` + main('pinsave', 'Cambiar la clave'); return; }
@@ -1493,7 +1493,7 @@ q('#app').addEventListener('change', e => { if(e.target.id!=='pnlFull') return; 
 try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
-<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu link para que te hagan pedidos';
+<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu Link de pedidos';
 const url = () => location.href.split('#')[0].split('?')[0];
 function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
   /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
@@ -1507,6 +1507,9 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
 </body>
+
+
+
 
 
 

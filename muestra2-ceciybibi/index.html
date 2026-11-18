@@ -231,7 +231,7 @@ body{font-variant-numeric:lining-nums}
 <div id="bar"><div class="wrap"><div><span id="barN"></span><br><b id="barT"></b></div><button class="c-btn" id="barGo" style="width:auto;min-height:52px;padding:8px 26px">Continuar</button></div></div>
 
 <div id="panel">
-  <header class="top"><div class="wrap"><img src="img/logo.png" alt=""><div style="text-align:right"><b style="font-family:"Libre Caslon Text",Georgia,serif;font-size:20px">Nuestro panel</b><br><a href="#" class="mut" style="color:var(--g);font-weight:500">Ver la página</a></div></div></header>
+  <header class="top"><div class="wrap"><img src="img/logo.png" alt=""><div style="text-align:right"><b style="font-family:"Libre Caslon Text",Georgia,serif;font-size:20px">Nuestro panel</b></div></div></header>
   <div class="wrap">
     <div id="loginBox" class="card box" style="margin-top:22px">
       <h3>Entrar al panel</h3>
@@ -412,7 +412,7 @@ function groups(){ const g = {}; S.orders.forEach(o => { (g[batch(o)] = g[batch(
 let pedAll = false;
 function renderPed(){ if(manual){ renderManual(); return; }
   const w = X().week, gs = groups().filter(g => pedAll || g.some(o => o.date >= thisMon() || inWeek(o,w)));
-  let h = `<button class="btn" data-a="man">+ Cargar un pedido a mano</button><p class="help" style="margin-top:10px">Los pedidos de la página aparecen solos. Los que les lleguen por otro lado los cargan con el botón de arriba.</p>
+  let h = `<button class="btn" data-a="man">+ Cargar un pedido a mano</button><p class="help" style="margin-top:10px">Los pedidos de tu Link de pedidos aparecen solos. Los que les lleguen por otro lado los cargan con el botón de arriba.</p>
   <div class="seg"><button data-a="pf" data-v="0" class="${pedAll?'':'on'}">Esta semana y próximos</button><button data-a="pf" data-v="1" class="${pedAll?'on':''}">Todos</button></div>`;
   if(!gs.length) h += '<div class="card box">Todavía no hay pedidos.</div>';
   h += gs.map(g => { const o = g[0], tot = g.reduce((s,x) => s + x.total, 0), paid = g.every(x => x.pay==='total'), tel = String(o.phone).replace(/\D/g,''), wa = tel.length>=10 ? (tel.startsWith('54') ? tel : '549'+tel.replace(/^0/,'')) : '';
@@ -425,7 +425,7 @@ function renderPed(){ if(manual){ renderManual(); return; }
 function renderManual(){ const md = menuDays();
   $('#pv-ped').innerHTML = `<h3>Cargar un pedido a mano</h3><p class="mut">Semana del ${dm(X().week)}</p>
   <div class="card" id="manList" style="margin-top:10px">${md.length ? menuHtml(md, manual.q, false) : '<div class="dayb" style="padding-bottom:14px">Primero carguen el menú de la semana.</div>'}</div>
-  <label>Nombre del cliente</label><input id="mName" value="${esc(manual.name)}"><label>WhatsApp</label><input id="mPhone" type="tel" value="${esc(manual.phone)}">
+  <label>Nombre de quien pide</label><input id="mName" value="${esc(manual.name)}"><label>WhatsApp</label><input id="mPhone" type="tel" value="${esc(manual.phone)}">
   <label>Entrega</label><select id="mEnt"><option>Retiro</option><option>Envío</option></select><label>Aclaraciones</label><input id="mNotes" value="${esc(manual.notes)}">
   <label style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="mPaid" style="width:26px;min-height:26px"> Ya lo pagó</label>
   <button class="btn" data-a="msave" style="margin-top:14px">Guardar pedido</button><button class="btn o" data-a="mcancel" style="margin-top:10px">Cancelar</button>`; }
@@ -438,7 +438,7 @@ function renderMen(){ const x = X(), md = menuDays(), ended = md.length && !md.s
     <label>Foto (opcional)</label><div style="display:flex;gap:12px;align-items:center">${p.img ? `<img class="ph-mini" src="${esc(p.img)}" alt="">` : ''}<label class="btn sm o" style="margin:0;cursor:pointer">${p.img?'Cambiar foto':'Subir foto'}<input type="file" id="eFile" accept="image/*" hidden></label></div>
     <button class="btn" data-a="esave" style="margin-top:16px">Guardar</button>${edit.isNew ? '' : '<button class="btn o" data-a="edel" style="margin-top:10px;border-color:var(--r);color:var(--r)">Quitar del menú</button>'}<button class="btn o" data-a="ecancel" style="margin-top:10px">Cancelar</button>`; return; }
   const mons = [...new Set([x.week, thisMon(), nextMon(), plus(nextMon(),7), plus(nextMon(),14)])].sort();
-  let h = `<p class="help">Acá arman el menú. Lo que guardan aparece al instante en la página.</p>${ended ? '<div class="card box" style="border-color:var(--r);margin:0 0 12px"><b>Esta semana ya terminó.</b> Elijan abajo si repiten el menú o arman uno nuevo.</div>' : ''}
+  let h = `<p class="help">Acá arman el menú. Lo que guardan aparece al instante en tu Link de pedidos.</p>${ended ? '<div class="card box" style="border-color:var(--r);margin:0 0 12px"><b>Esta semana ya terminó.</b> Elijan abajo si repiten el menú o arman uno nuevo.</div>' : ''}
   <label>Semana que empieza el lunes</label><select id="wkSel">${mons.map(m => `<option value="${m}"${m===x.week?' selected':''}>${pd(m).getDate()} de ${MES[pd(m).getMonth()]}</option>`).join('')}</select>
   <div class="card" style="margin-top:14px">` + DAYS.map((d,i) => { const its = S.products.filter(p => p.cat===d);
     return `<div class="dayb" style="padding-bottom:12px"><div class="dayh"><span class="day${i%2?' g':''}">${d}</span><small>${dm(plus(x.week,i))}</small></div>` + its.map(p => `<div class="it">${p.img?`<img src="${esc(p.img)}" alt="">`:''}<div class="tx"><div class="n">${esc(p.name)}</div><div class="d">${esc(p.desc)}</div><div class="p">${p.price?money(p.price):'Sin precio'}</div></div><button class="btn sm o" data-a="eopen" data-id="${esc(p.id)}">Cambiar</button></div>`).join('') + `<button class="pill ok" style="margin-top:6px;min-height:40px" data-a="eadd" data-day="${d}">+ Agregar plato</button></div>`; }).join('') + `</div>
@@ -460,10 +460,10 @@ function renderMas(){ const s = S.settings, x = X(); const f = (k,l,ph,t) => `<l
   <div class="card box"><h3>Entrega y pedidos</h3><label>Dirección de retiro</label><input id="sPick" value="${esc(x.pickup)}">
     <label>Hacen envíos</label><select id="sEnv"><option value="1"${x.envio?' selected':''}>Sí, se coordinan por WhatsApp</option><option value="0"${x.envio?'':' selected'}>No, solo retiro</option></select>
     <label>Se puede pedir hasta</label><select id="sCut">${[[1,'El día anterior'],[0,'El mismo día'],[2,'Dos días antes']].map(o => `<option value="${o[0]}"${Number(x.cutoff)===o[0]?' selected':''}>${o[1]}</option>`).join('')}</select>
-    <h3 style="margin-top:18px">Datos para que les paguen</h3><p class="mut">Si los cargan, el cliente los ve al terminar su pedido.</p><label>Alias</label><input id="sAlias" value="${esc(s.alias)}"><label>A nombre de</label><input id="sAliasN" value="${esc(s.aliasName)}">
+    <h3 style="margin-top:18px">Datos para que les paguen</h3><p class="mut">Si los cargan, se ven al terminar el pedido.</p><label>Alias</label><input id="sAlias" value="${esc(s.alias)}"><label>A nombre de</label><input id="sAliasN" value="${esc(s.aliasName)}">
     <button class="btn" data-a="ssave" style="margin-top:14px">Guardar</button></div>
   <div class="card box"><h3>Clave de acceso</h3><p class="mut">De 4 a 8 números.</p><label>Clave nueva</label><input id="npin" type="password" inputmode="numeric"><label>Repetir la clave nueva</label><input id="npin2" type="password" inputmode="numeric"><button class="btn" data-a="pinsave" style="margin-top:14px">Cambiar la clave</button></div>
-  <div class="card box"><h3>Visitas a la página</h3><div class="stats" style="grid-template-columns:1fr 1fr"><div><b id="vN">…</b><span>visitas</span></div><div><b id="vP">…</b><span>pedidos por la página</span></div></div></div>
+  <div class="card box"><h3>Visitas a tu Link de pedidos</h3><div class="stats" style="grid-template-columns:1fr 1fr"><div><b id="vN">…</b><span>visitas</span></div><div><b id="vP">…</b><span>pedidos por el Link de pedidos</span></div></div></div>
   <div class="card box"><h3>Tenerla como app en el celular</h3><p style="margin-top:6px">En iPhone: abran la página en Safari, toquen Compartir y después "Agregar a inicio". En Android: abran el menú de Chrome y toquen "Agregar a la pantalla principal".</p></div>
   <button class="btn o" data-a="out" style="margin-top:16px">Salir del panel</button>`;
   calcOut(); const g = HIT.replace('/hit/','/get/'); fetch(g).then(r => r.json()).then(j => { const e = $('#vN'); if(e) e.textContent = j.value||0; }).catch(()=>{}); fetch(g+'-pedidos').then(r => r.json()).then(j => { const e = $('#vP'); if(e) e.textContent = j.value||0; }).catch(() => { const e = $('#vP'); if(e) e.textContent = 0; }); }
@@ -489,7 +489,7 @@ $('#app').addEventListener('click', async e => {
   if(a==='gdel'){ if(!sure(b, 'd'+b.dataset.b)) return; const ids = S.orders.filter(o => batch(o)===b.dataset.b).map(o => o.id); S.orders = S.orders.filter(o => !ids.includes(o.id)); send({a:'delOrders', ids}, 'Pedido borrado'); renderPed(); }
   if(a==='man'){ manual = {q:{}, name:'', phone:'', notes:''}; renderPed(); window.scrollTo(0,0); }
   if(a==='mcancel'){ manual = null; renderPed(); }
-  if(a==='msave'){ const name = $('#mName').value.trim(), L = cartLines(manual.q); if(!name){ toast('Falta el nombre del cliente.'); return; } if(!L.length){ toast('Elijan al menos una vianda.'); return; }
+  if(a==='msave'){ const name = $('#mName').value.trim(), L = cartLines(manual.q); if(!name){ toast('Falta el nombre de quien pide.'); return; } if(!L.length){ toast('Elijan al menos una vianda.'); return; }
     const ts = Date.now(), paid = $('#mPaid').checked, list = L.map((l,i) => { const t = l.n*(Number(l.p.price)||0); return {id:'o'+ts+'_'+i, created:iso(today), date:l.d.date, product:l.p.name, people:l.n, fill:l.d.day, delivery:$('#mEnt').value, name, phone:$('#mPhone').value.trim(), notes:$('#mNotes').value.trim(), pay:paid?'total':'sin', total:t, paid:paid?t:0, done:false}; });
     S.orders.push(...list); send({a:'saveOrders', orders:list}, 'Pedido guardado ✔'); manual = null; renderPed(); }
   if(a==='eadd'){ edit = {isNew:true, day:b.dataset.day, p:{id:'p'+Date.now(), cat:b.dataset.day, name:'', desc:'', price:x.price||'', visible:true, img:''}}; renderMen(); window.scrollTo(0,0); }

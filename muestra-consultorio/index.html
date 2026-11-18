@@ -317,6 +317,17 @@ body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, t
 .duo>.pro2{flex:0 0 calc(50% - 5px);box-sizing:border-box}
 #panel .cV{margin:12px 0 0;padding:16px;background:var(--pc);border:1px solid var(--pl);border-radius:16px}
 #panel .cV h2{font-size:22px;margin:0 0 6px}
+#panel .cV label{display:block;font-size:16px;font-weight:600;margin:14px 0 6px}
+#panel .cV textarea.cPin{min-height:72px;padding:10px 14px}
+#panel .cRo{display:flex;flex-direction:column;gap:2px;margin:10px 0 0!important}
+#panel .cRo b{font-size:16px}
+#panel .cRo span{font-size:17px}
+.cIgP{display:inline-flex;align-items:center;gap:6px;min-height:48px;color:var(--ink);font-size:17px;text-decoration:underline;text-underline-offset:3px}
+.cIgP svg{width:20px;height:20px;flex:none}
+.pro2 .cIgP{font-size:16px;overflow-wrap:anywhere}
+.cFoot{margin:28px 0 8px;padding-top:18px;border-top:1px solid var(--line)}
+.cFoot h2{font-size:20px;margin:0 0 12px}
+.cFoot .lk{margin:0}
 #panel .cV p{font-size:17px;margin:0 0 12px}
 #panel .cOp{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;margin-top:8px;padding:0 16px;border:1.5px solid var(--pt);border-radius:14px;background:transparent;color:var(--pt);font:600 18px/1.2 inherit;font-family:inherit;text-align:left;cursor:pointer}
 #panel .cOp.on{background:var(--pas15);border-width:2.5px}
@@ -466,7 +477,7 @@ body.cEsp #panel .pT{display:none}
 const DEMO = false;                 // muestra: nada sale de este celular
 const KEY = 'turnos_mc_v1';
 const RUBRO = 'odo';               // rubro: 'psi' (psicólogos y afines), 'odo' (odontólogos y afines) o 'est' (manicura y estética). Una sola plantilla para los dos: lo común no se desfasa
-const RW0 = {k1:'Primera consulta', k2:'Ya soy paciente', nom:'Nombre y apellido del paciente', mot:'Motivo de consulta, en pocas palabras', env:'Enviar mi consulta', consE:'Consulta enviada', nueva:'Consulta nueva', tipo:'Tipo de consulta', tags:'Especialidades (separalas con coma)'};
+const RW0 = {k1:'Primera consulta', k2:'Ya soy paciente', nom:'Nombre y apellido de quien se atiende', mot:'Motivo de consulta, en pocas palabras', env:'Enviar mi consulta', consE:'Consulta enviada', nueva:'Consulta nueva', tipo:'Tipo de consulta', tags:'Especialidades (separalas con coma)'};
 const RW = Object.assign({}, RW0, RUBRO==='odo' ? {ses:'consulta', Ses:'Consulta', dura:'El turno dura', q2ej:'Ej.: Estás con dolor? / Es una emergencia?', tagej:'Ej.: Ortodoncia, Endodoncia', svej:'Ej.: Limpieza'}
   : RUBRO==='est' ? {ses:'turno', Ses:'Turno', dura:'El turno dura', q2ej:'Ej.: Tenés esmaltado para retirar?', tagej:'Ej.: Semipermanente, Kapping, Perfilado de cejas', svej:'Ej.: Esmaltado semipermanente',
       k1:'Primera vez', k2:'Ya vine antes', nom:'Nombre y apellido', mot:'Algo que quieras contarme (si querés)', env:'Pedir este turno', consE:'Turno pedido', nueva:'Primera vez', tipo:'Primera vez o no', tags:'Lo que hacés (separalo con coma)'}
@@ -478,7 +489,7 @@ const EST = RUBRO==='est';
    si los tocara, "Ya vine antes" (data-v="paciente") dejaba de quedar marcado (error visto por Dardo 17/11 03:51) */
 function rwDom(el){ if(!EST || !el) return; const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n; while((n = w.nextNode())){ const v = rwT(n.nodeValue); if(v !== n.nodeValue) n.nodeValue = v; }
   el.querySelectorAll('[placeholder],[aria-label],[alt],[title]').forEach(e => ['placeholder','aria-label','alt','title'].forEach(a => { const v = e.getAttribute(a); if(v){ const x = rwT(v); if(x !== v) e.setAttribute(a, x); } })); }
-const rwT = s => !EST ? s : String(s).replace(/El motivo de consulta/g,'Lo que te cuenta').replace(/motivo de consulta/g,'comentario').replace(/tu consulta/g,'tu pedido').replace(/Primera consulta/g,'Primera vez').replace(/ del paciente/g,'').replace(/pacientes/g,'clientas').replace(/paciente/g,'clienta');
+const rwT = s => !EST ? s : String(s).replace(/El motivo de consulta/g,'Lo que te cuenta').replace(/motivo de consulta/g,'comentario').replace(/tu consulta/g,'tu pedido').replace(/Primera consulta/g,'Primera vez').replace(/pacientes/g,'clientes').replace(/paciente/g,'cliente');
 const DEFAULT = {
   ig:'', addr:'',   /* LINKS v1: los carga cada profesional en Ajustes > Tus datos; vacíos = no se muestra nada (nunca inventar) */
   name:'Daniela Paz', short:'Daniela', role:'Psicóloga', mono:'DP',
@@ -502,7 +513,7 @@ const DEFAULT = {
 };
 Object.assign(DEFAULT, {"role": "Odontóloga", "modes": ["Presencial"], "place": "", "cancel": "", "dur": 30, "step": 30, "fees": {"part": 0, "show": true}, "os": [], "osOther": true, "selfPick": false, "wa": "", "q2": "Estás con dolor?", "lead": "", "tags": [], "photo": ""});
 const PROS0 = [{"c": "mc-ana", "slug": "ana", "name": "Ana Gómez", "short": "Ana", "mono": "A", "photo": "", "tags": ["Ortodoncia", "Limpieza y control"]}, {"c": "mc-sofia", "slug": "sofia", "name": "Sofía Ruiz", "short": "Sofía", "mono": "S", "photo": "", "tags": ["Odontopediatría", "Estética dental"]}];
-/* CONS: la lista de profesionales sale del consultorio (activas y en espera; la página muestra solo las activas) */
+/* CONS: la lista de profesionales sale del consultorio (activas y en espera; el Link de turnos muestra solo las activas) */
 const PROS = (() => { let D = {}; try{ D = JSON.parse(localStorage.getItem('mc_db_v1')) || {}; }catch(e){}
   const ms = D._cons ? D._cons.miembros.filter(m => m.alta==='activo' || m.alta==='espera') : PROS0.map(p => ({cliente:p.c, nombre:p.name, slug:p.slug, alta:'activo'}));
   return ms.map(m => Object.assign({tags:[], photo:''}, PROS0.find(p => p.c===m.cliente) || {}, {c:m.cliente, slug:m.slug, name:m.nombre, short:m.nombre.split(' ')[0], mono:m.nombre.trim()[0].toUpperCase(), alta:m.alta})); })();
@@ -537,7 +548,7 @@ const mapsUrl = a => 'https://www.google.com/maps/search/?api=1&query=' + encode
 const IGI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>';
 const PINI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>';
 function linksTop(c){ const u = igOk(c.ig) ? igUser(c.ig) : '', a = String(c.addr||'').trim(); if(!u && !a) return '';
-  return `<div class="lk">${u ? `<a class="btn o sm ig" target="_blank" rel="noopener" href="https://www.instagram.com/${encodeURIComponent(u)}/">${IGI}<span>Instagram</span></a>` : ''}${a ? `<a class="map" target="_blank" rel="noopener" href="${esc(mapsUrl(a))}">${PINI}<span>${esc(a)}</span></a>` : ''}</div>`; }
+  return `<div class="lk">${u ? `<a class="btn o sm ig" target="_blank" rel="noopener" href="https://www.instagram.com/${encodeURIComponent(u)}/">${IGI}<span>Instagram</span></a>` : ''}${a ? `<a class="map" target="_blank" rel="noopener" href="${esc(mapsUrl(a))}">${PINI}<span>${esc(a)} ↗</span></a>` : ''}</div>`; }
 const waLink = (p,txt) => 'https://wa.me/'+waNum(p)+'?text='+encodeURIComponent(txt);
 const modeTxt = t => S.cfg.modes.length>1 && t.mode ? ` (${t.mode.toLowerCase()})` : '';
 
@@ -768,7 +779,7 @@ function viewServ(){ const L = A.sv || (A.sv = JSON.parse(JSON.stringify(S.cfg.s
     ${L.map((x,i) => `<div class="form svr"><label for="sN${i}" style="margin-top:0">Servicio</label><input id="sN${i}" class="sN" data-i="${i}" type="text" maxlength="40" value="${esc(x.n)}" placeholder="${esc(RW.svej)}">
       <div class="two"><div><label for="sP${i}">Precio ($)</label><input id="sP${i}" class="sP" data-i="${i}" type="tel" inputmode="numeric" value="${x.p||''}" placeholder="Vacío: Consultar"></div><div><label for="sD${i}">Cuánto dura</label><select id="sD${i}" class="sD" data-i="${i}">${dd(x.d)}</select></div></div>
       <button class="btn del sm gap" data-a="svdel" data-v="${i}" aria-label="Quitar ${esc(x.n||'este servicio')}">Quitar</button></div>`).join('')}
-    <div class="form"><button class="btn o w" data-a="svadd">Agregar un servicio</button><p class="hint" style="margin:8px 0 0">Si dejás el precio vacío, en tu página dice Consultar.</p><button class="btn w gap" data-a="svsave">Guardar servicios</button></div></section>`; }
+    <div class="form"><button class="btn o w" data-a="svadd">Agregar un servicio</button><p class="hint" style="margin:8px 0 0">Si dejás el precio vacío, en tu Link de turnos dice Consultar.</p><button class="btn w gap" data-a="svsave">Guardar servicios</button></div></section>`; }
 function viewSena(){ const s = S.cfg.sena, sv = servOn().length;
   return `<section class="sheet"><h2>Seña</h2><p class="sub">Si la activás, quien elige un horario ve cuánto es la seña y tu alias, y te manda el comprobante por WhatsApp. El turno queda pendiente de seña y ocupa el horario hasta que vos lo confirmás o lo liberás. La seña te la transfieren directo a vos: la app no cobra nada.</p>
     <div class="form"><label class="chk" style="margin-top:0"><input id="eOn" type="checkbox" ${s.on?'checked':''}> Pido seña para reservar</label>
@@ -780,7 +791,7 @@ function viewSena(){ const s = S.cfg.sena, sv = servOn().length;
     <button class="btn w gap" data-a="senasave">Guardar</button></div></section>`; }
 function readServ(){ const num = v => Number(String(v||'').replace(/\D/g,''))||0; (A.sv||[]).forEach((x,i) => { const q = k => document.querySelector('.'+k+'[data-i="'+i+'"]'); if(!q('sN')) return; x.n = q('sN').value; x.p = num(q('sP').value); x.d = Number(q('sD').value)||S.cfg.dur; }); }
 function viewHoras(){ const c = S.cfg, hs = []; for(let m=7*60;m<=22*60;m+=30) hs.push(hhmm(m));
-  return `<section class="sheet"><h2>Tus horarios</h2><p class="sub">${c.selfPick ? 'Los días y horas que marques son los que ve quien entra a tu página para elegir su turno.' : 'Con estos días y horas se arma tu agenda: son los horarios libres que te aparecen a vos cuando le das un turno a alguien. Quien entra a tu página no los ve.'}</p>
+  return `<section class="sheet"><h2>Tus horarios</h2><p class="sub">${c.selfPick ? 'Los días y horas que marques son los que ve quien entra a tu Link de turnos para elegir su turno.' : 'Con estos días y horas se arma tu agenda: son los horarios libres que te aparecen a vos cuando le das un turno a alguien. Quien entra a tu Link de turnos no los ve.'}</p>
     <p class="hint" style="margin:0 16px 10px">Si cortás al mediodía, tildá “A la tarde” en ese día y poné el segundo horario.</p>
     ${[1,2,3,4,5,6].map(d => { const x = c.days[d], sel = (cl,v,lab) => `<select class="${cl}" data-d="${d}" aria-label="${WD[d]} ${lab}">${hs.map(o => `<option ${o===v?'selected':''}>${o}</option>`).join('')}</select>`;
       return `<div class="hrow"><label class="chk"><input type="checkbox" data-d="${d}" class="hOn" ${x.on?'checked':''}> ${cap(WD[d])}</label>${sel('hF',x.from,'desde')}${sel('hT',x.to,'hasta')}</div><div class="hrow h2${x.on?'':' hid'}${x.on2?' on':''}" data-d="${d}"><label class="chk"><input type="checkbox" data-d="${d}" class="hOn2" ${x.on2?'checked':''}> A la tarde</label>${sel('hF2',x.from2||'15:00','tarde desde')}${sel('hT2',x.to2||'20:00','tarde hasta')}</div>`; }).join('')}
@@ -789,18 +800,18 @@ function viewHoras(){ const c = S.cfg, hs = []; for(let m=7*60;m<=22*60;m+=30) h
     <button class="btn w gap" data-a="hsave">Guardar horarios</button></div></section>`; }
 function viewMas(){ const c = S.cfg;
   return `<section class="sheet"><div class="form" style="border:0"><h3>Tus datos</h3>
-    ${EST?'':`<label for="mT">Título</label><input id="mT" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Lic.">`}<p class="mut" style="margin-top:6px">Tu nombre en la página: <b>${esc(c.name)}</b>. Para cambiarlo, escribinos.</p><label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
+    ${EST?'':`<label for="mT">Título</label><input id="mT" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Lic.">`}<p class="mut" style="margin-top:6px">Tu nombre en tu Link de turnos: <b>${esc(c.name)}</b>. Para cambiarlo, escribinos.</p><label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
     ${EST?'':`<label for="mL">Tu matrícula</label><input id="mL" type="text" value="${esc(c.lic)}" placeholder="Ej.: M.P. 1234">`}
     <label for="mW">Tu WhatsApp (ahí te llegan los pedidos de turno)</label><input id="mW" type="tel" value="${esc(waShow(c.wa))}" placeholder="Ej.: 341 555 1234"><p class="mut" style="margin-top:6px">Con la característica, sin 0 ni 15. Podés copiarlo como figura en WhatsApp: la app lo acomoda sola.</p>
     <label for="mD">Cómo te presentás (lo primero que se lee)</label><textarea id="mD" rows="2">${esc(c.lead)}</textarea><label for="mG">${RW.tags}</label><input id="mG" type="text" value="${esc((c.tags||[]).join(', '))}" placeholder="${RW.tagej}"><label for="mP">Dónde atendés</label><textarea id="mP" rows="2">${esc(c.place)}</textarea>${LKF(c)}<label for="mC">Aviso de cancelación</label><textarea id="mC" rows="2">${esc(c.cancel)}</textarea>
     <button class="btn w gap" data-a="msave">Guardar</button></div></section>`; }
 /* LINKS v1: campos Instagram y Dirección (también los usa LD) */
-const LKF = c => `<label for="mI">Tu Instagram</label><input id="mI" type="text" autocomplete="off" autocapitalize="none" value="${esc(c.ig ? '@'+igUser(c.ig) : '')}" placeholder="Ej.: @tunombre"><label for="mA">Dirección (se abre en Google Maps)</label><input id="mA" type="text" value="${esc(c.addr||'')}" placeholder="Ej.: San Martín 450, Rosario"><p class="mut" style="margin-top:6px">Si los dejás vacíos, no aparecen en tu página.</p>`;
+const LKF = c => `<label for="mI">Tu Instagram</label><input id="mI" type="text" autocomplete="off" autocapitalize="none" value="${esc(c.ig ? '@'+igUser(c.ig) : '')}" placeholder="Ej.: @tunombre"><label for="mA">Dirección (se abre en Google Maps)</label><input id="mA" type="text" value="${esc(c.addr||'')}" placeholder="Ej.: San Martín 450, Rosario"><p class="mut" style="margin-top:6px">Si los dejás vacíos, no aparecen en tu Link de turnos.</p>`;
 function lkRead(c){ const i = $('#mI') ? $('#mI').value.trim() : ''; if(i && !igOk(i)){ toast('Revisá tu Instagram: va tu usuario, por ejemplo @tunombre.'); $('#mI').focus(); return false; } c.ig = i ? igUser(i) : ''; c.addr = $('#mA') ? $('#mA').value.trim() : ''; return true; }
 function viewModo(){ const c = S.cfg, sp = A.mo ? A.mo.sp : c.selfPick, ca = A.mo ? A.mo.call : c.call, md = A.mo ? A.mo.modes : c.modes;
   return `<section class="sheet"><h2>Cómo das los turnos</h2><p class="sub">Tildá lo que va con tu forma de trabajar. Podés cambiarlo cuando quieras.</p>
     <div class="form"><h3>Quién elige el horario</h3>
-    <label class="chk"><input type="radio" name="moS" class="moS" value="1" ${sp?'checked':''}> Quien entra a tu página elige un horario libre de tu agenda</label>
+    <label class="chk"><input type="radio" name="moS" class="moS" value="1" ${sp?'checked':''}> Quien entra a tu Link de turnos elige un horario libre de tu agenda</label>
     <label class="chk"><input type="radio" name="moS" class="moS" value="0" ${sp?'':'checked'}> Te deja sus datos y vos le das el turno</label>
     ${sp?'':`<label class="chk" style="margin-left:28px"><input type="checkbox" id="moC" ${ca?'checked':''}> Antes de darle el turno, lo llamo por teléfono</label>`}</div>
     <div class="form"${EST?' hidden':''}><h3>Cómo atendés</h3>${['Presencial','Online'].map(m => `<label class="chk"><input type="checkbox" class="mM" value="${m}" ${md.includes(m)?'checked':''}> ${m==='Online'?'Online (videollamada)':m}</label>`).join('')}
@@ -815,8 +826,8 @@ function viewCobros(){ const c = S.cfg;
     ${c.os.map((o,i) => `<div class="orow os2"><div class="osl"><label class="chk"><input type="checkbox" class="oOn" data-i="${i}" ${o.on?'checked':''}> <b>${esc(o.n)}</b></label><button class="btn del sm" data-a="osdel" data-v="${i}" aria-label="Quitar ${esc(o.n)}">Quitar</button></div>
       <div class="osc"><label class="chk"><input type="checkbox" class="oCp" data-i="${i}" ${o.cop?'checked':''}> Copago</label><input class="oPl" data-i="${i}" type="tel" inputmode="numeric" placeholder="Monto" aria-label="Copago con ${esc(o.n)}" value="${o.plus||''}"></div></div>`).join('')}
     <div class="form"><label for="oNew" style="margin-top:0">Agregar una obra social</label><div class="two" style="grid-template-columns:1fr auto"><input id="oNew" type="text"><button class="btn o" data-a="osadd">Agregar</button></div>
-    <label class="chk" style="margin-top:18px"><input id="cOt" type="checkbox" ${c.osOther?'checked':''}> Que el paciente pueda escribir otra obra social que no está en mi lista</label>
-    <label class="chk"><input id="cS" type="checkbox" ${c.fees.show?'checked':''}> Mostrar los montos en mi página</label>
+    <label class="chk" style="margin-top:18px"><input id="cOt" type="checkbox" ${c.osOther?'checked':''}> Que quien pide turno pueda escribir otra obra social que no está en mi lista</label>
+    <label class="chk"><input id="cS" type="checkbox" ${c.fees.show?'checked':''}> Mostrar los montos en tu Link de turnos</label>
     <button class="btn w gap" data-a="csave">Guardar</button></div></section>`; }
 function readCobros(){ const c = S.cfg, num = v => Number(String(v||'').replace(/\D/g,''))||0; c.fees.part = num($('#cP').value); c.fees.partOn = $('#cPo').checked; c.fees.show = $('#cS').checked; c.osOther = $('#cOt').checked;
   document.querySelectorAll('.oOn').forEach(i => { const o = c.os[i.dataset.i]; o.on = i.checked; o.cop = document.querySelector('.oCp[data-i="'+i.dataset.i+'"]').checked; o.plus = o.cop ? num(document.querySelector('.oPl[data-i="'+i.dataset.i+'"]').value) : 0; }); }
@@ -825,7 +836,7 @@ function calLink(t, date){ const s = day(date), m = mins(t.time), f = (mm) => da
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1), isAndroid = /Android/i.test(navigator.userAgent);
 function icsText(t, date){ const m = mins(t.time), f = mm => date.replace(/-/g,'')+'T'+pad(Math.floor(mm/60))+pad(mm%60)+'00', n = new Date(), st = n.getUTCFullYear()+pad(n.getUTCMonth()+1)+pad(n.getUTCDate())+'T'+pad(n.getUTCHours())+pad(n.getUTCMinutes())+pad(n.getUTCSeconds())+'Z';
   return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Turnos//ES','BEGIN:VEVENT','UID:'+t.id+'-'+date+'@turnos','DTSTAMP:'+st,'DTSTART:'+f(m),'DTEND:'+f(m+durOf(t)),'SUMMARY:Turno '+t.name].concat(t.weekly?['RRULE:FREQ=WEEKLY']:[], t.phone?['DESCRIPTION:WhatsApp '+t.phone]:[], ['END:VEVENT','END:VCALENDAR']).join('\r\n'); }
-function calBtn(tu, date){ if(isIOS) return ''; // iPhone: Safari no abre el Calendario desde un archivo armado en la página (probado 13/11); necesita un .ics servido por un servidor
+function calBtn(tu, date){ if(isIOS) return ''; // iPhone: Safari no abre el Calendario desde un archivo armado en tu Link de turnos (probado 13/11); necesita un .ics servido por un servidor
   if(isAndroid) return `<button class="btn o" data-a="ics" data-id="${tu.id}">Guardarlo en mi calendario</button>`;
   return `<a class="btn o" target="_blank" rel="noopener" href="${esc(calLink(tu, date))}">Guardarlo en Google Calendar</a>`; }
 function showMsg(t, title, text){ text = rwT(text); const full = text + '\n' + S.cfg.name + ' – Consultorio de muestra'; A.msg = {title, text:full, queued:!!t.phone}; if(t.phone) queueAviso(t, title, full); }
@@ -843,7 +854,7 @@ document.addEventListener('click', e => {
   if(a==='psv'){ P.sv = Number(v); P.date = null; P.time = null; renderSite(); }
   if(a==='svadd'){ readServ(); A.sv.push({n:'', p:0, d:S.cfg.dur}); renderPanel(); const n = document.querySelectorAll('.sN'); if(n.length) n[n.length-1].focus(); }
   if(a==='svdel'){ readServ(); A.sv.splice(Number(v),1); renderPanel(); }
-  if(a==='svsave'){ readServ(); const L = A.sv.filter(x => x.n.trim()); c.serv = L.map(x => ({n:x.n.trim(), p:x.p, d:x.d})); A.sv = null; P.sv = null; save(); renderPanel(); renderSite(); toast(L.length ? 'Servicios guardados.' : 'Sin servicios: tu página queda como antes.'); }
+  if(a==='svsave'){ readServ(); const L = A.sv.filter(x => x.n.trim()); c.serv = L.map(x => ({n:x.n.trim(), p:x.p, d:x.d})); A.sv = null; P.sv = null; save(); renderPanel(); renderSite(); toast(L.length ? 'Servicios guardados.' : 'Sin servicios: tu Link de turnos queda como antes.'); }
   if(a==='send'){ const f = P.f, nuevo = P.kind==='nuevo', name = (f.name||'').trim(), phone = (f.phone||'').trim();
     if(name.length<3){ toast('Falta tu nombre.'); $('#fN').focus(); return; }
     if(nuevo && !EST && !(Number(f.age)>0 && Number(f.age)<120)){ toast('Poné tu edad.'); $('#fE').focus(); return; }
@@ -1012,28 +1023,34 @@ const API = 'muestra:local', MUESTRA = true;
 /* MUESTRA: no hay servidor. Responde como el de verdad pero guarda en este aparato (clave de cada profesional y de Avisos: 1234) */
 const MDB = 'mc_db_v1', TPF = ['Turno confirmado','Turno por confirmar','Primera consulta'];
 
-/* ===== CONS (muestra): servidor de consultorios v16 simulado en el aparato ===== */
-function consDb(D){ if(!D._cons){ D._cons = {consultorio:'muestra', admin:'', votos:{}, prueba_terminada:false, al_dia:true, tope:10,
-    miembros:PROS0.map(p => ({cliente:p.c, nombre:p.name, slug:p.slug, alta:'activo', alta_vence:'', nueva:false}))}; }
-  const C = D._cons, hoy = new Date().toISOString().slice(0,10); C.miembros.forEach(m => { if(m.alta==='espera' && m.alta_vence && m.alta_vence < hoy) m.alta = 'vencido'; }); return C; }
+/* ===== CONS (muestra): servidor de consultorios v18 simulado en el aparato (mismas acciones y respuestas) ===== */
+function consDb(D){ if(!D._cons){ D._cons = {consultorio:'muestra', admin:'', votos:{}, prueba_terminada:false, al_dia:true, tope:10, datos:{direccion:'', instagram:'', donde:''},
+    miembros:PROS0.map(p => ({cliente:p.c, nombre:p.name, slug:p.slug, alta:'activo', alta_vence:'', nueva:false, instagram:''}))}; }
+  const C = D._cons, hoy = new Date().toISOString().slice(0,10); C.datos = C.datos || {direccion:'', instagram:'', donde:''}; C.miembros.forEach(m => { if(m.alta==='espera' && m.alta_vence && m.alta_vence < hoy) m.alta = 'vencido'; }); return C; }
+const consIgU = s => { const u = String(s||'').trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/^@/,'').split(/[\/?#]/)[0]; return /^[A-Za-z0-9._]{1,30}$/.test(u) ? u : (u ? null : ''); };
 function consFake(q, D, d){ const C = consDb(D), yo = C.miembros.find(m => m.cliente===q.c), act = () => C.miembros.filter(m => m.alta==='activo');
-  const info = () => ({ok:true, consultorio:C.consultorio, yo:q.c, alta:yo ? yo.alta : '', alta_vence:yo ? yo.alta_vence : '', admin:C.admin, soy_admin:!!C.admin && C.admin===q.c, votos:Object.assign({}, C.votos), prueba_terminada:C.prueba_terminada, al_dia:C.al_dia, tope:C.tope, nueva:!!(yo && yo.nueva),
-    miembros:C.miembros.filter(m => m.alta==='activo' || m.alta==='espera').map(m => ({cliente:m.cliente, nombre:m.nombre, slug:m.slug, alta:m.alta, alta_vence:m.alta_vence, al_dia:true, estado:m.alta}))});
+  const info = () => ({ok:true, consultorio:C.consultorio, yo:q.c, alta:yo ? yo.alta : '', alta_vence:yo ? yo.alta_vence : '', admin:C.admin, hay_admin:!!C.admin, soy_admin:!!C.admin && C.admin===q.c, votos:Object.assign({}, C.votos), prueba_terminada:C.prueba_terminada, al_dia:C.al_dia, tope:C.tope, nueva:!!(yo && yo.nueva),
+    datos:Object.assign({}, C.datos), instagram:yo ? yo.instagram || '' : '',
+    miembros:C.miembros.filter(m => m.alta==='activo' || m.alta==='espera').map(m => ({cliente:m.cliente, nombre:m.nombre, slug:m.slug, alta:m.alta, alta_vence:m.alta_vence, al_dia:true, estado:m.alta, instagram:m.instagram || ''}))});
   /* AVISOS (17/11 20:03): la suscripción del paciente viaja con su pedido y el panel la retira una sola vez al resolverlo */
   if(q.a==='ntfSub'){ const o = d.orders.slice().reverse().find(x => x.product==='Pedido nuevo' && x.name===q.name && x.phone===q.phone); if(!o || !q.sub || !q.sub.endpoint) return {ok:false, msg:'No encuentro el pedido.'}; o.push = q.sub; return {ok:true}; }
   if(q.a==='ntfTake'){ if(q.pin!==d.pin) return {ok:false, msg:'Clave incorrecta'}; const o = d.orders.find(x => x.id===q.id); const sub = o && o.push; if(o) delete o.push; return {ok:true, sub:sub || null}; }
-  if(q.a==='consPub') return {ok:true, profesionales:act().map(m => ({cliente:m.cliente, nombre:m.nombre}))};
-  if(!yo || yo.alta==='baja' || yo.alta==='vencido') return {ok:false, msg:'Este link ya no anda. Pedile uno nuevo a la administradora del consultorio.'};
+  if(q.a==='consPub') return {ok:true, datos:Object.assign({}, C.datos), profesionales:act().map(m => ({cliente:m.cliente, nombre:m.nombre, instagram:m.instagram || ''}))};
+  if(!yo || yo.alta==='baja' || yo.alta==='vencido') return {ok:false, msg:'Este panel ya no anda. Pedile uno nuevo a quien administra el consultorio.'};
   if(q.pin!==d.pin) return null;   /* sigue el control de clave de siempre */
   if(yo.alta==='espera' && !['all','payLink','payCheck','setPin','consInfo','export','consPagoMuestra'].includes(q.a)) return {ok:false, espera:true, msg:'Primero pagá tu suscripción.'};
   if(q.a==='consInfo') return info();
   if(q.a==='consVote'){ if(yo.alta!=='activo' || !act().some(m => m.cliente===q.voto)) return {ok:false, msg:'No se pudo votar.'}; C.votos[q.c] = q.voto; const v = act().map(m => C.votos[m.cliente]); if(v.every(x => x && x===v[0])) C.admin = v[0]; return info(); }
-  if(q.a==='consAdd'){ if(C.admin!==q.c) return {ok:false, msg:'Solo la administradora agrega profesionales.'}; if(!C.al_dia) return {ok:false, msg:'Para agregar, el consultorio tiene que estar al día.'};
+  if(q.a==='consDatos'){ if(!C.admin) return {ok:false, msg:'Primero elijan quién administra.'}; if(C.admin!==q.c) return {ok:false, msg:'Los datos del consultorio los carga quien administra.'};
+    const n = {}; if('instagram' in q){ const u = consIgU(q.instagram); if(u===null) return {ok:false, msg:'Revisá el Instagram del consultorio: va el nombre de la cuenta, por ejemplo @consultorio.'}; n.instagram = u; }
+    ['direccion','donde'].forEach(k => { if(k in q) n[k] = String(q[k]||'').trim(); }); Object.assign(C.datos, n); return info(); }
+  if(q.a==='consIg'){ const u = consIgU(q.instagram); if(u===null) return {ok:false, msg:'Revisá tu Instagram: va tu usuario, por ejemplo @tunombre.'}; yo.instagram = u; return info(); }
+  if(q.a==='consAdd'){ if(C.admin!==q.c) return {ok:false, msg:'Solo quien administra agrega profesionales.'}; if(!C.prueba_terminada) return {ok:false, msg:'Se pueden agregar profesionales cuando termina la prueba.'}; if(!C.al_dia) return {ok:false, msg:'Para agregar, el consultorio tiene que estar al día.'};
     if(C.miembros.filter(m => m.alta==='activo' || m.alta==='espera').length >= C.tope) return {ok:false, msg:'Llegaron al máximo de ' + C.tope + ' profesionales.'};
     const n = String(q.nombre||'').trim(); if(n.length < 3) return {ok:false, msg:'Escribí el nombre y apellido.'};
     let s = n.split(' ')[0].toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'') || 'pro', s0 = s, k = 2; while(C.miembros.some(m => m.slug===s) || ['panel','avisos'].includes(s)) s = s0 + (k++);
-    const ve = new Date(Date.now() + 7*864e5).toISOString().slice(0,10), m = {cliente:'mc-' + s, nombre:n, slug:s, alta:'espera', alta_vence:ve, nueva:true}; C.miembros.push(m); D[m.cliente] = {pin:'1234', orders:[], extra:{kind:'turnos', cfg:{}}, n:0};
-    return {ok:true, cliente:m.cliente, nombre:n, pin:'1234', alta_vence:ve, link:location.origin + location.pathname + '#' + s}; }
+    const ve = new Date(Date.now() + 7*864e5).toISOString().slice(0,10), m = {cliente:'mc-' + s, nombre:n, slug:s, alta:'espera', alta_vence:ve, nueva:true, instagram:''}; C.miembros.push(m); D[m.cliente] = {pin:'1234', orders:[], extra:{kind:'turnos', cfg:{}}, n:0};
+    return {ok:true, cliente:m.cliente, nombre:n, pin:'1234', alta_vence:ve, link:location.href.split('#')[0].split('?')[0] + '#' + s}; }
   if(q.a==='consDel'){ if(C.admin!==q.c || q.cliente===q.c) return {ok:false, msg:'No se pudo sacar.'}; const m = C.miembros.find(x => x.cliente===q.cliente); if(!m) return {ok:false, msg:'No está en el consultorio.'}; m.alta = 'baja'; delete C.votos[m.cliente]; return {ok:true}; }
   if(q.a==='consPagoMuestra'){ yo.alta = 'activo'; yo.alta_vence = ''; return info(); }
   if(q.a==='consFinMuestra'){ C.prueba_terminada = true; return info(); }
@@ -1159,8 +1176,8 @@ function renderPanel(){ const el = $('#panel'); if(OWN>=0 && CUR===null){ CUR = 
 const tagRow = x => `<div class="orow tg"><span class="tgi">${esc(x)}</span><button class="btn del sm" data-ld="tagdel">Quitar</button></div>`;
 function viewMas(){ const c = S.cfg;
   return `<section class="sheet"><div class="form" style="border:0"><h3>Tus datos</h3>
-    <label style="margin-top:12px">Tu foto</label><div class="fot"><span id="mFv">${face({photo:c.photo, mono:c.mono})}</span><div><label class="btn o" for="mF">Cambiar mi foto</label><input id="mF" type="file" accept="image/*" hidden><p class="mut gap">Es la que ven tus pacientes en la página.</p></div></div>
-    <label for="mTi">Título</label><input id="mTi" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Od."><p class="mut" style="margin-top:6px">Va antes de tu nombre en la página.</p>
+    <label style="margin-top:12px">Tu foto</label><div class="fot"><span id="mFv">${face({photo:c.photo, mono:c.mono})}</span><div><label class="btn o" for="mF">Cambiar mi foto</label><input id="mF" type="file" accept="image/*" hidden><p class="mut gap">Es la que ven tus pacientes en tu Link de turnos.</p></div></div>
+    <label for="mTi">Título</label><input id="mTi" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Od."><p class="mut" style="margin-top:6px">Va antes de tu nombre en tu Link de turnos.</p>
     <label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
     <label for="mL">Tu matrícula</label><input id="mL" type="text" value="${esc(c.lic)}" placeholder="Ej.: M.P. 1234">
     <label>Tus especialidades</label><div id="mT">${(c.tags||[]).map(tagRow).join('')}</div>
@@ -1193,7 +1210,7 @@ document.addEventListener('click', async e => { const b = e.target.closest('[dat
 // ----- Avisos: los mensajes a pacientes salen siempre desde el celular del consultorio -----
 // en compu: directo a WhatsApp Web y siempre en la misma pestaña (sin rel=noopener, que obligaría a abrir una nueva cada vez)
 const PC = !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-// la clave de Avisos no va en la página: se pide una vez y queda guardada en ese aparato
+// la clave de Avisos no va en tu Link de turnos: se pide una vez y queda guardada en ese aparato
 const AVK = 'mc_avisos_clave'; const avGet = () => { try{ return localStorage.getItem(AVK)||''; }catch(e){ return ''; } }; const avSet = v => { try{ v ? localStorage.setItem(AVK, v) : localStorage.removeItem(AVK); }catch(e){} };
 const AV = {c:'mc-avisos', pin:avGet()}; let AVL = null, AVO = {};
 const avApi = body => fetch(API, {method:'POST', body:JSON.stringify(Object.assign({c:AV.c}, body))}).then(r => r.json());
@@ -1213,7 +1230,7 @@ function planRem(t, d){ if(S.cfg.ownWa || !t.phone || !t.time) return; NEXTFILL 
   queueAviso(t, REM, `Hola ${fn}! Te recuerdo tu turno de ${am?'mañana':'hoy'}, ${shortDate(d)}, a las ${t.time}${modeTxt(t)}. Te espero.` + '\n' + S.cfg.name + ' – Consultorio de muestra', due + '|' + d + ' ' + padT(t.time)); }
 function anulRem(t, d){ if(S.cfg.ownWa || !t.phone) return; queueAviso(t, ANUL, '', d ? d + ' ' + padT(t.time) : 'ALL'); }
 if(AQ.length) aqFlush();
-async function renderAvisos(load){ const el = $('#panel'); /* el logo animado sigue donde iba aunque la lista se vuelva a dibujar */ const head = LOGO.replace('class="lg"', 'class="lg sm" style="--ld:-' + ((performance.now()/1000)%12).toFixed(2) + 's"') + `<div class="ptop"><h1>Avisos para mandar</h1></div>`;
+async function renderAvisos(load){ const el = $('#panel'); /* el logo animado sigue donde iba aunque la lista se vuelva a dibujar */ const head = LOGO.replace('class="lg"', 'class="lg sm" style="--ld:-' + ((performance.now()/1000)%12).toFixed(2) + 's"') + `<div class="ptop"><h1>Panel de Avisos</h1></div>`;
   if(!AV.pin){ AVL = null; el.innerHTML = head + `<p class="note">Instalá esta app en el celular que manda los WhatsApp.</p><section class="sheet"><div class="form" style="border:0"><label for="avPin" style="margin-top:0">Clave del consultorio</label><input id="avPin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-ld="avpin">Entrar</button><p class="mut gap">Se pide una sola vez en este aparato.</p></div></section>`; return; }
   if(load || !AVL){ if(!AVL) el.innerHTML = head + '<p class="mut">Cargando…</p>'; try{ const d = await avApi({a:'all', pin:AV.pin}); if(!d.ok && /Clave/.test(d.msg||'')){ AV.pin = ''; avSet(''); toast('Clave incorrecta.'); return renderAvisos(false); } if(!d.ok && d.msg){ toast(d.msg); } if(d.ok){ avSet(AV.pin); AVL = d.orders; /* si después vino una cancelación o un rechazo, los avisos anteriores a esa persona ya no van */ const old = AVL.filter(o => AVL.some(n => n!==o && n.phone===o.phone && n.name===o.name && n.product===o.product && n.id>o.id && n.delivery.indexOf('Aviso para ')===0)).map(o => o.id); if(old.length){ AVL = AVL.filter(o => !old.includes(o.id)); avApi({a:'delOrders', pin:AV.pin, ids:old}).catch(()=>{}); }
       /* recordatorios: se borran si el turno se canceló (marca __anular) o si ya pasó la hora del turno */ const now = nowStamp(), mk = AVL.filter(o => o.delivery===ANUL);
@@ -1267,7 +1284,7 @@ const GRUPO = s => s==='day' ? 'day' : s==='sv' ? 'sv' : ['set','ho','co','ma','
 const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 /* AVISOS DE GUARDADO (CONTENIDO 17/11 17:10): uno solo, "Guardado ✓", en una línea, arriba de la barra y sin tapar el botón que se tocó */
 (function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
-  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
+  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu Link de turnos queda como antes/i;
   window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
   window.pnlPlace = () => { const t = document.getElementById('toast'); if(t) t.classList.toggle('pOk', t.textContent==='Guardado ✓'); };   /* siempre abajo, centrado sobre la barra de pestañas (CONTENIDO 18:00) */
   window.pnlHide = () => { const t = document.getElementById('toast'); if(t) t.classList.remove('show', 'on'); };   /* todo aviso se borra al cambiar de pantalla o de pestaña */
@@ -1296,7 +1313,7 @@ function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) r
 D.addEventListener('click', e => { const b = e.target.closest('#panel [data-a="pnlins"]'); if(!b) return; const l = D.getElementById('insL'); if(l) l.click(); });
 try{ if(!q('#panel').hidden && location.hash!=='#avisos' && !q('#panel .pnlTop')) deco(); }catch(e){}   /* sin volver a dibujar: en LD #avisos es otra pantalla (salió de un error: se pisaba con la elección de profesional) */
 })();</script>
-<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu link para que te pidan turno';
+<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu Link de turnos';
 const url = () => location.href.split('#')[0].split('?')[0];
 function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
   /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
@@ -1311,46 +1328,73 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
 put(); })();</script>
 <script>/*CONS v1*/
 (function(){ const D = document, q = s => D.querySelector(s), H = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let CI = null, CIK = '', BUSY = false, CS = '', CX = null;   /* CI = respuesta de consInfo de esta profesional; CS = pantalla propia (lista, agregar, listo, sacar, voto) */
+let CI = null, CIK = '', BUSY = false, CS = '', CX = null, CPUB = null;   /* CI = consInfo de esta profesional; CPUB = consPub (página); CS = pantalla propia */
 const TACHO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
 const dm = s => s ? Number(s.slice(8,10)) + '/' + Number(s.slice(5,7)) : '';
 const nom = c => { const m = CI && CI.miembros.find(x => x.cliente===c); return m ? m.nombre : ''; };
 const pri = n => String(n).split(' ')[0];
+const igA = (u, cls) => u ? `<a class="${cls}" target="_blank" rel="noopener" href="https://www.instagram.com/${encodeURIComponent(u)}/">${typeof IGI!=='undefined' ? IGI : ''}<span>@${H(u)}</span></a>` : '';
+/* ===== PÁGINA: Instagram de cada profesional debajo de lo que hace; dirección e Instagram del consultorio abajo de todo ===== */
+function pie(){ const d = (CPUB && CPUB.datos) || {}; if(!d.direccion && !d.instagram) return '';
+  return `<footer class="cFoot"><h2>El consultorio</h2><div class="lk">${d.instagram ? `<a class="btn o sm ig" target="_blank" rel="noopener" href="https://www.instagram.com/${encodeURIComponent(d.instagram)}/">${typeof IGI!=='undefined' ? IGI : ''}<span>Instagram del consultorio</span></a>` : ''}${d.direccion ? `<a class="map" target="_blank" rel="noopener" href="${H(mapsUrl(d.direccion))}">${typeof PINI!=='undefined' ? PINI : ''}<span>${H(d.direccion)} ↗</span></a>` : ''}</div></footer>`; }
+const igDe = c => { const p = CPUB && CPUB.profesionales.find(x => x.cliente===c); return p ? p.instagram : ''; };
+const RS = window.renderSite;
+window.renderSite = function(){ if(typeof S!=='undefined' && S && S.cfg && CPUB){ S.cfg.addr = ''; S.cfg.ig = ''; S.cfg.place = (CPUB.datos && CPUB.datos.donde) || ''; }   /* lo del consultorio es uno solo, lo carga quien administra */
+  const r = RS.apply(this, arguments); try{ pagina(); }catch(e){ console.error('CONS', e); } return r; };
+function pagina(){ const el = q('#site'); if(!el || el.hidden || !CPUB) return;
+  if(CUR===null){ el.querySelectorAll('.pro2').forEach(c => { const b = c.querySelector('[data-ld="pro"]'), p = b && PROS[Number(b.dataset.v)], u = p && igDe(p.c); if(u && !c.querySelector('.cIgP')) (c.querySelector('.sp') || c.querySelector('.hd')).insertAdjacentHTML('afterend', igA(u, 'cIgP')); });
+    const a = el.querySelector('.addr'); if(a) a.remove(); }
+  else { const top = el.querySelector('.top p'), u = igDe(PROS[CUR].c); if(top && u && !el.querySelector('.top .cIgP')) top.insertAdjacentHTML('afterend', igA(u, 'cIgP')); }
+  if(!el.querySelector('.cFoot')) el.insertAdjacentHTML('beforeend', pie()); }
+fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(r => r.json()).then(r => { if(r.ok){ CPUB = r; if(!q('#site').hidden) renderSite(); } }).catch(() => {});
+/* ===== PANEL ===== */
 async function pull(){ if(BUSY || !A.ok || CUR===null) return; BUSY = true; try{ const r = await api({a:'consInfo', pin:A.pin}); if(r.ok){ CI = r; CIK = PROS[CUR].c + '|' + A.pin; } }catch(e){} BUSY = false; renderPanel(); }
 const R1 = window.renderPanel;
 window.renderPanel = function(){ R1.apply(this, arguments); try{ paint(); }catch(e){ console.error('CONS', e); } };
 function screen(h){ const el = q('#panel'); [...el.children].forEach(x => { if(!x.classList.contains('pnlTop') && !x.classList.contains('pT')) x.remove(); }); const top = el.querySelector('.pnlTop'); top ? top.insertAdjacentHTML('afterend', h) : el.insertAdjacentHTML('afterbegin', h); }
+function datosCons(){   /* Tus datos: lo del consultorio lo carga solo quien administra; tu Instagram personal, cada profesional */
+  const f = q('#panel #mP'); if(!f) return; const hide = id => { const x = q('#panel #' + id); if(!x) return; x.value = ''; x.hidden = true; const l = q(`#panel label[for="${id}"]`); if(l) l.hidden = true; };
+  hide('mP'); hide('mA'); const li = q('#panel label[for="mI"]'), ii = q('#panel #mI'); if(li) li.textContent = 'Tu Instagram personal (opcional)'; if(ii && !ii.dataset.c){ ii.dataset.c = '1'; ii.value = CI.instagram ? '@' + CI.instagram : ''; }
+  const nota = ii && ii.nextElementSibling; if(nota && nota.classList.contains('mut') && !nota.dataset.c){ nota.dataset.c = '1'; nota.textContent = 'Aparece debajo de lo que hacés en el Link de turnos. Si lo dejás vacío, no aparece.'; }
+  const sec = f.closest('section'); if(!sec || q('#panel .cDat')) return; const d = CI.datos || {};
+  const ro = (l, v) => `<p class="cRo"><b>${l}</b><span>${v ? H(v) : 'Sin cargar'}</span></p>`;
+  sec.insertAdjacentHTML('afterend', `<section class="cV cDat"><h2>Datos del consultorio</h2>` + (CI.soy_admin
+    ? `<p>Son los mismos para todo el consultorio. Se ven abajo de todo en el Link de turnos.</p><label for="cDir">Dirección (se abre en Google Maps)</label><input id="cDir" class="cPin" type="text" value="${H(d.direccion)}" placeholder="Ej.: San Martín 450, Rosario"><label for="cIg">Instagram del consultorio</label><input id="cIg" class="cPin" type="text" autocapitalize="none" value="${d.instagram ? '@' + H(d.instagram) : ''}" placeholder="Ej.: @consultorio"><label for="cDon">Dónde atienden</label><textarea id="cDon" class="cPin" rows="2">${H(d.donde)}</textarea><button class="btn w gap" data-cons="datos">Guardar datos del consultorio</button>`
+    : (CI.hay_admin ? `<p>Los carga quien administra.</p>` : `<p>Elijan quién administra para cargar la dirección y el Instagram del consultorio.</p>`) + ro('Dirección', d.direccion) + ro('Instagram del consultorio', d.instagram ? '@' + d.instagram : '') + ro('Dónde atienden', d.donde)) + `</section>`); }
 function paint(){ const el = q('#panel'); D.body.classList.remove('cEsp'); if(!el || el.hidden || !A.ok || CUR===null){ CI = null; CS = ''; return; }
   if(!CI || CIK !== PROS[CUR].c + '|' + A.pin){ if(!BUSY) pull(); return; }
   /* 1. en espera: lo único que hay es pagar la suscripción */
-  if(CI.alta==='espera'){ D.body.classList.add('cEsp'); screen(`<div class="ptop" style="padding-top:12px"><h1>Pagar suscripción</h1></div><section class="cV"><p>Para activar tu panel y aparecer en la página de turnos del consultorio, pagá tu suscripción.</p><p>Tenés hasta el ${dm(CI.alta_vence)}. Si no, este link deja de andar.</p><button class="btn w" data-cons="pagar">Pagar suscripción</button><p class="cSt">${MUESTRA ? 'En la muestra el pago se simula. En la app real se paga con Mercado Pago y se activa solo.' : 'Se paga con Mercado Pago y se activa solo.'}</p></section>`); return; }
-  /* 2. recién activada con la clave 1234: tiene que elegir la suya antes de seguir */
+  if(CI.alta==='espera'){ D.body.classList.add('cEsp'); screen(`<div class="ptop" style="padding-top:12px"><h1>Pagar suscripción</h1></div><section class="cV"><p>Para activar tu panel y aparecer en el Link de turnos del consultorio, pagá tu suscripción.</p><p>Tenés hasta el ${dm(CI.alta_vence)}. Si no, tu panel deja de andar.</p><button class="btn w" data-cons="pagar">Pagar suscripción</button><p class="cSt">${MUESTRA ? 'En la muestra el pago se simula. En la app real se paga con Mercado Pago y se activa solo.' : 'Se paga con Mercado Pago y se activa solo.'}</p></section>`); return; }
+  /* 2. recién activado con la clave 1234: elegir la clave propia antes de seguir */
   if(CI.nueva && A.pin==='1234'){ D.body.classList.add('cEsp'); screen(`<div class="ptop" style="padding-top:12px"><h1>Elegí tu clave</h1></div><section class="cV"><p>Tu panel ya está activo. Antes de empezar, cambiá la clave 1234 por una tuya.</p><label for="cPin">Tu clave nueva (de 4 a 8 números)</label><input id="cPin" class="cPin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-cons="pin">Guardar mi clave</button></section>`); return; }
   const lista = () => CI.miembros.filter(m => m.alta==='activo');
-  const voto = () => `<section class="cV"><h2>${CI.admin ? 'Cambiar la administradora' : 'Elijamos administradora'}</h2><p>${CI.admin ? `Hoy es ${H(pri(nom(CI.admin)))}. Para cambiarla, todas tienen que marcar a la misma.` : 'Es la que agrega y saca profesionales del consultorio. Queda elegida cuando todas marcan a la misma.'}</p>${lista().map(m => `<button type="button" class="cOp ${CI.votos[CI.yo]===m.cliente ? 'on' : ''}" data-cons="votar" data-v="${H(m.cliente)}" aria-pressed="${CI.votos[CI.yo]===m.cliente}"><i></i>${H(pri(m.nombre))} es administradora</button>`).join('')}<p class="cSt">Votaron ${lista().filter(m => CI.votos[m.cliente]).length} de ${lista().length}.</p></section>`;
+  const voto = () => `<section class="cV"><h2>${CI.admin ? 'Cambiar quién administra' : 'Elijan quién administra'}</h2><p>${CI.admin ? `Hoy administra ${H(pri(nom(CI.admin)))}. Para cambiar, todo el consultorio tiene que marcar a la misma persona.` : 'Quien administra agrega y saca profesionales y carga la dirección y el Instagram del consultorio. Queda elegida la persona que marque todo el consultorio.'}</p>${lista().map(m => `<button type="button" class="cOp ${CI.votos[CI.yo]===m.cliente ? 'on' : ''}" data-cons="votar" data-v="${H(m.cliente)}" aria-pressed="${CI.votos[CI.yo]===m.cliente}"><i></i>Que administre ${H(pri(m.nombre))}</button>`).join('')}<p class="cSt">Votaron ${lista().filter(m => CI.votos[m.cliente]).length} de ${lista().length}.</p></section>`;
   /* 3. pantallas propias */
   if(CS==='voto'){ screen(`<button class="btn o sm back" data-cons="mas">← Volver</button>` + voto()); return; }
-  if(CS==='lista'){ const pend = CI.miembros.length < CI.tope;
-    screen(`<button class="btn o sm back" data-cons="mas">← Volver</button><div class="ptop" style="padding-top:12px"><h1>Profesionales del consultorio</h1></div><div class="cL">${CI.miembros.map(m => `<div class="cR"><div><b>${H(m.nombre)}</b><span>${m.cliente===CI.yo ? 'Vos, administradora' : m.alta==='espera' ? 'Esperando el pago hasta el ' + dm(m.alta_vence) : 'Activa'}</span></div>${m.cliente===CI.yo ? '' : `<button type="button" class="cDel" data-cons="sacar" data-v="${H(m.cliente)}" aria-label="Sacar a ${H(m.nombre)}">${TACHO}</button>`}</div>`).join('')}</div>`
-      + (CI.al_dia && pend ? `<button class="btn w gap" data-cons="nueva">Agregar profesional</button><p class="cSt">Cada una paga su suscripción. Si deja de pagar, sale de la página de turnos.</p>` : `<p class="cSt">${CI.al_dia ? 'Llegaron al máximo de ' + CI.tope + ' profesionales.' : 'Para agregar profesionales, el consultorio tiene que estar al día.'}</p>`)); return; }
+  if(CS==='lista'){ const pend = CI.miembros.length < CI.tope, puede = CI.prueba_terminada && CI.al_dia && pend;
+    screen(`<button class="btn o sm back" data-cons="mas">← Volver</button><div class="ptop" style="padding-top:12px"><h1>Profesionales del consultorio</h1></div><div class="cL">${CI.miembros.map(m => `<div class="cR"><div><b>${H(m.nombre)}</b><span>${m.cliente===CI.yo ? 'Vos administrás' : m.alta==='espera' ? 'Falta pagar, hasta el ' + dm(m.alta_vence) : 'Con el panel activo'}</span></div>${m.cliente===CI.yo ? '' : `<button type="button" class="cDel" data-cons="sacar" data-v="${H(m.cliente)}" aria-label="Sacar a ${H(m.nombre)} del consultorio">${TACHO}</button>`}</div>`).join('')}</div>`
+      + (puede ? `<button class="btn w gap" data-cons="nueva">Agregar profesional</button><p class="cSt">Cada profesional paga su suscripción. Si deja de pagar, sale del Link de turnos.</p>` : `<p class="cSt">${!CI.prueba_terminada ? 'Vas a poder agregar profesionales cuando termine la prueba.' : !CI.al_dia ? 'Para agregar profesionales, el consultorio tiene que estar al día.' : 'Llegaron al máximo de ' + CI.tope + ' profesionales.'}</p>`)); return; }
   if(CS==='sacar'){ const m = CI.miembros.find(x => x.cliente===CX); if(!m){ CS = 'lista'; return paint(); }
-    screen(`<button class="btn o sm back" data-cons="lista">← Volver</button><div class="ptop" style="padding-top:12px"><h1>Sacar a ${H(pri(m.nombre))}</h1></div><section class="cV"><p>${H(m.nombre)} deja de aparecer en la página de turnos y su link deja de andar.</p><button class="btn w" data-cons="sacarok">Sí, sacarla del consultorio</button><button class="btn o w gap" data-cons="lista">No, dejarla</button></section>`); return; }
+    screen(`<button class="btn o sm back" data-cons="lista">← Volver</button><div class="ptop" style="padding-top:12px"><h1>Sacar a ${H(pri(m.nombre))} del consultorio</h1></div><section class="cV"><p>${H(m.nombre)} deja de aparecer en el Link de turnos y su panel deja de andar.</p><button class="btn w" data-cons="sacarok">Sí, sacar del consultorio</button><button class="btn o w gap" data-cons="lista">No, dejar como está</button></section>`); return; }
   if(CS==='nueva'){ screen(`<button class="btn o sm back" data-cons="lista">← Volver</button><div class="ptop" style="padding-top:12px"><h1>Agregar profesional</h1></div><section class="cV"><label for="cNom">Nombre y apellido</label><input id="cNom" class="cPin" type="text" maxlength="60" autocomplete="off"><button class="btn w gap" data-cons="alta">Agregar</button><p class="cSt">Te damos el link de su panel para que se lo mandes por WhatsApp.</p></section>`); return; }
-  if(CS==='listo' && CX){ screen(`<div class="ptop" style="padding-top:12px"><h1>Listo: ${H(pri(CX.nombre))} ya tiene su panel</h1></div><section class="cV"><p>Mandale este link por WhatsApp. Entra con la clave 1234, paga su suscripción y elige su clave.</p><p class="cLink" id="cLink">${H(CX.link)}</p><button class="btn w gap" data-cons="copiar">Copiar</button><p class="cSt">Si no paga hasta el ${dm(CX.alta_vence)}, el link deja de andar y sale de la lista.</p><button class="btn o w gap" data-cons="lista">Volver a la lista</button></section>`); return; }
-  /* 4. agenda: al terminar la prueba, si no hay administradora, se elige (en cada panel) */
-  if(A.scr==='home' && CI.prueba_terminada && !CI.admin){ const top = el.querySelector('.pnlTop'); (top || el).insertAdjacentHTML(top ? 'afterend' : 'afterbegin', voto()); }
-  /* 5. Más: lista (solo la administradora), administradora y, solo en la muestra, terminar la prueba */
+  if(CS==='listo' && CX){ screen(`<div class="ptop" style="padding-top:12px"><h1>Listo: ${H(pri(CX.nombre))} ya tiene su panel</h1></div><section class="cV"><p>Mandale el link de su panel por WhatsApp. Entra con la clave 1234, paga su suscripción y elige su clave.</p><p class="cLink" id="cLink">${H(CX.link)}</p><button class="btn w gap" data-cons="copiar">Copiar</button><p class="cSt">Si no paga hasta el ${dm(CX.alta_vence)}, su panel deja de andar y sale de la lista.</p><button class="btn o w gap" data-cons="lista">Volver a la lista</button></section>`); return; }
+  /* 4. agenda: desde el primer día, si no hay quien administre, se elige (en cada panel) */
+  if(A.scr==='home' && !CI.admin){ const top = el.querySelector('.pnlTop'); (top || el).insertAdjacentHTML(top ? 'afterend' : 'afterbegin', voto()); }
+  /* 5. Tus datos: datos del consultorio e Instagram personal */
+  if(A.scr==='ma') datosCons();
+  /* 6. Más: lista (solo quien administra), quién administra y, solo en la muestra, terminar la prueba */
   if(A.scr==='set'){ const m = el.querySelector('.pMenu'); if(!m) return; const out = m.querySelector('.pSalir'), add = h => out ? out.insertAdjacentHTML('beforebegin', h) : m.insertAdjacentHTML('beforeend', h);
     if(CI.soy_admin) add(`<button class="btn o w opt" data-cons="lista"><b>Profesionales del consultorio</b><span>Agregar o sacar profesionales</span></button>`);
-    if(CI.admin) add(`<button class="btn o w opt" data-cons="voto"><b>Administradora: ${H(pri(nom(CI.admin)))}</b><span>Para cambiarla, votan todas</span></button>`);
-    if(MUESTRA && !CI.prueba_terminada) add(`<button class="btn o w opt" data-cons="fin"><b>Muestra: terminar la prueba</b><span>Para ver la elección de administradora</span></button>`); } }
+    if(CI.admin) add(`<button class="btn o w opt" data-cons="voto"><b>Quién administra: ${H(pri(nom(CI.admin)))}</b><span>Para cambiar, vota todo el consultorio</span></button>`);
+    if(MUESTRA && !CI.prueba_terminada) add(`<button class="btn o w opt" data-cons="fin"><b>Muestra: terminar la prueba</b><span>Para poder agregar profesionales</span></button>`); } }
 D.addEventListener('click', async e => { const b = e.target.closest('#panel [data-cons]'); if(!b) return; const a = b.dataset.cons, v = b.dataset.v;
   const go = s => { CS = s; renderPanel(); scrollTo(0,0); };
-  const call = async (body, ok) => { b.disabled = true; try{ const r = await api(Object.assign({pin:A.pin}, body)); if(!r.ok){ toast(r.msg || 'No se pudo. Probá de nuevo.'); b.disabled = false; return null; } if(ok) toast(ok); return r; }catch(x){ toast('No hay conexión. Probá de nuevo.'); b.disabled = false; return null; } };
+  const call = async (body, ok) => { b.disabled = true; try{ const r = await api(Object.assign({pin:A.pin}, body)); if(!r.ok){ toast(r.msg || 'No se pudo. Probá de nuevo.'); b.disabled = false; return null; } if(ok) toast(ok); b.disabled = false; return r; }catch(x){ toast('No hay conexión. Probá de nuevo.'); b.disabled = false; return null; } };
   if(a==='mas'){ CS = ''; A.scr = 'set'; renderPanel(); scrollTo(0,0); return; }
   if(a==='lista' || a==='voto' || a==='nueva'){ go(a); return; }
   if(a==='sacar'){ CX = v; go('sacar'); return; }
-  if(a==='votar'){ const r = await call({a:'consVote', voto:v}); if(r){ CI = r; toast(r.admin ? pri(nom(r.admin)) + ' es la administradora' : 'Voto guardado'); renderPanel(); } return; }
+  if(a==='votar'){ const r = await call({a:'consVote', voto:v}); if(r){ CI = r; toast(r.admin ? pri(nom(r.admin)) + ' administra el consultorio' : 'Voto guardado'); renderPanel(); } return; }
+  if(a==='datos'){ const r = await call({a:'consDatos', direccion:q('#cDir').value, instagram:q('#cIg').value, donde:q('#cDon').value}, 'Guardado'); if(r){ CI = r; CPUB = null; fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(x => x.json()).then(x => { if(x.ok) CPUB = x; }).catch(() => {}); renderPanel(); } return; }
   if(a==='sacarok'){ const r = await call({a:'consDel', cliente:CX}, 'Listo, ya no está en el consultorio'); if(r){ CI = null; CS = 'lista'; renderPanel(); } return; }
   if(a==='alta'){ const n = q('#cNom').value.trim(); if(n.length < 3){ toast('Escribí el nombre y apellido.'); q('#cNom').focus(); return; } const r = await call({a:'consAdd', nombre:n}); if(r){ CX = r; CI = null; CS = 'listo'; renderPanel(); scrollTo(0,0); } return; }
   if(a==='copiar'){ try{ await navigator.clipboard.writeText(CX.link); toast('Link copiado'); }catch(x){ const r = D.createRange(); r.selectNodeContents(q('#cLink')); getSelection().removeAllRanges(); getSelection().addRange(r); toast('Mantené apretado el link para copiarlo'); } return; }
@@ -1360,6 +1404,8 @@ D.addEventListener('click', async e => { const b = e.target.closest('#panel [dat
     const r = await call({a:'setPin', newPin:n}, 'Listo, ya tenés tu clave'); if(r){ A.pin = n; CI = null; renderPanel(); } return; }
   if(a==='fin'){ const r = await call({a:'consFinMuestra'}); if(r){ CI = r; A.scr = 'home'; CS = ''; renderPanel(); scrollTo(0,0); } return; }
 });
+/* Tus datos: al Guardar, el Instagram personal va también al consultorio (consIg) */
+D.addEventListener('click', e => { if(!e.target.closest('#panel [data-a="msave"]') || !CI || !q('#panel #mI')) return; const v = q('#panel #mI').value; api({a:'consIg', pin:A.pin, instagram:v}).then(r => { if(r.ok){ CI = r; CPUB = null; fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(x => x.json()).then(x => { if(x.ok) CPUB = x; }).catch(() => {}); } }).catch(() => {}); }, true);
 D.addEventListener('click', e => { if(e.target.closest('#panel .pT button, #panel [data-a="go"], #panel [data-a="out"], #panel .pSalir')) CS = ''; }, true);
 addEventListener('hashchange', () => { CI = null; CS = ''; });
 })();
@@ -1398,6 +1444,7 @@ D.addEventListener('click', e => { const b = e.target.closest && e.target.closes
 try{ bloque(); }catch(e){}
 })();</script>
 </body>
+
 
 
 

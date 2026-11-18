@@ -41,6 +41,7 @@
 
 
 
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Capas y Sabores · Tortas y postres en San Luis</title>
@@ -957,7 +958,7 @@ body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing
     <h2>Ingresá tu clave</h2>
     <input type="password" id="pin" inputmode="numeric" maxlength="6" placeholder="••••">
     <button class="btn" id="pinBtn" style="width:100%">Entrar</button>
-    <p style="margin-top:14px"><a href="#" class="hint" style="text-decoration:underline">Volver a la página</a></p>
+    <p style="margin-top:14px"><a href="#" class="hint" style="text-decoration:underline">Volver a tu Link de pedidos</a></p>
   </div>
 
   <div id="panelApp" style="display:none">
@@ -971,7 +972,7 @@ body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing
       <!-- Pedidos -->
       <div class="pv on" id="pv-pedidos">
         <details class="help" open><summary>Cómo se usa?</summary><ol>
-          <li>Cada pedido que hacen desde tu página <b>aparece acá solo</b> y además te llega armado por WhatsApp. Si te piden por otro lado, cargalo con <b>+ Cargar pedido</b>.</li>
+          <li>Cada pedido que hacen desde tu Link de pedidos <b>aparece acá solo</b> y además te llega armado por WhatsApp. Si te piden por otro lado, cargalo con <b>+ Cargar pedido</b>.</li>
           <li>Tocá <b>💬 Escribirle</b> para confirmarle el precio y pasarle los datos de la seña.</li>
           <li>Anotá el <b>precio total</b> y <b>cuánto te pagó</b>: el saldo se calcula solo.</li>
           <li>El estado se marca solo: <b>Sin pagar</b> (no pagó nada), <b>Seña</b> (pagó una parte) o <b>Pagado total</b>. También lo podés tocar vos.</li>
@@ -1003,8 +1004,8 @@ body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing
       <div class="pv" id="pv-precios">
         <details class="help" open><summary>Cómo se usa?</summary><ol>
           <li>Tocá <b>📷 Cambiar foto</b> para elegir una foto de tu galería o sacar una con la cámara. Se recorta sola en formato vertical.</li>
-          <li>Escribí el nombre, la descripción y el precio. Si dejás el precio vacío, en la página dice "Consultar".</li>
-          <li><b>Visible</b> prendido: se ve en la página. Apagado: queda guardado pero escondido (sirve para los boxes de fechas especiales).</li>
+          <li>Escribí el nombre, la descripción y el precio. Si dejás el precio vacío, en tu Link de pedidos dice "Consultar".</li>
+          <li><b>Visible</b> prendido: se ve en tu Link de pedidos. Apagado: queda guardado pero escondido (sirve para los boxes de fechas especiales).</li>
           <li><b>+ Agregar producto</b> crea uno nuevo escondido. Completalo, ponele foto y prendé "Visible".</li>
           <li>Todo se guarda solo, no hay que tocar ningún botón de guardar.</li>
         </ol></details>
@@ -1052,14 +1053,14 @@ body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing
       <!-- Agenda -->
       <div class="pv" id="pv-agenda">
         <details class="help" open><summary>Cómo se usa?</summary><ol>
-          <li><b>Pedidos por día:</b> cuántos pedidos podés hacer en un día. Cuando se llena, la página no deja reservar esa fecha.</li>
+          <li><b>Pedidos por día:</b> cuántos pedidos podés hacer en un día. Cuando se llena, el Link de pedidos no deja reservar esa fecha.</li>
           <li><b>Días que no tomo pedidos:</b> elegí la fecha y tocá "Bloquear día". Para desbloquearlo, tocá la ×.</li>
           <li><b>Clave de acceso:</b> abajo de todo podés cambiar la clave de este panel.</li>
-          <li><b>Fecha especial:</b> el cartel amarillo de arriba de la página. Cambiá el texto según la época o apagalo.</li>
+          <li><b>Fecha especial:</b> el cartel amarillo de arriba de tu Link de pedidos. Cambiá el texto según la época o apagalo.</li>
         </ol></details>
         <div class="card" style="margin-bottom:14px">
           <h3 style="font-size:1.15rem">Pedidos por día</h3>
-          <p class="hint" style="margin:6px 0 10px">Cuando un día llega a este número, la página ya no deja reservar esa fecha.</p>
+          <p class="hint" style="margin:6px 0 10px">Cuando un día llega a este número, el Link de pedidos ya no deja reservar esa fecha.</p>
           <input type="number" id="maxDay" min="1" style="border:1px solid var(--line);border-radius:10px;padding:10px;width:120px">
         </div>
         <div class="card" style="margin-bottom:14px">
@@ -1070,14 +1071,14 @@ body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing
         </div>
         <div class="card">
           <h3 style="font-size:1.15rem">Fecha especial destacada</h3>
-          <p class="hint" style="margin:6px 0 10px">Aparece arriba en la página (Día de la Madre, Navidad, San Valentín...).</p>
+          <p class="hint" style="margin:6px 0 10px">Aparece arriba en tu Link de pedidos (Día de la Madre, Navidad, San Valentín...).</p>
           <div class="f"><label for="spTitle">Título</label><input id="spTitle"></div>
           <div class="f"><label for="spText">Texto</label><input id="spText"></div>
-          <label class="sw"><input type="checkbox" id="spOn"> Mostrar en la página</label>
+          <label class="sw"><input type="checkbox" id="spOn"> Mostrar en tu Link de pedidos</label>
         </div>
         <div class="card" style="margin-top:14px">
           <h3 style="font-size:1.15rem">Datos para la seña</h3>
-          <p class="hint" style="margin:6px 0 10px">Se le muestran al cliente apenas hace el pedido.</p>
+          <p class="hint" style="margin:6px 0 10px">Se muestran apenas se hace el pedido.</p>
           <div class="f"><label for="alias">Alias o CBU</label><input id="alias" placeholder="Tu alias de Mercado Pago o banco"></div>
           <div class="f"><label for="aliasName">A nombre de</label><input id="aliasName"></div>
           <div class="f"><label for="senaPct">Seña (%)</label><input id="senaPct" type="number" min="0" max="100"></div>
@@ -1330,7 +1331,7 @@ function renderPanel(){
     <div><b>${S.orders.filter(o=>o.pay==='sin'&&!o.done).length}</b><span>Sin seña</span></div>
     <div><b>${money(debt)}</b><span>Saldo por cobrar</span></div>`;
   if(!window._vis){ window._vis=1; fetch(HIT.replace('/hit/','/get/')).then(r=>r.json()).then(j=>{ window._visN=j.value; renderPanel(); }).catch(()=>{}); }
-  if(window._visN!=null) $('#sum').insertAdjacentHTML('beforeend', `<div><b>${window._visN}</b><span>Visitas a tu página</span></div>`);
+  if(window._visN!=null) $('#sum').insertAdjacentHTML('beforeend', `<div><b>${window._visN}</b><span>Visitas a tu Link de pedidos</span></div>`);
 
   let list = [...S.orders];
   if(oFilter==='prox') list = list.filter(o=>!o.done && o.date>=iso(today));
@@ -1576,7 +1577,7 @@ const norm = s => String(s||'').trim().toLowerCase();
 
 /* ---- Contenido de la propia página (no se pide nada nuevo al dueño) ---- */
 const B = (function(){ const h = site.querySelector('header'), cs = e => e ? getComputedStyle(e) : null;
-  /* logo: solo una imagen que sea logo (src, alt o clase con 'logo'); nunca la primera foto de la página (CONTENIDO 17/11 08:49). APPS[slug]['logo'] lo fija a mano */
+  /* logo: solo una imagen que sea logo (src, alt o clase con 'logo'); nunca la primera foto de tu Link de pedidos (CONTENIDO 17/11 08:49). APPS[slug]['logo'] lo fija a mano */
   const esLogo = e => /logo/i.test((e.getAttribute('src')||'') + ' ' + (e.alt||'') + ' ' + (e.className||'')), logo = C.logo !== undefined ? null : [...site.querySelectorAll('img')].find(esLogo), br = h && (h.querySelector('.brand') || h);
   const accs = [...site.querySelectorAll('a[href="#panel"],a[href="#admin"]')], acc = accs[accs.length-1];
   const h1 = site.querySelector('h1'), lead = h1 && h1.parentElement.querySelector('p');
@@ -1609,7 +1610,7 @@ function V(p){ const v = ((X().var)||{})[p.id] || {}, t = torta(p) || isPers(p),
   const d = {sz:[], biz: t && (x.biz||[]).length ? 1 : 0, rel: t && relList().length ? (C.rel2 ? 2 : 1) : 0, cob: t && (x.cob||[]).length ? 1 : 0,
     per: t ? 1 : 0, qty: t ? 0 : 1, sab: t && !relList().length && !(x.biz||[]).length ? 1 : 0, ext: t && (x.cajas||[]).length ? x.cajas.map(n => ({n, p:0})) : [], idea: isPers(p) ? 1 : 0};
   return Object.assign(d, v); }
-/* categoría con la que se agrupa en la página: la que elige el emprendedor en Tu catálogo (var[id].grp) o la del producto */
+/* categoría con la que se agrupa en tu Link de pedidos: la que elige el emprendedor en Tu catálogo (var[id].grp) o la del producto */
 const grupo = p => String(V(p).grp || p.cat || 'Otros').trim() || 'Otros';
 const desde = p => { const v = V(p), ps = (v.sz||[]).map(s => Number(s.p)||0).filter(Boolean); return ps.length ? Math.min(...ps) : (Number(p.price)||0); };
 const ph = (p, cls) => p && p.img && !dup(p) ? `<img class="vph ${cls||''}" src="${E(p.img)}" alt="${E(p.name)}" loading="lazy">` : '';   /* sin foto, sin hueco (17/11): nunca una letra */
@@ -1922,11 +1923,11 @@ let OPN = '';
 function lst(t){ return String(t||'').split('\n').map(s => s.trim()).filter(Boolean).map(s => { const m = s.match(/^(.*?)[\s:=$-]*\$?\s*([\d.]+)\s*$/); return m && m[1] ? {n:m[1].trim(), p:Number(m[2].replace(/\./g,''))} : {n:s, p:0}; }); }
 const lstT = a => (a||[]).map(x => x.n + (Number(x.p) ? ' ' + x.p : '')).join('\n');
 function encHtml(){ const fe = formaEnc(), lg = logoEnc();
-  return `<div class="venc"><h3>Encabezado de tu página</h3><div class="vlogo">${lg ? `<img src="${E(lg)}" alt="Tu logo">` : '<span class="vnf vnl" style="width:64px;height:64px;border-radius:50%">Sin logo</span>'}<label class="vsub">${lg ? 'Cambiar logo' : 'Subir logo'}<input type="file" accept="image/*" hidden data-tvlogo="1"></label></div>
+  return `<div class="venc"><h3>Encabezado de tu Link de pedidos</h3><div class="vlogo">${lg ? `<img src="${E(lg)}" alt="Tu logo">` : '<span class="vnf vnl" style="width:64px;height:64px;border-radius:50%">Sin logo</span>'}<label class="vsub">${lg ? 'Cambiar logo' : 'Subir logo'}<input type="file" accept="image/*" hidden data-tvlogo="1"></label></div>
     ${[['logo-nombre', 'Logo y nombre'], ['nombre', 'Solo el nombre'], ['logo', 'Solo el logo (si tu logo ya trae el nombre)']].map(([v, l]) => `<label class="vck"><input type="radio" name="tvenc" value="${v}"${fe===v ? ' checked' : ''}${v!=='nombre' && !lg ? ' disabled' : ''}> ${l}</label>`).join('')}
     ${lg ? '' : '<div class="vok" style="margin:2px 0 6px">Para mostrar el logo, primero subilo.</div>'}<button type="button" class="vsv" data-tvenc="1">Guardar encabezado</button></div>`; }
 function opcHtml(p){ const v = V(p), x = X();
-  return `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre || window.PNL ? '' : `<label>Categoría en tu página</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu página aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `${window.PNL ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">`}
+  return `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre || window.PNL ? '' : `<label>Categoría en tu Link de pedidos</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu Link de pedidos aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `${window.PNL ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">`}
           <label>Tamaños y precios (uno por renglón)</label><textarea data-f="sz" placeholder="Para 10 personas 38000">${E(lstT(v.sz))}</textarea>
           ${(v.sz||[]).length ? '' : `<label class="vck"><input type="checkbox" data-f="per"${v.per?' checked':''}> Preguntar para cuántas personas</label>`}
           <label class="vck"><input type="checkbox" data-f="qty"${v.qty?' checked':''}> Preguntar cantidad</label>
@@ -1939,7 +1940,7 @@ function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || 
   const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
   const fe = formaEnc(), lg = logoEnc();
   return encHtml()
-    + `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
+    + `<h3>Tu catálogo en tu Link de pedidos</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
     + ps.map(p => { const v = V(p), o = OPN===p.id;
       return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">Categoría: ${E(grupo(p))}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
         <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
@@ -2007,7 +2008,7 @@ const $m = n => '$' + Number(n||0).toLocaleString('es-AR');
 function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEnc ? window.tvEnc() : {nombre: ''}; m.innerHTML = (e.logo ? `<img src="${H(e.logo)}" alt="">` : '') + `<b>${H(e.nombre || '')}</b>`; }
 /* AVISOS DE GUARDADO (CONTENIDO 17/11 17:10): uno solo, "Guardado ✓", en una línea, arriba de la barra y sin tapar el botón que se tocó */
 (function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
-  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
+  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu Link de pedidos queda como antes/i;
   window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
   window.pnlPlace = () => { const t = document.getElementById('toast'); if(t) t.classList.toggle('pOk', t.textContent==='Guardado ✓'); };   /* siempre abajo, centrado sobre la barra de pestañas (CONTENIDO 18:00) */
   window.pnlHide = () => { const t = document.getElementById('toast'); if(t) t.classList.remove('show', 'on'); };   /* todo aviso se borra al cambiar de pantalla o de pestaña */
@@ -2015,7 +2016,7 @@ function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEn
   addEventListener('hashchange', () => pnlHide()); })();
 let tT; window.toast = function(m){ const t = q('#toast'); if(!t) return; t.textContent = pnlNorm(m); t.classList.add('show'); pnlPlace(); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2000); };
 const up = () => { try{ window.scrollTo(0, 0); }catch(e){} };
-function visitas(el, conPed){ el.innerHTML = '<div class="pCard"><p><b id="vN">…</b> visitas a tu página.</p>' + (conPed ? '<p><b id="vP">…</b> pedidos hechos desde ahí.</p>' : '') + '</div>';
+function visitas(el, conPed){ el.innerHTML = '<div class="pCard"><p><b id="vN">…</b> visitas a tu Link de pedidos.</p>' + (conPed ? '<p><b id="vP">…</b> pedidos hechos desde ahí.</p>' : '') + '</div>';
   const g = HIT.replace('/hit/','/get/'), put = (id,t) => { const e = q(id); if(e) e.textContent = t; }; fetch(g).then(r => r.json()).then(j => put('#vN', j.value||0)).catch(() => put('#vN', 0)); if(conPed) fetch(g+'-pedidos').then(r => r.json()).then(j => put('#vP', j.value||0)).catch(() => put('#vP', 0)); }
 function instalar(el){ const l = D.getElementById('insL'); el.innerHTML = l ? '<p>Te queda el ícono en el celular y entrás directo a tu panel, sin buscar el link.</p>' + main('pnlins', 'Instalar la app') : '<div class="pCard"><p>Ya la tenés instalada en este celular.</p></div>'; }
 
@@ -2025,15 +2026,15 @@ const tabs = q('#panelApp .tabs'), wrap = q('#panelApp > .wrap');
 /* pestañas: Pedidos, Agenda, Carta, Más (Cuánto cobrar pasa a Más) */
 tabs.innerHTML = [['pedidos','Pedidos',IC.ped],['agenda','Agenda',IC.cal],['precios','Carta',IC.car],['mas','Más',IC.mas]].map(([v,l,i],k) => `<button type="button" data-t="${v}"${k ? '' : ' class="on"'}>${SVG(i)}<span>${l}</span></button>`).join('');
 /* un solo renglón de ayuda por pantalla, en lugar de los "Cómo se usa" */
-const AY = {'pv-pedidos': 'Los pedidos de tu página aparecen acá solos.', 'pv-precios': 'Lo que cambies se guarda solo y se ve al instante en tu página.', 'pv-agenda': 'Cuántos pedidos tomás por día y qué días no.', 'pv-calc': 'Cargá lo que gastás en hacer un producto y las horas que te lleva.'};
+const AY = {'pv-pedidos': 'Los pedidos de tu Link de pedidos aparecen acá solos.', 'pv-precios': 'Lo que cambies se guarda solo y se ve al instante en tu Link de pedidos.', 'pv-agenda': 'Cuántos pedidos tomás por día y qué días no.', 'pv-calc': 'Cargá lo que gastás en hacer un producto y las horas que te lleva.'};
 D.querySelectorAll('#panelApp details.help').forEach(d => { const v = d.closest('.pv'), tx = AY[v && v.id]; if(tx){ const p = D.createElement('p'); p.className = 'pHelp'; p.textContent = tx; d.replaceWith(p); } else d.remove(); });
 /* Más: cada tarjeta de siempre pasa a su propia pantalla, con los mismos campos */
-const MENU = [['cobrar','pv-calc','Cuánto cobrar'],['sena','pv-m-sena','Seña y alias'],['esp','pv-m-esp','Fecha especial'],['enc','pv-m-enc','Encabezado de tu página'],['visitas','pv-m-vis','Visitas'],['instalar','pv-m-ins','Instalar como app'],['clave','pv-m-clave','Cambiar la clave']];
+const MENU = [['cobrar','pv-calc','Cuánto cobrar'],['sena','pv-m-sena','Seña y alias'],['esp','pv-m-esp','Fecha especial'],['enc','pv-m-enc','Encabezado de tu Link de pedidos'],['visitas','pv-m-vis','Visitas'],['instalar','pv-m-ins','Instalar como app'],['clave','pv-m-clave','Cambiar la clave']];
 const sec = (id, tit, nodo) => { const s = D.createElement('div'); s.className = 'pv pSub'; s.id = id; s.innerHTML = nav('mas0') + `<h3>${tit}</h3><div class="pBody"></div>`; if(nodo) s.querySelector('.pBody').appendChild(nodo); wrap.appendChild(s); return s; };
 const tarjeta = sel => { const e = q(sel); return e ? e.closest('.card') : null; };
 const mas = D.createElement('div'); mas.className = 'pv'; mas.id = 'pv-mas'; wrap.appendChild(mas);
 sec('pv-m-sena', 'Seña y alias', tarjeta('#alias')); sec('pv-m-esp', 'Fecha especial', tarjeta('#spTitle')); sec('pv-m-clave', 'Cambiar la clave', tarjeta('#npin'));
-sec('pv-m-enc', 'Encabezado de tu página'); sec('pv-m-vis', 'Visitas'); sec('pv-m-ins', 'Instalar como app');
+sec('pv-m-enc', 'Encabezado de tu Link de pedidos'); sec('pv-m-vis', 'Visitas'); sec('pv-m-ins', 'Instalar como app');
 q('#pv-calc').classList.add('pSub'); q('#pv-calc').insertAdjacentHTML('afterbegin', nav('mas0') + '<h3>Cuánto cobrar</h3>');
 D.querySelectorAll('#panelApp label.sw').forEach(l => l.classList.add('pSw'));
 const pin = q('#pinSave'); if(pin){ pin.className = 'pMain'; pin.textContent = 'Cambiar la clave'; }
@@ -2070,13 +2071,13 @@ window.renderPrices = function(){ const pl = q('#plist'), cats = [...new Set(S.p
   if(p){ N.tv = null; pl.innerHTML = `<div class="pcard pEd" data-id="${H(p.id)}">${nav('ped0')}<h3>Editar producto</h3>
       <label>Foto</label><div class="pFoto">${p.img ? `<img src="${H(p.img)}" alt="">` : `<span class="pPh">${CAM}</span>`}<label class="pSec">${p.img ? 'Cambiar foto' : 'Subir foto'}<input type="file" accept="image/*" data-k="img" hidden></label></div>
       <label for="pnlN">Nombre</label><input id="pnlN" type="text" data-k="name" value="${H(p.name)}"><label for="pnlPr">Precio desde ($)</label><input id="pnlPr" type="number" inputmode="numeric" data-k="price" value="${p.price||''}" placeholder="Vacío: dice Consultar">
-      <label for="pnlCat">Categoría en tu página</label><input id="pnlCat" type="text" data-k="cat" list="catList" value="${H(p.cat)}"><label for="pnlD">Descripción</label><textarea id="pnlD" data-k="desc">${H(p.desc)}</textarea>
-      <label class="pSw"><span>Se muestra en tu página</span><input type="checkbox" data-k="visible"${p.visible ? ' checked' : ''}></label>
+      <label for="pnlCat">Categoría en tu Link de pedidos</label><input id="pnlCat" type="text" data-k="cat" list="catList" value="${H(p.cat)}"><label for="pnlD">Descripción</label><textarea id="pnlD" data-k="desc">${H(p.desc)}</textarea>
+      <label class="pSw"><span>Se muestra en tu Link de pedidos</span><input type="checkbox" data-k="visible"${p.visible ? ' checked' : ''}></label>
       ${row('opc', 'Opciones', 'pSolo')}${main('pnl', 'Guardar', ' data-v="ped0"')}<button type="button" class="pDel del" data-a="pdel">Borrar el producto</button></div>`; return; }
   N.tv = null; const ps = S.products, falta = ps.filter(x => !x.img && x.visible!==false).length, sinP = ps.filter(x => x.visible!==false && !info(x).desde).length;
   const pend = falta || sinP ? `<p class="pPend">${falta ? `<b style="color:var(--prj)">${falta===1 ? 'Te falta 1 foto.' : 'Te faltan ' + falta + ' fotos.'}</b> ` : ''}${sinP ? `<b style="color:var(--prj)">${sinP===1 ? '1 producto no tiene' : sinP + ' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>` : '';
   pl.innerHTML = `<div id="tvpc" class="pList">${pend}` + ps.map(x => { const i = info(x), w = [], vis = x.visible!==false;
-    if(!x.img && vis) w.push('Subí la foto'); if(vis && !i.desde) w.push('Cargá un precio "Desde"'); if(!vis) w.push('No se muestra en tu página');
+    if(!x.img && vis) w.push('Subí la foto'); if(vis && !i.desde) w.push('Cargá un precio "Desde"'); if(!vis) w.push('No se muestra en tu Link de pedidos');
     return `<button type="button" class="pRowP vpr" data-a="pnl" data-v="ped" data-id="${H(x.id)}">${x.img ? `<img src="${H(x.img)}" alt="">` : vis ? `<span class="vnf" role="img" aria-label="Falta foto">${CAM}</span>` : `<span class="vnx">${CAM}</span>`}<span class="pTx"><span class="vnm">${H(x.name)}</span><span class="pPr">${i.desde ? 'Desde ' + $m(i.desde) : 'Sin precio'}</span></span><span class="pEd">Editar ›</span>${w.length ? `<span class="pWarn">${w.map(z => `<span class="vwn">${z}</span>`).join('')}</span>` : ''}</button>`; }).join('') + '</div>'; };
 
 /* ---------- MÁS ---------- */
@@ -2105,11 +2106,11 @@ q('#panelApp').addEventListener('click', e => { const b = e.target.closest('[dat
   if(a==='pnlins'){ const l = D.getElementById('insL'); if(l) l.click(); } });
 if(nb) nb.addEventListener('click', () => { D.body.classList.add('pnlNew'); up(); });
 q('#noCancel').addEventListener('click', () => D.body.classList.remove('pnlNew'));
-if(ad) ad.addEventListener('click', () => { const p = S.products[0]; if(p){ N.ped = p.id; N.sub = ''; renderPrices(); up(); toast('Producto nuevo: completalo y prendé "Se muestra en tu página".'); } });
+if(ad) ad.addEventListener('click', () => { const p = S.products[0]; if(p){ N.ped = p.id; N.sub = ''; renderPrices(); up(); toast('Producto nuevo: completalo y prendé "Se muestra en tu Link de pedidos".'); } });
 try{ if(q('#panelApp').style.display!=='none') renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
-<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu link para que te hagan pedidos';
+<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu Link de pedidos';
 const url = () => location.href.split('#')[0].split('?')[0];
 function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
   /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
@@ -2123,6 +2124,9 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
 </body>
+
+
+
 
 
 

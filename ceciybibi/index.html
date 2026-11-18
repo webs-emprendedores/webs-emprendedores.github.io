@@ -981,7 +981,7 @@ function groups(){ const g = {}; S.orders.forEach(o => { (g[batch(o)] = g[batch(
 let pedAll = false;
 function renderPed(){ if(manual){ renderManual(); return; }
   const w = X().week, gs = groups().filter(g => pedAll || g.some(o => o.date >= thisMon() || inWeek(o,w)));
-  let h = `<button class="btn" data-a="man">+ Cargar un pedido a mano</button><p class="help" style="margin-top:10px">Los pedidos de la página aparecen solos. Los que les lleguen por otro lado los cargan con el botón de arriba.</p>
+  let h = `<button class="btn" data-a="man">+ Cargar un pedido a mano</button><p class="help" style="margin-top:10px">Los pedidos de tu Link de pedidos aparecen solos. Los que les lleguen por otro lado los cargan con el botón de arriba.</p>
   <div class="seg"><button data-a="pf" data-v="0" class="${pedAll?'':'on'}">Esta semana y próximos</button><button data-a="pf" data-v="1" class="${pedAll?'on':''}">Todos</button></div>`;
   if(!gs.length) h += '<div class="card box">Todavía no hay pedidos.</div>';
   h += gs.map(g => { const o = g[0], tot = g.reduce((s,x) => s + x.total, 0), paid = g.every(x => x.pay==='total'), tel = String(o.phone).replace(/\D/g,''), wa = tel.length>=10 ? (tel.startsWith('54') ? tel : '549'+tel.replace(/^0/,'')) : '';
@@ -994,7 +994,7 @@ function renderPed(){ if(manual){ renderManual(); return; }
 function renderManual(){ const md = menuDays();
   $('#pv-ped').innerHTML = `<h3>Cargar un pedido a mano</h3><p class="mut">Semana del ${dm(X().week)}</p>
   <div class="card" id="manList" style="margin-top:10px">${md.length ? menuHtml(md, manual.q, false) : '<div class="dayb" style="padding-bottom:14px">Primero carguen el menú de la semana.</div>'}</div>
-  <label>Nombre del cliente</label><input id="mName" value="${esc(manual.name)}"><label>WhatsApp</label><input id="mPhone" type="tel" value="${esc(manual.phone)}">
+  <label>Nombre de quien pide</label><input id="mName" value="${esc(manual.name)}"><label>WhatsApp</label><input id="mPhone" type="tel" value="${esc(manual.phone)}">
   <label>Entrega</label><select id="mEnt"><option>Retiro</option><option>Envío</option></select><label>Aclaraciones</label><input id="mNotes" value="${esc(manual.notes)}">
   <label style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="mPaid" style="width:26px;min-height:26px"> Ya lo pagó</label>
   <button class="btn" data-a="msave" style="margin-top:14px">Guardar pedido</button><button class="btn o" data-a="mcancel" style="margin-top:10px">Cancelar</button>`; }
@@ -1007,7 +1007,7 @@ function renderMen(){ const x = X(), md = menuDays(), ended = md.length && !md.s
     <label>Foto (obligatoria)</label><div style="display:flex;gap:12px;align-items:center">${p.img ? `<img class="ph-mini" src="${esc(p.img)}" alt="">` : ''}<label class="btn sm o" style="margin:0;cursor:pointer">${p.img?'Cambiar foto':'Subir foto'}<input type="file" id="eFile" accept="image/*" hidden></label></div>
     <button class="btn" data-a="esave" style="margin-top:16px">Guardar</button>${edit.isNew ? '' : '<button class="btn o" data-a="edel" style="margin-top:10px;border-color:var(--r);color:var(--r)">Quitar del menú</button>'}<button class="btn o" data-a="ecancel" style="margin-top:10px">Cancelar</button>`; return; }
   const mons = [...new Set([x.week, thisMon(), nextMon(), plus(nextMon(),7), plus(nextMon(),14)])].sort();
-  let h = `<p class="help">Acá arman el menú. Lo que guardan aparece al instante en la página.</p>${ended ? '<div class="card box" style="border-color:var(--r);margin:0 0 12px"><b>Esta semana ya terminó.</b> Elijan abajo si repiten el menú o arman uno nuevo.</div>' : ''}
+  let h = `<p class="help">Acá arman el menú. Lo que guardan aparece al instante en tu Link de pedidos.</p>${ended ? '<div class="card box" style="border-color:var(--r);margin:0 0 12px"><b>Esta semana ya terminó.</b> Elijan abajo si repiten el menú o arman uno nuevo.</div>' : ''}
   <label>Semana que empieza el lunes</label><select id="wkSel">${mons.map(m => `<option value="${m}"${m===x.week?' selected':''}>${pd(m).getDate()} de ${MES[pd(m).getMonth()]}</option>`).join('')}</select>
   <div class="card" style="margin-top:14px">` + DAYS.map((d,i) => { const its = S.products.filter(p => p.cat===d);
     return `<div class="dayb" style="padding-bottom:12px"><div class="dayh"><span class="day${i%2?' g':''}">${d}</span><small>${dm(plus(x.week,i))}</small></div>` + its.map(p => `<div class="it">${p.img?`<img src="${esc(p.img)}" alt="">`:''}<div class="tx"><div class="n">${esc(p.name)}</div><div class="d">${esc(p.desc)}</div><div class="p">${p.price?money(p.price):'Sin precio'}</div></div><button class="btn sm o" data-a="eopen" data-id="${esc(p.id)}">Cambiar</button></div>`).join('') + `<button class="pill ok" style="margin-top:6px;min-height:40px" data-a="eadd" data-day="${d}">+ Agregar plato</button></div>`; }).join('') + `</div>
@@ -1029,10 +1029,10 @@ function renderMas(){ const s = S.settings, x = X(); const f = (k,l,ph,t) => `<l
   <div class="card box"><h3>Entrega y pedidos</h3><label>Dirección de retiro</label><input id="sPick" value="${esc(x.pickup)}">
     <label>Hacen envíos</label><select id="sEnv"><option value="1"${x.envio?' selected':''}>Sí, se coordinan por WhatsApp</option><option value="0"${x.envio?'':' selected'}>No, solo retiro</option></select>
     <label>Se puede pedir hasta</label><select id="sCut">${[[1,'El día anterior'],[0,'El mismo día'],[2,'Dos días antes']].map(o => `<option value="${o[0]}"${Number(x.cutoff)===o[0]?' selected':''}>${o[1]}</option>`).join('')}</select>
-    <h3 style="margin-top:18px">Datos para que les paguen</h3><p class="mut">Si los cargan, el cliente los ve al terminar su pedido.</p><label>Alias</label><input id="sAlias" value="${esc(s.alias)}"><label>A nombre de</label><input id="sAliasN" value="${esc(s.aliasName)}">
+    <h3 style="margin-top:18px">Datos para que les paguen</h3><p class="mut">Si los cargan, se ven al terminar el pedido.</p><label>Alias</label><input id="sAlias" value="${esc(s.alias)}"><label>A nombre de</label><input id="sAliasN" value="${esc(s.aliasName)}">
     <button class="btn" data-a="ssave" style="margin-top:14px">Guardar</button></div>
   <div class="card box"><h3>Clave de acceso</h3><p class="mut">De 4 a 8 números.</p><label>Clave nueva</label><input id="npin" type="password" inputmode="numeric"><label>Repetir la clave nueva</label><input id="npin2" type="password" inputmode="numeric"><button class="btn" data-a="pinsave" style="margin-top:14px">Cambiar la clave</button></div>
-  <div class="card box"><h3>Visitas a la página</h3><div class="stats" style="grid-template-columns:1fr 1fr"><div><b id="vN">…</b><span>visitas</span></div><div><b id="vP">…</b><span>pedidos por la página</span></div></div></div>
+  <div class="card box"><h3>Visitas a tu Link de pedidos</h3><div class="stats" style="grid-template-columns:1fr 1fr"><div><b id="vN">…</b><span>visitas</span></div><div><b id="vP">…</b><span>pedidos por el Link de pedidos</span></div></div></div>
   <div class="card box"><h3>Tenerla como app en el celular</h3><p style="margin-top:6px">En iPhone: abran la página en Safari, toquen Compartir y después "Agregar a inicio". En Android: abran el menú de Chrome y toquen "Agregar a la pantalla principal".</p></div>
   <button class="btn o" data-a="out" style="margin-top:16px">Salir del panel</button>`;
   calcOut(); const g = HIT.replace('/hit/','/get/'); fetch(g).then(r => r.json()).then(j => { const e = $('#vN'); if(e) e.textContent = j.value||0; }).catch(()=>{}); fetch(g+'-pedidos').then(r => r.json()).then(j => { const e = $('#vP'); if(e) e.textContent = j.value||0; }).catch(() => { const e = $('#vP'); if(e) e.textContent = 0; }); }
@@ -1058,7 +1058,7 @@ $('#app').addEventListener('click', async e => {
   if(a==='gdel'){ if(!sure(b, 'd'+b.dataset.b)) return; const ids = S.orders.filter(o => batch(o)===b.dataset.b).map(o => o.id); S.orders = S.orders.filter(o => !ids.includes(o.id)); send({a:'delOrders', ids}, 'Pedido borrado'); renderPed(); }
   if(a==='man'){ manual = {q:{}, name:'', phone:'', notes:''}; renderPed(); window.scrollTo(0,0); }
   if(a==='mcancel'){ manual = null; renderPed(); }
-  if(a==='msave'){ const name = $('#mName').value.trim(), L = cartLines(manual.q); if(!name){ toast('Falta el nombre del cliente.'); return; } if(!L.length){ toast('Elijan al menos una vianda.'); return; }
+  if(a==='msave'){ const name = $('#mName').value.trim(), L = cartLines(manual.q); if(!name){ toast('Falta el nombre de quien pide.'); return; } if(!L.length){ toast('Elijan al menos una vianda.'); return; }
     const ts = Date.now(), paid = $('#mPaid').checked, list = L.map((l,i) => { const t = l.n*(Number(l.p.price)||0); return {id:'o'+ts+'_'+i, created:iso(today), date:l.d.date, product:l.p.name, people:l.n, fill:l.d.day, delivery:$('#mEnt').value, name, phone:$('#mPhone').value.trim(), notes:$('#mNotes').value.trim(), pay:paid?'total':'sin', total:t, paid:paid?t:0, done:false}; });
     S.orders.push(...list); send({a:'saveOrders', orders:list}, 'Pedido guardado ✔'); manual = null; renderPed(); }
   if(a==='eadd'){ edit = {isNew:true, day:b.dataset.day, p:{id:'p'+Date.now(), cat:b.dataset.day, name:'', desc:'', price:x.price||'', visible:true, img:''}}; renderMen(); window.scrollTo(0,0); }
@@ -1123,7 +1123,7 @@ const norm = s => String(s||'').trim().toLowerCase();
 
 /* ---- Contenido de la propia página (no se pide nada nuevo al dueño) ---- */
 const B = (function(){ const h = site.querySelector('header'), cs = e => e ? getComputedStyle(e) : null;
-  /* logo: solo una imagen que sea logo (src, alt o clase con 'logo'); nunca la primera foto de la página (CONTENIDO 17/11 08:49). APPS[slug]['logo'] lo fija a mano */
+  /* logo: solo una imagen que sea logo (src, alt o clase con 'logo'); nunca la primera foto de tu Link de pedidos (CONTENIDO 17/11 08:49). APPS[slug]['logo'] lo fija a mano */
   const esLogo = e => /logo/i.test((e.getAttribute('src')||'') + ' ' + (e.alt||'') + ' ' + (e.className||'')), logo = C.logo !== undefined ? null : [...site.querySelectorAll('img')].find(esLogo), br = h && (h.querySelector('.brand') || h);
   const accs = [...site.querySelectorAll('a[href="#panel"],a[href="#admin"]')], acc = accs[accs.length-1];
   const h1 = site.querySelector('h1'), lead = h1 && h1.parentElement.querySelector('p');
@@ -1156,7 +1156,7 @@ function V(p){ const v = ((X().var)||{})[p.id] || {}, t = torta(p) || isPers(p),
   const d = {sz:[], biz: t && (x.biz||[]).length ? 1 : 0, rel: t && relList().length ? (C.rel2 ? 2 : 1) : 0, cob: t && (x.cob||[]).length ? 1 : 0,
     per: t ? 1 : 0, qty: t ? 0 : 1, sab: t && !relList().length && !(x.biz||[]).length ? 1 : 0, ext: t && (x.cajas||[]).length ? x.cajas.map(n => ({n, p:0})) : [], idea: isPers(p) ? 1 : 0};
   return Object.assign(d, v); }
-/* categoría con la que se agrupa en la página: la que elige el emprendedor en Tu catálogo (var[id].grp) o la del producto */
+/* categoría con la que se agrupa en tu Link de pedidos: la que elige el emprendedor en Tu catálogo (var[id].grp) o la del producto */
 const grupo = p => String(V(p).grp || p.cat || 'Otros').trim() || 'Otros';
 const desde = p => { const v = V(p), ps = (v.sz||[]).map(s => Number(s.p)||0).filter(Boolean); return ps.length ? Math.min(...ps) : (Number(p.price)||0); };
 const ph = (p, cls) => p && p.img && !dup(p) ? `<img class="vph ${cls||''}" src="${E(p.img)}" alt="${E(p.name)}" loading="lazy">` : '';   /* sin foto, sin hueco (17/11): nunca una letra */
@@ -1469,11 +1469,11 @@ let OPN = '';
 function lst(t){ return String(t||'').split('\n').map(s => s.trim()).filter(Boolean).map(s => { const m = s.match(/^(.*?)[\s:=$-]*\$?\s*([\d.]+)\s*$/); return m && m[1] ? {n:m[1].trim(), p:Number(m[2].replace(/\./g,''))} : {n:s, p:0}; }); }
 const lstT = a => (a||[]).map(x => x.n + (Number(x.p) ? ' ' + x.p : '')).join('\n');
 function encHtml(){ const fe = formaEnc(), lg = logoEnc();
-  return `<div class="venc"><h3>Encabezado de tu página</h3><div class="vlogo">${lg ? `<img src="${E(lg)}" alt="Tu logo">` : '<span class="vnf vnl" style="width:64px;height:64px;border-radius:50%">Sin logo</span>'}<label class="vsub">${lg ? 'Cambiar logo' : 'Subir logo'}<input type="file" accept="image/*" hidden data-tvlogo="1"></label></div>
+  return `<div class="venc"><h3>Encabezado de tu Link de pedidos</h3><div class="vlogo">${lg ? `<img src="${E(lg)}" alt="Tu logo">` : '<span class="vnf vnl" style="width:64px;height:64px;border-radius:50%">Sin logo</span>'}<label class="vsub">${lg ? 'Cambiar logo' : 'Subir logo'}<input type="file" accept="image/*" hidden data-tvlogo="1"></label></div>
     ${[['logo-nombre', 'Logo y nombre'], ['nombre', 'Solo el nombre'], ['logo', 'Solo el logo (si tu logo ya trae el nombre)']].map(([v, l]) => `<label class="vck"><input type="radio" name="tvenc" value="${v}"${fe===v ? ' checked' : ''}${v!=='nombre' && !lg ? ' disabled' : ''}> ${l}</label>`).join('')}
     ${lg ? '' : '<div class="vok" style="margin:2px 0 6px">Para mostrar el logo, primero subilo.</div>'}<button type="button" class="vsv" data-tvenc="1">Guardar encabezado</button></div>`; }
 function opcHtml(p){ const v = V(p), x = X();
-  return `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre || window.PNL ? '' : `<label>Categoría en tu página</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu página aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `${window.PNL ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">`}
+  return `<div class="ved" data-tve="${E(p.id)}">${C.rubro==='viandas' || C.catLibre || window.PNL ? '' : `<label>Categoría en tu Link de pedidos</label><input type="text" data-f="grp" list="tvCats" maxlength="30" value="${E(V(p).grp || p.cat || '')}" placeholder="Por ejemplo: Cookies" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box"><div class="vok" style="margin:4px 0 0">Los productos con la misma categoría van juntos y arriba de tu Link de pedidos aparece un acceso a cada una.</div>`}${C.rubro==='viandas' ? '' : `${window.PNL ? '' : `<label>Precio desde ($)</label><input type="number" inputmode="numeric" min="0" data-f="pr" value="${E(p.price||'')}" placeholder="Por ejemplo: 25000" style="width:100%;font-size:16px;padding:10px;border-radius:10px;border:1.5px solid #ccc;min-height:46px;box-sizing:border-box">`}
           <label>Tamaños y precios (uno por renglón)</label><textarea data-f="sz" placeholder="Para 10 personas 38000">${E(lstT(v.sz))}</textarea>
           ${(v.sz||[]).length ? '' : `<label class="vck"><input type="checkbox" data-f="per"${v.per?' checked':''}> Preguntar para cuántas personas</label>`}
           <label class="vck"><input type="checkbox" data-f="qty"${v.qty?' checked':''}> Preguntar cantidad</label>
@@ -1486,7 +1486,7 @@ function card(){ const ps = (S.products||[]).filter(p => C.rubro!=='viandas' || 
   const falta = ps.filter(p => !p.img && p.visible!==false).length, sinP = C.rubro==='viandas' ? 0 : ps.filter(p => p.visible!==false && !desde(p)).length;
   const fe = formaEnc(), lg = logoEnc();
   return encHtml()
-    + `<h3>Tu catálogo en la página</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
+    + `<h3>Tu catálogo en tu Link de pedidos</h3><p class="pm">Cada producto necesita su foto. ${C.rubro==='viandas' ? 'En Opciones cargás variantes del plato (por ejemplo: sin sal, porción grande + 1500).' : 'En Opciones elegís qué puede personalizar tu cliente en ese producto.'}${falta ? ` <b style="color:#b3261e">Te ${falta===1?'falta 1 foto':'faltan '+falta+' fotos'}.</b>` : ''}${sinP ? ` <b style="color:#b3261e">${sinP===1?'1 producto no tiene':sinP+' productos no tienen'} precio: sin un "Desde $" se vende menos.</b>` : ''}</p>`
     + ps.map(p => { const v = V(p), o = OPN===p.id;
       return `<div class="vpr">${p.img?`<img src="${E(p.img)}" alt="">`:'<span class="vnf">Falta foto</span>'}<div><div class="vnm">${E(p.name)}</div>${p.img?`<div class="vok">Categoría: ${E(grupo(p))}</div>`:'<div class="vwn">Subí la foto</div>'}${C.rubro!=='viandas' && !desde(p) ? '<div class="vwn">Cargá un precio "Desde"</div>' : ''}</div>
         <div class="vbt"><label>${p.img?'Cambiar foto':'Subir foto'}<input type="file" accept="image/*" hidden data-tvf="${E(p.id)}"></label><button type="button" data-tvo="${E(p.id)}">${o?'Cerrar':'Opciones'}</button></div>
@@ -1554,7 +1554,7 @@ const $m = n => '$' + Number(n||0).toLocaleString('es-AR');
 function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEnc ? window.tvEnc() : {nombre: ''}; m.innerHTML = (e.logo ? `<img src="${H(e.logo)}" alt="">` : '') + `<b>${H(e.nombre || '')}</b>`; }
 /* AVISOS DE GUARDADO (CONTENIDO 17/11 17:10): uno solo, "Guardado ✓", en una línea, arriba de la barra y sin tapar el botón que se tocó */
 (function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
-  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
+  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu Link de pedidos queda como antes/i;
   window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
   window.pnlPlace = () => { const t = document.getElementById('toast'); if(t) t.classList.toggle('pOk', t.textContent==='Guardado ✓'); };   /* siempre abajo, centrado sobre la barra de pestañas (CONTENIDO 18:00) */
   window.pnlHide = () => { const t = document.getElementById('toast'); if(t) t.classList.remove('show', 'on'); };   /* todo aviso se borra al cambiar de pantalla o de pestaña */
@@ -1562,7 +1562,7 @@ function marca(){ const m = q('#pnlMarca'); if(!m) return; const e = window.tvEn
   addEventListener('hashchange', () => pnlHide()); })();
 let tT; window.toast = function(m){ const t = q('#toast'); if(!t) return; t.textContent = pnlNorm(m); t.classList.add('show'); pnlPlace(); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 2000); };
 const up = () => { try{ window.scrollTo(0, 0); }catch(e){} };
-function visitas(el, conPed){ el.innerHTML = '<div class="pCard"><p><b id="vN">…</b> visitas a tu página.</p>' + (conPed ? '<p><b id="vP">…</b> pedidos hechos desde ahí.</p>' : '') + '</div>';
+function visitas(el, conPed){ el.innerHTML = '<div class="pCard"><p><b id="vN">…</b> visitas a tu Link de pedidos.</p>' + (conPed ? '<p><b id="vP">…</b> pedidos hechos desde ahí.</p>' : '') + '</div>';
   const g = HIT.replace('/hit/','/get/'), put = (id,t) => { const e = q(id); if(e) e.textContent = t; }; fetch(g).then(r => r.json()).then(j => put('#vN', j.value||0)).catch(() => put('#vN', 0)); if(conPed) fetch(g+'-pedidos').then(r => r.json()).then(j => put('#vP', j.value||0)).catch(() => put('#vP', 0)); }
 function instalar(el){ const l = D.getElementById('insL'); el.innerHTML = l ? '<p>Te queda el ícono en el celular y entrás directo a tu panel, sin buscar el link.</p>' + main('pnlins', 'Instalar la app') : '<div class="pCard"><p>Ya la tenés instalada en este celular.</p></div>'; }
 
@@ -1590,7 +1590,7 @@ window.renderCoc = function(){ const w = viewWeek || X().week, os = S.orders.fil
 window.renderManual = function(){ const md = menuDays();
   q('#pv-ped').innerHTML = `<button type="button" class="pBack" data-a="mcancel">← Volver</button><h3>Cargar un pedido</h3><p class="pHelp" style="margin:0!important">Semana del ${dm(X().week)}</p>
   <div class="pCard" id="manList">${md.length ? menuHtml(md, manual.q, false) : '<p>Primero carguen el menú de la semana.</p>'}</div>
-  <label for="mName">Nombre del cliente</label><input id="mName" value="${H(manual.name)}"><label for="mPhone">WhatsApp</label><input id="mPhone" type="tel" value="${H(manual.phone)}">
+  <label for="mName">Nombre de quien pide</label><input id="mName" value="${H(manual.name)}"><label for="mPhone">WhatsApp</label><input id="mPhone" type="tel" value="${H(manual.phone)}">
   <label for="mEnt">Entrega</label><select id="mEnt"><option>Retiro</option><option>Envío</option></select><label for="mNotes">Aclaraciones</label><input id="mNotes" value="${H(manual.notes)}">
   <label class="pSw"><span>Ya lo pagó</span><input type="checkbox" id="mPaid"></label>${main('msave', 'Guardar')}`; };
 window.renderPed = function(){ if(manual){ renderManual(); return; }
@@ -1603,12 +1603,12 @@ window.renderPed = function(){ if(manual){ renderManual(); return; }
     return `<div class="pCard"><div class="pRowT"><b>${H(o.name)}</b>${tag}</div><p class="pMeta" style="margin-top:6px">${H(o.delivery)}${o.phone ? ', ' + H(o.phone) : ''}</p>${g.map(x => `<p class="pMeta">${H(x.fill)} ${dm(x.date)}: ${x.people} × ${H(x.product)}${x.done ? ' ✓' : ''}</p>`).join('')}
       ${o.notes ? `<p class="mut">Aclaraciones: ${H(o.notes)}</p>` : ''}<p class="pSum" style="margin-top:6px!important">Total ${money(tot)}</p>
       <div class="pAcc">${wa ? `<a class="pSec" target="_blank" rel="noopener" href="https://wa.me/${wa}">WhatsApp</a>` : ''}<button type="button" class="pSec" data-a="gpay" data-b="${batch(o)}">${paid ? 'Marcar sin pagar' : 'Marcar pagado ✓'}</button></div><button type="button" class="pDel" data-a="gdel" data-b="${batch(o)}">Borrar el pedido</button></div>`; }).join('');
-  q('#pv-ped').innerHTML = gs.length ? sum + main('man', '+ Cargar un pedido') + seg + cards : sum + seg + `<div class="pCard" style="margin-top:16px"><p>Los pedidos de la página aparecen acá solos. Los que les lleguen por otro lado, cárguenlos acá.</p>${main('man', '+ Cargar un pedido')}</div>`; };
+  q('#pv-ped').innerHTML = gs.length ? sum + main('man', '+ Cargar un pedido') + seg + cards : sum + seg + `<div class="pCard" style="margin-top:16px"><p>Los pedidos de tu Link de pedidos aparecen acá solos. Los que les lleguen por otro lado, cárguenlos acá.</p>${main('man', '+ Cargar un pedido')}</div>`; };
 
 /* ---------- MENÚ ---------- */
 window.renderMen = function(){ const x = X(), md = menuDays(), ended = md.length && !md.some(d => diff(d.date) >= 0), saved = S.products.filter(p => p.cat===SAVED), v = q('#pv-men');
   if(edit){ const p = edit.p;
-    if(N.sub==='opc' && !edit.isNew){ N.tv = {modo: 'opc', id: p.id}; v.innerHTML = nav('opc0') + `<h3>Opciones de ${H(p.name)}</h3><p class="pHelp" style="margin:0 0 4px!important">Variantes que el cliente puede elegir en este plato.</p><div id="tvpc"></div>`; if(window.tvMount) window.tvMount(); return; }
+    if(N.sub==='opc' && !edit.isNew){ N.tv = {modo: 'opc', id: p.id}; v.innerHTML = nav('opc0') + `<h3>Opciones de ${H(p.name)}</h3><p class="pHelp" style="margin:0 0 4px!important">Variantes que se pueden elegir en este plato.</p><div id="tvpc"></div>`; if(window.tvMount) window.tvMount(); return; }
     v.innerHTML = `<button type="button" class="pBack" data-a="ecancel">← Volver</button><h3>${edit.isNew ? 'Agregar plato' : 'Cambiar plato'}, ${edit.day}</h3>
     ${edit.isNew && saved.length ? `<label for="eSaved">Elegir uno de sus platos guardados</label><select id="eSaved"><option value="">Escribir uno nuevo</option>${saved.map(s => `<option value="${H(s.id)}">${H(s.name)}</option>`).join('')}</select>` : ''}
     <label>Foto (obligatoria)</label><div class="pFoto">${p.img ? `<img src="${H(p.img)}" alt="">` : `<span class="pPh">${CAM}</span>`}<label class="pSec">${p.img ? 'Cambiar foto' : 'Subir foto'}<input type="file" id="eFile" accept="image/*" hidden></label></div>
@@ -1617,7 +1617,7 @@ window.renderMen = function(){ const x = X(), md = menuDays(), ended = md.length
     ${edit.isNew ? '<p class="pHelp">Las opciones se cargan después de guardar el plato.</p>' : row('opc', 'Opciones', 'pSolo')}${main('esave', 'Guardar')}${edit.isNew ? '' : '<button type="button" class="pDel" data-a="edel">Quitar del menú</button>'}`; return; }
   N.tv = null; const mons = [...new Set([x.week, thisMon(), nextMon(), plus(nextMon(),7), plus(nextMon(),14)])].sort();
   const its = S.products.filter(p => DAYS.includes(p.cat)), falta = its.filter(p => !p.img && p.visible!==false).length;
-  let h = `<p class="pHelp" style="margin-top:0!important">Lo que guardan aparece al instante en la página.</p>${ended ? '<div class="pCard"><p><b>Esta semana ya terminó.</b> Elijan abajo si repiten el menú o arman uno nuevo.</p></div>' : ''}
+  let h = `<p class="pHelp" style="margin-top:0!important">Lo que guardan aparece al instante en tu Link de pedidos.</p>${ended ? '<div class="pCard"><p><b>Esta semana ya terminó.</b> Elijan abajo si repiten el menú o arman uno nuevo.</p></div>' : ''}
   <label for="wkSel">Semana que empieza el lunes</label><select id="wkSel">${mons.map(m => `<option value="${m}"${m===x.week ? ' selected' : ''}>${pd(m).getDate()} de ${MES[pd(m).getMonth()]}</option>`).join('')}</select>
   <div id="tvpc" class="pList">${falta ? `<p class="pPend"><b style="color:var(--prj)">${falta===1 ? 'Les falta 1 foto.' : 'Les faltan ' + falta + ' fotos.'}</b></p>` : ''}` + DAYS.map((d,i) => `<p class="pDay pIn">${d} ${dm(plus(x.week,i))}</p>` + S.products.filter(p => p.cat===d).map(p => { const vis = p.visible!==false;
       return `<button type="button" class="pRowP vpr" data-a="eopen" data-id="${H(p.id)}">${p.img ? `<img src="${H(p.img)}" alt="">` : vis ? `<span class="vnf" role="img" aria-label="Falta foto">${CAM}</span>` : `<span class="vnx">${CAM}</span>`}<span class="pTx"><span class="vnm">${H(p.name)}</span>${p.desc ? `<span class="pPr">${H(p.desc)}</span>` : ''}<span class="pPr">${p.price ? money(p.price) : 'Sin precio'}</span></span><span class="pEd">Editar ›</span>${!p.img && vis ? '<span class="pWarn"><span class="vwn">Subí la foto</span></span>' : ''}</button>`; }).join('')
@@ -1627,7 +1627,7 @@ window.renderMen = function(){ const x = X(), md = menuDays(), ended = md.length
   v.innerHTML = h; };
 
 /* ---------- MÁS ---------- */
-const MENU = [['cobrar', 'Cuánto cobrar cada vianda'], ['entrega', 'Entrega y pedidos'], ['sena', 'Datos para que les paguen'], ['enc', 'Encabezado de la página'], ['visitas', 'Visitas'], ['instalar', 'Instalar como app'], ['clave', 'Cambiar la clave']];
+const MENU = [['cobrar', 'Cuánto cobrar cada vianda'], ['entrega', 'Entrega y pedidos'], ['sena', 'Datos para que les paguen'], ['enc', 'Encabezado de tu Link de pedidos'], ['visitas', 'Visitas'], ['instalar', 'Instalar como app'], ['clave', 'Cambiar la clave']];
 window.renderMas = function(){ const s = S.settings, x = X(), v = q('#pv-mas'), f = (k,l,ph,t) => `<label>${l}<input data-c="${k}" ${t==='t' ? '' : 'type="number" inputmode="decimal"'} value="${H(C[k])}" placeholder="${ph||''}" style="margin-top:6px"></label>`;
   const sb = N.sub, tit = sb ? `${nav('mas0')}<h3>${(MENU.find(m => m[0]===sb)||['',''])[1]}</h3>` : '';
   if(sb==='cobrar'){ v.innerHTML = tit + '<p class="pHelp" style="margin:0!important">Carguen lo que gastan en una tanda de un plato.</p>' + f('name','Plato','Por ejemplo: Lasaña de panqueques','t') + f('ing','Ingredientes de toda la tanda ($)') + f('n','Cuántas viandas salen') + f('pack','Bandeja de cada vianda ($)')
@@ -1636,7 +1636,7 @@ window.renderMas = function(){ const s = S.settings, x = X(), v = q('#pv-mas'), 
     calcOut(); return; }
   if(sb==='entrega'){ v.innerHTML = tit + `<label for="sPick">Dirección de retiro</label><input id="sPick" value="${H(x.pickup)}"><label for="sEnv">Hacen envíos</label><select id="sEnv"><option value="1"${x.envio ? ' selected' : ''}>Sí, se coordinan por WhatsApp</option><option value="0"${x.envio ? '' : ' selected'}>No, solo retiro</option></select>
       <label for="sCut">Se puede pedir hasta</label><select id="sCut">${[[1,'El día anterior'],[0,'El mismo día'],[2,'Dos días antes']].map(o => `<option value="${o[0]}"${Number(x.cutoff)===o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}</select>` + main('pnlent', 'Guardar'); return; }
-  if(sb==='sena'){ v.innerHTML = tit + `<p class="pHelp" style="margin:0!important">Si los cargan, el cliente los ve al terminar su pedido.</p><label for="sAlias">Alias</label><input id="sAlias" value="${H(s.alias)}"><label for="sAliasN">A nombre de</label><input id="sAliasN" value="${H(s.aliasName)}">` + main('pnlsena', 'Guardar'); return; }
+  if(sb==='sena'){ v.innerHTML = tit + `<p class="pHelp" style="margin:0!important">Si los cargan, se ven al terminar el pedido.</p><label for="sAlias">Alias</label><input id="sAlias" value="${H(s.alias)}"><label for="sAliasN">A nombre de</label><input id="sAliasN" value="${H(s.aliasName)}">` + main('pnlsena', 'Guardar'); return; }
   if(sb==='enc'){ N.tv = {modo: 'enc'}; v.innerHTML = tit + '<div id="tvpc"></div>'; if(window.tvMount) window.tvMount(); const h = q('#tvpc .venc h3'); if(h) h.remove(); return; }
   if(sb==='visitas'){ v.innerHTML = tit + '<div class="pB"></div>'; visitas(v.querySelector('.pB'), true); return; }
   if(sb==='instalar'){ v.innerHTML = tit + '<div class="pB"></div>'; instalar(v.querySelector('.pB')); return; }
@@ -1656,7 +1656,7 @@ q('#app').addEventListener('click', e => { const b = e.target.closest('[data-a]'
 try{ if(!q('#app').hidden) renderPanel(); }catch(e){ console.error('PNL', e); }
 marca();
 })();</script>
-<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu link para que te hagan pedidos';
+<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu Link de pedidos';
 const url = () => location.href.split('#')[0].split('?')[0];
 function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
   /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
@@ -1670,6 +1670,9 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
 </body>
+
+
+
 
 
 

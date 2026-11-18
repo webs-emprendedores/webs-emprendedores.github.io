@@ -435,7 +435,7 @@ body.pnl.tLogin #insL{display:none!important}   /* Instalar la app va en Más, t
 const DEMO = false;                 // muestra: nada sale de este celular
 const KEY = 'turnos_ld_v1';
 const RUBRO = 'odo';               // rubro: 'psi' (psicólogos y afines), 'odo' (odontólogos y afines) o 'est' (manicura y estética). Una sola plantilla para los dos: lo común no se desfasa
-const RW0 = {k1:'Primera consulta', k2:'Ya soy paciente', nom:'Nombre y apellido del paciente', mot:'Motivo de consulta, en pocas palabras', env:'Enviar mi consulta', consE:'Consulta enviada', nueva:'Consulta nueva', tipo:'Tipo de consulta', tags:'Especialidades (separalas con coma)'};
+const RW0 = {k1:'Primera consulta', k2:'Ya soy paciente', nom:'Nombre y apellido de quien se atiende', mot:'Motivo de consulta, en pocas palabras', env:'Enviar mi consulta', consE:'Consulta enviada', nueva:'Consulta nueva', tipo:'Tipo de consulta', tags:'Especialidades (separalas con coma)'};
 const RW = Object.assign({}, RW0, RUBRO==='odo' ? {ses:'consulta', Ses:'Consulta', dura:'El turno dura', q2ej:'Ej.: Estás con dolor? / Es una emergencia?', tagej:'Ej.: Ortodoncia, Endodoncia', svej:'Ej.: Limpieza'}
   : RUBRO==='est' ? {ses:'turno', Ses:'Turno', dura:'El turno dura', q2ej:'Ej.: Tenés esmaltado para retirar?', tagej:'Ej.: Semipermanente, Kapping, Perfilado de cejas', svej:'Ej.: Esmaltado semipermanente',
       k1:'Primera vez', k2:'Ya vine antes', nom:'Nombre y apellido', mot:'Algo que quieras contarme (si querés)', env:'Pedir este turno', consE:'Turno pedido', nueva:'Primera vez', tipo:'Primera vez o no', tags:'Lo que hacés (separalo con coma)'}
@@ -447,7 +447,7 @@ const EST = RUBRO==='est';
    si los tocara, "Ya vine antes" (data-v="paciente") dejaba de quedar marcado (error visto por Dardo 17/11 03:51) */
 function rwDom(el){ if(!EST || !el) return; const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n; while((n = w.nextNode())){ const v = rwT(n.nodeValue); if(v !== n.nodeValue) n.nodeValue = v; }
   el.querySelectorAll('[placeholder],[aria-label],[alt],[title]').forEach(e => ['placeholder','aria-label','alt','title'].forEach(a => { const v = e.getAttribute(a); if(v){ const x = rwT(v); if(x !== v) e.setAttribute(a, x); } })); }
-const rwT = s => !EST ? s : String(s).replace(/El motivo de consulta/g,'Lo que te cuenta').replace(/motivo de consulta/g,'comentario').replace(/tu consulta/g,'tu pedido').replace(/Primera consulta/g,'Primera vez').replace(/ del paciente/g,'').replace(/pacientes/g,'clientas').replace(/paciente/g,'clienta');
+const rwT = s => !EST ? s : String(s).replace(/El motivo de consulta/g,'Lo que te cuenta').replace(/motivo de consulta/g,'comentario').replace(/tu consulta/g,'tu pedido').replace(/Primera consulta/g,'Primera vez').replace(/pacientes/g,'clientes').replace(/paciente/g,'cliente');
 const DEFAULT = {
   ig:'', addr:'',   /* LINKS v1: los carga cada profesional en Ajustes > Tus datos; vacíos = no se muestra nada (nunca inventar) */
   name:'Daniela Paz', short:'Daniela', role:'Psicóloga', mono:'DP',
@@ -502,7 +502,7 @@ const mapsUrl = a => 'https://www.google.com/maps/search/?api=1&query=' + encode
 const IGI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>';
 const PINI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>';
 function linksTop(c){ const u = igOk(c.ig) ? igUser(c.ig) : '', a = String(c.addr||'').trim(); if(!u && !a) return '';
-  return `<div class="lk">${u ? `<a class="btn o sm ig" target="_blank" rel="noopener" href="https://www.instagram.com/${encodeURIComponent(u)}/">${IGI}<span>Instagram</span></a>` : ''}${a ? `<a class="map" target="_blank" rel="noopener" href="${esc(mapsUrl(a))}">${PINI}<span>${esc(a)}</span></a>` : ''}</div>`; }
+  return `<div class="lk">${u ? `<a class="btn o sm ig" target="_blank" rel="noopener" href="https://www.instagram.com/${encodeURIComponent(u)}/">${IGI}<span>Instagram</span></a>` : ''}${a ? `<a class="map" target="_blank" rel="noopener" href="${esc(mapsUrl(a))}">${PINI}<span>${esc(a)} ↗</span></a>` : ''}</div>`; }
 const waLink = (p,txt) => 'https://wa.me/'+waNum(p)+'?text='+encodeURIComponent(txt);
 const modeTxt = t => S.cfg.modes.length>1 && t.mode ? ` (${t.mode.toLowerCase()})` : '';
 
@@ -733,7 +733,7 @@ function viewServ(){ const L = A.sv || (A.sv = JSON.parse(JSON.stringify(S.cfg.s
     ${L.map((x,i) => `<div class="form svr"><label for="sN${i}" style="margin-top:0">Servicio</label><input id="sN${i}" class="sN" data-i="${i}" type="text" maxlength="40" value="${esc(x.n)}" placeholder="${esc(RW.svej)}">
       <div class="two"><div><label for="sP${i}">Precio ($)</label><input id="sP${i}" class="sP" data-i="${i}" type="tel" inputmode="numeric" value="${x.p||''}" placeholder="Vacío: Consultar"></div><div><label for="sD${i}">Cuánto dura</label><select id="sD${i}" class="sD" data-i="${i}">${dd(x.d)}</select></div></div>
       <button class="btn del sm gap" data-a="svdel" data-v="${i}" aria-label="Quitar ${esc(x.n||'este servicio')}">Quitar</button></div>`).join('')}
-    <div class="form"><button class="btn o w" data-a="svadd">Agregar un servicio</button><p class="hint" style="margin:8px 0 0">Si dejás el precio vacío, en tu página dice Consultar.</p><button class="btn w gap" data-a="svsave">Guardar servicios</button></div></section>`; }
+    <div class="form"><button class="btn o w" data-a="svadd">Agregar un servicio</button><p class="hint" style="margin:8px 0 0">Si dejás el precio vacío, en tu Link de turnos dice Consultar.</p><button class="btn w gap" data-a="svsave">Guardar servicios</button></div></section>`; }
 function viewSena(){ const s = S.cfg.sena, sv = servOn().length;
   return `<section class="sheet"><h2>Seña</h2><p class="sub">Si la activás, quien elige un horario ve cuánto es la seña y tu alias, y te manda el comprobante por WhatsApp. El turno queda pendiente de seña y ocupa el horario hasta que vos lo confirmás o lo liberás. La seña te la transfieren directo a vos: la app no cobra nada.</p>
     <div class="form"><label class="chk" style="margin-top:0"><input id="eOn" type="checkbox" ${s.on?'checked':''}> Pido seña para reservar</label>
@@ -745,7 +745,7 @@ function viewSena(){ const s = S.cfg.sena, sv = servOn().length;
     <button class="btn w gap" data-a="senasave">Guardar</button></div></section>`; }
 function readServ(){ const num = v => Number(String(v||'').replace(/\D/g,''))||0; (A.sv||[]).forEach((x,i) => { const q = k => document.querySelector('.'+k+'[data-i="'+i+'"]'); if(!q('sN')) return; x.n = q('sN').value; x.p = num(q('sP').value); x.d = Number(q('sD').value)||S.cfg.dur; }); }
 function viewHoras(){ const c = S.cfg, hs = []; for(let m=7*60;m<=22*60;m+=30) hs.push(hhmm(m));
-  return `<section class="sheet"><h2>Tus horarios</h2><p class="sub">${c.selfPick ? 'Los días y horas que marques son los que ve quien entra a tu página para elegir su turno.' : 'Con estos días y horas se arma tu agenda: son los horarios libres que te aparecen a vos cuando le das un turno a alguien. Quien entra a tu página no los ve.'}</p>
+  return `<section class="sheet"><h2>Tus horarios</h2><p class="sub">${c.selfPick ? 'Los días y horas que marques son los que ve quien entra a tu Link de turnos para elegir su turno.' : 'Con estos días y horas se arma tu agenda: son los horarios libres que te aparecen a vos cuando le das un turno a alguien. Quien entra a tu Link de turnos no los ve.'}</p>
     <p class="hint" style="margin:0 16px 10px">Si cortás al mediodía, tildá “A la tarde” en ese día y poné el segundo horario.</p>
     ${[1,2,3,4,5,6].map(d => { const x = c.days[d], sel = (cl,v,lab) => `<select class="${cl}" data-d="${d}" aria-label="${WD[d]} ${lab}">${hs.map(o => `<option ${o===v?'selected':''}>${o}</option>`).join('')}</select>`;
       return `<div class="hrow"><label class="chk"><input type="checkbox" data-d="${d}" class="hOn" ${x.on?'checked':''}> ${cap(WD[d])}</label>${sel('hF',x.from,'desde')}${sel('hT',x.to,'hasta')}</div><div class="hrow h2${x.on?'':' hid'}${x.on2?' on':''}" data-d="${d}"><label class="chk"><input type="checkbox" data-d="${d}" class="hOn2" ${x.on2?'checked':''}> A la tarde</label>${sel('hF2',x.from2||'15:00','tarde desde')}${sel('hT2',x.to2||'20:00','tarde hasta')}</div>`; }).join('')}
@@ -754,18 +754,18 @@ function viewHoras(){ const c = S.cfg, hs = []; for(let m=7*60;m<=22*60;m+=30) h
     <button class="btn w gap" data-a="hsave">Guardar horarios</button></div></section>`; }
 function viewMas(){ const c = S.cfg;
   return `<section class="sheet"><div class="form" style="border:0"><h3>Tus datos</h3>
-    ${EST?'':`<label for="mT">Título</label><input id="mT" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Lic.">`}<p class="mut" style="margin-top:6px">Tu nombre en la página: <b>${esc(c.name)}</b>. Para cambiarlo, escribinos.</p><label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
+    ${EST?'':`<label for="mT">Título</label><input id="mT" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Lic.">`}<p class="mut" style="margin-top:6px">Tu nombre en tu Link de turnos: <b>${esc(c.name)}</b>. Para cambiarlo, escribinos.</p><label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
     ${EST?'':`<label for="mL">Tu matrícula</label><input id="mL" type="text" value="${esc(c.lic)}" placeholder="Ej.: M.P. 1234">`}
     <label for="mW">Tu WhatsApp (ahí te llegan los pedidos de turno)</label><input id="mW" type="tel" value="${esc(waShow(c.wa))}" placeholder="Ej.: 341 555 1234"><p class="mut" style="margin-top:6px">Con la característica, sin 0 ni 15. Podés copiarlo como figura en WhatsApp: la app lo acomoda sola.</p>
     <label for="mD">Cómo te presentás (lo primero que se lee)</label><textarea id="mD" rows="2">${esc(c.lead)}</textarea><label for="mG">${RW.tags}</label><input id="mG" type="text" value="${esc((c.tags||[]).join(', '))}" placeholder="${RW.tagej}"><label for="mP">Dónde atendés</label><textarea id="mP" rows="2">${esc(c.place)}</textarea>${LKF(c)}<label for="mC">Aviso de cancelación</label><textarea id="mC" rows="2">${esc(c.cancel)}</textarea>
     <button class="btn w gap" data-a="msave">Guardar</button></div></section>`; }
 /* LINKS v1: campos Instagram y Dirección (también los usa LD) */
-const LKF = c => `<label for="mI">Tu Instagram</label><input id="mI" type="text" autocomplete="off" autocapitalize="none" value="${esc(c.ig ? '@'+igUser(c.ig) : '')}" placeholder="Ej.: @tunombre"><label for="mA">Dirección (se abre en Google Maps)</label><input id="mA" type="text" value="${esc(c.addr||'')}" placeholder="Ej.: San Martín 450, Rosario"><p class="mut" style="margin-top:6px">Si los dejás vacíos, no aparecen en tu página.</p>`;
+const LKF = c => `<label for="mI">Tu Instagram</label><input id="mI" type="text" autocomplete="off" autocapitalize="none" value="${esc(c.ig ? '@'+igUser(c.ig) : '')}" placeholder="Ej.: @tunombre"><label for="mA">Dirección (se abre en Google Maps)</label><input id="mA" type="text" value="${esc(c.addr||'')}" placeholder="Ej.: San Martín 450, Rosario"><p class="mut" style="margin-top:6px">Si los dejás vacíos, no aparecen en tu Link de turnos.</p>`;
 function lkRead(c){ const i = $('#mI') ? $('#mI').value.trim() : ''; if(i && !igOk(i)){ toast('Revisá tu Instagram: va tu usuario, por ejemplo @tunombre.'); $('#mI').focus(); return false; } c.ig = i ? igUser(i) : ''; c.addr = $('#mA') ? $('#mA').value.trim() : ''; return true; }
 function viewModo(){ const c = S.cfg, sp = A.mo ? A.mo.sp : c.selfPick, ca = A.mo ? A.mo.call : c.call, md = A.mo ? A.mo.modes : c.modes;
   return `<section class="sheet"><h2>Cómo das los turnos</h2><p class="sub">Tildá lo que va con tu forma de trabajar. Podés cambiarlo cuando quieras.</p>
     <div class="form"><h3>Quién elige el horario</h3>
-    <label class="chk"><input type="radio" name="moS" class="moS" value="1" ${sp?'checked':''}> Quien entra a tu página elige un horario libre de tu agenda</label>
+    <label class="chk"><input type="radio" name="moS" class="moS" value="1" ${sp?'checked':''}> Quien entra a tu Link de turnos elige un horario libre de tu agenda</label>
     <label class="chk"><input type="radio" name="moS" class="moS" value="0" ${sp?'':'checked'}> Te deja sus datos y vos le das el turno</label>
     ${sp?'':`<label class="chk" style="margin-left:28px"><input type="checkbox" id="moC" ${ca?'checked':''}> Antes de darle el turno, lo llamo por teléfono</label>`}</div>
     <div class="form"${EST?' hidden':''}><h3>Cómo atendés</h3>${['Presencial','Online'].map(m => `<label class="chk"><input type="checkbox" class="mM" value="${m}" ${md.includes(m)?'checked':''}> ${m==='Online'?'Online (videollamada)':m}</label>`).join('')}
@@ -780,8 +780,8 @@ function viewCobros(){ const c = S.cfg;
     ${c.os.map((o,i) => `<div class="orow os2"><div class="osl"><label class="chk"><input type="checkbox" class="oOn" data-i="${i}" ${o.on?'checked':''}> <b>${esc(o.n)}</b></label><button class="btn del sm" data-a="osdel" data-v="${i}" aria-label="Quitar ${esc(o.n)}">Quitar</button></div>
       <div class="osc"><label class="chk"><input type="checkbox" class="oCp" data-i="${i}" ${o.cop?'checked':''}> Copago</label><input class="oPl" data-i="${i}" type="tel" inputmode="numeric" placeholder="Monto" aria-label="Copago con ${esc(o.n)}" value="${o.plus||''}"></div></div>`).join('')}
     <div class="form"><label for="oNew" style="margin-top:0">Agregar una obra social</label><div class="two" style="grid-template-columns:1fr auto"><input id="oNew" type="text"><button class="btn o" data-a="osadd">Agregar</button></div>
-    <label class="chk" style="margin-top:18px"><input id="cOt" type="checkbox" ${c.osOther?'checked':''}> Que el paciente pueda escribir otra obra social que no está en mi lista</label>
-    <label class="chk"><input id="cS" type="checkbox" ${c.fees.show?'checked':''}> Mostrar los montos en mi página</label>
+    <label class="chk" style="margin-top:18px"><input id="cOt" type="checkbox" ${c.osOther?'checked':''}> Que quien pide turno pueda escribir otra obra social que no está en mi lista</label>
+    <label class="chk"><input id="cS" type="checkbox" ${c.fees.show?'checked':''}> Mostrar los montos en tu Link de turnos</label>
     <button class="btn w gap" data-a="csave">Guardar</button></div></section>`; }
 function readCobros(){ const c = S.cfg, num = v => Number(String(v||'').replace(/\D/g,''))||0; c.fees.part = num($('#cP').value); c.fees.partOn = $('#cPo').checked; c.fees.show = $('#cS').checked; c.osOther = $('#cOt').checked;
   document.querySelectorAll('.oOn').forEach(i => { const o = c.os[i.dataset.i]; o.on = i.checked; o.cop = document.querySelector('.oCp[data-i="'+i.dataset.i+'"]').checked; o.plus = o.cop ? num(document.querySelector('.oPl[data-i="'+i.dataset.i+'"]').value) : 0; }); }
@@ -790,7 +790,7 @@ function calLink(t, date){ const s = day(date), m = mins(t.time), f = (mm) => da
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1), isAndroid = /Android/i.test(navigator.userAgent);
 function icsText(t, date){ const m = mins(t.time), f = mm => date.replace(/-/g,'')+'T'+pad(Math.floor(mm/60))+pad(mm%60)+'00', n = new Date(), st = n.getUTCFullYear()+pad(n.getUTCMonth()+1)+pad(n.getUTCDate())+'T'+pad(n.getUTCHours())+pad(n.getUTCMinutes())+pad(n.getUTCSeconds())+'Z';
   return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Turnos//ES','BEGIN:VEVENT','UID:'+t.id+'-'+date+'@turnos','DTSTAMP:'+st,'DTSTART:'+f(m),'DTEND:'+f(m+durOf(t)),'SUMMARY:Turno '+t.name].concat(t.weekly?['RRULE:FREQ=WEEKLY']:[], t.phone?['DESCRIPTION:WhatsApp '+t.phone]:[], ['END:VEVENT','END:VCALENDAR']).join('\r\n'); }
-function calBtn(tu, date){ if(isIOS) return ''; // iPhone: Safari no abre el Calendario desde un archivo armado en la página (probado 13/11); necesita un .ics servido por un servidor
+function calBtn(tu, date){ if(isIOS) return ''; // iPhone: Safari no abre el Calendario desde un archivo armado en tu Link de turnos (probado 13/11); necesita un .ics servido por un servidor
   if(isAndroid) return `<button class="btn o" data-a="ics" data-id="${tu.id}">Guardarlo en mi calendario</button>`;
   return `<a class="btn o" target="_blank" rel="noopener" href="${esc(calLink(tu, date))}">Guardarlo en Google Calendar</a>`; }
 function showMsg(t, title, text){ text = rwT(text); const full = text + '\n' + S.cfg.name + ' – LD Odontología'; A.msg = {title, text:full, queued:!!t.phone}; if(t.phone) queueAviso(t, title, full); }
@@ -808,7 +808,7 @@ document.addEventListener('click', e => {
   if(a==='psv'){ P.sv = Number(v); P.date = null; P.time = null; renderSite(); }
   if(a==='svadd'){ readServ(); A.sv.push({n:'', p:0, d:S.cfg.dur}); renderPanel(); const n = document.querySelectorAll('.sN'); if(n.length) n[n.length-1].focus(); }
   if(a==='svdel'){ readServ(); A.sv.splice(Number(v),1); renderPanel(); }
-  if(a==='svsave'){ readServ(); const L = A.sv.filter(x => x.n.trim()); c.serv = L.map(x => ({n:x.n.trim(), p:x.p, d:x.d})); A.sv = null; P.sv = null; save(); renderPanel(); renderSite(); toast(L.length ? 'Servicios guardados.' : 'Sin servicios: tu página queda como antes.'); }
+  if(a==='svsave'){ readServ(); const L = A.sv.filter(x => x.n.trim()); c.serv = L.map(x => ({n:x.n.trim(), p:x.p, d:x.d})); A.sv = null; P.sv = null; save(); renderPanel(); renderSite(); toast(L.length ? 'Servicios guardados.' : 'Sin servicios: tu Link de turnos queda como antes.'); }
   if(a==='send'){ const f = P.f, nuevo = P.kind==='nuevo', name = (f.name||'').trim(), phone = (f.phone||'').trim();
     if(name.length<3){ toast('Falta tu nombre.'); $('#fN').focus(); return; }
     if(nuevo && !EST && !(Number(f.age)>0 && Number(f.age)<120)){ toast('Poné tu edad.'); $('#fE').focus(); return; }
@@ -1075,8 +1075,8 @@ function renderPanel(){ const el = $('#panel'); if(OWN>=0 && CUR===null){ CUR = 
 const tagRow = x => `<div class="orow tg"><span class="tgi">${esc(x)}</span><button class="btn del sm" data-ld="tagdel">Quitar</button></div>`;
 function viewMas(){ const c = S.cfg;
   return `<section class="sheet"><div class="form" style="border:0"><h3>Tus datos</h3>
-    <label style="margin-top:12px">Tu foto</label><div class="fot"><span id="mFv">${face({photo:c.photo, mono:c.mono})}</span><div><label class="btn o" for="mF">Cambiar mi foto</label><input id="mF" type="file" accept="image/*" hidden><p class="mut gap">Es la que ven tus pacientes en la página.</p></div></div>
-    <label for="mTi">Título</label><input id="mTi" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Od."><p class="mut" style="margin-top:6px">Va antes de tu nombre en la página.</p>
+    <label style="margin-top:12px">Tu foto</label><div class="fot"><span id="mFv">${face({photo:c.photo, mono:c.mono})}</span><div><label class="btn o" for="mF">Cambiar mi foto</label><input id="mF" type="file" accept="image/*" hidden><p class="mut gap">Es la que ven tus pacientes en tu Link de turnos.</p></div></div>
+    <label for="mTi">Título</label><input id="mTi" type="text" maxlength="12" value="${esc(c.title||'')}" placeholder="Ej.: Dra. / Od."><p class="mut" style="margin-top:6px">Va antes de tu nombre en tu Link de turnos.</p>
     <label for="mR">Qué hacés</label><input id="mR" type="text" value="${esc(c.role)}">
     <label for="mL">Tu matrícula</label><input id="mL" type="text" value="${esc(c.lic)}" placeholder="Ej.: M.P. 1234">
     <label>Tus especialidades</label><div id="mT">${(c.tags||[]).map(tagRow).join('')}</div>
@@ -1109,7 +1109,7 @@ document.addEventListener('click', async e => { const b = e.target.closest('[dat
 // ----- Avisos: los mensajes a pacientes salen siempre desde el celular del consultorio -----
 // en compu: directo a WhatsApp Web y siempre en la misma pestaña (sin rel=noopener, que obligaría a abrir una nueva cada vez)
 const PC = !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-// la clave de Avisos no va en la página: se pide una vez y queda guardada en ese aparato
+// la clave de Avisos no va en tu Link de turnos: se pide una vez y queda guardada en ese aparato
 const AVK = 'ld_avisos_clave'; const avGet = () => { try{ return localStorage.getItem(AVK)||''; }catch(e){ return ''; } }; const avSet = v => { try{ v ? localStorage.setItem(AVK, v) : localStorage.removeItem(AVK); }catch(e){} };
 const AV = {c:'ld-avisos', pin:avGet()}; let AVL = null, AVO = {};
 const avApi = body => fetch(API, {method:'POST', body:JSON.stringify(Object.assign({c:AV.c}, body))}).then(r => r.json());
@@ -1129,7 +1129,7 @@ function planRem(t, d){ if(S.cfg.ownWa || !t.phone || !t.time) return; NEXTFILL 
   queueAviso(t, REM, `Hola ${fn}! Te recuerdo tu turno de ${am?'mañana':'hoy'}, ${shortDate(d)}, a las ${t.time}${modeTxt(t)}. Te espero.` + '\n' + S.cfg.name + ' – LD Odontología', due + '|' + d + ' ' + padT(t.time)); }
 function anulRem(t, d){ if(S.cfg.ownWa || !t.phone) return; queueAviso(t, ANUL, '', d ? d + ' ' + padT(t.time) : 'ALL'); }
 if(AQ.length) aqFlush();
-async function renderAvisos(load){ const el = $('#panel'); /* el logo animado sigue donde iba aunque la lista se vuelva a dibujar */ const head = LOGO.replace('class="lg"', 'class="lg sm" style="--ld:-' + ((performance.now()/1000)%12).toFixed(2) + 's"') + `<div class="ptop"><h1>Avisos para mandar</h1></div>`;
+async function renderAvisos(load){ const el = $('#panel'); /* el logo animado sigue donde iba aunque la lista se vuelva a dibujar */ const head = LOGO.replace('class="lg"', 'class="lg sm" style="--ld:-' + ((performance.now()/1000)%12).toFixed(2) + 's"') + `<div class="ptop"><h1>Panel de Avisos</h1></div>`;
   if(!AV.pin){ AVL = null; el.innerHTML = head + `<p class="note">Instalá esta app en el celular que manda los WhatsApp.</p><section class="sheet"><div class="form" style="border:0"><label for="avPin" style="margin-top:0">Clave del consultorio</label><input id="avPin" type="tel" inputmode="numeric" maxlength="8" autocomplete="off"><button class="btn w gap" data-ld="avpin">Entrar</button><p class="mut gap">Se pide una sola vez en este aparato.</p></div></section>`; return; }
   if(load || !AVL){ if(!AVL) el.innerHTML = head + '<p class="mut">Cargando…</p>'; try{ const d = await avApi({a:'all', pin:AV.pin}); if(!d.ok && /Clave/.test(d.msg||'')){ AV.pin = ''; avSet(''); toast('Clave incorrecta.'); return renderAvisos(false); } if(!d.ok && d.msg){ toast(d.msg); } if(d.ok){ avSet(AV.pin); AVL = d.orders; /* si después vino una cancelación o un rechazo, los avisos anteriores a esa persona ya no van */ const old = AVL.filter(o => AVL.some(n => n!==o && n.phone===o.phone && n.name===o.name && n.product===o.product && n.id>o.id && n.delivery.indexOf('Aviso para ')===0)).map(o => o.id); if(old.length){ AVL = AVL.filter(o => !old.includes(o.id)); avApi({a:'delOrders', pin:AV.pin, ids:old}).catch(()=>{}); }
       /* recordatorios: se borran si el turno se canceló (marca __anular) o si ya pasó la hora del turno */ const now = nowStamp(), mk = AVL.filter(o => o.delivery===ANUL);
@@ -1183,7 +1183,7 @@ const GRUPO = s => s==='day' ? 'day' : s==='sv' ? 'sv' : ['set','ho','co','ma','
 const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 /* AVISOS DE GUARDADO (CONTENIDO 17/11 17:10): uno solo, "Guardado ✓", en una línea, arriba de la barra y sin tapar el botón que se tocó */
 (function(){ let last = null; const pick = e => { const b = e.target && e.target.closest && e.target.closest('button,a,label'); if(b) last = b; }; document.addEventListener('pointerdown', pick, true); document.addEventListener('click', pick, true);
-  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu página queda como antes/i;
+  const OK = /(^|\s)guardad[oa]s?\b|[✔✓]\s*$|^Sin servicios: tu Link de turnos queda como antes/i;
   window.pnlNorm = m => OK.test(String(m == null ? '' : m)) ? 'Guardado ✓' : m;
   window.pnlPlace = () => { const t = document.getElementById('toast'); if(t) t.classList.toggle('pOk', t.textContent==='Guardado ✓'); };   /* siempre abajo, centrado sobre la barra de pestañas (CONTENIDO 18:00) */
   window.pnlHide = () => { const t = document.getElementById('toast'); if(t) t.classList.remove('show', 'on'); };   /* todo aviso se borra al cambiar de pantalla o de pestaña */
@@ -1212,7 +1212,7 @@ function deco(){ const el = q('#panel'), c = S.cfg || {}; if(!el || el.hidden) r
 D.addEventListener('click', e => { const b = e.target.closest('#panel [data-a="pnlins"]'); if(!b) return; const l = D.getElementById('insL'); if(l) l.click(); });
 try{ if(!q('#panel').hidden && location.hash!=='#avisos' && !q('#panel .pnlTop')) deco(); }catch(e){}   /* sin volver a dibujar: en LD #avisos es otra pantalla (salió de un error: se pisaba con la elección de profesional) */
 })();</script>
-<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu link para que te pidan turno';
+<script>/*LNK v1*/ (function(){ const D = document, TXT = 'Tu Link de turnos';
 const url = () => location.href.split('#')[0].split('?')[0];
 function put(){ const P = D.getElementById('panel'); if(!P || P.hidden) return;
   /* Más: en pedidos es #pv-mas con su menú; en turnos, la pantalla de Ajustes con su menú */
@@ -1226,6 +1226,7 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
   try{ await navigator.clipboard.writeText(url()); say('Link copiado'); }catch(x){ const p = b.parentNode.querySelector('[data-lnk-url]'), r = D.createRange(); r.selectNodeContents(p); getSelection().removeAllRanges(); getSelection().addRange(r); say('Mantené apretado el link para copiarlo'); } });
 put(); })();</script>
 </body>
+
 
 
 
