@@ -1368,7 +1368,7 @@ function pagina(){ const el = q('#site'); if(!el || el.hidden || !CPUB) return;
     const a = el.querySelector('.addr'); if(a) a.remove(); }
   else { const top = el.querySelector('.top p'), u = igDe(PROS[CUR].c); if(top && u && !el.querySelector('.top .cIgP')) top.insertAdjacentHTML('afterend', igA(u, 'cIgP')); }
   if(!el.querySelector('.cFoot')) el.insertAdjacentHTML('beforeend', pie()); }
-fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(r => r.json()).then(r => { if(r.ok){ CPUB = r; if(!q('#site').hidden) renderSite(); } }).catch(() => {});
+fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(r => r.json()).then(r => { if(r.ok){ CPUB = r; window.__CPUB = r; if(!q('#site').hidden) renderSite(); } }).catch(() => {});
 /* ===== PANEL ===== */
 let FALLA = 0;   /* sin servidor (plan de contingencia): no reintentar en cada dibujo, recién a los 30 s */
 async function pull(){ if(BUSY || !A.ok || CUR===null || Date.now() - FALLA < 30000) return; BUSY = true; let bien = false; try{ const r = await api({a:'consInfo', pin:A.pin}); if(r.ok){ CI = r; CIK = PROS[CUR].c + '|' + A.pin; bien = true; } }catch(e){} BUSY = false; if(!bien){ FALLA = Date.now(); return; } FALLA = 0; renderPanel(); }
@@ -1417,7 +1417,7 @@ D.addEventListener('click', async e => { const b = e.target.closest('#panel [dat
   if(a==='lista' || a==='voto' || a==='nueva'){ go(a); return; }
   if(a==='sacar'){ CX = v; go('sacar'); return; }
   if(a==='votar'){ const r = await call({a:'consVote', voto:v}); if(r){ CI = r; toast(r.admin ? pri(nom(r.admin)) + ' administra el consultorio' : 'Voto guardado'); renderPanel(); } return; }
-  if(a==='datos'){ const r = await call({a:'consDatos', direccion:q('#cDir').value, instagram:q('#cIg').value, donde:q('#cDon').value}, 'Guardado'); if(r){ CI = r; CPUB = null; fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(x => x.json()).then(x => { if(x.ok) CPUB = x; }).catch(() => {}); renderPanel(); } return; }
+  if(a==='datos'){ const r = await call({a:'consDatos', direccion:q('#cDir').value, instagram:q('#cIg').value, donde:q('#cDon').value}, 'Guardado'); if(r){ CI = r; CPUB = null; fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(x => x.json()).then(x => { if(x.ok){ CPUB = x; window.__CPUB = x; } }).catch(() => {}); renderPanel(); } return; }
   if(a==='sacarok'){ const r = await call({a:'consDel', cliente:CX}, 'Listo, ya no está en el consultorio'); if(r){ CI = null; CS = 'lista'; renderPanel(); } return; }
   if(a==='alta'){ const n = q('#cNom').value.trim(); if(n.length < 3){ toast('Escribí el nombre y apellido.'); q('#cNom').focus(); return; } const r = await call({a:'consAdd', nombre:n}); if(r){ CX = r; CI = null; CS = 'listo'; renderPanel(); scrollTo(0,0); } return; }
   if(a==='copiar'){ try{ await navigator.clipboard.writeText(CX.link); toast('Link copiado'); }catch(x){ const r = D.createRange(); r.selectNodeContents(q('#cLink')); getSelection().removeAllRanges(); getSelection().addRange(r); toast('Mantené apretado el link para copiarlo'); } return; }
@@ -1428,7 +1428,7 @@ D.addEventListener('click', async e => { const b = e.target.closest('#panel [dat
   if(a==='fin'){ const r = await call({a:'consFinMuestra'}); if(r){ CI = r; A.scr = 'home'; CS = ''; renderPanel(); scrollTo(0,0); } return; }
 });
 /* Tus datos: al Guardar, el Instagram personal va también al consultorio (consIg) */
-D.addEventListener('click', e => { if(!e.target.closest('#panel [data-a="msave"]') || !CI || !q('#panel #mI')) return; const v = q('#panel #mI').value; api({a:'consIg', pin:A.pin, instagram:v}).then(r => { if(r.ok){ CI = r; CPUB = null; fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(x => x.json()).then(x => { if(x.ok) CPUB = x; }).catch(() => {}); } }).catch(() => {}); }, true);
+D.addEventListener('click', e => { if(!e.target.closest('#panel [data-a="msave"]') || !CI || !q('#panel #mI')) return; const v = q('#panel #mI').value; api({a:'consIg', pin:A.pin, instagram:v}).then(r => { if(r.ok){ CI = r; CPUB = null; fetch(API, {method:'POST', body:JSON.stringify({a:'consPub', c:PROS0[0].c})}).then(x => x.json()).then(x => { if(x.ok){ CPUB = x; window.__CPUB = x; } }).catch(() => {}); } }).catch(() => {}); }, true);
 D.addEventListener('click', e => { if(e.target.closest('#panel .pT button, #panel [data-a="go"], #panel [data-a="out"], #panel .pSalir')) CS = ''; }, true);
 addEventListener('hashchange', () => { CI = null; CS = ''; });
 })();
@@ -1529,7 +1529,26 @@ function bloque(){ const d = q('#site .done'), r = pedido(); if(!d || !r || d.qu
     : (!puede() || Notification.permission==='denied') ? `<p class="mut">Este navegador no deja recibir avisos. ${quien} te responde por WhatsApp.</p>`
     : `<button type="button" class="btn o w" data-a="ntf">Avisame cuando me den el turno</button><p class="hint" style="margin:8px 0 0">Te llega un aviso a este celular. El WhatsApp sigue igual.</p>`;
   const ag = d.querySelector('[data-a="again"]'); d.insertBefore(box, ag || null); }
-const R0 = window.renderSite; window.renderSite = function(){ const r = R0.apply(this, arguments); try{ bloque(); }catch(e){} return r; };
+
+/* TOCAR LA NOTIFICACIÓN ABRE SU TURNO (regla Dardo 17/11 23:34): el aviso trae en el link #aviso=ok|no&d=AAAA-MM-DD&h=HH:MM&p=profesional
+   y al abrirlo se muestra ese turno. Confirmado: día, hora y profesional + Agregar al calendario + Cómo llegar (solo con dirección cargada).
+   No se pudo: "No pudieron tomar tu turno" + Pedir otro turno. */
+const avLink = (tipo, d, h, p) => location.href.split('#')[0] + '#aviso=' + tipo + (d ? '&d=' + d : '') + (h ? '&h=' + encodeURIComponent(h) : '') + (p ? '&p=' + encodeURIComponent(p) : '');
+function avDatos(){ const m = location.hash.match(/^#aviso=(ok|no)(.*)$/); if(!m) return null; const q = new URLSearchParams(m[2].replace(/^&/, '')); return {tipo:m[1], d:q.get('d') || '', h:q.get('h') || '', p:q.get('p') || ''}; }
+function avDir(){ try{ if(typeof CPUB!=='undefined' && CPUB && CPUB.datos) return CPUB.datos.direccion || ''; }catch(e){} try{ if(window.__CPUB && window.__CPUB.datos) return window.__CPUB.datos.direccion || ''; }catch(e){} try{ return (S && S.cfg && S.cfg.addr) || ''; }catch(e){ return ''; } }
+function avIcs(a){ const p2 = n => String(n).padStart(2, '0'), [hh, mm] = a.h.split(':').map(Number), dur = (typeof S!=='undefined' && S && S.cfg && S.cfg.dur) || 30, ini = hh * 60 + mm, fin = ini + dur, f = x => a.d.replace(/-/g, '') + 'T' + p2(Math.floor(x / 60)) + p2(x % 60) + '00', dir = avDir();
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Turnos//ES', 'BEGIN:VEVENT', 'UID:' + Date.now() + '@turnos', 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, ''), 'DTSTART:' + f(ini), 'DTEND:' + f(fin), 'SUMMARY:Turno con ' + a.p, dir ? 'LOCATION:' + dir.replace(/[,;]/g, ' ') : '', 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n'); }
+function avPantalla(){ const a = avDatos(), el = q('#site'); if(!a || !el) return false;
+  let h;
+  if(a.tipo === 'ok'){ const dir = avDir(); h = `<section class="sheet avT"><div class="done"><h2>Tu turno está confirmado</h2><p class="gap"><b>${a.d ? esc(cap(longDate(a.d))) : ''}${a.h ? ' a las ' + esc(a.h) : ''}</b>${a.p ? ' con ' + esc(a.p) : ''}.</p>
+      <button type="button" class="btn w gap" data-av="cal">Agregar al calendario</button>${dir ? `<a class="btn o w gap" target="_blank" rel="noopener" href="${esc(mapsUrl(dir))}">Cómo llegar ↗</a>` : ''}<button type="button" class="btn o w gap" data-av="ini">Volver al inicio</button></div></section>`; }
+  else h = `<section class="sheet avT"><div class="done"><h2>No pudieron tomar tu turno</h2><p class="gap">${a.d && a.h ? 'El turno del ' + esc(longDate(a.d)) + ' a las ' + esc(a.h) + ' no está disponible. ' : ''}Elegí otro día y horario.</p><button type="button" class="btn w gap" data-av="otro">Pedir otro turno</button></div></section>`;
+  el.innerHTML = h; return true; }
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-av]'); if(!b) return; const a = avDatos();
+  if(b.dataset.av === 'cal' && a){ const u = URL.createObjectURL(new Blob([avIcs(a)], {type: 'text/calendar'})), l = D.createElement('a'); l.href = u; l.download = 'turno.ics'; D.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); return; }
+  history.replaceState(null, '', location.pathname + location.search); renderSite(); scrollTo(0, 0); });
+addEventListener('hashchange', () => { if(avDatos()) renderSite(); });
+const R0 = window.renderSite; window.renderSite = function(){ if(avDatos() && avPantalla()) return; const r = R0.apply(this, arguments); try{ bloque(); }catch(e){} return r; };
 window.ntfGuardar = async sub => { const r = pedido(); const x = await api({a:'ntfSub', name:r.name, phone:r.phone, sub}); if(!x.ok) throw 0; r.ntf = true; renderSite(); };
 D.addEventListener('click', async e => { const b = e.target.closest && e.target.closest('[data-a="ntf"]'); if(!b || !pedido()) return; b.disabled = true;
   try{ const perm = Notification.requestPermission();   /* primero el permiso, dentro del toque (iPhone lo exige) */
@@ -1538,12 +1557,12 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
     await ntfGuardar(JSON.parse(JSON.stringify(await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: u8(NTF.key)}))));
   }catch(err){ toast('No se pudo activar el aviso. Te responden por WhatsApp.'); b.disabled = false; } });
 /* panel: al darle turno (se guarda) o al decir que no, el servidor entrega la suscripción una sola vez y sale el aviso (el WhatsApp sigue igual) */
-async function avisar(id, tipo, cuando){ try{ const x = await api({a:'ntfTake', pin:A.pin, id}); if(!x.ok || !x.sub) return; if(typeof MUESTRA!=='undefined' && MUESTRA){ try{ toast('Aviso en camino: salí a la pantalla de inicio y en unos segundos llega.'); }catch(err){} } await fetch(NTF.api, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sub:x.sub, tipo, quien:S.cfg.short, cuando, url:location.href.split('#')[0], espera: (typeof MUESTRA!=='undefined' && MUESTRA) ? 8 : 0})}); }catch(err){} }
+async function avisar(id, tipo, cuando, d, h){ try{ const x = await api({a:'ntfTake', pin:A.pin, id}); if(!x.ok || !x.sub) return; if(typeof MUESTRA!=='undefined' && MUESTRA){ try{ toast('Aviso en camino: salí a la pantalla de inicio y en unos segundos llega.'); }catch(err){} } await fetch(NTF.api, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sub:x.sub, tipo, quien:S.cfg.short, cuando, url:avLink(tipo, d, h, S.cfg.name), espera: (typeof MUESTRA!=='undefined' && MUESTRA) ? 8 : 0})}); }catch(err){} }
 D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('#panel [data-a="reqrej"], #panel [data-a="wsave"]'); if(!b || typeof A==='undefined' || !A.ok) return;
-  if(b.dataset.a==='reqrej'){ avisar(b.dataset.id, 'no', ''); return; }
+  if(b.dataset.a==='reqrej'){ avisar(b.dataset.id, 'no', '', '', ''); return; }
   const w = A.w; if(!w || !w.req || !w.date || !w.time) return; const id = w.req, cuando = cap(longDate(w.date)) + ', ' + w.time;
-  setTimeout(() => { if(!S.reqs.some(x => x.id===id)) avisar(id, 'ok', cuando); }, 0); }, true);   /* solo si el turno quedó guardado */
-try{ bloque(); }catch(e){}
+  const wd = w.date, wt = w.time; setTimeout(() => { if(!S.reqs.some(x => x.id===id)) avisar(id, 'ok', cuando, wd, wt); }, 0); }, true);   /* solo si el turno quedó guardado */
+try{ if(avDatos()) renderSite(); else bloque(); }catch(e){}
 })();</script>
 </body>
 
