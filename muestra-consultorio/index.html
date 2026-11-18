@@ -1459,10 +1459,13 @@ const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && n
 const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
 const puede = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
 const u8 = s => { const b = atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)); return Uint8Array.from(b, c => c.charCodeAt(0)); };
+/* DEMO EN IPHONE (17/11 22:42): mismo arreglo que en muestra-odonto (panel en la misma app y aviso con espera) */
+const PRUEBA = (h, quien) => `<p class="hint" style="margin:12px 0 6px">Para probar el aviso en esta muestra: abrí ${quien} desde acá (clave 1234), dale turno y salí enseguida a la pantalla de inicio. El aviso llega en unos segundos.</p><button type="button" class="btn w" data-ntfp="${h}">Probar ahora: abrir ${quien}</button>`;
+D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-ntfp]'); if(b){ location.hash = b.dataset.ntfp; scrollTo(0,0); } });
 const pedido = () => (typeof P!=='undefined' && P.last && P.last.req && S) ? P.last : null;
 function bloque(){ const d = q('#site .done'), r = pedido(); if(!d || !r || d.querySelector('.ntf')) return; const quien = esc(S.cfg.short);
   const box = D.createElement('div'); box.className = 'ntf';
-  box.innerHTML = r.ntf ? `<p class="ntfok">Listo: te avisamos en este celular cuando ${quien} te responda.</p>`
+  box.innerHTML = r.ntf ? `<p class="ntfok">Listo: te avisamos en este celular cuando ${quien} te responda.</p>` + (typeof MUESTRA!=='undefined' && MUESTRA ? PRUEBA('#' + PROS[CUR].slug, 'el panel de ' + esc(S.cfg.short)) : '')
     : INAPP ? `<p class="mut">Para recibir un aviso cuando ${quien} te responda, abrí esta página en Chrome o Safari.</p>`
     : IOS && !SA() ? `<p class="mut">En iPhone, el aviso solo llega si agregás esta página a tu pantalla de inicio y la abrís desde el ícono.</p>`
     : (!puede() || Notification.permission==='denied') ? `<p class="mut">Este navegador no deja recibir avisos. ${quien} te responde por WhatsApp.</p>`
@@ -1477,7 +1480,7 @@ D.addEventListener('click', async e => { const b = e.target.closest && e.target.
     await ntfGuardar(JSON.parse(JSON.stringify(await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: u8(NTF.key)}))));
   }catch(err){ toast('No se pudo activar el aviso. Te responden por WhatsApp.'); b.disabled = false; } });
 /* panel: al darle turno (se guarda) o al decir que no, el servidor entrega la suscripción una sola vez y sale el aviso (el WhatsApp sigue igual) */
-async function avisar(id, tipo, cuando){ try{ const x = await api({a:'ntfTake', pin:A.pin, id}); if(!x.ok || !x.sub) return; await fetch(NTF.api, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sub:x.sub, tipo, quien:S.cfg.short, cuando, url:location.href.split('#')[0]})}); }catch(err){} }
+async function avisar(id, tipo, cuando){ try{ const x = await api({a:'ntfTake', pin:A.pin, id}); if(!x.ok || !x.sub) return; if(typeof MUESTRA!=='undefined' && MUESTRA){ try{ toast('Aviso en camino: salí a la pantalla de inicio y en unos segundos llega.'); }catch(err){} } await fetch(NTF.api, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({sub:x.sub, tipo, quien:S.cfg.short, cuando, url:location.href.split('#')[0], espera: (typeof MUESTRA!=='undefined' && MUESTRA) ? 8 : 0})}); }catch(err){} }
 D.addEventListener('click', e => { const b = e.target.closest && e.target.closest('#panel [data-a="reqrej"], #panel [data-a="wsave"]'); if(!b || typeof A==='undefined' || !A.ok) return;
   if(b.dataset.a==='reqrej'){ avisar(b.dataset.id, 'no', ''); return; }
   const w = A.w; if(!w || !w.req || !w.date || !w.time) return; const id = w.req, cuando = cap(longDate(w.date)) + ', ' + w.time;
