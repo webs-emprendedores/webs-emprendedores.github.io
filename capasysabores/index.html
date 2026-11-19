@@ -49,6 +49,7 @@
 
 
 
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Capas y Sabores · Tortas y postres en San Luis</title>
@@ -1111,6 +1112,8 @@ body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing
 /*INS v1*/ (function(){ let DP = null; const el = id => document.getElementById(id), ua = navigator.userAgent || '';
   const IOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1), AND = /Android/.test(ua);
   const INAPP = /Instagram|FBAN|FBAV|FB_IAB|Messenger|TikTok|musical_ly/i.test(ua), OTRO = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  const XN = /Xiaomi|Redmi|POCO|MIUI|HyperOS|\bMi [0-9A-Z]/i, XC = /^M?2\d{3}[0-9A-Z]{2,}[A-Z]{1,3}$/; let XI = AND && XN.test(ua);   /* XIAOMI (18/11): Chrome esconde el modelo en el user agent; se pide aparte */
+  try{ if(AND && navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) navigator.userAgentData.getHighEntropyValues(['model']).then(v => { const m = (v && v.model) || ''; if(XN.test(m) || XC.test(m)) XI = true; }, () => {}); }catch(e){}
   const SA = () => !!(window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
   const HK = 'ins_h_' + location.pathname, vis = e => !!e && !e.hidden && e.getClientRects().length > 0, panel = () => [el('app'), el('panel')].find(vis), inPanel = () => !!panel();   /* también en la pantalla de la clave */
   const say = m => { try{ toast(m); }catch(e){ alert(m); } };
@@ -1123,6 +1126,7 @@ body.pnl #panel .f label,body.pnl #panel .lbl{text-transform:none;letter-spacing
     if(IOS && OTRO) return ['Instalarla en tu iPhone', ['', 'Tocá <b>Compartir</b> ' + SH + ', al lado de la dirección.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Si no te aparece esa opción, abrí este link en Safari y repetí los pasos.'], true];
     if(IOS) return ['Instalarla en tu iPhone', ['', 'Tocá el botón de menú que está junto a la dirección (las tres rayitas o los tres puntitos).', 'Tocá <b>Compartir</b> ' + SH + '.', 'Tocá <b>Ver más</b> y después <b>Agregar a Inicio</b> ' + MA + '.', 'Tocá <b>Agregar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
     const AND1 = 'Tocá el menú de Chrome (los tres puntitos) y elegí <b>Agregar a la pantalla principal</b>. Puede estar más abajo en el menú: deslizá hasta verlo.';   /* nombre de la opción en Chrome Android en español (ayuda de Google; Dardo 18/11) */
+    if(AND && XI) return ['Instalarla en tu celular', ['En los Xiaomi, Redmi y POCO primero hay que darle a Chrome un permiso.', 'Abrí <b>Ajustes</b> &gt; <b>Aplicaciones</b> &gt; <b>Administrar aplicaciones</b> &gt; <b>Chrome</b> &gt; <b>Otros permisos</b> y activá <b>Accesos directos en pantalla de inicio</b>. Después volvé acá.', AND1, 'Tocá <b>Instalar</b>. Te queda el ícono junto a tus otras aplicaciones.', 'Si igual no aparece: en el menú de Chrome tocá la estrella para guardar este link en Favoritos. Después mantené apretado un lugar vacío de la pantalla de inicio, tocá <b>Widgets</b>, elegí <b>Chrome</b> y poné <b>Favoritos</b>. Desde ahí la abrís con un toque.'], false];   /* XIAOMI: permiso de MIUI/HyperOS y, si no, widget de Favoritos (Dardo 18/11) */
     if(AND) return ['Instalarla en tu celular', ['', AND1, 'Tocá <b>Instalar</b>. Te queda el ícono junto a tus otras aplicaciones.'], false];
     return ['Instalarla en tu computadora', ['', 'Abrí este link en Chrome o en Edge.', 'Tocá el ícono de instalar que aparece a la derecha de la dirección.', 'Si lo que querés es tenerla en el celular, abrí este mismo link desde el celular y tocá <b>Instalar la app</b>.'], true]; }
   function open(){ if(el('insD')) return; const p = pasos(), d = document.createElement('div'); d.id = 'insD'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','insT');
@@ -1579,7 +1583,7 @@ renderSite(); route();
 if(API){ if(logged){ pullAll().then(r=>{ if(r.ok){ renderSite(); route(); } }).catch(()=>{}); } else pullPub(); }
 </script>
 <script>/*TV v1*/ (function(){
-const C = {"rubro": "tortas", "familia": "casera", "colores": {"tinta": "#4a2c25", "fondo": "#fff8f3", "fondo-2": "#f8e4e6", "acento": "#f2b8c6", "acento-2": "#e9c9a0", "sobre-acento": "#4a2c25"}, "destacada": "img/hb.jpg", "panel": "#admin", "logo": "img/logo.jpg", "catLibre": true, "nom": "#plist input[data-k=\"name\"]", "before": "#plist", "fn": "renderPrices", "full": true, "rel2": false, "lead": 2, "slug": "capasysabores", "nombres": ["Torta de cumplea\u00f1os", "Torta personalizada", "Torta tem\u00e1tica", "Torta de dos pisos", "Minitorta", "Bento cake", "Chocotorta", "Cheesecake", "Cheesecake de frutos rojos", "Lemon pie", "Key lime pie", "Red velvet", "Toffee", "Brownie", "Brownie con merengue", "Tarta de frutillas", "Tarta de frutos rojos", "Tarta de durazno", "Tarta de manzana", "Pastafrola", "Tiramis\u00fa", "Marquise", "Torta Balcarce", "Rogel", "Selva negra", "Carrot cake", "Torta galesa", "Torta de ricota", "Bud\u00edn de lim\u00f3n", "Bud\u00edn de naranja", "Bud\u00edn marmolado", "Alfajores de maicena", "Alfajores de chocolate", "Cookies", "Box de cookies", "Cupcakes", "Macarons", "Cake pops", "Mesa dulce", "Postres en vasito", "Bombones", "Pavlova", "Trufas", "Scones", "Medialunas", "Flan casero", "Mousse de chocolate", "Torta matilda"]}, D = document, q = s => D.querySelector(s);
+const C = {"rubro": "tortas", "familia": "casera", "colores": {"tinta": "#4a2c25", "fondo": "#fff8f3", "fondo-2": "#f8e4e6", "acento": "#f2b8c6", "acento-2": "#e9c9a0", "sobre-acento": "#4a2c25"}, "destacada": "img/hb.jpg", "panel": "#admin", "logo": "img/logo.jpg", "catLibre": true, "nom": "#plist input[data-k=\"name\"]", "before": "#plist", "fn": "renderPrices", "full": true, "rel2": false, "lead": 2, "slug": "capasysabores", "nombres": ["Torta de cumplea\u00f1os", "Torta personalizada", "Torta tem\u00e1tica", "Torta de dos pisos", "Minitorta", "Bento cake", "Chocotorta", "Cheesecake", "Cheesecake de frutos rojos", "Lemon pie", "Key lime pie", "Red velvet", "Toffee", "Brownie", "Brownie con merengue", "Tarta de frutillas", "Tarta de frutos rojos", "Tarta de durazno", "Tarta de manzana", "Pastafrola", "Tiramis\u00fa", "Marquise", "Torta Balcarce", "Rogel", "Selva negra", "Carrot cake", "Torta galesa", "Torta de ricota", "Bud\u00edn de lim\u00f3n", "Bud\u00edn de naranja", "Bud\u00edn marmolado", "Alfajores de maicena", "Alfajores de chocolate", "Cookies", "Box de cookies", "Cupcakes", "Macarons", "Cake pops", "Mesa dulce", "Postres en vasito", "Bombones", "Pavlova", "Trufas", "Scones", "Medialunas", "Flan casero", "Mousse de chocolate", "Torta matilda"], "datos": {"ciudad": "San Luis Capital", "horario": "A coordinar", "envioCosto": "A coordinar"}}, D = document, q = s => D.querySelector(s);
 const E = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const M = n => '$' + Math.round(Number(n)||0).toLocaleString('es-AR');
 const site = q('#site'), tv = q('#tv'), SH = q('#tvS'), BAR = q('#tvB');
@@ -1618,6 +1622,14 @@ tv.style.setProperty('--fd', B.fd); tv.style.setProperty('--fb', B.fb); tv.style
 [SH, BAR].forEach(el => { ['--a','--ai','--b','--i','--fd','--fb','--s','--m','--l'].forEach(k => { const v = getComputedStyle(tv).getPropertyValue(k); if(v) el.style.setProperty(k, v); }); });
 
 const X = () => (S.settings && S.settings.extra) || {};
+/* CIUDAD, HORARIOS Y COSTO DE ENVÍO (Dardo 18/11 21:30): los carga el emprendedor en Tu panel > Más; mientras no los toque valen los precargados (C.datos, regla DATOS PRECARGADOS).
+   Un ejemplo genérico ("Tu ubicación") se ve en el panel pero no en tu Link de pedidos. */
+const DGEN = ['tu ubicación', 'tu ciudad'], DK = [['ciudad', 'sCiu', 'Ciudad', 'La ciudad o zona donde estás'], ['horario', 'sHor', 'Horarios de entrega o retiro', 'Por ejemplo: martes a sábado de 10 a 19'], ['envioCosto', 'sCos', 'Costo de envío', 'Por ejemplo: $2.000 o A coordinar']];
+const DAT = () => { const x = X(), d = C.datos || {}, o = {}; DK.forEach(([k]) => { o[k] = x[k] != null ? String(x[k]) : String(d[k] || ''); }); return o; };
+const DV = k => { const v = (DAT()[k] || '').trim(); return v && !DGEN.includes(v.toLowerCase()) ? v : ''; }, MIN = s => s ? s.charAt(0).toLowerCase() + s.slice(1) : s;
+window.tvDat = DAT;
+window.tvDatHtml = () => { const d = DAT(); return DK.map(([k, id, l, ph]) => `<label for="${id}">${l}</label><input id="${id}" data-dat="${k}" value="${E(d[k])}" placeholder="${E(ph)}">`).join(''); };
+window.tvDatSave = () => { S.settings.extra = S.settings.extra || {}; DK.forEach(([k, id]) => { const i = q('#' + id); if(i) S.settings.extra[k] = i.value.replace(/\s+/g, ' ').trim(); }); try{ render(); }catch(e){} };
 const WAN = () => String(X().wa || (typeof WA !== 'undefined' ? WA : '') || '').replace(/\D/g,'');
 const isPers = p => /personaliz/i.test(p.name||'');
 const torta = p => /torta/i.test(p.cat||'');
@@ -1681,7 +1693,7 @@ function heroPop(){ const usadas = new Set((S.products||[]).map(p => p.img).filt
   return [C.destacada, B.hero].concat(B.fotos).find(s => s && !usadas.has(s) && !/icon-|logo/i.test(s)) || ''; }
 function renderPop(){
   const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => grupo(p)))];
-  const ciudad = ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
+  const ciudad = ciudadDe();
   const banda = cats.slice(0, MAXL).concat(tal.length ? ['Talleres'] : [], ciudad ? [ciudad] : []).join(' · ').toUpperCase() + ' · ';
   const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
   let h = `<div class="pBanda" aria-hidden="true"><span class="pBandaT" data-temporada="banda">${E(banda.repeat(8))}</span></div><div class="pIn">
@@ -1715,7 +1727,7 @@ const logoEnc = () => ENC().logo || B.logo || '';
 const FORMA0 = {pop:'logo', casera:'logo', editorial:'logo-nombre', moderna:'logo-nombre'};
 const formaEnc = () => { const f = ENC().forma || C.enc || (logoEnc() ? (FORMA0[C.familia] || 'logo-nombre') : 'nombre'); return f !== 'nombre' && !logoEnc() ? 'nombre' : f; };
 window.tvEnc = () => ({forma: formaEnc(), logo: logoEnc(), nombre: B.name});   /* para las pruebas (shot_encabezado.py) */
-const ciudadDe = () => ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
+const ciudadDe = () => (X().ciudad != null || (C.datos || {}).ciudad) ? DV('ciudad') : (((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '');   /* la ciudad del panel manda sobre la del título */
 function portadaCasera(){ const hf = heroPop();
   return `<div class="cIn"><span class="cSello">${sello()}<span class="cAro" data-temporada="aro"></span>${formaEnc()==='nombre' ? `<span class="cSelloN">${E(B.name)}</span>` : `<img src="${E(logoEnc())}" alt="${E(B.name)}">`}</span>${formaEnc()==='logo-nombre' ? `<p class="cMarcaN">${E(B.name)}</p>` : ''}
     <p class="cHola">Hola, ${/ y /.test(B.who) ? 'somos' : 'soy'} ${E(B.who)}</p><h1 class="cTit">${E(B.h1 || B.name)}</h1>${sinNombre(B.lead) ? `<p class="cLead">${E(sinNombre(B.lead))}</p>` : ''}
@@ -1769,7 +1781,7 @@ function renderModerna(){ const ps = prods(), tal = talleres(), hf = heroPop();
   if(tal.length) secs.push({t:'Talleres', i:secs.length, its:[], html: tal.map((x, j) => mRow(j, `data-tl="${E(x.id)}"`, x.name, fecha(x.date) + (x.time ? ', ' + x.time + ' h' : ''), x.price ? M(x.price) : 'Precio a consultar', '')).join('')});
   if(C.rubro==='tortas' && !C.sinPers){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', i:secs.length, pers:1, its:[], html: mRow(0, 'data-pers="1"', pers ? pers.name : 'Torta personalizada', (pers && pers.desc) || 'Contame tu idea y te paso el precio.', 'Precio a consultar', persFoto())}); }
   const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
-  let h = `<div class="mIn"><p class="mMarca${formaEnc()==='logo' ? ' mSolo' : ''}">${formaEnc()==='nombre' ? '' : `<img src="${E(logoEnc())}" alt="${formaEnc()==='logo' ? E(B.name) : ''}">`}${formaEnc()==='logo' ? '' : E(B.name)}</p><h1 class="mTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="mLead">${E(B.lead)}</p>` : ''}
+  let h = `<div class="mIn"><p class="mMarca${formaEnc()==='logo' ? ' mSolo' : ''}">${formaEnc()==='nombre' ? '' : `<img src="${E(logoEnc())}" alt="${formaEnc()==='logo' ? E(B.name) : ''}">`}${formaEnc()==='logo' ? '' : E(B.name)}</p><h1 class="mTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="mLead">${E(B.lead)}</p>` : ''}${ciudadDe() ? `<p class="mLead vCiu">En ${E(ciudadDe())}</p>` : ''}
     ${hf ? `<div class="mHero"><img src="${E(hf)}" alt="${E(B.name)}"></div>` : ''}<div data-temporada="foto"></div></div>`;
   h += accesos(secs);
   secs.forEach((s, i) => { h += `<div data-temporada="separador"></div><section class="mCat" id="tvCat${i}"><h2 class="mCatT">${E(s.t)}</h2><div class="mFilas">${s.html}</div></section>`; });
@@ -1844,7 +1856,7 @@ function datosHtml(){ const x = X();
     <label class="vf" for="tv_name">Tu nombre</label><input id="tv_name" type="text" autocomplete="name" data-k="name" value="${E(T.name)}">
     <label class="vf" for="tv_phone">Tu WhatsApp</label><input id="tv_phone" type="tel" inputmode="tel" autocomplete="tel" data-k="phone" value="${E(T.phone)}" placeholder="Con característica">
     ${T.tal ? '' : `<label class="vf">Entrega</label><div class="vseg"><button type="button" data-ent="Retiro"${T.ent==='Retiro'?' class="von"':''}>La retiro</button>${x.envio!==false?`<button type="button" data-ent="Envío"${T.ent==='Envío'?' class="von"':''}>Envío</button>`:''}</div>
-    ${T.ent==='Retiro' && x.pickup ? `<p class="vhint" style="margin-top:8px">Retirás por ${E(x.pickup)}.</p>` : ''}${T.ent==='Envío' ? `<label class="vf" for="tv_dir">Dirección para el envío</label><input id="tv_dir" type="text" autocomplete="street-address" data-k="dir" value="${E(T.dir)}">` : ''}`}
+    ${T.ent==='Retiro' && (x.pickup || DV('horario')) ? `<p class="vhint vEnt" style="margin-top:8px">${x.pickup ? `Retirás por ${E(x.pickup)}.` : ''}${x.pickup && DV('horario') ? ' ' : ''}${DV('horario') ? `Horarios de retiro: ${E(MIN(DV('horario')))}.` : ''}</p>` : ''}${T.ent==='Envío' ? `${DV('envioCosto') || DV('horario') ? `<p class="vhint vEnt" style="margin-top:8px">${DV('envioCosto') ? `Costo de envío: ${E(MIN(DV('envioCosto')))}.` : ''}${DV('envioCosto') && DV('horario') ? ' ' : ''}${DV('horario') ? `Horarios de entrega: ${E(MIN(DV('horario')))}.` : ''}</p>` : ''}<label class="vf" for="tv_dir">Dirección para el envío</label><input id="tv_dir" type="text" autocomplete="street-address" data-k="dir" value="${E(T.dir)}">` : ''}`}
     <label class="vf" for="tv_notes">Algo más (opcional)</label><textarea id="tv_notes" data-k="notes">${E(T.notes)}</textarea>
     ${T.err ? `<p class="verr" role="alert">${E(T.err)}</p>` : ''}<p class="cmP">Tus datos los ve solo ${E(B.who)} y se usan para tu pedido.</p>`; }
 function sheet(){ const st = steps(), k = st[T.step], title = C.rubro==='viandas' ? 'Tus viandas' : T.tal ? 'Taller: ' + T.tal.name : T.p.name;
@@ -2045,12 +2057,12 @@ tabs.innerHTML = [['pedidos','Pedidos',IC.ped],['agenda','Agenda',IC.cal],['prec
 const AY = {'pv-pedidos': 'Los pedidos de tu Link de pedidos aparecen acá solos.', 'pv-precios': 'Lo que cambies se guarda solo y se ve al instante en tu Link de pedidos.', 'pv-agenda': 'Cuántos pedidos tomás por día y qué días no.', 'pv-calc': 'Cargá lo que gastás en hacer un producto y las horas que te lleva.'};
 D.querySelectorAll('#panelApp details.help').forEach(d => { const v = d.closest('.pv'), tx = AY[v && v.id]; if(tx){ const p = D.createElement('p'); p.className = 'pHelp'; p.textContent = tx; d.replaceWith(p); } else d.remove(); });
 /* Más: cada tarjeta de siempre pasa a su propia pantalla, con los mismos campos */
-const MENU = [['cobrar','pv-calc','Cuánto cobrar'],['sena','pv-m-sena','Seña y alias'],['esp','pv-m-esp','Fecha especial'],['enc','pv-m-enc','Encabezado de tu Link de pedidos'],['visitas','pv-m-vis','Visitas'],['instalar','pv-m-ins','Instalar como app'],['clave','pv-m-clave','Cambiar la clave']];
+const MENU = [['cobrar','pv-calc','Cuánto cobrar'],['entrega','pv-m-ent','Ciudad, horarios y envío'],['sena','pv-m-sena','Seña y alias'],['esp','pv-m-esp','Fecha especial'],['enc','pv-m-enc','Encabezado de tu Link de pedidos'],['visitas','pv-m-vis','Visitas'],['instalar','pv-m-ins','Instalar como app'],['clave','pv-m-clave','Cambiar la clave']];
 const sec = (id, tit, nodo) => { const s = D.createElement('div'); s.className = 'pv pSub'; s.id = id; s.innerHTML = nav('mas0') + `<h3>${tit}</h3><div class="pBody"></div>`; if(nodo) s.querySelector('.pBody').appendChild(nodo); wrap.appendChild(s); return s; };
 const tarjeta = sel => { const e = q(sel); return e ? e.closest('.card') : null; };
 const mas = D.createElement('div'); mas.className = 'pv'; mas.id = 'pv-mas'; wrap.appendChild(mas);
 sec('pv-m-sena', 'Seña y alias', tarjeta('#alias')); sec('pv-m-esp', 'Fecha especial', tarjeta('#spTitle')); sec('pv-m-clave', 'Cambiar la clave', tarjeta('#npin'));
-sec('pv-m-enc', 'Encabezado de tu Link de pedidos'); sec('pv-m-vis', 'Visitas'); sec('pv-m-ins', 'Instalar como app');
+sec('pv-m-enc', 'Encabezado de tu Link de pedidos'); sec('pv-m-ent', 'Ciudad, horarios y envío'); sec('pv-m-vis', 'Visitas'); sec('pv-m-ins', 'Instalar como app');
 q('#pv-calc').classList.add('pSub'); q('#pv-calc').insertAdjacentHTML('afterbegin', nav('mas0') + '<h3>Cuánto cobrar</h3>');
 D.querySelectorAll('#panelApp label.sw').forEach(l => l.classList.add('pSw'));
 const pin = q('#pinSave'); if(pin){ pin.className = 'pMain'; pin.textContent = 'Cambiar la clave'; }
@@ -2101,6 +2113,7 @@ function renderMas(){ mas.innerHTML = '<div class="pMenu">' + MENU.map(m => row(
 function abrir(k){ const m = MENU.find(x => x[0]===k); if(!m) return; encOff(); show(m[1]);
   if(k==='cobrar') renderCalc(); if(k==='sena' || k==='esp' || k==='clave') renderAgenda();
   if(k==='enc'){ q('#plist').innerHTML = ''; N.tv = {modo: 'enc'}; q('#pv-m-enc .pBody').innerHTML = '<div id="tvpc"></div>'; if(window.tvMount) window.tvMount(); const h = q('#tvpc .venc h3'); if(h) h.remove(); }
+  if(k==='entrega') q('#pv-m-ent .pBody').innerHTML = (window.tvDatHtml ? tvDatHtml() : '') + main('pnldat', 'Guardar');   /* 18/11: ciudad, horarios y costo de envío */
   if(k==='visitas') visitas(q('#pv-m-vis .pBody'), false); if(k==='instalar') instalar(q('#pv-m-ins .pBody')); up(); }
 
 /* ---------- acciones (las de siempre las sigue haciendo el panel de Maru) ---------- */
@@ -2119,7 +2132,8 @@ q('#panelApp').addEventListener('click', e => { const b = e.target.closest('[dat
     else if(v==='opc0'){ N.sub = ''; renderPrices(); }
     else abrir(v);
     up(); return; }
-  if(a==='pnlins'){ const l = D.getElementById('insL'); if(l) l.click(); } });
+  if(a==='pnlins'){ const l = D.getElementById('insL'); if(l) l.click(); }
+  if(a==='pnldat' && window.tvDatSave){ tvDatSave(); api({a:'saveSettings', pin:pinOk, settings:S.settings}).then(r => toast(r && r.ok ? 'Guardado ✓' : ((r && r.msg) || 'No se pudo guardar')), () => toast('Sin conexión: no se guardó. Probá de nuevo.')); } });
 if(nb) nb.addEventListener('click', () => { D.body.classList.add('pnlNew'); up(); });
 q('#noCancel').addEventListener('click', () => D.body.classList.remove('pnlNew'));
 if(ad) ad.addEventListener('click', () => { const p = S.products[0]; if(p){ N.ped = p.id; N.sub = ''; renderPrices(); up(); toast('Producto nuevo: completalo y prendé "Se muestra en tu Link de pedidos".'); } });

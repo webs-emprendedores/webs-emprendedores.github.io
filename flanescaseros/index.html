@@ -940,7 +940,7 @@ function novShow(){ if(window.NO_NOV || !NOV || !NOV.items || !NOV.items.length 
   b.addEventListener('click', () => { try{ localStorage.setItem(k, NOV.v); }catch(x){} d.remove(); }); } /*NOV fin*/
 </script>
 <script>/*TV v1*/ (function(){
-const C = {"rubro": "tortas", "nom": "#pName", "tab": "#pv-car", "fn": "renderCar", "full": false, "rel2": false, "lead": 2, "familia": "casera", "colores": {"tinta": "#3b2416", "fondo": "#fff8ee", "fondo-2": "#f6e3c8", "acento": "#a84c17", "acento-2": "#f2d39c", "sobre-acento": "#ffffff"}, "destacada": "img/hero.jpg", "logo": "img/logo.png", "sinPers": true, "raiz": true, "slug": "flanescaseros", "nombres": ["Torta de cumplea\u00f1os", "Torta personalizada", "Torta tem\u00e1tica", "Torta de dos pisos", "Minitorta", "Bento cake", "Chocotorta", "Cheesecake", "Cheesecake de frutos rojos", "Lemon pie", "Key lime pie", "Red velvet", "Toffee", "Brownie", "Brownie con merengue", "Tarta de frutillas", "Tarta de frutos rojos", "Tarta de durazno", "Tarta de manzana", "Pastafrola", "Tiramis\u00fa", "Marquise", "Torta Balcarce", "Rogel", "Selva negra", "Carrot cake", "Torta galesa", "Torta de ricota", "Bud\u00edn de lim\u00f3n", "Bud\u00edn de naranja", "Bud\u00edn marmolado", "Alfajores de maicena", "Alfajores de chocolate", "Cookies", "Box de cookies", "Cupcakes", "Macarons", "Cake pops", "Mesa dulce", "Postres en vasito", "Bombones", "Pavlova", "Trufas", "Scones", "Medialunas", "Flan casero", "Mousse de chocolate", "Torta matilda"]}, D = document, q = s => D.querySelector(s);
+const C = {"rubro": "tortas", "nom": "#pName", "tab": "#pv-car", "fn": "renderCar", "full": false, "rel2": false, "lead": 2, "familia": "casera", "colores": {"tinta": "#3b2416", "fondo": "#fff8ee", "fondo-2": "#f6e3c8", "acento": "#a84c17", "acento-2": "#f2d39c", "sobre-acento": "#ffffff"}, "destacada": "img/hero.jpg", "logo": "img/logo.png", "sinPers": true, "raiz": true, "slug": "flanescaseros", "nombres": ["Torta de cumplea\u00f1os", "Torta personalizada", "Torta tem\u00e1tica", "Torta de dos pisos", "Minitorta", "Bento cake", "Chocotorta", "Cheesecake", "Cheesecake de frutos rojos", "Lemon pie", "Key lime pie", "Red velvet", "Toffee", "Brownie", "Brownie con merengue", "Tarta de frutillas", "Tarta de frutos rojos", "Tarta de durazno", "Tarta de manzana", "Pastafrola", "Tiramis\u00fa", "Marquise", "Torta Balcarce", "Rogel", "Selva negra", "Carrot cake", "Torta galesa", "Torta de ricota", "Bud\u00edn de lim\u00f3n", "Bud\u00edn de naranja", "Bud\u00edn marmolado", "Alfajores de maicena", "Alfajores de chocolate", "Cookies", "Box de cookies", "Cupcakes", "Macarons", "Cake pops", "Mesa dulce", "Postres en vasito", "Bombones", "Pavlova", "Trufas", "Scones", "Medialunas", "Flan casero", "Mousse de chocolate", "Torta matilda"], "datos": {"ciudad": "Tu ubicaci\u00f3n", "horario": "A coordinar", "envioCosto": "A coordinar"}}, D = document, q = s => D.querySelector(s);
 const E = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const M = n => '$' + Math.round(Number(n)||0).toLocaleString('es-AR');
 const site = q('#site'), tv = q('#tv'), SH = q('#tvS'), BAR = q('#tvB');
@@ -979,6 +979,14 @@ tv.style.setProperty('--fd', B.fd); tv.style.setProperty('--fb', B.fb); tv.style
 [SH, BAR].forEach(el => { ['--a','--ai','--b','--i','--fd','--fb','--s','--m','--l'].forEach(k => { const v = getComputedStyle(tv).getPropertyValue(k); if(v) el.style.setProperty(k, v); }); });
 
 const X = () => (S.settings && S.settings.extra) || {};
+/* CIUDAD, HORARIOS Y COSTO DE ENVÍO (Dardo 18/11 21:30): los carga el emprendedor en Tu panel > Más; mientras no los toque valen los precargados (C.datos, regla DATOS PRECARGADOS).
+   Un ejemplo genérico ("Tu ubicación") se ve en el panel pero no en tu Link de pedidos. */
+const DGEN = ['tu ubicación', 'tu ciudad'], DK = [['ciudad', 'sCiu', 'Ciudad', 'La ciudad o zona donde estás'], ['horario', 'sHor', 'Horarios de entrega o retiro', 'Por ejemplo: martes a sábado de 10 a 19'], ['envioCosto', 'sCos', 'Costo de envío', 'Por ejemplo: $2.000 o A coordinar']];
+const DAT = () => { const x = X(), d = C.datos || {}, o = {}; DK.forEach(([k]) => { o[k] = x[k] != null ? String(x[k]) : String(d[k] || ''); }); return o; };
+const DV = k => { const v = (DAT()[k] || '').trim(); return v && !DGEN.includes(v.toLowerCase()) ? v : ''; }, MIN = s => s ? s.charAt(0).toLowerCase() + s.slice(1) : s;
+window.tvDat = DAT;
+window.tvDatHtml = () => { const d = DAT(); return DK.map(([k, id, l, ph]) => `<label for="${id}">${l}</label><input id="${id}" data-dat="${k}" value="${E(d[k])}" placeholder="${E(ph)}">`).join(''); };
+window.tvDatSave = () => { S.settings.extra = S.settings.extra || {}; DK.forEach(([k, id]) => { const i = q('#' + id); if(i) S.settings.extra[k] = i.value.replace(/\s+/g, ' ').trim(); }); try{ render(); }catch(e){} };
 const WAN = () => String(X().wa || (typeof WA !== 'undefined' ? WA : '') || '').replace(/\D/g,'');
 const isPers = p => /personaliz/i.test(p.name||'');
 const torta = p => /torta/i.test(p.cat||'');
@@ -1042,7 +1050,7 @@ function heroPop(){ const usadas = new Set((S.products||[]).map(p => p.img).filt
   return [C.destacada, B.hero].concat(B.fotos).find(s => s && !usadas.has(s) && !/icon-|logo/i.test(s)) || ''; }
 function renderPop(){
   const ps = prods(), tal = talleres(), cats = [...new Set(ps.map(p => grupo(p)))];
-  const ciudad = ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
+  const ciudad = ciudadDe();
   const banda = cats.slice(0, MAXL).concat(tal.length ? ['Talleres'] : [], ciudad ? [ciudad] : []).join(' · ').toUpperCase() + ' · ';
   const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
   let h = `<div class="pBanda" aria-hidden="true"><span class="pBandaT" data-temporada="banda">${E(banda.repeat(8))}</span></div><div class="pIn">
@@ -1076,7 +1084,7 @@ const logoEnc = () => ENC().logo || B.logo || '';
 const FORMA0 = {pop:'logo', casera:'logo', editorial:'logo-nombre', moderna:'logo-nombre'};
 const formaEnc = () => { const f = ENC().forma || C.enc || (logoEnc() ? (FORMA0[C.familia] || 'logo-nombre') : 'nombre'); return f !== 'nombre' && !logoEnc() ? 'nombre' : f; };
 window.tvEnc = () => ({forma: formaEnc(), logo: logoEnc(), nombre: B.name});   /* para las pruebas (shot_encabezado.py) */
-const ciudadDe = () => ((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '';
+const ciudadDe = () => (X().ciudad != null || (C.datos || {}).ciudad) ? DV('ciudad') : (((D.title.split(/[·|]/)[1]||'').match(/ en (.+)$/i)||[])[1] || '');   /* la ciudad del panel manda sobre la del título */
 function portadaCasera(){ const hf = heroPop();
   return `<div class="cIn"><span class="cSello">${sello()}<span class="cAro" data-temporada="aro"></span>${formaEnc()==='nombre' ? `<span class="cSelloN">${E(B.name)}</span>` : `<img src="${E(logoEnc())}" alt="${E(B.name)}">`}</span>${formaEnc()==='logo-nombre' ? `<p class="cMarcaN">${E(B.name)}</p>` : ''}
     <p class="cHola">Hola, ${/ y /.test(B.who) ? 'somos' : 'soy'} ${E(B.who)}</p><h1 class="cTit">${E(B.h1 || B.name)}</h1>${sinNombre(B.lead) ? `<p class="cLead">${E(sinNombre(B.lead))}</p>` : ''}
@@ -1130,7 +1138,7 @@ function renderModerna(){ const ps = prods(), tal = talleres(), hf = heroPop();
   if(tal.length) secs.push({t:'Talleres', i:secs.length, its:[], html: tal.map((x, j) => mRow(j, `data-tl="${E(x.id)}"`, x.name, fecha(x.date) + (x.time ? ', ' + x.time + ' h' : ''), x.price ? M(x.price) : 'Precio a consultar', '')).join('')});
   if(C.rubro==='tortas' && !C.sinPers){ const pers = (S.products||[]).find(p => isPers(p) && p.visible!==false); secs.push({t:'A tu idea', i:secs.length, pers:1, its:[], html: mRow(0, 'data-pers="1"', pers ? pers.name : 'Torta personalizada', (pers && pers.desc) || 'Contame tu idea y te paso el precio.', 'Precio a consultar', persFoto())}); }
   const w = (B.h1 || B.name).trim().split(/\s+/), last = w.pop();
-  let h = `<div class="mIn"><p class="mMarca${formaEnc()==='logo' ? ' mSolo' : ''}">${formaEnc()==='nombre' ? '' : `<img src="${E(logoEnc())}" alt="${formaEnc()==='logo' ? E(B.name) : ''}">`}${formaEnc()==='logo' ? '' : E(B.name)}</p><h1 class="mTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="mLead">${E(B.lead)}</p>` : ''}
+  let h = `<div class="mIn"><p class="mMarca${formaEnc()==='logo' ? ' mSolo' : ''}">${formaEnc()==='nombre' ? '' : `<img src="${E(logoEnc())}" alt="${formaEnc()==='logo' ? E(B.name) : ''}">`}${formaEnc()==='logo' ? '' : E(B.name)}</p><h1 class="mTit">${E(w.join(' '))} <mark>${E(last)}</mark></h1>${B.lead ? `<p class="mLead">${E(B.lead)}</p>` : ''}${ciudadDe() ? `<p class="mLead vCiu">En ${E(ciudadDe())}</p>` : ''}
     ${hf ? `<div class="mHero"><img src="${E(hf)}" alt="${E(B.name)}"></div>` : ''}<div data-temporada="foto"></div></div>`;
   h += accesos(secs);
   secs.forEach((s, i) => { h += `<div data-temporada="separador"></div><section class="mCat" id="tvCat${i}"><h2 class="mCatT">${E(s.t)}</h2><div class="mFilas">${s.html}</div></section>`; });
@@ -1205,7 +1213,7 @@ function datosHtml(){ const x = X();
     <label class="vf" for="tv_name">Tu nombre</label><input id="tv_name" type="text" autocomplete="name" data-k="name" value="${E(T.name)}">
     <label class="vf" for="tv_phone">Tu WhatsApp</label><input id="tv_phone" type="tel" inputmode="tel" autocomplete="tel" data-k="phone" value="${E(T.phone)}" placeholder="Con característica">
     ${T.tal ? '' : `<label class="vf">Entrega</label><div class="vseg"><button type="button" data-ent="Retiro"${T.ent==='Retiro'?' class="von"':''}>La retiro</button>${x.envio!==false?`<button type="button" data-ent="Envío"${T.ent==='Envío'?' class="von"':''}>Envío</button>`:''}</div>
-    ${T.ent==='Retiro' && x.pickup ? `<p class="vhint" style="margin-top:8px">Retirás por ${E(x.pickup)}.</p>` : ''}${T.ent==='Envío' ? `<label class="vf" for="tv_dir">Dirección para el envío</label><input id="tv_dir" type="text" autocomplete="street-address" data-k="dir" value="${E(T.dir)}">` : ''}`}
+    ${T.ent==='Retiro' && (x.pickup || DV('horario')) ? `<p class="vhint vEnt" style="margin-top:8px">${x.pickup ? `Retirás por ${E(x.pickup)}.` : ''}${x.pickup && DV('horario') ? ' ' : ''}${DV('horario') ? `Horarios de retiro: ${E(MIN(DV('horario')))}.` : ''}</p>` : ''}${T.ent==='Envío' ? `${DV('envioCosto') || DV('horario') ? `<p class="vhint vEnt" style="margin-top:8px">${DV('envioCosto') ? `Costo de envío: ${E(MIN(DV('envioCosto')))}.` : ''}${DV('envioCosto') && DV('horario') ? ' ' : ''}${DV('horario') ? `Horarios de entrega: ${E(MIN(DV('horario')))}.` : ''}</p>` : ''}<label class="vf" for="tv_dir">Dirección para el envío</label><input id="tv_dir" type="text" autocomplete="street-address" data-k="dir" value="${E(T.dir)}">` : ''}`}
     <label class="vf" for="tv_notes">Algo más (opcional)</label><textarea id="tv_notes" data-k="notes">${E(T.notes)}</textarea>
     ${T.err ? `<p class="verr" role="alert">${E(T.err)}</p>` : ''}<p class="cmP">Tus datos los ve solo ${E(B.who)} y se usan para tu pedido.</p>`; }
 function sheet(){ const st = steps(), k = st[T.step], title = C.rubro==='viandas' ? 'Tus viandas' : T.tal ? 'Taller: ' + T.tal.name : T.p.name;
@@ -1474,7 +1482,7 @@ window.renderMas = function(){ const v = q('#pv-mas'), s = S.settings, x = X(), 
     calcOut(); return; }
   if(sb==='entrega'){ v.innerHTML = tit + `<label for="sWa">Tu WhatsApp para recibir pedidos</label><input id="sWa" type="tel" value="${esc(x.wa||'')}" placeholder="Con característica, sin 0 ni 15"><label for="sLead">Días de anticipación mínima</label><input id="sLead" type="number" inputmode="numeric" value="${esc(x.lead)}"><label for="sPick">Dónde se retira</label><input id="sPick" value="${esc(x.pickup)}" placeholder="Zona o dirección"><label for="sEnv">Hacés envíos</label><select id="sEnv"><option value="1"${x.envio?' selected':''}>Sí, se coordinan por WhatsApp</option><option value="0"${x.envio?'':' selected'}>No, solo retiro</option></select>`
       + (P.agenda ? '' : `<label for="sBlk">Días que no tomás pedidos</label><div class="pTwo"><input id="sBlk" type="date"><button type="button" class="pSec" data-a="badd" style="min-height:52px;width:100%">Agregar el día</button></div><div class="pChips">${(s.blocked||[]).filter(d => d >= iso(today)).sort().map(d => `<button type="button" class="pSec" data-a="bdel" data-d="${d}" aria-label="Quitar ${dshort(d)}">${dshort(d)} ✕</button>`).join('')}</div>`)
-      + main('pnlent', 'Guardar'); return; }
+      + (window.tvDatHtml ? tvDatHtml() : '') + main('pnlent', 'Guardar'); return; }   /* + ciudad, horarios y costo de envío (18/11) */
   if(sb==='sena'){ v.innerHTML = tit + `<label for="sSena">Seña (%)</label><input id="sSena" type="number" inputmode="numeric" value="${esc(s.senaPct)}"><label for="sAlias">Alias</label><input id="sAlias" value="${esc(s.alias)}"><label for="sAliasN">A nombre de</label><input id="sAliasN" value="${esc(s.aliasName)}">` + main('pnlsena', 'Guardar'); return; }
   if(sb==='enc'){ N.tv = {modo: 'enc'}; v.innerHTML = tit + '<div id="tvpc"></div>'; if(window.tvMount) window.tvMount(); const h = q('#tvpc .venc h3'); if(h) h.remove(); return; }
   if(sb==='visitas'){ v.innerHTML = tit + '<div class="pCard"><p><b id="vN">…</b> visitas a tu Link de pedidos.</p><p><b id="vP">…</b> pedidos hechos desde ahí.</p></div>';
@@ -1496,7 +1504,7 @@ q('#app').addEventListener('click', async e => { const b = e.target.closest('[da
     else if(v==='sab'){ N.sub = 'sab'; renderCar(); } else { N.sub = v; renderMas(); } up(); return; }
   if(a==='old'){ up(); }
   if(a==='pnlodel'){ if(!sure(b, 'd'+b.dataset.id)) return; S.orders = S.orders.filter(o => o.id!==b.dataset.id); send({a:'delOrder', id:b.dataset.id}, 'Borrado'); edit = null; renderPanel(); up(); }
-  if(a==='pnlent'){ x.wa = q('#sWa').value.replace(/\D/g,''); if(x.wa && !x.wa.startsWith('54')) x.wa = '549'+x.wa.replace(/^0/,''); x.lead = Number(q('#sLead').value)||0; x.pickup = q('#sPick').value.trim(); x.envio = q('#sEnv').value==='1'; saveSettings('Guardado ✓'); renderSite(); renderMas(); }
+  if(a==='pnlent'){ x.wa = q('#sWa').value.replace(/\D/g,''); if(x.wa && !x.wa.startsWith('54')) x.wa = '549'+x.wa.replace(/^0/,''); x.lead = Number(q('#sLead').value)||0; x.pickup = q('#sPick').value.trim(); x.envio = q('#sEnv').value==='1'; if(window.tvDatSave) tvDatSave(); saveSettings('Guardado ✓'); renderSite(); renderMas(); }
   if(a==='pnlsena'){ S.settings.senaPct = Number(q('#sSena').value)||0; S.settings.alias = q('#sAlias').value.trim(); S.settings.aliasName = q('#sAliasN').value.trim(); saveSettings('Guardado ✓'); renderSite(); renderMas(); }
   if(a==='pnlins'){ const l = D.getElementById('insL'); if(l) l.click(); }
   if(a==='psave' || a==='pdel' || a==='osave' || a==='tsave' || a==='tdel'){ N.sub = ''; N.tv = null; }
