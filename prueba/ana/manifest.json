@@ -1,0 +1,2 @@
+{"id": "./?app=prueba-ana-panel", "name": "Panel de prueba · Turnos", "short_name": "Panel prueba", "start_url": "./#panel", "scope": "./", "display": "standalone", "background_color": "#f6f4ef", "theme_color": "#1f4d46",
+ "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png"}, {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}]}

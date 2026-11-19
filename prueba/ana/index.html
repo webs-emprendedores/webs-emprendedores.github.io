@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Prueba técnica · Turnos sin WhatsApp</title><meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f4d46"><meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+:root{--t:#1f4d46;--f:#f6f4ef;--l:#d8d3c8;--x:#23211d;--s:#6b665c;--e:#a3311f}
+*{box-sizing:border-box}body{margin:0;background:var(--f);color:var(--x);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:460px;margin:0 auto;padding:18px 18px 40px}
+.prb{background:#fff3cd;border:1px solid #e6cf7a;border-radius:10px;padding:8px 12px;font-size:14px;margin-bottom:14px}
+h1{font-size:22px;margin:4px 0 2px}h2{font-size:18px;margin:22px 0 8px}.sub{color:var(--s);margin:0 0 14px}
+label{display:block;font-size:14px;color:var(--s);margin:12px 0 4px}
+input,select{width:100%;font:inherit;padding:12px;border:1px solid var(--l);border-radius:10px;background:#fff;min-height:48px}
+.btn{display:block;width:100%;font:inherit;font-weight:600;min-height:48px;border-radius:10px;border:1px solid var(--t);background:var(--t);color:#fff;margin-top:14px;cursor:pointer;text-align:center;text-decoration:none;padding:12px}
+.btn.o{background:#fff;color:var(--t)}.btn:disabled{opacity:.5}
+.fila{display:flex;gap:10px}.fila>*{flex:1}
+.card{background:#fff;border:1px solid var(--l);border-radius:12px;padding:12px 14px;margin:10px 0}
+.est{font-weight:600}.est.pendiente{color:#8a6100}.est.aceptado{color:var(--t)}.est.rechazado{color:var(--e)}
+.msg{min-height:22px;margin-top:10px;font-size:15px}.msg.err{color:var(--e)}
+.sep{display:flex;align-items:center;gap:10px;color:var(--s);font-size:14px;margin:18px 0 4px}.sep:before,.sep:after{content:"";flex:1;border-top:1px solid var(--l)}
+.chk{display:flex;align-items:center;gap:10px;min-height:48px;color:var(--x);font-size:16px;margin:0}.chk input{width:22px;min-height:22px}
+[hidden]{display:none!important}
+</style></head><body><main>
+<p class="prb">Prueba técnica con datos inventados. No es un consultorio real.</p>
+<h1 id="tit">Consultorio de prueba</h1><p class="sub" id="sub">Turnos con Ana Prueba</p>
+
+<section id="vEntrar" hidden>
+  <h2>Entrá para pedir tu turno</h2>
+  <p class="sub">Te registrás una sola vez y queda abierto en este celular.</p>
+  <div id="gbtn"></div><p class="sub" id="gno" hidden>El ingreso con Google todavía no está configurado en esta prueba.</p>
+  <div class="sep">o con tu mail</div>
+  <label for="eMail">Mail</label><input id="eMail" type="email" autocomplete="email">
+  <label for="eClave">Clave (6 caracteres o más)</label><input id="eClave" type="password" autocomplete="current-password">
+  <button class="btn" data-a="entrar">Entrar</button><button class="btn o" data-a="alta">Crear mi cuenta</button>
+</section>
+
+<section id="vDatos" hidden>
+  <h2>Tus datos</h2><p class="sub">Los cargás una vez. La profesional los ve en tu ficha.</p>
+  <label for="dNom">Nombre y apellido</label><input id="dNom" autocomplete="name">
+  <label for="dTel">Teléfono</label><input id="dTel" type="tel" autocomplete="tel">
+  <label for="dPago">Forma de pago</label><select id="dPago"></select>
+  <button class="btn" data-a="perfil">Guardar mis datos</button>
+</section>
+
+<section id="vPedir" hidden>
+  <h2>Pedir un turno</h2>
+  <div class="fila"><div><label for="tDia">Día</label><input id="tDia" type="date"></div><div><label for="tHora">Horario</label><select id="tHora"></select></div></div>
+  <button class="btn" data-a="pedir">Pedir turno</button>
+  <h2>Mis turnos</h2><div id="mis"><p class="sub">Todavía no pediste turnos.</p></div>
+  <button class="btn o" data-a="datos">Cambiar mis datos</button><button class="btn o" data-a="salir">Cerrar sesión en este celular</button>
+</section>
+
+<section id="vPanel" hidden>
+  <h2>Panel de la profesional</h2>
+  <div id="pLogin"><label for="pClave">Clave del panel</label><input id="pClave" type="password" autocomplete="current-password"><button class="btn" data-a="plog">Entrar</button></div>
+  <div id="pIn" hidden>
+    <h2>Pendientes</h2><div id="pPend"></div><button class="btn o" data-a="pact">Actualizar</button>
+    <h2>Formas de pago que aceptás</h2><div id="pPagos"></div><button class="btn o" data-a="ppagos">Guardar formas de pago</button>
+    <h2>Avisos en este aparato</h2><p class="sub" id="pAvTx"></p><button class="btn o" data-a="pfcm">Activar avisos de turnos nuevos</button>
+    <h2>Decididos</h2><div id="pHecho"></div>
+  </div>
+</section>
+
+<section id="vCaido" hidden>
+  <h2>El sistema de turnos no responde</h2>
+  <p class="sub" id="cTx">Probá de nuevo en un rato, o pedí el turno por WhatsApp: el mensaje ya va escrito.</p>
+  <a class="btn" id="cWa" href="#" target="_blank" rel="noopener">Pedir el turno por WhatsApp</a><button class="btn o" data-a="reintentar">Probar de nuevo</button>
+</section>
+<p class="msg" id="msg" role="status"></p>
+</main>
+<script>/*PRUEBA TURNOS v1*/
+(() => {
+const API = '', WA0 = '5493700000000', PRO0 = 'Ana Prueba', D = document, q = s => D.querySelector(s), E = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LS = {get: k => { try{ return localStorage.getItem(k); }catch(e){ return null; } }, set: (k, v) => { try{ v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} }};
+let dev = LS.get('pt_dev'); if(!dev){ dev = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now()); LS.set('pt_dev', dev); }   /* 2) id de ESTE aparato */
+let PUB = {wa: WA0, profesional: PRO0, pagos: []}, PERF = null, CLAVE = null, ULT = null;
+const msg = (t, err) => { const m = q('#msg'); m.textContent = t || ''; m.className = 'msg' + (err ? ' err' : ''); };
+const ver = id => { ['vEntrar','vDatos','vPedir','vPanel','vCaido'].forEach(v => q('#' + v).hidden = v !== id); };
+/* 6) si el servidor no responde: aviso y WhatsApp con el mensaje escrito */
+const waTx = () => { const n = PERF && PERF.nombre ? ' Soy ' + PERF.nombre + (PERF.tel ? ', mi teléfono es ' + PERF.tel : '') + '.' : '';
+  const d = q('#tDia').value, h = q('#tHora').value; return 'Hola, quiero pedir un turno con ' + (PUB.profesional || 'la profesional') + '.' + n + (d && h ? ' Me sirve el ' + d.split('-').reverse().join('/') + ' a las ' + h + '.' : '') + ' La página de turnos no me anduvo.'; };
+const caido = () => { const w = String(PUB.wa || '').replace(/\D/g, ''); q('#cWa').href = 'https://wa.me/' + w + '?text=' + encodeURIComponent(waTx()); q('#cWa').hidden = !w; ver('vCaido'); msg(''); };
+async function api(o){
+  ULT = o; if(!API || API.indexOf('__') === 0) throw new Error('sin servidor');
+  const ac = new AbortController(), to = setTimeout(() => ac.abort(), 12000);
+  try{ const r = await fetch(API, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(o), signal: ac.signal}); if(!r.ok) throw new Error('http ' + r.status); return await r.json(); }
+  finally{ clearTimeout(to); } }
+async function pide(o, sinCaido){ try{ return await api(o); }catch(e){ if(!sinCaido) caido(); return null; } }
+
+/* ---------- paciente ---------- */
+const HORAS = ['09:00','09:30','10:00','10:30','11:00','11:30','16:00','16:30','17:00','17:30','18:00','18:30'];
+function armaPedir(){ const t = new Date(); t.setDate(t.getDate() + 1); const iso = x => new Date(x.getTime() - x.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+  q('#tDia').min = iso(t); if(!q('#tDia').value) q('#tDia').value = iso(t); q('#tHora').innerHTML = HORAS.map(h => `<option>${h}</option>`).join(''); }
+function pagosSel(){ q('#dPago').innerHTML = '<option value="">Elegí</option>' + (PUB.pagos || []).map(p => `<option${PERF && PERF.pago === p ? ' selected' : ''}>${E(p)}</option>`).join(''); }
+async function datos(){ const r = await pide({a: 'pub'}, true); if(r && r.ok) PUB = r;   /* formas de pago al día: las elige la profesional */
+  pagosSel(); q('#dNom').value = PERF.nombre || ''; q('#dTel').value = PERF.tel || ''; ver('vDatos'); }
+const fecha = d => d.split('-').reverse().join('/');
+async function mis(){ const r = await pide({a: 'mis', ses: LS.get('pt_ses'), dev}); if(!r) return; if(!r.ok){ if(r.sesion === false){ LS.set('pt_ses', null); entrar(); } return msg(r.msg, 1); }
+  PERF = r.perfil; if(!PERF.completo) return await datos();
+  armaPedir(); ver('vPedir');
+  q('#mis').innerHTML = r.turnos.length ? r.turnos.slice().reverse().map(t => `<div class="card">${fecha(t.dia)} a las ${t.hora}<br><span class="est ${t.estado}">${t.estado === 'pendiente' ? 'Pendiente: esperando que lo confirmen' : t.estado === 'aceptado' ? 'Confirmado' : 'No se pudo confirmar'}</span></div>`).join('') : '<p class="sub">Todavía no pediste turnos.</p>'; }
+function entrar(){ ver('vEntrar');
+  if(PUB.gid){ q('#gno').hidden = true; const go = () => { google.accounts.id.initialize({client_id: PUB.gid, callback: async r => { msg('Entrando…'); const x = await pide({a: 'google', cred: r.credential, dev}); if(!x) return; if(!x.ok) return msg(x.msg, 1); LS.set('pt_ses', x.ses); PERF = x.perfil; msg(''); mis(); }});
+      google.accounts.id.renderButton(q('#gbtn'), {theme: 'outline', size: 'large', text: 'continue_with', width: 300, locale: 'es'}); };
+    if(window.google && google.accounts) go(); else { const s = D.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true; s.onload = go; D.head.appendChild(s); } }
+  else q('#gno').hidden = false; }
+async function inicio(){
+  const r = await pide({a: 'pub'}); if(!r) return; PUB = r;
+  q('#tit').textContent = r.nombre; q('#sub').textContent = 'Turnos con ' + r.profesional;
+  if(location.hash === '#panel') return panel();
+  if(LS.get('pt_ses')) return mis();
+  entrar(); }
+
+/* ---------- panel de la profesional ---------- */
+function panel(){ ver('vPanel'); if(CLAVE) cargaPanel(); }
+async function cargaPanel(){ const r = await pide({a: 'panel', clave: CLAVE}); if(!r) return; if(!r.ok){ CLAVE = null; q('#pLogin').hidden = false; q('#pIn').hidden = true; return msg(r.msg, 1); }
+  q('#pLogin').hidden = true; q('#pIn').hidden = false; msg('');
+  const pend = r.turnos.filter(t => t.estado === 'pendiente'), hecho = r.turnos.filter(t => t.estado !== 'pendiente').slice(-10).reverse();
+  q('#pPend').innerHTML = pend.length ? pend.map(t => `<div class="card"><b>${E(t.nombre)}</b> · ${fecha(t.dia)} a las ${t.hora}<br>Teléfono: ${E(t.tel)}<br>Forma de pago: ${E(t.pago)}<div class="fila"><button class="btn" data-a="dec" data-id="${t.id}" data-e="aceptado">Aceptar</button><button class="btn o" data-a="dec" data-id="${t.id}" data-e="rechazado">Rechazar</button></div></div>`).join('') : '<p class="sub">No hay turnos para aceptar.</p>';
+  q('#pHecho').innerHTML = hecho.map(t => `<div class="card">${E(t.nombre)} · ${fecha(t.dia)} ${t.hora} · <span class="est ${t.estado}">${t.estado === 'aceptado' ? 'Aceptado' : 'Rechazado'}</span></div>`).join('') || '<p class="sub">Nada todavía.</p>';
+  q('#pPagos').innerHTML = ['Particular','Obra social','Otra'].map(p => `<label class="chk"><input type="checkbox" value="${p}"${r.pagos.includes(p) ? ' checked' : ''}> ${p}</label>`).join('');
+  const ios = /iPhone|iPad/.test(navigator.userAgent), app = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  q('#pAvTx').textContent = !PUB.fcm ? 'Los avisos con Firebase todavía no están configurados en esta prueba.' : (ios && !app) ? 'En iPhone los avisos andan con el panel instalado (iOS 16.4 o más): instalalo desde Compartir > Agregar a inicio y activalos desde ahí.' : r.aparatos ? 'Avisos activos en ' + r.aparatos + (r.aparatos === 1 ? ' aparato.' : ' aparatos.') : 'Todavía no activaste los avisos.'; }
+/* 5) avisos: Firebase usa el MISMO service worker de la página (no registra el suyo) */
+const carga = src => new Promise((ok, no) => { const s = D.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; D.head.appendChild(s); });
+async function activarAvisos(){
+  if(!PUB.fcm) return msg('Los avisos todavía no están configurados en esta prueba.', 1);
+  if(!('serviceWorker' in navigator) || !('Notification' in window)) return msg('Este navegador no permite avisos. En iPhone, instalá el panel primero.', 1);
+  if(await Notification.requestPermission() !== 'granted') return msg('No diste permiso para los avisos.', 1);
+  const reg = await navigator.serviceWorker.register('sw.js'); await navigator.serviceWorker.ready;
+  await carga('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js'); await carga('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js');
+  if(!firebase.apps.length) firebase.initializeApp(PUB.fcm.config);
+  const token = await firebase.messaging().getToken({vapidKey: PUB.fcm.vapidKey, serviceWorkerRegistration: reg});
+  const r = await pide({a: 'fcm', clave: CLAVE, token, ua: navigator.userAgent}); if(r && r.ok){ msg('Avisos activos en este aparato.'); cargaPanel(); } }
+
+/* ---------- botones ---------- */
+D.addEventListener('click', async ev => {
+  const b = ev.target.closest('[data-a]'); if(!b) return; const a = b.dataset.a;
+  if(a === 'entrar' || a === 'alta'){ msg('Entrando…'); const r = await pide({a, mail: q('#eMail').value, clave: q('#eClave').value, dev}); if(!r) return; if(!r.ok) return msg(r.msg, 1); LS.set('pt_ses', r.ses); PERF = r.perfil; msg(''); return mis(); }
+  if(a === 'perfil'){ const r = await pide({a: 'perfil', ses: LS.get('pt_ses'), dev, nombre: q('#dNom').value, tel: q('#dTel').value, pago: q('#dPago').value}); if(!r) return; if(!r.ok) return msg(r.msg, 1); PERF = r.perfil; msg('Datos guardados.'); return mis(); }
+  if(a === 'pedir'){ b.disabled = true; const r = await pide({a: 'pedir', ses: LS.get('pt_ses'), dev, dia: q('#tDia').value, hora: q('#tHora').value}); b.disabled = false; if(!r) return; if(!r.ok) return msg(r.msg, 1);
+    msg('Listo: tu pedido quedó pendiente. Te avisamos por mail cuando lo confirmen.'); return mis(); }
+  if(a === 'datos') return datos();
+  if(a === 'salir'){ await pide({a: 'salir', ses: LS.get('pt_ses'), dev}, true); LS.set('pt_ses', null); PERF = null; msg('Cerraste la sesión en este celular.'); return entrar(); }
+  if(a === 'reintentar'){ msg(''); return inicio(); }
+  if(a === 'pact') return cargaPanel();
+  if(a === 'plog'){ CLAVE = q('#pClave').value; return cargaPanel(); }
+  if(a === 'dec'){ b.disabled = true; const r = await pide({a: 'decidir', clave: CLAVE, id: b.dataset.id, estado: b.dataset.e}); if(!r) return; if(!r.ok) return msg(r.msg, 1); msg(b.dataset.e === 'aceptado' ? 'Turno aceptado. Le llega un mail al paciente.' : 'Turno rechazado. Le llega un mail al paciente.'); return cargaPanel(); }
+  if(a === 'ppagos'){ const r = await pide({a: 'pagos', clave: CLAVE, pagos: [...D.querySelectorAll('#pPagos input:checked')].map(i => i.value)}); if(!r) return; if(!r.ok) return msg(r.msg, 1); msg('Formas de pago guardadas.'); return cargaPanel(); }
+  if(a === 'pfcm'){ try{ await activarAvisos(); }catch(e){ msg('No se pudieron activar los avisos: ' + e.message, 1); } }
+});
+addEventListener('hashchange', () => location.hash === '#panel' ? panel() : inicio());
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+inicio();
+})();
+</script></body></html>
